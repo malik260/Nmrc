@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="changeEmployer" id="changeEmployer">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Change Employer</span>
+                <div>
+                    <div id="changeemployer" style="margin-top: 10px; margin-bottom:5%">
+                        <div class="form-group" style="margin-left: 100px;">
+                            <div class="col-sm-4">
+                                <label for="principal" class="form-label">NHF Number</label>
+                                <input id="principal" col="Principal" class="form-control" />
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="rate" class="form-label">Current Employer</label>
+                                <input id="rate" col="CurrentEmployer"  class="form-control" readonly />
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="form-group" style="margin-left: 100px;">
+                            <div class="col-sm-4">
+                                <label for="documentUpload" class="form-label">New Employer</label>
+                                <select id="documentTitle" class="form-control">
+                                    <option value="" disabled selected hidden>--Select Employer--</option>
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="yearsOfService" class="form-label">Employer Number</label>
+                                <input id="repaymentPattern" type="text" col="RepaymentPattern" class="form-control" readonly />
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+
+    $("#changeemployer").cnComboBox({
+        url: '@Url.Content("~/ChangeEmployer/GetListJson")',
+        key: "Id",
+        value: "Name"
+    });
+</script>

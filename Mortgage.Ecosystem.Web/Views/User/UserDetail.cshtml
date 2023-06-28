@@ -1,0 +1,176 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="wrapper wrapper-content">
+    <div class="row animated fadeInRight">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Personal Information</h5>
+                    <div class="ibox-tools">
+
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="profile.html#">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="javascript:showChangeUserForm()">Modify information</a></li>
+                            <li><a href="javascript:showChangePasswordForm()">Change Password</a></li>
+                            <li><a href="javascript:showUserAvatarForm()">Modify Avatar</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+                <div class="contact-box">
+                    <div class="col-sm-4">
+                        <div>
+                            <img id="portrait" alt="User Avatar" style="margin:0 auto;" class="img-circle m-t-xs img-responsive">
+                            <div class="m-t-xs font-bold text-center"><span>@ViewBag.Ip</span></div>
+                        </div>
+                    </div>
+                    <div id="userInfo" class="col-sm-8">
+                        <h3><strong><span col="UserName"></span></strong></h3>
+                        <p><i class="fa fa-user"></i> <span col="RealName"></span> / <span id="roleName"></span>
+                        <p><i class="fa fa-phone"></i> <span col="Mobile"></span></p>
+                        <p><i class="fa fa-group"></i> <span id="departmentName"></span> / <span id="positionName"></span></p>
+                        <p><i class="fa fa-transgender"></i> Gender: <span col="Gender"></span></p>
+                        <p><i class="fa fa-envelope-o"></i> <span col="Email"></span></p>
+                        <p><i class="fa fa-calendar"></i> <span col="Birthday"></span></p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var id = cn.request("id");
+    $(function () {
+        getForm();
+    });
+
+    function getForm() {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/User/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Data;
+                        result.Gender = cn.getValueByKey(@Html.Raw(typeof(GenderTypeEnum).EnumToDictionaryString()), result.Gender);
+                        $("#userInfo").setWebControls(result);
+
+                        if (cn.isNullOrEmpty(result.Portrait)) {
+                            result.Portrait = ctx + 'image/portrait.png';
+                        }
+                        else {
+                            result.Portrait = '@GlobalContext.SystemConfig.ApiSite' + result.Portrait;
+                        }
+                        $("#portrait").attr("src", result.Portrait);
+
+                        getDepartmentName(result.DepartmentId);
+                        getRoleName(result.RoleIds);
+                        getPositionName(result.PositionIds);
+                    }
+                }
+            });
+        }
+    }
+
+    function getRoleName(roleIds) {
+        if (!cn.isNullOrEmpty(roleIds)) {
+            cn.ajax({
+                url: '@Url.Content("~/Role/GetRoleName")' + '?RoleIds=' + roleIds,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        $("#roleName").html(obj.Data);
+                    }
+                }
+            });
+        }
+    }
+
+    function getPositionName(positionIds) {
+        if (!cn.isNullOrEmpty(positionIds)) {
+            cn.ajax({
+                url: '@Url.Content("~/Position/GetPositionName")' + '?PositionIds=' + positionIds,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        $("#positionName").html(obj.Data);
+                    }
+                }
+            });
+        }
+    }
+
+    function getDepartmentName(id) {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/Department/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        $("#departmentName").html(obj.Data.DepartmentName);
+                    }
+                }
+            });
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/User/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+    function showChangePasswordForm() {
+        cn.openDialog({
+            title: "Change Password",
+            content: '@Url.Content("~/User/ChangePassword")' + '?id=' + id,
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showChangeUserForm() {
+        cn.openDialog({
+            title: "Modify information",
+            content: '@Url.Content("~/User/ChangeUser")' + '?id=' + id,
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showUserAvatarForm() {
+        cn.openDialog({
+            title: "Modify Avatar",
+            content: '@Url.Content("~/User/UserPortrait")' + '?id=' + id,
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,368 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
+}
+
+    <div class="wrapper animated fadeInRight">
+        <form id="form" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">New Diaspora Record</span>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="margin-right: -22px;">Email<font class="red"> *</font></label>
+                        <div class="col-sm-4">
+                            <input id="email" col="Email" type="text" class="form-control" />
+                        </div>
+                        <label class="col-sm-2 control-label" style="margin-right: -22px;">Telephone<font class="red"> *</font></label>
+                        <div class="col-sm-4">
+                            <input id="telephone" col="Telephone" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-3" style="margin-bottom: 0px;">
+                <button class="btn btn-success" type="button" id="generateOTP" style="margin-top: 10px;">
+                    <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Generate OTP</span>
+                </button>
+            </div>
+
+         
+           <div id="diaspora" style="margin-top: 10px;">
+                <div class="dialogblockborder dialogblockborderheadline">
+                    <div class="dialogblock-body" style="height: auto; padding-top: 20px;">
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label class="nidcom control-label" style="margin-left: 100px;">NIDCOM&nbsp;Number<font class="red">&nbsp;*</font></label>
+                                <input type="text" col="NIDCOM" style="margin-left: 100px;" class="form-control" id="nidcom">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="bvn control-label" style="margin-left: 200px;">BVN<font class="red">&nbsp;*</font></label>
+                                <input type="text" col="BVN" style="margin-left: 200px;" class="form-control" id="bvn">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="employerStatus" style="margin-left: 100px;" class="form-label">Employer Status</label>
+                                <div class="form-row">
+                                    <select id="employerStatus" style="margin-left: 100px;" col="EmployerStatus" class="form-control">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="firstName control-label" style="margin-left: 200px;">First&nbsp;Name<font class="red">&nbsp;*</font></label>
+                                <input type="text" col="FirstName" style="margin-left: 200px;" class="form-control" id="firstName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="otherName" style="margin-left: 100px;" class="form-label">Other Name(s)</label>
+                                <input type="text" col="OtherName" style="margin-left: 100px;" class="form-control" id="otherName">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="lastName control-label" style="margin-left: 200px;">Last&nbsp;Name<font class="red">&nbsp;*</font></label>
+                                <input type="text" col="LastName" style="margin-left: 200px;" class="form-control" id="lastName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label class="phoneNumber control-label" style="margin-left: 100px;">Phone Number</label>
+                                <input type="number" col="DOB" style="margin-left: 100px;" class="form-control" id="phoneNumber">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="dob control-label" style="margin-left: 200px;">Date&nbsp;of&nbsp;Birth<font class="red">&nbsp;*</font></label>
+                                <input type="date" col="DOB" style="margin-left: 200px;" class="form-control" id="dob">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="email" style="margin-left: 100px;" class="form-label">Email</label>
+                                <input type="email" style="margin-left: 100px;" class="form-control" id="email">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="address" style="margin-left: 200px;" class="form-label">Address</label>
+                                <textarea type="text" style="margin-left: 200px; height: 60px;" class="form-control" id="address"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="country" style="margin-left: 100px;" class="form-label">Country</label>
+                                <div class="form-row">
+                                    <select id="country" style="margin-left: 100px;" col="Country" class="form-control">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="passportNumber control-label" style="margin-left: 200px;">Passport&nbsp;Number<font class="red">&nbsp;*</font></label>
+                                <input type="text" col="PassportNumber" style="margin-left: 200px;" class="form-control" id="passportNumber">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="postalCode" style="margin-left: 100px;" class="form-label">Postal Code</label>
+                                <input type="text" col="postalCode" style="margin-left: 100px;" class="form-control" id="postalCode">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label class="basicSalary control-label" style="margin-left: 200px;">Basic&nbsp;Salary</label>
+                                    <input type="text" col="StaffNumber" style="margin-left: 200px;" class="form-control" id="basicSalary">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="issueDate" style="margin-left: 100px;" class="form-label">Issue Date</label>
+                                <input type="date" col="IssueDate" style="margin-left: 100px;" class="form-control" id="issueDate">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label class="expiryDate control-label" style="margin-left: 200px;">Expiry&nbsp;Date</label>
+                                    <input type="date" col="ExpiryDate" style="margin-left: 200px;" class="form-control" id="expiryDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="bankName" style="margin-left: 100px;" class="form-label">Bank Name</label>
+                                <input type="text" col="BankName" style="margin-left: 100px;" class="form-control" id="bankName">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label class="accountName control-label" style="margin-left: 200px;">Account&nbsp;Name</label>
+                                    <input type="text" col="AccountName" style="margin-left: 200px;" class="form-control" id="AccountName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="kinName" style="margin-left: 100px;" class="form-label">Kin's FullName</label>
+                                <input type="text" style="margin-left: 100px;" class="form-control" id="kinName">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="kinNumber" style="margin-left: 200px;" class="form-label">Kin's&nbsp;Number</label>
+                                <input type="number" style="margin-left: 200px;" class="form-control" id="kinNumber">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="KinAddress" style="margin-left: 100px;" class="form-label">Kin's Address</label>
+                                <textarea type="text" style="margin-left: 100px; height: 60px;" class="form-control" id="KinAddress"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         
+    </form>
+</div>
+
+
+
+
+
+
+    <script type="text/javascript">
+        var id = cn.request("id");
+        var selectedAgent = 1;
+        $(function () {
+            $('#email').attr('readonly', false);
+            $('#telephone').attr('readonly', false);
+            $("#generateOTP").attr("enable", "disabled");          
+            $('#diaspora').hide();
+            $('#subSector').attr('readonly', true);
+
+            $("#accType").cnComboBox({
+                url: '@Url.Content("~/AccountType/GetListJson")',
+                key: "Id",
+                value: "Name",
+                class: "form-control"
+            });
+
+            $("#sector").cnComboBox({
+                url: '@Url.Content("~/Sector/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+            $("#subSector").cnComboBox({
+                url: '@Url.Content("~/SubSector/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+            laydate.render({ elem: '#dateOfIncorporation', format: 'yyyy-MM-dd' });
+
+            $("#companyClass").cnComboBox({
+                url: '@Url.Content("~/CompanyClass/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+            $("#companyType").cnComboBox({
+                url: '@Url.Content("~/CompanyType/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+            $("#contributionFrequency").cnComboBox({
+                url: '@Url.Content("~/ContributionFrequency/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+            $('#accType').change(function () {
+                selectedAgent = $("#accType").cnComboBox('getValue');
+                if (selectedAgent > 0) {
+                    $('#email').val('');
+                    $('#email').attr('readonly', false);
+                    $('#telephone').val('');
+                    $('#telephone').attr('readonly', false);
+                    $('#generateOTP').removeAttr("disabled");
+                    $('#generateOTP').show();
+                    $('#diaspora').hide();
+                }
+            });
+
+            $('#generateOTP').on('click', function () {
+                if ($('#email').val() == "") {
+                    cn.msgError("Please enter email!");
+                    return false;
+                }
+                else if ($('#telephone').val() == "") {
+                    cn.msgError("Please enter telephone!");
+                    return false;
+                }
+
+               
+                if (selectedAgent == 1) {
+                    $('#employer').hide();
+                    $('#pmbdevelopercooperativesociety').hide();
+                    $('#individualcontributor').hide();
+                    $('#diaspora').show();
+                    $('#employeraggregator').hide();
+               
+                    $("#title").cnComboBox({
+                        url: '@Url.Content("~/Title/GetListJson")',
+                        key: "Id",
+                        value: "Name",
+                        class: "form-control"
+                    });
+
+                    $("#gender").cnCheckBox({
+                        url: '@Url.Content("~/Gender/GetListJson")',
+                        key: "Id",
+                        value: "Name",
+                        class: "form-control"
+                    });
+
+                    $("#marital").cnComboBox({
+                        url: '@Url.Content("~/MaritalStatus/GetListJson")',
+                        key: "Id",
+                        value: "Name",
+                        class: "form-control"
+                    });
+
+                    $("#empType").cnComboBox({
+                        data: cn.getJson(@Html.Raw(typeof(EmploymentTypeEnum).EnumToDictionaryString()))
+                    });
+
+                    $("#branch").cnComboBox({
+                        url: '@Url.Content("~/State/GetListJson")',
+                        key: "Id",
+                        value: "Name",
+                        class: "form-control"
+                    });
+
+                    $("#accountType").cnComboBox({
+                        data: cn.getJson(@Html.Raw(typeof(AccountTypeEnum).EnumToDictionaryString()))
+                    });
+
+                    $("#alertType").cnComboBox({
+                        data: cn.getJson(@Html.Raw(typeof(AlertTypeEnum).EnumToDictionaryString()))
+                    });
+                }
+                $('#generateOTP').hide();
+            });
+
+            $('#sector').change(function () {
+                $('#subSector').attr('readonly', false);
+            });
+
+            getForm();
+
+            $("#form").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    telephone: {
+                        required: true,
+                        pattern: "^[0-9-+s()]*$",
+                    }
+                },
+                messages: {
+                    email: { required: "Email is required" },
+                    telephone: { required: "Telephone is required" }
+                }
+            });
+        });
+
+        function getForm() {
+            if (id > 0) {
+                cn.ajax({
+                    url: '@Url.Content("~/Company/GetFormJson")' + '?id=' + id,
+                    type: "get",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            var result = obj.Data;
+                            $("#form").setWebControls(result);
+                        }
+                    }
+                });
+            }
+            else {
+                cn.ajax({
+                    url: '@Url.Content("~/Company/GetMaxSortJson")',
+                    type: "get",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            $("#companySort").val(obj.Data);
+                        }
+                    }
+                });
+            }
+        }
+
+        function saveForm(index) {
+            if ($("#form").validate().form()) {
+                var postData = $("#form").getWebControls({ Id: id });
+                postData.Parent = cn.getLastValue(postData.Parent);
+                postData.PrincipalId = cn.getLastValue(postData.PrincipalId);
+                cn.ajax({
+                    url: '@Url.Content("~/Company/SaveFormJson")',
+                    type: "post",
+                    data: postData,
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            parent.searchTreeGrid(obj.Data);
+                            parent.layer.close(index);
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            }
+        }
+    </script>

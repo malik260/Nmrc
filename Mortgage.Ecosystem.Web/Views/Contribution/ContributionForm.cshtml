@@ -1,0 +1,217 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="singleContribution">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: 100px;">
+                <span class="dialogblockheader">Employee Contribution(Single & Bulk)</span>
+                <div>
+                    <p class="ism">  FOR THE PAYMENT OF BACKLOG CLICK </p>
+                </div>
+
+                <button class="btn btn-primary" type="button" id="backlog" style="margin-top: 10px;">
+                    <span class="bold">BACKLOG PAYMENT</span>
+                </button>
+            </div>
+        </div>
+
+
+        <div id="employeeContribution" style="margin-top: 10px; margin-bottom:5%">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-body" style="height: 100%;">
+                    <span class="dialogblockheader">Single Contribution</span>
+                    <div Class="form-group">
+                        <div class="col-sm-6">
+                            <label for="employeeNumber" class="form-label">Employee&nbsp;Number</label>
+                            <select id="employeeNumber" col="EmployeeNumber" class="form-control">
+                                <option></option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="employeeName" class="form-label">Employee&nbsp;Name</label>
+                            <input type="text" class="form-control" id="employeeName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="contributionAmount" class="form-label">Contribution&nbsp;Amount</label>
+                            <input id="contributionAmount" col="ContributionAmount" class="form-control" />
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="employerNumber" class="form-label">Employer&nbsp;Number</label>
+                            <input type="text" class="form-control" id="employerNumber">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="month" class="form-label">Month</label>
+                            <input id="month" col="Month" class="form-control" />
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="year" class="form-label">Year</label>
+                            <input id="year" col="Year" class="form-control" />
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+
+                            <label for="employerName" class="form-label">Employer&nbsp;Name</label>
+                            <input id="employerName" col="EmployerName" class="form-control" />
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="remark" class="form-label">Remark</label>
+                            <input id="remark" col="Remark" class="form-control" />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="paymentOption">Payement&nbsp Option</label>
+
+                            <div id="paymentOption" col="PaymentOption"></div>
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label></label>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+
+    <form id="multipleUploadForm" class="form-horizontal m ">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: 50px;">
+                <span class="dialogblockheader">Multiple Upload</span>
+                <div>
+                    <button class="btn btn-primary" type="button" id="downloadTemplate">
+                        <i class="fa fa-file-excel-o"></i>
+                        <span class="bold">Download Template </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="employeeContributionMultiple" style="margin-top: 10px; margin-bottom:5%">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-body" style="height: 100%;">
+                    <span class="dialogblockheader">Multiple Contribution</span>
+                    <div Class="form-group">
+                        <div class="col-sm-6">
+                            <label for="accountName" class="form-label">Account&nbsp;Name</label>
+                            <input id="accountName" col="AccountName" class="form-control" />
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="narration" class="form-label">Narration</label>
+                            <input id="narration" col="Narration" class="form-control" />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="phoneNumber" class="form-label">Phone&nbsp;Number</label>
+                            <input id="phoneNumber" col="PhoneNumber" class="form-control" />
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="emailAddress" class="form-label">Email&nbsp;Address</label>
+                            <input id="emailAddress" col="EmailAddress" class="form-control" />
+
+
+                        </div>
+                    </div>
+
+                    <div Class="form-group">
+                        <div class="col-sm-6">
+
+                            <label for="paymentOption" class="form-label">Payment&nbsp;Option</label>
+
+                            <div id="paymentOption1" col="PaymentOption"></div>
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label class="form-label"></label>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <label class="control-label">Document Title</label>
+                            <input id="document" type="file">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        // hide the form initially
+        $('#form1').show();
+        $('#multipleUploadForm').hide();
+
+
+        // add click event listener to the button
+        $('#backlog').click(function () {
+            // unhide the form
+            $('#form1').hide();
+            $('#multipleUploadForm').show();
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+
+        $("#paymentOption").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
+        $("#paymentOption1").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
+
+        $("#document").fileinput({
+            language: 'en',
+            showPreview: false,
+            allowedFileExtensions: ['xls', 'xlss']
+        }).on("fileuploaded", function (event, data) {
+            var obj = data.response;
+            if (obj.Tag == 1) {
+                filePath = obj.Data;
+            }
+            else {
+                filePath = '';
+            }
+        });
+
+    });
+
+</script>
+

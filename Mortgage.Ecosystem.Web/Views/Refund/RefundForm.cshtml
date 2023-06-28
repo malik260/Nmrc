@@ -1,0 +1,231 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="refundApplication" id="refundApplication">
+        <form id="form1" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Customer Details</span>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="nhfNumber" style="margin-left: 100px;" class="form-label">NHF&nbsp;Number</label>
+                        <input id="nhfNumber" style="margin-left: 100px;" col="NHFNumber" class="form-control" />
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="customerName" style="margin-left: 200px;" class="form-label">Customer&nbsp;Name</label>
+                        <input id="customerName" style="margin-left: 200px;" col="CustomerName" class="form-control" />
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="dateOfBirth" style="margin-left: 100px;" class="form-label">Date&nbsp;Of&nbsp;Birth</label>
+                        <input id="dateOfBirth" type="date"  style="margin-left: 100px;" col="DateOfBirth" class="form-control" />
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="employerNumber" style="margin-left: 200px;" class="form-label">Employer&nbsp;Number</label>
+                        <input id="employerNumber" style="margin-left: 200px;" col="EmployerNumber" class="form-control" />
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="employmentDate" style="margin-left: 100px;" class="form-label">Employment&nbsp;Date</label>
+                        <input id="employmentDate" type="date" style="margin-left: 100px;" col="EmploymentDate" class="form-control" />
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="bvn" style="margin-left: 200px;" class="form-label">BVN</label>
+                        <input id="bvn" style="margin-left: 200px;" col="Bvn" class="form-control" />
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="nin" style="margin-left: 100px;" class="form-label">NIN</label>
+                        <input id="nin"  style="margin-left: 100px;" col="Nin" class="form-control" />
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="mobileNumber" style="margin-left: 200px;" class="form-label">Mobile&nbsp;Number</label>
+                        <input id="mobileNumber" style="margin-left: 200px;" col="MobileNumber" class="form-control" />
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="contactAddress" style="margin-left: 100px;" class="form-label">Contact&nbsp;Address</label>
+                        <input id="contactAddress" style="margin-left: 100px;" col="ContactAddress" class="form-control" />
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="employer Name" style="margin-left: 200px;" class="form-label">Employer&nbsp;Name</label>
+                        <input id="employerName" style="margin-left: 200px;" col="EmployerName" class="form-control" />
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="contactAddress" style="margin-left: 100px;" class="form-label"></label>
+
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <button class="btn btn-success" type="button" id="procced" style="margin-top: 10px; margin-left: 200px;">
+                            <span class="bold">Proceed To Application</span>
+                        </button>
+
+
+                    </div>
+                </div>
+          
+                </div>
+            </div>
+            </form>
+
+        <form id="form2" class="form-horizontal m ">
+
+            <div id="refundApplication" style="margin-top: 10px; margin-bottom:5%">
+                <div class="dialogblockborder dialogblockborderheadline">
+                    <div class="dialogblock-body" style="height: 100%;">
+                        <span class="dialogblockheader">Refund Application</span>
+                    <div Class="form-group">
+                        <div class="col-sm-4">
+
+                            <label for="paymentOption" style="margin-left: 100px;" class="form-label">Condition&nbsp;For&nbsp;Application</label>
+
+                            <select id="conditionForApplication" style="margin-left: 100px;" col="ConditionForApplication" class="form-control">
+                                <option selected> select Condition</option>
+                                <option value="1">Age</option>
+                                <option value="2">Incapacitation</option>
+                                <option value="3">Death</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="backName" style="margin-left: 200px;" class="form-label">Bank&nbsp;Name</label>
+                            <input id="bankName" style="margin-left: 200px;" col="BankName" class="form-control" />
+                        </div>
+                    </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                            <label for="bankAccountNo" style="margin-left: 100px;" class="form-label">Bank&nbsp;Account No</label>
+                            <input id="bankAccountNo" style="margin-left: 100px;" col="BankAccountNo" class="form-control" />
+
+                        </div>
+
+                            <div class="col-sm-4">
+                            <label for="bankCode" style="margin-left: 200px;" class="form-label">Bank&nbsp;Code</label>
+                            <input id="bankCode" style="margin-left: 200px;" col="BankCode" class="form-control" />
+
+
+                        </div>
+                        </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <label for="customerNo" style="margin-left: 100px;" class="form-label">Customer&nbsp;No</label>
+                            <input id="customerNo" style="margin-left: 100px;" col="CustomerNo" class="form-control" />
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="age" style="margin-left: 200px;" class="form-label">Age</label>
+                            <input id="age" style="margin-left: 200px;" col="Age" class="form-control" />
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <label for="yearsOfService" style="margin-left: 100px;" class="form-label">Years&nbsp;of&nbsp;Service</label>
+                            <input id="yearsOfService" type="number" style="margin-left: 100px;" col="YearsOfService" class="form-control" />
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label for="availabiliyBalance" style="margin-left: 200px;" class="form-label">Availability&nbsp;Balance </label>
+                            <input id="availabiliyBalance" style="margin-left: 200px;" col="AvailabiliyBalance" class="form-control" />
+
+
+                        </div>
+                    </div>
+
+
+
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                            <label for="documentUpload" style="margin-left: 100px;" class="form-label">Document&nbsp;Upload</label>
+                            <select id="file-dropdown" style="margin-left: 100px;" class="form-control">
+                                <option ></option>
+                            </select> 
+                            </div>
+
+                        <div class="col-sm-4">
+                            <label for="availabiliyBalance" style="margin-left: 200px;" class="form-label"></label>
+                            <input type="file" id="chooseFile" style="margin-left: 90px; margin-top:5%">
+                            <button id="addDcument" style="margin-left: 90px; margin-top:10%">Add Document</button>
+
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </form>
+</div>
+
+  
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        // hide the form initially
+        $('#form1').show();
+        $('#form2').hide();
+
+
+        // add click event listener to the button
+        $('#procced').click(function () {
+            // unhide the form
+            $('#form1').hide();
+            $('#form2').show();
+
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+
+        // add click event listener to buttons in form2
+        $('#form2 button').click(function (event) {
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+    });
+
+</script>
+

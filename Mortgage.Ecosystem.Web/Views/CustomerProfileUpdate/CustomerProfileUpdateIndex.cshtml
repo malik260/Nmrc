@@ -1,0 +1,140 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        Name: <input id="name" col="Name" type="text" />
+                    </li>
+                    <li>
+                        Status: <span id="status" col="Status"></span>
+                    </li>
+                    <li class="select-time">
+                        <label>Created: </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                        <span>-</span>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="btn-group-sm" id="toolbar">
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
+            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> edit</a>
+            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="customerProfileUpdateTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd',theme:'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    }); 
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/CustomerProfileUpdate/GetPageListJson")';
+        $('#customerProfileUpdateTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'PhoneNumber', title: 'Phone Number', sortable: true },
+                { field: 'EmailAddress', title: 'Email Address', sortable: true },
+                { field: 'AccountName', title: 'Account Name', sortable: true },
+                { field: 'NHFNumber', title: 'NHF Number', sortable: true },
+
+
+                //{
+                //    field: 'ApprovalStatus', title: 'Approval Status', align: 'center',
+                //    formatter: function (value, row, index) {
+                //        if (value == "@StatusEnum.Yes.ToInt()") {
+                //            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
+                //        } else {
+                //            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
+                //        }
+                //    }
+                //},
+                {
+                    field: 'BaseModifyTime', title: 'Date Created', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#customerProfileUpdateTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#customerProfileUpdateTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+    function showSaveForm(bAdd) {
+        var id = 0;
+        if (!bAdd) {
+            var selectedRow = $("#customerProfileUpdateTable").bootstrapTable("getSelections");
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        cn.openDialog({
+            title: id > 0 ? "Edit  Customer Profile Update" : "Customer Profile Update",
+            content: '@Url.Content("~/CustomerProfileUpdate/CustomerProfileUpdateForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+
+
+
+
+
+
+    function deleteForm() {
+        var selectedRow = $("#customerProfileUpdateTable").bootstrapTable("getSelections");
+        if (cn.checkRowDelete(selectedRow)) {
+            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
+                var ids = cn.getIds(selectedRow);
+                cn.ajax({
+                    url: '@Url.Content("~/CustomerProfileUpdate/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            searchGrid();
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+</script>

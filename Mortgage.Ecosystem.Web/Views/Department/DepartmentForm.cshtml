@@ -1,0 +1,122 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Superior Department</label>
+            <div class="col-sm-8">
+                <div id="parent" col="Parent"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Department name<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="departmentName" col="DepartmentName" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Person in charge</label>
+            <div class="col-sm-8">
+                <div id="principalId" col="PrincipalId"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Phone number</label>
+            <div class="col-sm-8">
+                <input id="telephone" col="Telephone" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Fax</label>
+            <div class="col-sm-8">
+                <input id="fax" col="Fax" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-8">
+                <input id="email" col="Email" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Display order</label>
+            <div class="col-sm-8">
+                <input id="departmentSort" col="DepartmentSort" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Notes</label>
+            <div class="col-sm-8">
+                <textarea id="remark" col="Remark" class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = cn.request("id");
+    $(function () {
+        $('#parent').cnComboBoxTree({ url: '@Url.Content("~/Department/GetDepartmentTreeListJson")', async: false });
+        $('#principalId').cnComboBoxTree({ url: '@Url.Content("~/Department/GetUserTreeListJson")', async: false });
+
+        getForm();
+
+        $("#form").validate({
+            rules: {
+                departmentName: { required: true },
+                parentInput: { required: true }
+            }
+        });
+    });
+
+    function getForm() {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/Department/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Data;
+                        $("#form").setWebControls(result);
+                    }
+                }
+            });
+        }
+        else {
+            cn.ajax({
+                url: '@Url.Content("~/Department/GetMaxSortJson")',
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        $("#departmentSort").val(obj.Data);
+                    }
+                }
+            });
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            postData.Parent = cn.getLastValue(postData.Parent);
+            postData.PrincipalId = cn.getLastValue(postData.PrincipalId);
+            cn.ajax({
+                url: '@Url.Content("~/Department/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        parent.searchTreeGrid(obj.Data);
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>

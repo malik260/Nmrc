@@ -1,0 +1,51 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="eTicket" id="eTicket">
+        <form id="form1" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Write Message</span>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label class="messageType control-label" style="margin-left: 100px;">Message Type<font class="red">&nbsp;*</font></label>
+                       @* <input type="text" col="messageType" style="margin-left: 100px; width: 550px;" class="form-control" id="messageType">*@
+                        <div id="messageType" col="MessageType" style="margin-left: 100px; width: 550px;"></div>
+                    </div>
+                
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="subject" style="margin-left: 100px;" class="form-label">Subject</label>
+                        <input type="text" style="margin-left: 100px; width: 550px;" col="subject" class="form-control">
+                         
+                    </div>
+                   
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="mailBody" style="margin-left: 100px;" class="form-label">Mail Body</label>
+                        <textarea type="text" style="margin-left: 100px; height: 100px; width: 550px;" class="form-control" id="mailBody"></textarea>
+                          
+                    </div>
+                  
+                </div>     
+                
+                </div>
+            </div>
+        </form>
+</div>
+
+
+
+      <script type="text/javascript">
+
+        $("#messageType").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(MessageTypeEnum).EnumToDictionaryString())) });
+      
+     </script>
+  
+
+
+

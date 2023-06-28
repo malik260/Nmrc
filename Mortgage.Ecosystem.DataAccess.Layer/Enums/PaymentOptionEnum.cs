@@ -1,0 +1,1 @@
+﻿using System.ComponentModel;namespace Mortgage.Ecosystem.DataAccess.Layer.Enums{    public enum PaymentOptionEnum    {        [Description("Remitta")]        Remitta = 1,        [Description("ETransact")]        ETransact = 2,    }}

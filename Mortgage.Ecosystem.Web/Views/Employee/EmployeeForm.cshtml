@@ -1,0 +1,301 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">New Employee Record</span>
+                <div class="form-group" style="margin-top: 10px;">
+                    <div class="col-sm-6">
+                        <label class="control-label">Employer<font class="red"> *</font></label>
+                        <div id="company" col="Company"></div>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <div class="col-sm-6">
+                        <label class="control-label">Email<font class="red"> *</font></label>
+                        <input id="emailAddress" col="EmailAddress" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Mobile/Telephone<font class="red"> *</font></label>
+                        <input id="mobileNumber" col="MobileNumber" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-body" style="height: auto;">
+                <span class="dialogblockheader"></span>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">BVN<font class="red"> *</font></label>
+                        <input id="bvn" col="BVN" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">NIN</label>
+                        <input id="nin" col="NIN" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Title</label>
+                        <div id="title" col="Title"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">First Name<font class="red"> *</font></label>
+                        <input id="firstName" col="FirstName" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Other Name(s)</label>
+                        <input id="otherName" col="OtherName" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Last Name<font class="red"> *</font></label>
+                        <input id="lastName" col="LastName" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="col-sm-2 control-label" style="padding-left: 0px;">Gender</label>
+                        <div id="gender" col="Gender"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Date of Birth<font class="red"> *</font></label>
+                        <input id="dateOfBirth" col="DateOfBirth" type="text" class="form-control" placeholder="yyyy-MM-dd" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Postal Address</label>
+                        <textarea id="postalAddress" col="PostalAddress" class="form-control" style="height:60px"></textarea>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Marital Status</label>
+                        <div id="marital" col="Marital"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Kin's Last Name</label>
+                        <input id="kinLastName" col="KinLastName" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Kin's FIrst Number</label>
+                        <input id="kinFirstNumber" col="KinFirstNumber" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Kin's Mobile/Telephone</label>
+                        <input id="kinMobileNumber" col="KinMobileNumber" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Kin's Relationship</label>
+                        <div id="kinRelationship" col="KinRelationship"></div>
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Contribution Branch</label>
+                        <div id="branch" col="Branch"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Date of Employment</label>
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" id="employmentDate" col="EmploymentDate" placeholder="yyyy-MM-dd">
+                        </div>
+                    </div>
+                    @*<div class="col-sm-6">
+                    <label class="control-label">Date of Employment<font class="red"> *</font></label>
+                    <input id="employmentDate" col="EmploymentDate" type="text" class="form-control" placeholder="yyyy-MM-dd" />
+                    </div>*@
+                </div>
+                <hr />
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Account Type</label>
+                        <div id="accountType" col="AccountType"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Bank Name</label>
+                        <input id="bankName" col="BankName" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Account Number</label>
+                        <input id="accountNumber" col="AccountNumber" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Monthly Salary (Net Pay)</label>
+                        <input id="monthlySalary" col="MonthlySalary" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Alert Type</label>
+                        <div id="alertType" col="AlertType"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Statement</label>
+                        <input id="statement" col="Statement" type="text" class="form-control" />
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="control-label">Privileges</label>
+                        <div id="menuTree" class="ztree"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = cn.request("id");
+    $(function () {
+        $('#company').cnComboBoxTree({ url: '@Url.Content("~/Company/GetCompanyTreeListJson")' });
+        $("#title").cnComboBox({
+            url: '@Url.Content("~/Title/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#gender").cnComboBox({
+            url: '@Url.Content("~/Gender/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        laydate.render({ elem: '#dateOfBirth', type: 'date', theme: 'molv' });
+        $("#marital").cnComboBox({
+            url: '@Url.Content("~/MaritalStatus/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#kinRelationship").cnComboBox({
+            url: '@Url.Content("~/Relation/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#branch").cnComboBox({
+            url: '@Url.Content("~/State/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        laydate.render({ elem: '#employmentDate', type: 'date', theme: 'molv' });
+        $("#accountType").cnComboBox({
+            url: '@Url.Content("~/AccountType/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#alertType").cnComboBox({
+            url: '@Url.Content("~/AlertType/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+
+        loadMenuTree();
+        getForm();
+
+        $("#form").validate({
+            rules: {
+                emailAddress: {
+                    required: true,
+                    email: true,
+                },
+                mobileNumber: {
+                    required: true,
+                    //isPhone: true,
+                }
+            },
+            messages: {
+                emailAddress: { required: "Email is required" },
+                mobileNumber: { required: "Mobile number is required" }
+            }
+        });
+    });
+
+    function loadMenuTree() {
+        $('#menuTree').cnTree({
+            async: false,
+            url: '@Url.Content("~/Menu/GetMenuTreeListJson")',
+            check: { enable: true },
+            expandLevel: 0
+        })
+    }
+
+    function getForm() {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/Employee/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Data;
+                        $("#form").setWebControls(result);
+                        $('#menuTree').cnTree("setCheckedNodes", result.MenuIds);
+                    }
+                }
+            });
+        }
+        else {
+            var defaultData = {};
+            defaultData.Company = "";
+            defaultData.EmailAddress = ""
+            defaultData.MobileNumber = "";
+            $("#form").setWebControls(defaultData);
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            postData.Company = cn.getLastValue(postData.Company);
+            postData.MenuIds = $('#menuTree').cnTree("getCheckedNodes");
+            if (postData.Company <= 0) {
+                cn.msgError("Please select employer!");
+                return false;
+            }
+            else if (postData.MenuIds == "") {
+                cn.msgError("Please select privileges!");
+                return false;
+            }
+
+            cn.ajax({
+                url: '@Url.Content("~/Employee/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>
