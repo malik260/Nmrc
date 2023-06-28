@@ -98,32 +98,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
-
-        // Generate Employee NHF Number
-        public long GenerateNHFNumber()
-        {
-            var Exist = true;
-            var NHFEmployeeNumber = 0L;
-
-            while (Exist)
-            {
-                NHFEmployeeNumber = MathHelper.RandomLongGenerator(GlobalConstant.NHF_NUMBER_START_RANGE, GlobalConstant.NHF_NUMBER_END_RANGE);
-                var param = new EmployeeListParam()
-                {
-                    NHFNumber = NHFEmployeeNumber,
-                };
-
-                if (_iUnitOfWork.Employees.IsEmployeeNHFNumberExist(param))
-                {
-                    Exist = true;
-                }
-                else
-                {
-                    Exist = false;
-                }
-            }
-            return NHFEmployeeNumber;
-        }
+        
         #endregion
 
         #region Submit data
@@ -297,6 +272,35 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             await _iUnitOfWork.Employees.DeleteForm(ids);
             obj.Tag = 1;
             return obj;
+        }
+        #endregion
+
+        #region Private method
+
+        // Generate Employee NHF Number
+        private long GenerateNHFNumber()
+        {
+            var Exist = true;
+            var NHFEmployeeNumber = 0L;
+
+            while (Exist)
+            {
+                NHFEmployeeNumber = MathHelper.RandomLongGenerator(GlobalConstant.NHF_NUMBER_START_RANGE, GlobalConstant.NHF_NUMBER_END_RANGE);
+                var param = new EmployeeListParam()
+                {
+                    NHFNumber = NHFEmployeeNumber,
+                };
+
+                if (_iUnitOfWork.Employees.IsEmployeeNHFNumberExist(param))
+                {
+                    Exist = true;
+                }
+                else
+                {
+                    Exist = false;
+                }
+            }
+            return NHFEmployeeNumber;
         }
         #endregion
     }

@@ -19,13 +19,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
     public class CompanyService : ICompanyService
     {
         private readonly IUnitOfWork _iUnitOfWork;
-        private readonly EmployeeService _iEmployeeService;
         private readonly HttpClient _client;
 
-        public CompanyService(IUnitOfWork iUnitOfWork, EmployeeService iEmployeeService)
+        public CompanyService(IUnitOfWork iUnitOfWork)
         {
             _iUnitOfWork = iUnitOfWork;
-            _iEmployeeService = iEmployeeService;
             _client = new HttpClient
             {
                 BaseAddress = new Uri(ApiResource.baseAddress)
@@ -214,7 +212,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 return obj;
             }
 
-            entity.NHFNumber = _iEmployeeService.GenerateNHFNumber();
+            entity.NHFNumber = GenerateNHFNumber();
 
             await _iUnitOfWork.Companies.SaveForms(entity);
             obj.Data = entity.Id.ParseToString();
@@ -309,6 +307,35 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 return false;
             }
+        }
+        #endregion
+
+        #region Private method
+
+        // Generate Employee NHF Number
+        private long GenerateNHFNumber()
+        {
+            var Exist = true;
+            var NHFEmployeeNumber = 0L;
+
+            while (Exist)
+            {
+                NHFEmployeeNumber = MathHelper.RandomLongGenerator(GlobalConstant.NHF_NUMBER_START_RANGE, GlobalConstant.NHF_NUMBER_END_RANGE);
+                var param = new EmployeeListParam()
+                {
+                    NHFNumber = NHFEmployeeNumber,
+                };
+
+                if (_iUnitOfWork.Employees.IsEmployeeNHFNumberExist(param))
+                {
+                    Exist = true;
+                }
+                else
+                {
+                    Exist = false;
+                }
+            }
+            return NHFEmployeeNumber;
         }
         #endregion
     }

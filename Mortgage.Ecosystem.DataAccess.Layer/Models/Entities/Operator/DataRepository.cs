@@ -55,7 +55,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                 if (!string.IsNullOrEmpty(operatorInfo.Employee.ToString()) && !string.IsNullOrEmpty(operatorInfo.Company.ToString()))
                 {
                     strSql.Clear();
-                    strSql.Append(@"SELECT a.Id, a.Company, a.Branch, a.Department, a.BVN, a.NIN,
+                    strSql.Append(@"SELECT a.Id, a.Company, a.Branch, a.Department, a.BVN, a.NHFNumber, a.NIN,
                                         a.EmploymentType, a.Title, a.LastName, a.FirstName, a.EmailAddress,
                                         a.StaffNumber, a.DateOfBirth, a.Gender, a.Portrait, a.PortraitType
                                 FROM tbl_Employee a
