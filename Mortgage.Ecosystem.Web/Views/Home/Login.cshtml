@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Mortgage Ecosystem - Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header{
+    <link href='@Url.Content("~/central/css/login.css")' rel="stylesheet" />
+    <script>
+        if (window.top !== window.self) { window.top.location = window.location };
+    </script>
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.validation/1.14.0/jquery.validate.min.js"))
+}
+    <div class="login-panel">
+        <div class="row section">
+            <div class="col-sm-12">
+                <form id="form">
+                    <h4 class="no-margin">User Authentication</h4>
+                    <p id="errorMessage" hidden></p>
+                    <div id="defaultMessage">
+                        <p class="m-t-md" style="color:black;">The mortgage ecosystem encompasses all of the individuals and processes involved in the origination of a mortgage loan.</p>
+                        <p>UserName：admin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password：123456</p>
+                    </div>
+                    <input id="userName" name="userName" class="form-control uname" col="UserName" type="text" placeholder="UserName" value="@ViewBag.UserName" />
+                    <input id="password" name="password" class="form-control pword m-b" col="Password" type="password" placeholder="Password" value="@ViewBag.Password" />
+                    <div class="row">
+                        <div class="col-xs-7">
+                            <input id="captchaCode" name="captchaCode" type="text" col="CaptchaCode" class="form-control code" placeholder="Verification Code" maxlength="3">
+                        </div>
+                        <div class="col-xs-5">
+                            <a href="javascript:void(0);" title="Click to change verification code">
+                                <img id="imgCaptchaCode" src='@Url.Content("~/Home/GetCaptchaImage")' height="34" />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="checkbox-custom">
+                        <input id="rememberMe" name="rememberMe" type="checkbox"> <label for="rememberMe">Remember me</label>
+                    </div>
+                  
+                    <button class="btn btn-success btn-block" onclick="loginForm(); return false;">Log in</button>
+                    <div>
+                    <br />
+                        <a style="float:left">New User</a>
+                        <a  style="float:right">Forget Password</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="login-footer">
+            <div style="text-align:center; color:#f30909">
+                &copy; Copyright @DateTime.Now.Year <a href="http://www.fintraksoftware.com" target="_blank">Fintrak Software Co. Limited</a> All Rights Reserved.<br>
+                <a href="" target="_blank" rel="nofollow"></a><br>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            if ($.cookie('RememberMe') == 1) {
+                $("#rememberMe").prop("checked", true);
+                if ("@GlobalContext.SystemConfig.LoginProvider" == "Cookie") {
+                    if (!cn.isNullOrEmpty($.cookie('UserToken'))) {
+                        redirectToIndex();
+                    }
+                }
+                else {
+                    $.removeCookie("UserToken", { path: '/' });
+                }
+            }
+            $("#rememberMe").click(function () {
+                if ($(this).prop("checked")) {
+                    $.cookie('RememberMe', 1, { expires: 30, path: '/' });
+                }
+            });
+
+            $("#imgCaptchaCode").click(function () {
+                $(this).attr("src", '@Url.Content("~/Home/GetCaptchaImage")' + '?t=' + new Date().getTime());
+            });
+
+            $("#form").validate({
+                rules: {
+                    userName: { required: true },
+                    password: { required: true }
+                }
+            });
+
+            $.validator.setDefaults({
+                submitHandler: function () {
+                    loginForm();
+                }
+            });
+        });
+
+        function loginForm() {
+            if ($("#form").validate().form()) {
+                var postData = $("#form").getWebControls();
+                cn.ajax({
+                    url: '@Url.Content("~/Home/LoginJson")',
+                    type: "post",
+                    data: postData,
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            redirectToIndex();
+                        }
+                        else {
+                            $('#errorMessage').val(obj.Message);
+                            $("#errorMessage").show();
+                            $("#defaultMessage").hide();
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            }
+        }
+
+        function redirectToIndex() {
+            location.href = '@Url.Content("~/Home/Index")';
+        }
+    </script>

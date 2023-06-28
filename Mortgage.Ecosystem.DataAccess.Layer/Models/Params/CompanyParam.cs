@@ -1,0 +1,21 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
+{
+    public class CompanyListParam
+    {
+        public long Id { get; set; }
+        public string? Name { get; set; }
+        public string? Address { get; set; }
+        public string? MobileNumber { get; set; }
+        public string? EmailAddress { get; set; }
+        public string? RCNumber { get; set; }
+        public int CompanyClass { get; set; }
+        public int CompanyType { get; set; }
+        public byte[]? Logo { get; set; }
+        public string? LogoType { get; set; }
+
+        [NotMapped]
+        public List<long>? Ids { get; set; }
+    }
+}

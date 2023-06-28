@@ -1,0 +1,270 @@
+﻿@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@{
+    ViewBag.Title = "Mortgage Ecosystem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    OperatorInfo operatorInfo = ViewBag.OperatorInfo;
+    string logo = Url.Content("~/image/finTrakLogo.jpg");
+    string cLogo = string.Empty;
+    string cName = string.Empty;
+    string portrait = string.Empty;
+    if (operatorInfo.EmployeeInfo?.Portrait == null || operatorInfo.EmployeeInfo?.Portrait.Length == 0)
+    {
+        switch (operatorInfo.EmployeeInfo?.Gender)
+        {
+            case (int)GenderTypeEnum.Male:
+                portrait = Url.Content("~/image/male.png");
+                break;
+            case (int)GenderTypeEnum.Female:
+                portrait = Url.Content("~/image/female.png");
+                break;
+            default:
+                portrait = Url.Content("~/image/blank-photo.png");
+                break;
+        }
+    }
+    else
+    {
+        portrait = Url.Content(string.Format($"data:{operatorInfo.EmployeeInfo?.PortraitType};base64,{Convert.ToBase64String(operatorInfo.EmployeeInfo?.Portrait)}"));
+    }
+
+    if (operatorInfo.CompanyInfo?.Logo?.Length != 0 || !string.IsNullOrEmpty(operatorInfo.CompanyInfo?.LogoType))
+    {
+        cLogo = Url.Content(string.Format($"data:{operatorInfo.CompanyInfo?.LogoType};base64,{Convert.ToBase64String(operatorInfo.CompanyInfo?.Logo)}"));
+    }
+
+    if (string.IsNullOrEmpty(operatorInfo.CompanyInfo?.Name))
+    {
+        cLogo = string.Empty;
+        cName = GlobalConstant.APP_NAME;
+    }
+    else
+    {
+        cName = operatorInfo.CompanyInfo?.Name;
+    }
+}
+@BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/central/js/central-data.min.js"))
+
+<div id="wrapper">
+    <!--Start left navigation-->
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="nav-close">
+            <i class="fa fa-times-circle"></i>
+        </div>
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="logo" style="margin-left:-9px;">Eco</li>
+                <li class="nav-header">
+                    <div class="dropdown profile-element clear">
+                        <div class="image-left">
+                            <img alt="image" src='@logo' class="" height="50" width="170" />
+                            <p>
+                                <strong style="font-size: medium; font-family: DM Serif; padding-top: 10px; font-weight: bold; color: #fff; display: flex; text-shadow: 1px 1px 1px #333;"><span style="padding: 4px;">Mortgage</span><span style="padding: 4px;">Ecosystem</span></strong>
+                                @*  <strong style="font-size: small; padding-top: 10px; font-weight: bold; color: #fff; display: inline-block; text-shadow: 1px 1px 1px #333;">Mortgage Ecosystem</strong>*@
+                            </p>
+                        </div>
+                    </div>
+                </li>
+                @{
+                    List<MenuEntity> menuList = ViewBag.MenuList;
+                    foreach (MenuEntity menu in menuList.Where(p => p.Parent == 0).OrderBy(p => p.MenuSort))
+                    {
+                        <li data-type="menu">
+                            @{
+                                if (menu.MenuUrl.IsNull())
+                                {
+                                    <a href="#">
+                                        <i class="@menu.MenuIcon"></i>
+                                        <span class="nav-label">@menu.MenuName</span>
+                                        <span class="fa arrow"></span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    if (HttpHelper.IsUrl(menu.MenuUrl.ToStr()))
+                                    {
+                                        <a class="menuItem" href="@menu.MenuUrl">
+                                            <i class="@menu.MenuIcon"></i>
+                                            <span class="nav-label">@menu.MenuName</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="menuItem" href="#" data-url='@Url.Content("~/" + menu.MenuUrl)'>
+                                            <i class="@menu.MenuIcon"></i>
+                                            <span class="nav-label">@menu.MenuName</span>
+                                        </a>
+                                    }
+                                }
+                            }
+                            <ul class="nav nav-second-level collapse" data-type="menu">
+                                @foreach (MenuEntity secondMenu in menuList.Where(p => p.Parent == menu.Id).OrderBy(p => p.MenuSort))
+                                {
+                                    <li data-type="menu">
+                                        @{
+                                            if (menuList.Where(p => p.Parent == secondMenu.Id && p.MenuType != (int)MenuTypeEnum.Button).Count() == 0)
+                                            {
+                                                if (HttpHelper.IsUrl(secondMenu.MenuUrl.ToStr()))
+                                                {
+                                                    <a class="menuItem" href='@secondMenu.MenuUrl'>@secondMenu.MenuName</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="menuItem" href="#" data-url='@Url.Content("~/" + secondMenu.MenuUrl)'>@secondMenu.MenuName</a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a href="#">@secondMenu.MenuName<span class="fa arrow"></span></a>
+                                                <ul class="nav nav-third-level" data-type="menu">
+                                                    @foreach (MenuEntity thirdMenu in menuList.Where(p => p.Parent == secondMenu.Id).OrderBy(p => p.MenuSort))
+                                                    {
+                                                        <li data-type="menu">
+                                                            <a class="menuItem" href="#" data-url='@Url.Content("~/" + thirdMenu.MenuUrl)'>@thirdMenu.MenuName</a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </nav>
+    <!--Left Navigation Finish-->
+    <!--Right part starts-->
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <a class="navbar-minimalize minimalize-styl-2" href="#" title="Collapse the menu">
+                    <i class="fa fa-bars"></i>
+                </a>
+                @if(!string.IsNullOrEmpty(cLogo)){
+                    <img src='@cLogo' class="" height="27" width="27" style="margin-top: -7px; margin-right: 5px; border: 1px solid ThreeDShadow;" />
+                }
+                <strong style="font-size: large; font-weight: bold; color: #fff; letter-spacing: 15px; text-align: center; text-shadow: 1px 1px 1px #333;">@cName</strong>
+                <ul class="nav navbar-top-links navbar-right welcome-message">
+                    <li><a id="fullScreen"><i class="fa fa-arrows-alt"></i>Full screen</a></li>
+                    <li class="dropdown user-menu">
+                        <a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
+                            <img src="@portrait" class="user-image">
+                            <span class="hidden-xs">@operatorInfo.RealName</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="mt5">
+                                <a class="menuItem" href="#" data-url='@Url.Content("~/User/UserDetail")?id=@operatorInfo.Id'>
+                                    <i class="fa fa-user"></i> Personal center
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="showChangePasswordForm()">
+                                    <i class="fa fa-key"></i> Change Password
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="showSwitchSkinForm()">
+                                    <i class="fa fa-dashboard"></i> Switch themes
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#" onclick="loginOff()">
+                                    <i class="fa fa-sign-out"></i> Sign out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="row content-tabs">
+            <button class="roll-nav roll-left tabLeft">
+                <i class="fa fa-backward"></i>
+            </button>
+            <nav class="page-tabs menuTabs">
+                <div class="page-tabs-content">
+                    <a href="javascript:;" class="active menuTab" data-id="/system/main">Dashboard</a>
+                </div>
+            </nav>
+            <button class="roll-nav roll-right tabRight">
+                <i class="fa fa-forward"></i>
+            </button>
+            <div class="btn-group roll-nav roll-right">
+                <button class="dropdown J_tabClose" data-toggle="dropdown">
+                    Tab<span class="caret"></span>
+                </button>
+                <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                    <li><a class="tabCloseCurrent" href="#">Close Current</a></li>
+                    <li><a class="tabCloseOther" href="#">Close Other</a></li>
+                    <li><a class="tabCloseAll" href="#">Close All</a></li>
+                </ul>
+            </div>
+            <a href="#" class="roll-nav roll-right tabReload" style="width: 70px;"><i class="fa fa-refresh"></i> Refresh</a>
+        </div>
+        <div class="row mainContent" id="content-main">
+            <iframe class="Central_iframe" name="iframe0" width="100%" height="100%" data-id="/system/main" src="@Url.Content("~/Home/Welcome")" frameborder="0" seamless></iframe>
+        </div>
+        <div class="row" id="footer" style="background-color: #fff; border-top: 2px solid #ebebeb;">
+            <div style="text-align:center; color:#333; margin: 8px 0; font-weight: bold;">
+                &copy; Copyright @DateTime.Now.Year <a href="http://www.fintraksoftware.com" target="_blank">Fintrak Software Co. Limited</a> All Rights Reserved.<br>
+            </div>
+        </div>
+    </div>
+    <!--Right part Finish-->
+</div>
+
+<script type="text/javascript">
+    if (!cn.isNullOrEmpty($.cookie('Skin'))) {
+        var skin = decodeURIComponent($.cookie('Skin'));
+        $("body").addClass(skin.split('|')[0]);
+        $("body").addClass(skin.split('|')[1]);
+    } else {
+        var sideTheme = "theme-dark";
+        var skinName = "skin-blue";
+        $("body").addClass(sideTheme);
+        $("body").addClass(skinName);
+    }
+
+    function showChangePasswordForm() {
+        cn.openDialog({
+            title: "Change Password",
+            content: '@Url.Content("~/User/ChangePassword")' + '?id=@operatorInfo.Id',
+            height: "500px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showSwitchSkinForm() {
+        cn.openDialog({
+            title: "Switch themes",
+            content: '@Url.Content("~/Home/Skin")',
+            width: '530px',
+            height: '390px',
+            btn: null,
+            maxmin: false
+        });
+    }
+
+    function loginOff() {
+        cn.ajax({
+            url: '@Url.Content("~/Home/LoginOffJson")',
+            type: "post",
+            success: function (obj) {
+                //alert(obj.Tag);
+                if (obj.Tag == 1) {
+                    location.href = '@Url.Content("~/Home/Index")';
+                }
+                else {
+                    cn.msgError(obj.Message);
+                }
+            }
+        });
+    }
+</script>

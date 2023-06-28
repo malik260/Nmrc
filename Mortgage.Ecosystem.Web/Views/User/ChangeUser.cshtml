@@ -1,0 +1,121 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">Login name<font class="red"> *</font></label>
+            <div class="col-sm-4">
+                <input id="userName" col="UserName" type="text" class="form-control" readonly="readonly" />
+            </div>
+            <label class="col-sm-2 control-label ">Name</label>
+            <div class="col-sm-4">
+                <input id="realName" col="RealName" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-sm-2 control-label ">Gender</label>
+            <div class="col-sm-4" id="gender" col="Gender"></div>
+            <label class="col-sm-2 control-label ">Birthday</label>
+            <div class="col-sm-4">
+                <input id="birthday" col="Birthday" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">Department</label>
+            <div class="col-sm-4">
+                <input id="departmentName" col="DepartmentName" type="text" class="form-control" readonly="readonly" />
+            </div>
+            <label class="col-sm-2 control-label ">Job</label>
+            <div class="col-sm-4">
+                <div id="positionId" col="PositionIds"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">Mobile</label>
+            <div class="col-sm-4">
+                <input id="mobile" col="Mobile" type="text" class="form-control" />
+            </div>
+            <label class="col-sm-2 control-label ">Mailbox</label>
+            <div class="col-sm-4">
+                <input id="email" col="Email" type="text" class="form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    var id = cn.request("id");
+    $(function () {
+
+        $("#userStatus").cnRadioBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+        $("#gender").cnRadioBox({ data: cn.getJson(@Html.Raw(typeof(GenderTypeEnum).EnumToDictionaryString())) });
+
+        $("#positionId").cnComboBox({
+            url: '@Url.Content("~/Position/GetListJson")',
+            dataName: "Result",
+            key: "Id",
+            value: "PositionName",
+            class: "form-control",
+            multiple: true
+        });
+        $("#positionId_select").attr("disabled", "disabled");
+
+        laydate.render({ elem: '#birthday', format: 'yyyy-MM-dd' });
+
+        getForm(id);
+
+        $("#form").validate({
+            rules: {
+                userName: { required: true },
+                password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 20
+                },
+                mobile: { isPhone: true },
+                email: { email: true }
+            }
+        });
+    });
+
+    function getForm() {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/User/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Data;
+                        $("#form").setWebControls(result);
+                    }
+                }
+            });
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/User/ChangeUserJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+
+                        parent.getForm();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>

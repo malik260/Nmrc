@@ -1,0 +1,152 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
+}
+
+
+    <div class="wrapper animated fadeInRight">
+        <form id="form" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Loan Repayment (Single & Multiple)</span>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Choose Repayment Type</label>
+                        <div id="repaymentType" col="RepaymentType"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="singleContribution" style="margin-top: 10px; margin-bottom:5%">
+                <div class="dialogblockborder dialogblockborderheadline">
+                    <div class="dialogblock-body" style="height: 100%;">
+                        <span class="dialogblockheader">Single Loan Repayment</span>
+                        <div Class="form-group">
+                            <div class="col-sm-4">
+                                <label for="employeeNumber" style="margin-left: 100px;" class="form-label">Employee&nbsp;Number</label>
+
+                                <select id="employeeNumberRepayment" style="margin-left: 100px;" col="EmployeeNumber" class="form-control">
+                                    <option></option>
+
+                                </select>
+
+
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="employeeName" style="margin-left: 200px;" class="form-label">Employee&nbsp;Name</label>
+                                <input type="text" style="margin-left: 200px;" class="form-control" id="employeeNameRepayment">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="amount" style="margin-left: 100px;" class="form-label">Amount</label>
+                                <input type="number" style="margin-left: 100px;" class="form-control" id="amountRepayment">
+
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="narration" style="margin-left: 200px;" class="form-label">Narration</label>
+                                <input type="text" style="margin-left: 200px;" class="form-control" id="narrationRepayment">
+                            </div>
+                        </div>
+
+                        <div Class="form-group">
+                            <div class="col-sm-4">
+                                <label for="accountName" style="margin-left: 100px;" class="form-label">Account&nbsp;Name</label>
+                                <input type="text" style="margin-left: 100px;" class="form-control" id="accountNameRepayment">
+
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="phoneNumber" style="margin-left: 200px;" class="form-label">Phone&nbsp;Number</label>
+                                <input type="text" style="margin-left: 200px;" class="form-control" id="phoneNumberRepayment">
+
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label for="email" style="margin-left: 100px;" class="form-label">Email</label>
+                                <input type="text" style="margin-left: 100px;" class="form-control" id="emailRepayment">
+
+
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="paymentOption" style="margin-left: 200px;" class="form-label">Payment&nbsp;Option</label>
+                                <select id="paymentOptionRepayment" style="margin-left: 200px;" col="PaymentOption" class="form-control">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="multipleUpload" style="margin-top: 10px; margin-bottom:5%">
+                <div class="dialogblockborder dialogblockborderheadline">
+                    <div class="dialogblock-body" style="height: 100%;">
+                        <span class="dialogblockheader">Batch Loan Repayment</span>
+                        <div Class="form-group">
+                            <div class="col-sm-6">
+                                <button class="btn btn-primary" type="button" id="downloadTemplateRepayment" style="margin-top: 10px;margin-left: 50px;width:50%">
+                                    <i class="fa fa-file-excel-o"></i>
+                                    <span class="bold">Download Template</span>
+                                </button>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <input id="templateFile" col="TemplateFile" type="file" style="margin-top: 15px;" />
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#repaymentType").cnComboBox({
+                data: cn.getJson(@Html.Raw(typeof(LoanRepaymentEnum).EnumToDictionaryString()))
+            });
+            $("#singleContribution").hide();
+            $("#multipleUpload").hide();
+            // Show the singleContribution div when option value 1 is selected
+            $('#repaymentType').change(function () {
+
+                var repaymentType = $("#repaymentType").cnComboBox('getValue');
+                debugger;
+                if (repaymentType == 1) {
+                    $("#singleContribution").show();
+                    $("#multipleUpload").hide();
+                }
+                else if (repaymentType == 2) {
+                    $("#singleContribution").hide();
+                    $("#multipleUpload").show();
+                }
+                else {
+                    $("#singleContribution").hide();
+                    $("#multipleUpload").hide();
+                }
+
+            });
+        });
+
+
+
+    </script>

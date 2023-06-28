@@ -1,0 +1,100 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="refundApplication" id="refundApplication">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Initiate Loan</span>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label class="companyNumber control-label" style="margin-left: 100px;">Loan Product</label>
+                        <select id="loanProduct" col="LoanProduct" class="form-control" style="margin-left: 100px;" required>
+                            <option>--Select Loan Product--</option>
+
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="sector control-label" style="margin-left: 200px;">Customer&nbsp;Sector</label>
+                        <div id="sector" style="margin-left: 200px;" col="Sector"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="principal" style="margin-left: 100px;" class="form-label">Principal</label>
+                        <input type="text" style="margin-left: 100px;" col="principal" class="form-control">
+
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="rate" style="margin-left: 200px;" class="form-label">Rate</label>
+                        <input type="text" style="margin-left: 200px;" col="principal" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="tenor" style="margin-left: 100px;" class="form-label">Tenor</label>
+                        <input type="text" style="margin-left: 100px;" col="tenor" class="form-control">
+
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="netIncomeMonthly" style="margin-left: 200px;" class="form-label">Net&nbsp;Income&nbsp;Monthly</label>
+                        <input type="text" style="margin-left: 200px;" col="propertySize" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="repaymentPattern" style="margin-left: 100px;" class="form-label">Repayment Pattern</label>
+                        <input type="text" style="margin-left: 100px;" class="form-control" id="repaymentPattern">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="loanPurpose" style="margin-left: 200px;" class="form-label">Loan&nbsp;Purpose</label>
+                        <input type="text" style="margin-left: 200px;" class="form-control" id="loanPurpose">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+
+                    <div class="col-sm-4">
+                        <label class="uploadDocument control-label" style="margin-left: 100px;">Document&nbsp;Uploads</label>
+                        <select id="loanProduct" col="documentUpload" class="form-control" style="margin-left: 100px;" required>
+                            <option>--Select Document Title--</option>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+
+                        <input type="file" style="margin-left: 100px;" id="logo">
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <div class="col-sm-4">
+                        <input type="file" style="display: none; margin-left: 100px;" id="addDocument" accept=".doc,.docx,.pdf,.xlsx,.txt,.rtf,.jpg,.png,.gif,.mp3,.wav,.aac,.mp4,.avi,.mov,.zip,.rar,.tar,.exe,.dmg,.apk,.db,.mdb,.sql,.ttf,.otf,.fon,.dll,.sys,.ini" multiple />
+                        <label for="addDocument" style=" width:140px; border: 0;  margin-left: 100px; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
+                            &nbsp; Add Document
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+
+    $("#sector").cnComboBox({
+        url: '@Url.Content("~/Sector/GetListJson")',
+        key: "Id",
+        value: "Name"
+    });
+</script>
+
+
+

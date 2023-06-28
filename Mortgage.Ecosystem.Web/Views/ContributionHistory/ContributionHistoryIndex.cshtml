@@ -1,0 +1,94 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+
+    <div class="row">
+        <div class="ibox-title">
+            <h5>CONTRIBUTION HISTORY </h5>
+        </div>
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+
+                    <li class="select-time">
+                        <label>Created: </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                        <span>-</span>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group-sm" id="toolbar">
+                <a id="btnViewStatement" class="btn btn-success">View Statement</a>
+                <a id="btnClear" class="btn btn-danger disabled">Clear</a>
+
+            </div>
+        </div>
+
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="contributionHistoryTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/ContributionHistory/GetContributionHistoryPageListJson")';
+        $('#contributionHistoryTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'NHFNumber', title: 'NHF Number', sortable: true },
+                { field: 'Name', title: 'Employee Name', sortable: true },
+                { field: 'EmployerName', title: 'Employer Name', sortable: true },
+                { field: 'AmountContributed', title: 'Amount Contributed', sortable: true },
+                { field: 'Remarks', title: 'Remarks', sortable: true },
+                { field: 'Month', title: 'Month', sortable: true },
+                { field: 'Year', title: 'Year', sortable: true },
+
+                {
+                    field: 'Status', title: 'Status', align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@StatusEnum.Yes.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#contributionHistoryTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#contributionHistoryTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+
+</script>
