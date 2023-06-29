@@ -1,7 +1,6 @@
 ﻿using Mortgage.Ecosystem.BusinessLogic.Layer.Cache;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Helpers;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
-using Mortgage.Ecosystem.DataAccess.Layer;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
@@ -98,7 +97,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
-        
+
         #endregion
 
         #region Submit data
@@ -155,7 +154,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
             }
 
-            entity.NHFNumber = GenerateNHFNumber();
+            entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
 
             await _iUnitOfWork.Employees.SaveForm(entity);
 
@@ -258,7 +257,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
             }
 
-            entity.NHFNumber = GenerateNHFNumber();
+            entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
 
             await _iUnitOfWork.Employees.SaveForms(entity);
             obj.Data = entity.Id.ParseToString();
@@ -273,35 +272,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
-        #endregion
-
-        #region Private method
-
-        // Generate Employee NHF Number
-        private long GenerateNHFNumber()
-        {
-            var Exist = true;
-            var NHFEmployeeNumber = 0L;
-
-            while (Exist)
-            {
-                NHFEmployeeNumber = MathHelper.RandomLongGenerator(GlobalConstant.NHF_NUMBER_START_RANGE, GlobalConstant.NHF_NUMBER_END_RANGE);
-                var param = new EmployeeListParam()
-                {
-                    NHFNumber = NHFEmployeeNumber,
-                };
-
-                if (_iUnitOfWork.Employees.IsEmployeeNHFNumberExist(param))
-                {
-                    Exist = true;
-                }
-                else
-                {
-                    Exist = false;
-                }
-            }
-            return NHFEmployeeNumber;
-        }
-        #endregion
+        #endregion        
     }
 }

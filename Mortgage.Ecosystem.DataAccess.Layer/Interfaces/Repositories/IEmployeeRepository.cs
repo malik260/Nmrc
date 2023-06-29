@@ -13,6 +13,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         bool ExistEmployee(EmployeeEntity entity);
         bool IsEmployeeNHFNumberExist(EmployeeListParam param);
         bool ExistEmployeeBVN(EmployeeEntity entity);
+        long GenerateNHFNumber();
         Task SaveForm(EmployeeEntity entity);
         Task SaveForms(EmployeeEntity entity);
         Task DeleteForm(string ids);

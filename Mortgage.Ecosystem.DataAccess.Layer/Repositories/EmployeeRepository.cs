@@ -79,6 +79,33 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             }
             return BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
         }
+
+        // Generate Employee NHF Number
+        public long GenerateNHFNumber()
+        {
+            var Exist = true;
+            var NHFEmployeeNumber = 0L;
+
+            while (Exist)
+            {
+                var param = new EmployeeListParam()
+                {
+                    NHFNumber = NHFEmployeeNumber,
+                };
+
+                NHFEmployeeNumber = RandomHelper.RandomLongGenerator(GlobalConstant.NHF_NUMBER_START_RANGE, GlobalConstant.NHF_NUMBER_END_RANGE);
+
+                if (IsEmployeeNHFNumberExist(param))
+                {
+                    Exist = true;
+                }
+                else
+                {
+                    Exist = false;
+                }
+            }
+            return NHFEmployeeNumber;
+        }
         #endregion
 
         #region Submit data

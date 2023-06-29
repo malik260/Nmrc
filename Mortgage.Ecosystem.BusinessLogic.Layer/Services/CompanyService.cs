@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mortgage.Ecosystem.BusinessLogic.Layer.Helpers;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Resources;
 using Mortgage.Ecosystem.DataAccess.Layer;
@@ -212,7 +211,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 return obj;
             }
 
-            entity.NHFNumber = GenerateNHFNumber();
+            entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
 
             await _iUnitOfWork.Companies.SaveForms(entity);
             obj.Data = entity.Id.ParseToString();
@@ -248,7 +247,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -274,7 +273,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -286,10 +285,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             try
             {
-
-
                 var jsonParameters = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(createCustomerRequestDTO), Encoding.UTF8, ApiResource.ApplicationJson);
-
                 var response = await _client.PostAsync(ApiResource.individualExisting, jsonParameters);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<CustomerExistResponse>(responseContent);
@@ -303,40 +299,12 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
         }
-        #endregion
 
-        #region Private method
-
-        // Generate Employee NHF Number
-        private long GenerateNHFNumber()
-        {
-            var Exist = true;
-            var NHFEmployeeNumber = 0L;
-
-            while (Exist)
-            {
-                NHFEmployeeNumber = MathHelper.RandomLongGenerator(GlobalConstant.NHF_NUMBER_START_RANGE, GlobalConstant.NHF_NUMBER_END_RANGE);
-                var param = new EmployeeListParam()
-                {
-                    NHFNumber = NHFEmployeeNumber,
-                };
-
-                if (_iUnitOfWork.Employees.IsEmployeeNHFNumberExist(param))
-                {
-                    Exist = true;
-                }
-                else
-                {
-                    Exist = false;
-                }
-            }
-            return NHFEmployeeNumber;
-        }
         #endregion
     }
 }
