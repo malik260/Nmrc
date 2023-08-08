@@ -12,7 +12,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base
     {
         // Primary key for all tables
         // When long returns to the front-end js, the precision will be lost, so it is converted into a string
-        [Key, Column("Id"), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, Column("Id"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long Id { get; set; }
 
         // WebApi does not have Cookie and Session, so Token needs to be passed in to identify the user
@@ -37,6 +37,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base
         [Column("BaseCreatorId")]
         public long BaseCreatorId { get; set; }
 
+        // Approving process (Menu Id)
+        [Column("BaseProcessMenu")]
+        public long BaseProcessMenu { get; set; }
+
         // Create
         public new async Task Create()
         {
@@ -51,6 +55,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base
             {
                 var user = await Operator.Operator.Instance.Current(Token);
                 BaseCreatorId = user != null ? user.Employee : 0;
+            }
+
+            if (BaseProcessMenu == default)
+            {
+                var user = await Operator.Operator.Instance.Current(Token);
+                BaseProcessMenu = user != null ? user.CurrentMenu : 0;
             }
         }
     }
@@ -115,6 +125,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base
         public static string[] BaseFieldList { get; } = new string[]
         {
             "Id",
+            "BaseProcessMenu",
             "BaseIsDelete",
             "BaseCreateTime",
             "BaseModifyTime",

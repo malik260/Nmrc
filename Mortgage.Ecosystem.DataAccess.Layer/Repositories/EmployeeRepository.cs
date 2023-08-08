@@ -29,6 +29,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<EmployeeEntity>> GetApprovalPageList(EmployeeListParam param, Pagination pagination)
+        {
+            var list = await new DataRepository().GetEmployeeApprovalItems();
+            return list.ToList();
+        }
+
         public async Task<EmployeeEntity> GetEntity(long id)
         {
             return await BaseRepository().FindEntity<EmployeeEntity>(id);
@@ -143,9 +149,26 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     }
                 }
 
+                // Next of kin record
+                if (!string.IsNullOrEmpty(entity.KinFirstNumber) && !string.IsNullOrEmpty(entity.KinLastName) && !string.IsNullOrEmpty(entity.KinMobileNumber) && !entity.KinRelationship.IsNullOrZero())
+                {
+                    NextOfKinEntity nextOfKinEntity = new()
+                    {
+                        Company = entity.Company,
+                        Employee = entity.Id,
+                        FirstName = entity.KinFirstNumber,
+                        LastName = entity.KinLastName,
+                        MobileNumber = entity.KinMobileNumber,
+                        Relationship = entity.KinRelationship
+                    };
+                    await nextOfKinEntity.Create();
+                    await db.Insert(nextOfKinEntity);
+                }
+
                 // User login record
                 if (!string.IsNullOrEmpty(entity.EmailAddress))
                 {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.USER_MENU_URL);
                     UserEntity userEntity = new()
                     {
                         Company = entity.Company,
@@ -159,7 +182,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                         IsSystem = GlobalConstant.ZERO,
                         IsOnline = GlobalConstant.ZERO,
                         WebToken = SecurityHelper.GetGuid(true),
-                        ApiToken = string.Empty
+                        ApiToken = string.Empty,
+                        BaseProcessMenu = currentMenu
                     };
                     await userEntity.Create();
                     await db.Insert(userEntity);
@@ -198,13 +222,15 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 // Individual company record
                 if (!string.IsNullOrEmpty(entity.CoyName) && !string.IsNullOrEmpty(entity.CoyAddress) && !string.IsNullOrEmpty(entity.CoyRCNumber))
                 {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.COMPANY_MENU_URL);
                     CompanyEntity companyEntity = new()
                     {
                         Name = entity.CoyName,
                         Address = entity.CoyAddress,
                         Sector = entity.CoySector,
                         Subsector = entity.CoySubsector,
-                        RCNumber = entity.CoyRCNumber
+                        RCNumber = entity.CoyRCNumber,
+                        BaseProcessMenu = currentMenu
                     };
                     await companyEntity.Create();
                     entity.Company = companyEntity.Id;
@@ -223,9 +249,26 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await db.Update(entity);
                 }
 
+                // Next of kin record
+                if (!string.IsNullOrEmpty(entity.KinFirstNumber) && !string.IsNullOrEmpty(entity.KinLastName) && !string.IsNullOrEmpty(entity.KinMobileNumber) && !entity.KinRelationship.IsNullOrZero())
+                {
+                    NextOfKinEntity nextOfKinEntity = new()
+                    {
+                        Company = entity.Company,
+                        Employee = entity.Id,
+                        FirstName = entity.KinFirstNumber,
+                        LastName = entity.KinLastName,
+                        MobileNumber = entity.KinMobileNumber,
+                        Relationship = entity.KinRelationship
+                    };
+                    await nextOfKinEntity.Create();
+                    await db.Insert(nextOfKinEntity);
+                }
+
                 // User login record
                 if (!string.IsNullOrEmpty(entity.UserName) && !entity.Role.IsNullOrZero())
                 {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.USER_MENU_URL);
                     UserEntity userEntity = new()
                     {
                         Company = entity.Company,
@@ -239,7 +282,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                         IsSystem = GlobalConstant.ZERO,
                         IsOnline = GlobalConstant.ZERO,
                         WebToken = SecurityHelper.GetGuid(true),
-                        ApiToken = string.Empty
+                        ApiToken = string.Empty,
+                        BaseProcessMenu = currentMenu
                     };
                     await userEntity.Create();
                     entity.User = userEntity.Id;

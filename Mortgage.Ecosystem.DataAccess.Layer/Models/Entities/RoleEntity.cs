@@ -31,11 +31,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Remark")]
         public string? Remark { get; set; }
 
-        // The menu, page and button corresponding to the role
         [NotMapped]
         public string? CompanyName { get; set; }
 
         [NotMapped]
-        public string? MenuIds { get; set; }
+        public string? MenuIds { get; set; } // The menu, page and button corresponding to the role
     }
 }

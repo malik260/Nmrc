@@ -1,4 +1,11 @@
-﻿namespace Mortgage.Ecosystem.DataAccess.Layer.Helpers
+﻿using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
+using Newtonsoft.Json;
+using System.Data;
+using System.Net;
+using System.Text;
+using System.Xml;
+
+namespace Mortgage.Ecosystem.DataAccess.Layer.Helpers
 {
     // IP Location Tool
     public class IpLocationHelper
@@ -35,15 +42,22 @@
             string postData = string.Format("ip={0}", ipAddress);
             string result = HttpHelper.HttpPost(url, postData);
             string ipLocation = string.Empty;
-            if (!string.IsNullOrEmpty(result))
+            //if (!string.IsNullOrEmpty(result))
+            //{
+            //    var json = JsonHelper.ToJObject(result);
+            //    var jsonData = json["data"];
+            //    if (jsonData != null)
+            //    {
+            //        ipLocation = jsonData["region"] + " " + jsonData["city"];
+            //        ipLocation = ipLocation.Trim();
+            //    }
+            //}
+            var json = JsonHelper.ToJObject(result);
+            var jsonData = json["data"];
+            if (jsonData != null)
             {
-                var json = JsonHelper.ToJObject(result);
-                var jsonData = json["data"];
-                if (jsonData != null)
-                {
-                    ipLocation = jsonData["region"] + " " + jsonData["city"];
-                    ipLocation = ipLocation.Trim();
-                }
+                ipLocation = jsonData["region"] + " " + jsonData["city"];
+                ipLocation = ipLocation.Trim();
             }
             return ipLocation;
         }
@@ -64,6 +78,86 @@
                 ipLocation = ipLocation.Trim();
             }
             return ipLocation;
+        }
+
+        public static string? GetLocation(string ipAddress)
+        {
+            string? jsonString = null;
+            string url = $"http://freegeoip.net/xml/{ipAddress}";
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            var proxy = new WebProxy(url, true);
+            request.Proxy = proxy;
+            request.Timeout = 2000;
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                StreamReader responseStream = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+                string returnValue = responseStream.ReadToEnd();
+                response.Close();
+                responseStream.Close();
+                XmlReader xmlReader = XmlReader.Create(new StringReader(returnValue));
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(returnValue.ToString());
+                jsonString = JsonConvert.SerializeXmlNode(xmlDoc);
+            }
+            catch (Exception)
+            {
+                jsonString = null;
+            }
+
+            //if (string.IsNullOrEmpty(jsonString))
+            //{
+            //    WebRequest webRequest = WebRequest.Create("http://freegeoip.net/xml/" + ipAddress);
+            //    WebProxy px = new WebProxy("http://freegeoip.net/xml/" + ipAddress, true);
+            //    webRequest.Proxy = px;
+            //    webRequest.Timeout = 2000;
+            //    try
+            //    {
+            //        WebResponse rep = webRequest.GetResponse();
+            //        XmlTextReader xtr = new XmlTextReader(rep.GetResponseStream());
+            //        DataSet ds = new DataSet();
+            //        ds.ReadXml(xtr);
+            //        return ds.Tables[0];
+            //    }
+            //    catch
+            //    {
+            //        return null;
+            //    }
+            //}
+            return jsonString;
+
+            //WebRequest webRequest = WebRequest.Create("http://freegeoip.net/xml/" + ipAddress);
+            //WebProxy px = new WebProxy("http://freegeoip.net/xml/" + ipAddress, true);
+            //webRequest.Proxy = px;
+            //webRequest.Timeout = 2000;
+            //try
+            //{
+            //    WebResponse rep = webRequest.GetResponse();
+            //    XmlTextReader xtr = new XmlTextReader(rep.GetResponseStream());
+            //    DataSet ds = new DataSet();
+            //    ds.ReadXml(xtr);
+            //    return ds.Tables[0];
+            //}
+            //catch
+            //{
+            //    return null;
+            //}
+        }
+
+        public static string GetMachineNameUsingIPAddress(string varIpAdress)
+        {
+            string machineName = string.Empty;
+            try
+            {
+                IPHostEntry hostEntry = Dns.GetHostEntry(varIpAdress);
+
+                machineName = hostEntry.HostName;
+            }
+            catch (Exception ex)
+            {
+                // Machine not found...    
+            }
+            return machineName;
         }
 
         #endregion

@@ -1,6 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base;
 using System.ComponentModel.DataAnnotations.Schema;
-using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 {

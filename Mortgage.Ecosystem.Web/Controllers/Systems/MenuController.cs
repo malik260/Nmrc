@@ -61,11 +61,21 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
             return Json(obj);
         }
 
+        //[HttpPost]
+        //[AuthorizeFilter("menu:view")]
+        //public async Task<IActionResult> GetFormJson(long id)
+        //{
+        //    TData<MenuEntity> obj = await _iMenuService.GetEntity(id);
+        //    ViewBag.ApprovalLevel = obj.Data.ApprovalLevel;
+        //    return Json(obj);
+        //}
+
         [HttpGet]
         [AuthorizeFilter("menu:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<MenuEntity> obj = await _iMenuService.GetEntity(id);
+            ViewBag.ApprovalLevel = obj.Data.ApprovalLevel;
             return Json(obj);
         }
 

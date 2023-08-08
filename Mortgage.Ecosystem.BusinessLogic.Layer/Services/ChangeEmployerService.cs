@@ -49,7 +49,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 obj.Data.Add(new ZtreeInfo
                 {
-                    id = changeEmployer.Id,                    
+                    id = changeEmployer.Id,
                 });
             }
             obj.Tag = 1;
@@ -66,7 +66,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 obj.Data.Add(new ZtreeInfo
                 {
-                    id = changeEmployer.Id,                    
+                    id = changeEmployer.Id,
                 });
                 List<long> userIdList = userList.Where(t => t.Company == changeEmployer.Id).Select(t => t.Employee).ToList();
                 foreach (UserEntity user in userList.Where(t => userIdList.Contains(t.Employee)))
@@ -131,9 +131,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             }
 
             // Update the existing entity with the new data
-            existingEntity.EmployerNo = entity.CurrentEmployerNo;
-            existingEntity.Employer = entity.CurrentEmployer;           
-           
+            //existingEntity.EmployerNo = entity.CurrentEmployerNo;
+            //existingEntity.Employer = entity.CurrentEmployer;           
+
 
             // Save the changes to the database
             await _iUnitOfWork.Employees.SaveForm(existingEntity);

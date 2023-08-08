@@ -2,7 +2,6 @@
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Resources;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
-using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -11,14 +10,8 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Drawing;
-using System.Linq.Expressions;
 using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
-using System.Web;
-using static Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos.LoanApplicationDTO;
 //using static Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos.LoanProductDTO;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
@@ -241,7 +234,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
         [HttpPost]
 
-        public async Task <List<messages>> UpdateLoanAffordability(checkafford affordabilityVM)
+        public async Task<List<messages>> UpdateLoanAffordability(checkafford affordabilityVM)
         {
 
             try
@@ -257,13 +250,13 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
                     obj = result.result;
                     return obj;
-                }                
+                }
                 else
                 {
                     List<messages> obj = new List<messages>();
 
                     obj = result.result;
-                    
+
                     return obj;
                 }
             }
@@ -321,11 +314,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 };
                 NextofKin NOK = new NextofKin()
                 {
-                    firstName = EmployeeInformation.NOKName,
-                    lastName = EmployeeInformation.NOKName,
-                    contactAddress = EmployeeInformation.NOKAddress,
-                    emailAddress = EmployeeInformation.NOKEmailAddress,
-                    mobilePhoneNo = EmployeeInformation.NOKNumber,
+                    //firstName = EmployeeInformation.NOKName,
+                    //lastName = EmployeeInformation.NOKName,
+                    //contactAddress = EmployeeInformation.NOKAddress,
+                    //emailAddress = EmployeeInformation.NOKEmailAddress,
+                    //mobilePhoneNo = EmployeeInformation.NOKNumber,
                     nearestLandmark = "",
                     cityId = 3017,
                     relationship = EmployeeInformation.KinRelationship.ToString(),
@@ -391,7 +384,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 result.monthlyRepayment = AffordabilityCheck.FirstOrDefault().amountRequested.ToString();
                 result.rate = AffordabilityCheck.FirstOrDefault().rate;
                 result.proposedTenor = AffordabilityCheck.FirstOrDefault().proposedTenor;
-                
+
 
             }
             TData<AffordabilityResponseDto> obj = new TData<AffordabilityResponseDto>();
@@ -429,11 +422,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 };
                 NextofKin NOK = new NextofKin()
                 {
-                    firstName = EmployeeInformation.NOKName,
-                    lastName = EmployeeInformation.NOKName,
-                    contactAddress = EmployeeInformation.NOKAddress,
-                    emailAddress = EmployeeInformation.NOKEmailAddress,
-                    mobilePhoneNo = EmployeeInformation.NOKNumber,
+                    //firstName = EmployeeInformation.NOKName,
+                    //lastName = EmployeeInformation.NOKName,
+                    //contactAddress = EmployeeInformation.NOKAddress,
+                    //emailAddress = EmployeeInformation.NOKEmailAddress,
+                    //mobilePhoneNo = EmployeeInformation.NOKNumber,
                     nearestLandmark = "",
                     cityId = 3017,
                     relationship = EmployeeInformation.KinRelationship.ToString(),

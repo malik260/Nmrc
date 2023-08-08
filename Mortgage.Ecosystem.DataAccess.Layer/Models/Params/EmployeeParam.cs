@@ -1,4 +1,6 @@
-﻿namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
 {
     public class EmployeeListParam
     {
@@ -19,5 +21,8 @@
         public int Gender { get; set; }
         public byte[]? Portrait { get; set; }
         public string? PortraitType { get; set; }
+
+        [NotMapped]
+        public List<long>? Ids { get; set; }
     }
 }

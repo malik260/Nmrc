@@ -143,12 +143,46 @@
                 <a class="navbar-minimalize minimalize-styl-2" href="#" title="Collapse the menu">
                     <i class="fa fa-bars"></i>
                 </a>
-                @if(!string.IsNullOrEmpty(cLogo)){
+                @if (!string.IsNullOrEmpty(cLogo))
+                {
                     <img src='@cLogo' class="" height="27" width="27" style="margin-top: -7px; margin-right: 5px; border: 1px solid ThreeDShadow;" />
                 }
                 <strong style="font-size: large; font-weight: bold; color: #fff; letter-spacing: 15px; text-align: center; text-shadow: 1px 1px 1px #333;">@cName</strong>
                 <ul class="nav navbar-top-links navbar-right welcome-message">
                     <li><a id="fullScreen"><i class="fa fa-arrows-alt"></i>Full screen</a></li>
+                    @if (operatorInfo.ApprovalItemCount > 0)
+                    {
+                        <li>
+                            <a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
+                                <i class="fa fa-bell-o fa-lg"></i>
+                                <span class="label-custom label-danger">@operatorInfo.ApprovalItemCount</span>
+                            </a>
+                            <ul class="dropdown-menu" style="padding: 0 0 3px;">
+                                @foreach (var item in @operatorInfo.ApprovalEmployeeItems)
+                                {
+                                    <li class="mt5">
+                                        <a href="#" class="list-group-item">
+                                            <h4 class="list-group-item-heading text-overflow">
+                                                <i class="fa fa-fw fa-plus-square"></i> @item.NHFNumber
+                                            </h4>
+                                            <p class="list-group-item-text text-overflow">@item.EmailAddress [@item.BaseCreateTime]</p>
+                                        </a>
+                                    </li>
+                                }
+                                @foreach (var item in @operatorInfo.ApprovalEmployerItems)
+                                {
+                                    <li class="mt5">
+                                        <a href="#" class="list-group-item">
+                                            <h4 class="list-group-item-heading text-overflow">
+                                                <i class="fa fa-fw fa-plus-square"></i> @item.Name
+                                            </h4>
+                                            <p class="list-group-item-text text-overflow">@item.EmailAddress [@item.BaseCreateTime]</p>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
                     <li class="dropdown user-menu">
                         <a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
                             <img src="@portrait" class="user-image">

@@ -63,6 +63,27 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+        public async Task<TData<List<CompanyEntity>>> GetApprovalPageList(CompanyListParam param, Pagination pagination)
+        {
+            TData<List<CompanyEntity>> obj = new TData<List<CompanyEntity>>();
+            obj.Data = await _iUnitOfWork.Companies.GetApprovalPageList(param, pagination);
+            if (obj.Data.Count > 0)
+            {
+                List<SectorEntity> sectorList = await _iUnitOfWork.Sectors.GetList(new SectorListParam { Ids = obj.Data.Select(p => p.Sector).ToList() });
+                List<CompanyClassEntity> companyClassList = await _iUnitOfWork.CompanyClasses.GetList(new CompanyClassListParam { Ids = obj.Data.Select(p => p.CompanyClass).ToList() });
+                List<CompanyTypeEntity> companyTypeList = await _iUnitOfWork.CompanyTypes.GetList(new CompanyTypeListParam { Ids = obj.Data.Select(p => p.CompanyType).ToList() });
+                foreach (CompanyEntity company in obj.Data)
+                {
+                    company.SectorName = sectorList.Where(p => p.Id == company.Sector).Select(p => p.Name).FirstOrDefault();
+                    company.CompanyClassName = companyClassList.Where(p => p.Id == company.CompanyClass).Select(p => p.Name).FirstOrDefault();
+                    company.CompanyTypeName = companyTypeList.Where(p => p.Id == company.CompanyType).Select(p => p.Name).FirstOrDefault();
+                }
+            }
+            obj.Total = pagination.TotalCount;
+            obj.Tag = 1;
+            return obj;
+        }
+
         public async Task<TData<List<ZtreeInfo>>> GetZtreeCompanyList(CompanyListParam param)
         {
             var obj = new TData<List<ZtreeInfo>>();

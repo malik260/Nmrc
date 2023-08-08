@@ -47,10 +47,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("ApprovalLevel")]
         public int ApprovalLevel { get; set; }
 
-        // Approval count
-        [Column("Approved")]
-        public int Approved { get; set; }
-
         // Remark
         [Column("Remark")]
         public string? Remark { get; set; }

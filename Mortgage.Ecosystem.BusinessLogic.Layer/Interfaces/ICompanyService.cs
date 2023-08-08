@@ -10,6 +10,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
     {
         Task<TData<List<CompanyEntity>>> GetList(CompanyListParam param);
         Task<TData<List<CompanyEntity>>> GetPageList(CompanyListParam param, Pagination pagination);
+        Task<TData<List<CompanyEntity>>> GetApprovalPageList(CompanyListParam param, Pagination pagination);
         Task<TData<List<ZtreeInfo>>> GetZtreeCompanyList(CompanyListParam param);
         Task<TData<List<ZtreeInfo>>> GetZtreeUserList(CompanyListParam param);
         Task<TData<CompanyEntity>> GetEntity(long id);

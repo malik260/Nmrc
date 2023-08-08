@@ -38,9 +38,28 @@ namespace Mortgage.Ecosystem.Web.Controllers
 
             sw.Stop();
             var ip = NetHelper.Ip;
+            //var publicIp = NetHelper.GetPublicIPAddress();
             var operateEntity = new LogOperateEntity();
             var controllerName = context.RouteData.Values["controller"] + "/";
             var currentUrl = "/" + controllerName + action;
+            var currentMenuUrl = controllerName + action;
+
+            if (user != null)
+            {
+                var currentMenu = await new DataRepository().GetMenuId(currentMenuUrl);
+                if (currentMenu > 0)
+                {
+                    user.CurrentMenu = currentMenu;
+                }
+
+                var approvalEmployeeItems = await new DataRepository().GetEmployeeApprovalItems();
+                user.ApprovalEmployeeItems = approvalEmployeeItems.ToList();
+                user.ApprovalItemCount = user.ApprovalEmployeeItems.Count;
+
+                var approvalEmployerItems = await new DataRepository().GetCompanyApprovalItems();
+                user.ApprovalEmployerItems = approvalEmployerItems.ToList();
+                user.ApprovalItemCount += user.ApprovalEmployerItems.Count;
+            }
 
             var notLogAction = new string[] { "GetServerJson", "Error" };
             if (!notLogAction.Select(p => p.ToUpper()).Contains(action.ToUpper()))
@@ -94,6 +113,7 @@ namespace Mortgage.Ecosystem.Web.Controllers
 
                 if (user != null)
                 {
+                    operateEntity.Company = user.Company > 0 ? user.Company : 0;
                     operateEntity.BaseCreatorId = user.Employee;
                 }
 

@@ -7,13 +7,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IAccountTypeRepository AccountTypes { get; }
         IAgentTypeRepository AgentTypes { get; }
         IAlertTypeRepository AlertTypes { get; }
-
         IAllNHFSubscriberRepository AllNHFSubscribers { get; }
-
+        IApprovalLogRepository ApprovalLogs { get; }
+        IApprovalSetupRepository ApprovalSetups { get; }
+        IApproveAgentsRepository ApproveAgents { get; }
         IAutoJobLogRepository AutoJobLogs { get; }
         IAutoJobRepository AutoJobs { get; }
-
-        IApproveAgentsRepository ApproveAgents { get; }
         IApproveEmployerAggregatorRepository ApproveEmployerAggregators { get; }
         IBankRepository Banks { get; }
         IBranchRepository Branches { get; }
@@ -23,34 +22,23 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         ICompanyClassRepository CompanyClasses { get; }
         ICompanyTypeRepository CompanyTypes { get; }
         IContributionFrequencyRepository ContributionFrequencies { get; }
-
         IContributionRepository Contributions { get; }
         IContributionRefundPostingRepository ContributionRefundPostings { get; }
-
         IContributionHistoryRepository ContributionHistories { get; }
-
         ICustomerProfileUpdateRepository CustomerProfileUpdates { get; }
-
         IDepartmentRepository Departments { get; }
         IDesignationRepository Designations { get; }
         IDiasporaUserRepository DiasporaUsers { get; }
-
         IEmployeeRepository Employees { get; }
         IETicketRepository ETickets { get; }
-
         IFeedBackFormRepository FeedBackForms { get; }
         IFinanceCounterpartyTransactionRepository FinanceCounterpartyTransactions { get; }
         IFinanceTransactionRepository FinanceTransactions { get; }
-
         IGenderRepository Genders { get; }
-
         IInternetBankingUsersRepository InternetBankingUsers { get; }
-
         ILoanInitiationRepository LoanInitiations { get; }
-
         ILoanRepaymentRepository LoanRepayments { get; }
         ILoanScheduleRepository LoanSchedules { get; }
-
         ILogLoginRepository LogLogins { get; }
         ILogOperateRepository LogOperates { get; }
         IMaritalStatusRepository MaritalStatus { get; }
@@ -59,7 +47,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         INationalityRepository Nationalities { get; }
         INextOfKinRepository NextOfKins { get; }
         INHFCustomerRequestRepository NHFCustomerRequests { get; }
-
         INHFRegUsersRepository NHFRegUsers { get; }
         IRefundRepository Refunds { get; }
         IRefundConditionRepository RefundConditions { get; }
@@ -76,7 +63,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         ISubSectorRepository SubSectors { get; }
         ITitleRepository Titles { get; }
         IUnlockNhfPortalRepository UnlockNhfPortals { get; }
-
         IUserBelongRepository UserBelongs { get; }
         IUserRepository Users { get; }
     }

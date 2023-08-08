@@ -8,6 +8,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
     {
         Task<List<EmployeeEntity>> GetList(EmployeeListParam param);
         Task<List<EmployeeEntity>> GetPageList(EmployeeListParam param, Pagination pagination);
+        Task<List<EmployeeEntity>> GetApprovalPageList(EmployeeListParam param, Pagination pagination);
         Task<EmployeeEntity> GetEntity(long id);
         Task<EmployeeEntity> GetById(long id);
         bool ExistEmployee(EmployeeEntity entity);

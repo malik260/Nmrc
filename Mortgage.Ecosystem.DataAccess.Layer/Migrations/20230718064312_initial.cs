@@ -13,8 +13,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "Finance_TblFinanceCounterpartyTransaction",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     TransactionId = table.Column<int>(type: "int", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Ref = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -45,6 +44,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -59,8 +59,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "Finance_TblFinanceTransaction",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TransactonType = table.Column<int>(type: "int", nullable: true),
                     TransactonId = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -92,6 +91,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     IsReversed = table.Column<int>(type: "int", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -106,13 +106,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "Refund_TblContributionrefundposting",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     LedgeDr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Ledgercr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Postingtype = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -127,8 +127,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "Refund_TblRefundcondition",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Year = table.Column<byte>(type: "tinyint", nullable: true),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -136,6 +135,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -150,8 +150,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "Refund_TblRefundprofiling",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     NhfNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ConditionToApply = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -183,6 +182,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     ApplicationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -197,8 +197,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "Remita_TblRemitaPaymentDetails",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EmployeeNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -210,6 +209,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Amount = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -230,6 +230,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -250,6 +251,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -270,6 +272,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -291,6 +294,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -311,6 +315,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -331,6 +336,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -351,6 +357,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -374,6 +381,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -394,6 +402,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -414,6 +423,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -437,6 +447,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Currency = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -457,6 +468,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -477,6 +489,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -500,6 +513,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Nationality = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -521,6 +535,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -541,6 +556,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -555,8 +571,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_AllNHFSubscriber",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     NHFEmployerNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NHFEmployeeNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -569,6 +584,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     DateOfIncorporation = table.Column<DateTime>(type: "datetime2", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -580,11 +596,61 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tbl_ApprovalLog",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Company = table.Column<long>(type: "bigint", nullable: false),
+                    Branch = table.Column<long>(type: "bigint", nullable: true),
+                    MenuId = table.Column<long>(type: "bigint", nullable: false),
+                    MenuType = table.Column<int>(type: "int", nullable: false),
+                    Authority = table.Column<long>(type: "bigint", nullable: false),
+                    ApprovalCount = table.Column<int>(type: "int", nullable: false),
+                    ApprovalLevel = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
+                    BaseVersion = table.Column<int>(type: "int", nullable: false),
+                    BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseIsDelete = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tbl_ApprovalLog", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tbl_ApprovalSetup",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Company = table.Column<long>(type: "bigint", nullable: false),
+                    Branch = table.Column<long>(type: "bigint", nullable: false),
+                    MenuId = table.Column<long>(type: "bigint", nullable: false),
+                    Authority = table.Column<long>(type: "bigint", nullable: false),
+                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
+                    BaseVersion = table.Column<int>(type: "int", nullable: false),
+                    BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseIsDelete = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tbl_ApprovalSetup", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tbl_ApproveAgents",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Company = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -595,6 +661,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -609,8 +676,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_ApproveEmployerAggregator",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -620,6 +686,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -634,8 +701,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_AutoJob",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     JobGroupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JobName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JobStatus = table.Column<int>(type: "int", nullable: true),
@@ -646,6 +712,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -660,14 +727,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_AutoJobLog",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     JobGroupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JobName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LogStatus = table.Column<int>(type: "int", nullable: true),
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false)
+                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -678,8 +745,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_Branch",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Company = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -690,6 +756,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Manager = table.Column<long>(type: "bigint", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -704,8 +771,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_ChangeEmployer",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     NhfNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrentEmployer = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrentEmployerNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -714,6 +780,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -728,13 +795,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_ChangePassword",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     OldPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NewPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConfirmPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -749,8 +816,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_Company",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -775,6 +841,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -789,8 +856,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_Contribution",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     EmployeeNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmployerName = table.Column<string>(name: "Employer Name", type: "nvarchar(max)", nullable: true),
                     ContributionAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -807,6 +873,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     File = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -821,8 +888,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_ContributionHistory",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     NHFNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -834,6 +900,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Year = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -861,6 +928,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -875,14 +943,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_DiasporaUser",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     NIDCOMNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmployerStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -897,8 +965,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_Employee",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Company = table.Column<long>(type: "bigint", nullable: false),
                     Branch = table.Column<long>(type: "bigint", nullable: false),
                     Department = table.Column<int>(type: "int", nullable: false),
@@ -925,15 +992,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     AlertType = table.Column<int>(type: "int", nullable: false),
                     Portrait = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     PortraitType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NOKName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NOKNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NOKEmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NOKAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Relationship = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Employer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmployerNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserType = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -948,8 +1011,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_ETicket",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     RequestNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Subject = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -959,6 +1021,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Disapproved = table.Column<int>(type: "int", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -973,14 +1036,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_FeedBackForm",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Subject = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -995,8 +1058,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_InternetBankingUsers",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     AccountNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccountName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CustomerCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1004,6 +1066,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1018,8 +1081,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_LoanInitation",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     LoanProduct = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Sector = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Principal = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1036,6 +1098,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     ReferenceNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1050,8 +1113,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_LoanRepaymentEntity",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Totalamount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Valuedate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Transactionid = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -1069,6 +1131,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1083,8 +1146,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_LoanSchedule",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     CreditId = table.Column<int>(type: "int", nullable: false),
                     Customer = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Product = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1099,6 +1161,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     EndPrincipalAmount = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1124,7 +1187,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExtraRemark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false)
+                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1149,7 +1213,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     ExecuteResult = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExecuteTime = table.Column<int>(type: "int", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false)
+                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1160,8 +1225,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_Menu",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Parent = table.Column<long>(type: "bigint", nullable: false),
                     MenuName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MenuIcon = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1172,10 +1236,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     MenuStatus = table.Column<int>(type: "int", nullable: false),
                     Authorize = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApprovalLevel = table.Column<int>(type: "int", nullable: false),
-                    Approved = table.Column<int>(type: "int", nullable: false),
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1190,13 +1254,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_MenuAuthorize",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     MenuId = table.Column<long>(type: "bigint", nullable: false),
                     AuthorizeId = table.Column<long>(type: "bigint", nullable: false),
                     AuthorizeType = table.Column<int>(type: "int", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false)
+                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1219,6 +1283,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Relationship = table.Column<int>(type: "int", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1233,8 +1298,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_NHFCustomerRequest",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1243,6 +1307,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     RequestedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1257,8 +1322,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_NHFRegUsers",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     NHFEmployerNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1284,6 +1348,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     PostalAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1298,8 +1363,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_PaymentHistory",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     NHFNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Amount = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1308,6 +1372,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1322,8 +1387,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_PropertyGallery",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     PropertyType = table.Column<int>(type: "int", nullable: false),
                     PriceRangeMin = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PriceRangeMax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -1333,6 +1397,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1347,8 +1412,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_PropertyRegistration",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PropertyType = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1359,6 +1423,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     DocumentTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1373,8 +1438,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_PropertySubscription",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     PropertyType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PropertyLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1385,6 +1449,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     ViewPictures = table.Column<byte>(type: "tinyint", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1399,8 +1464,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_Refund",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     NhfNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -1423,6 +1487,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Files = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1437,8 +1502,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_Role",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Company = table.Column<long>(type: "bigint", nullable: false),
                     Mode = table.Column<int>(type: "int", nullable: false),
                     RoleName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -1447,6 +1511,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1461,14 +1526,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_UnlockNhfPortal",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     AccountNo = table.Column<string>(name: "Account No", type: "nvarchar(max)", nullable: true),
                     AccountName = table.Column<string>(name: "Account Name", type: "nvarchar(max)", nullable: true),
                     CustomerCode = table.Column<string>(name: "Customer Code", type: "nvarchar(max)", nullable: true),
                     UnlockBy = table.Column<string>(name: "Unlock By", type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1502,6 +1567,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     ApiToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
                     BaseVersion = table.Column<int>(type: "int", nullable: false),
                     BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
@@ -1516,14 +1582,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_UserBelong",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
                     Company = table.Column<long>(type: "bigint", nullable: false),
                     Employee = table.Column<long>(type: "bigint", nullable: false),
                     Belong = table.Column<long>(type: "bigint", nullable: false),
                     BelongType = table.Column<int>(type: "int", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false)
+                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1601,6 +1667,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
 
             migrationBuilder.DropTable(
                 name: "tbl_AllNHFSubscriber");
+
+            migrationBuilder.DropTable(
+                name: "tbl_ApprovalLog");
+
+            migrationBuilder.DropTable(
+                name: "tbl_ApprovalSetup");
 
             migrationBuilder.DropTable(
                 name: "tbl_ApproveAgents");

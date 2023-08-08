@@ -32,6 +32,18 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         {
             return View();
         }
+
+        [AuthorizeFilter("nhfregusers:view")]
+        public IActionResult NHFRegUsersIndex()
+        {
+            return View();
+        }
+
+        public IActionResult NHFRegUserForm()
+        {
+            return View();
+        }
+
         #endregion View function
 
         #region Get data
@@ -48,6 +60,14 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetPageListJson(EmployeeListParam param, Pagination pagination)
         {
             TData<List<EmployeeEntity>> obj = await _employeeService.GetPageList(param, pagination);
+            return Json(obj);
+        }
+
+        [HttpGet]
+        [AuthorizeFilter("employee:search,user:search")]
+        public async Task<IActionResult> GetApprovalPageListJson(EmployeeListParam param, Pagination pagination)
+        {
+            TData<List<EmployeeEntity>> obj = await _employeeService.GetApprovalPageList(param, pagination);
             return Json(obj);
         }
 

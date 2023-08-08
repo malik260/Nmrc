@@ -34,6 +34,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base
         [Column("BaseCreatorId")]
         public long BaseCreatorId { get; set; }
 
+        // Approving process (Menu Id)
+        [Column("BaseProcessMenu")]
+        public long BaseProcessMenu { get; set; }
+
         // Create
         public new async Task Create()
         {
@@ -48,6 +52,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base
             {
                 var user = await Operator.Operator.Instance.Current(Token);
                 BaseCreatorId = user != null ? user.Employee : 0;
+            }
+
+            if (BaseProcessMenu == default)
+            {
+                var user = await Operator.Operator.Instance.Current(Token);
+                BaseProcessMenu = user != null ? user.CurrentMenu : 0;
             }
         }
     }
@@ -112,6 +122,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base
         public static string[] IdentityFieldList { get; } = new string[]
         {
             "Id",
+            "BaseProcessMenu",
             "BaseIsDelete",
             "BaseCreateTime",
             "BaseModifyTime",

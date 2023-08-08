@@ -2,6 +2,7 @@
 using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
+using Mortgage.Ecosystem.DataAccess.Layer.Repositories;
 using Mortgage.Ecosystem.DataAccess.Layer.Repositories.Base;
 using System.Text;
 
@@ -96,7 +97,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
 
                 #endregion Department Info
 
-                #region roles
+                #region Roles
 
                 if (!string.IsNullOrEmpty(operatorInfo.Company.ToString()) && !string.IsNullOrEmpty(operatorInfo.Employee.ToString()))
                 {
@@ -108,9 +109,150 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                     operatorInfo.RoleIds = string.Join(",", roleList.Select(p => p.RoleId).ToArray());
                 }
 
-                #endregion roles
+                #endregion Roles
+
+                #region Approval Employee Notification
+                if (!string.IsNullOrEmpty(operatorInfo.Company.ToString()) && !string.IsNullOrEmpty(operatorInfo.Employee.ToString()))
+                {
+                    strSql.Clear();
+                    operatorInfo.ApprovalItemCount = 0;
+                    var approvalLogListParam = new ApprovalLogListParam()
+                    {
+                        Company = operatorInfo.Company,
+                        //Branch = operatorInfo.Branch,
+                        Authority = operatorInfo.Employee
+                    };
+                    var approvalLogRecords = new ApprovalLogRepository().GetList(approvalLogListParam);
+                    if (approvalLogRecords != null)
+                    {
+                        strSql.Append(@"SELECT a.* FROM tbl_Employee a
+                                INNER JOIN tbl_ApprovalSetup b ON a.Company = b.Company
+                                INNER JOIN tbl_Menu c ON a.BaseProcessMenu = c.Id AND b.MenuId = c.Id
+                                WHERE b.Company = " + operatorInfo.Company + " AND b.Authority = " + operatorInfo.Employee + " AND c.ApprovalLevel > 0");
+                    }
+                    else
+                    {
+                        strSql.Append(@"SELECT a.* FROM tbl_Employee a
+                                INNER JOIN tbl_ApprovalSetup b ON a.Company = b.Company
+                                INNER JOIN tbl_ApprovalLog c ON b.Company = c.Company AND b.Authority = c.Authority AND b.MenuId = c.MenuId
+                                INNER JOIN tbl_Menu d ON a.BaseProcessMenu = d.Id AND b.MenuId = d.Id
+                                WHERE b.Company = " + operatorInfo.Company + " AND b.Authority = " + operatorInfo.Employee + " AND c.ApprovalCount <= 0 AND d.ApprovalLevel > 0 AND c.ApprovalCount < d.ApprovalLevel");
+                    }
+                    IEnumerable<EmployeeEntity> employeeList = await BaseRepository().FindList<EmployeeEntity>(strSql.ToString());
+                    operatorInfo.ApprovalEmployeeItems = MapHelper.Map(employeeList, operatorInfo.ApprovalEmployeeItems);
+                    operatorInfo.ApprovalEmployeeItems = operatorInfo.ApprovalEmployeeItems.ToList();
+                    operatorInfo.ApprovalItemCount = operatorInfo.ApprovalEmployeeItems.Count;
+                }
+                #endregion Approval Employee Notification
+
+                #region Approval Employer Notification
+                if (!string.IsNullOrEmpty(operatorInfo.Company.ToString()) && !string.IsNullOrEmpty(operatorInfo.Employee.ToString()))
+                {
+                    strSql.Clear();
+                    var approvalLogListParam = new ApprovalLogListParam()
+                    {
+                        Company = operatorInfo.Company,
+                        //Branch = operatorInfo.Branch,
+                        Authority = operatorInfo.Employee
+                    };
+                    var approvalLogRecords = new ApprovalLogRepository().GetList(approvalLogListParam);
+                    if (approvalLogRecords != null)
+                    {
+                        strSql.Append(@"SELECT a.* FROM tbl_Company a
+                                INNER JOIN tbl_ApprovalSetup b ON a.Id = b.Company
+                                INNER JOIN tbl_Menu c ON a.BaseProcessMenu = c.Id AND b.MenuId = c.Id
+                                WHERE b.Company = " + operatorInfo.Company + " AND b.Authority = " + operatorInfo.Employee + " AND c.ApprovalLevel > 0");
+                    }
+                    else
+                    {
+                        strSql.Append(@"SELECT a.* FROM tbl_Company a
+                                INNER JOIN tbl_ApprovalSetup b ON a.Id = b.Company
+                                INNER JOIN tbl_ApprovalLog c ON b.Company = c.Company AND b.Authority = c.Authority AND b.MenuId = c.MenuId
+                                INNER JOIN tbl_Menu d ON a.BaseProcessMenu = d.Id AND b.MenuId = d.Id
+                                WHERE b.Company = " + operatorInfo.Company + " AND b.Authority = " + operatorInfo.Employee + " AND c.ApprovalCount <= 0 AND d.ApprovalLevel > 0 AND c.ApprovalCount < d.ApprovalLevel");
+                    }
+                    IEnumerable<CompanyEntity> companyList = await BaseRepository().FindList<CompanyEntity>(strSql.ToString());
+                    operatorInfo.ApprovalEmployerItems = MapHelper.Map(companyList, operatorInfo.ApprovalEmployerItems);
+                    operatorInfo.ApprovalEmployerItems = operatorInfo.ApprovalEmployerItems.ToList();
+                    operatorInfo.ApprovalItemCount += operatorInfo.ApprovalEmployerItems.Count;
+                }
+                #endregion Approval Employer Notification
             }
             return operatorInfo;
+        }
+
+        public async Task<long> GetMenuId(string menuUrl)
+        {
+            menuUrl = menuUrl.ToStr().Trim();
+            var menuId = 0L;
+            var strSql = new StringBuilder();
+            strSql.Append(@"SELECT a.* FROM tbl_Menu a WHERE a.MenuUrl = " + $"'{menuUrl}'");
+            var menu = await BaseRepository().FindObject<MenuEntity>(strSql.ToString());
+            if (menu != null)
+            {
+                menuId = menu.Id;
+            }
+            return menuId;
+        }
+
+        public async Task<IEnumerable<EmployeeEntity>> GetEmployeeApprovalItems()
+        {
+            var strSql = new StringBuilder();
+            strSql.Clear();
+            var user = await Operator.Instance.Current();
+            var approvalLogListParam = new ApprovalLogListParam()
+            {
+                Company = user.Company,
+                Authority = user.Employee
+            };
+            var approvalLogRecords = new ApprovalLogRepository().GetList(approvalLogListParam);
+            if (approvalLogRecords != null)
+            {
+                strSql.Append(@"SELECT a.* FROM tbl_Employee a
+                                INNER JOIN tbl_ApprovalSetup b ON a.Company = b.Company
+                                INNER JOIN tbl_Menu c ON a.BaseProcessMenu = c.Id AND b.MenuId = c.Id
+                                WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND c.ApprovalLevel > 0");
+            }
+            else
+            {
+                strSql.Append(@"SELECT a.* FROM tbl_Employee a
+                                INNER JOIN tbl_ApprovalSetup b ON a.Company = b.Company
+                                INNER JOIN tbl_ApprovalLog c ON b.Company = c.Company AND b.Authority = c.Authority AND b.MenuId = c.MenuId
+                                INNER JOIN tbl_Menu d ON a.BaseProcessMenu = d.Id AND b.MenuId = d.Id
+                                WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND c.ApprovalCount <= 0 AND d.ApprovalLevel > 0 AND c.ApprovalCount < d.ApprovalLevel");
+            }
+            IEnumerable<EmployeeEntity> employeeList = await BaseRepository().FindList<EmployeeEntity>(strSql.ToString());
+            return employeeList;
+        }
+
+        public async Task<IEnumerable<CompanyEntity>> GetCompanyApprovalItems()
+        {
+            var strSql = new StringBuilder();
+            strSql.Clear();
+            var user = await Operator.Instance.Current();
+            var approvalLogListParam = new ApprovalLogListParam()
+            {
+                Company = user.Company,
+                Authority = user.Employee
+            };
+            var approvalLogRecords = new ApprovalLogRepository().GetList(approvalLogListParam);
+            if (approvalLogRecords != null)
+            {
+                strSql.Append(@"SELECT a.* FROM tbl_Company a
+                                INNER JOIN tbl_ApprovalSetup b ON a.Id = b.Company
+                                INNER JOIN tbl_Menu c ON a.BaseProcessMenu = c.Id AND b.MenuId = c.Id
+                                WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND c.ApprovalLevel > 0");
+            }
+            else
+            {
+                strSql.Append(@"SELECT a.* FROM tbl_Company a
+                                INNER JOIN tbl_ApprovalSetup b ON a.Id = b.Company
+                                INNER JOIN tbl_ApprovalLog c ON b.Company = c.Company AND b.Authority = c.Authority AND b.MenuId = c.MenuId
+                                INNER JOIN tbl_Menu d ON a.BaseProcessMenu = d.Id AND b.MenuId = d.Id
+                                WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND c.ApprovalCount <= 0 AND d.ApprovalLevel > 0 AND c.ApprovalCount < d.ApprovalLevel");
+            }
+            IEnumerable<CompanyEntity> companyList = await BaseRepository().FindList<CompanyEntity>(strSql.ToString());
+            return companyList;
         }
     }
 }
