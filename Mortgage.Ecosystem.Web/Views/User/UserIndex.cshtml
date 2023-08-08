@@ -190,7 +190,7 @@
     function deleteForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to be selected by delete" + selectedRow.length + "iece of data?？", function () {
+            cn.confirm("Confirm to be selected by delete" + selectedRow.length + "piece of data?？", function () {
                 var ids = cn.getIds(selectedRow);
                 cn.ajax({
                     url: '@Url.Content("~/User/DeleteFormJson")' + '?ids=' + ids,

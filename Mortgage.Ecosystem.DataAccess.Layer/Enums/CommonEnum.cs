@@ -100,4 +100,28 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         [Description("General")]
         General = 5
     }
+
+    public enum ApprovalEnum
+    {
+        [Description("Pending")]
+        Pending = 0,
+
+        [Description("Approved")]
+        Approved = 1,
+
+        [Description("Rejected")]
+        Rejected = 2,
+
+        [Description("Cancelled")]
+        Cancelled = 3
+    }
+
+    public enum UserTypeEnum
+    {
+        [Description("Employee")]
+        Employee = 1,
+
+        [Description("Diaspora")]
+        Diaspora = 2
+    }
 }

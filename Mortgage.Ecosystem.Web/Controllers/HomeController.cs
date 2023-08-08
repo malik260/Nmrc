@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
@@ -187,6 +186,9 @@ namespace Mortgage.Ecosystem.Web.Controllers
             }
 
             string ip = NetHelper.Ip;
+            string machineName = IpLocationHelper.GetMachineNameUsingIPAddress(ip);
+            //string publicIp = NetHelper.GetPublicIPAddress();
+            //string location = IpLocationHelper.GetLocation(publicIp);
             string browser = NetHelper.Browser;
             string os = NetHelper.GetOSVersion();
             string userAgent = NetHelper.UserAgent;
@@ -195,6 +197,7 @@ namespace Mortgage.Ecosystem.Web.Controllers
             {
                 LogLoginEntity logLoginEntity = new LogLoginEntity()
                 {
+                    Company = userObj.Data != null ? userObj.Data.Company : 0,
                     LogStatus = userObj.Tag == 1 ? OperateStatusEnum.Success.ToInt() : OperateStatusEnum.Fail.ToInt(),
                     Remark = userObj.Message,
                     IpAddress = ip,

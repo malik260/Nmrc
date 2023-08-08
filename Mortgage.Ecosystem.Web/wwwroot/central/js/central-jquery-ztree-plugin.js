@@ -84,7 +84,7 @@
 
         // style needs to be changed to generic
         target.css("position", "relative");
-        var html = "<input id='" + eleInputId + "' name='" + eleInputId + "' readonly='readonly' type='text' class='form-control' />";
+        var html = "<input id='" + eleInputId + "' name='" + eleInputId + "' /*readonly='readonly'*/ type='text' class='form-control' />";
         html += "<div id='" + eleTreeId + "' class='ztree treeSelect-panel' style='overflow-y: auto;max-height:" + _option.maxHeight + ";border:1px solid #e5e6e7 ;margin-top:1px;display:none'></div>";
         $(html).appendTo(target);
 

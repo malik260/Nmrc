@@ -4,9 +4,7 @@ using Mortgage.Ecosystem.DataAccess.Layer;
 using Mortgage.Ecosystem.DataAccess.Layer.Configurations;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Base;
-using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories;
 using Mortgage.Ecosystem.DataAccess.Layer.Models;
-using Mortgage.Ecosystem.DataAccess.Layer.Repositories;
 using Mortgage.Ecosystem.DataAccess.Layer.Repositories.Base;
 
 namespace Mortgage.Ecosystem.Web.Authorization
@@ -40,6 +38,8 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IAgentTypeService, AgentTypeService>();
             services.AddScoped<IAlertTypeService, AlertTypeService>();
             services.AddScoped<IAllNHFSubscriberService, AllNHFSubscriberService>();
+            services.AddScoped<IApprovalLogService, ApprovalLogService>();
+            services.AddScoped<IApprovalSetupService, ApprovalSetupService>();
             services.AddScoped<IApproveAgentsService, ApproveAgentsService>();
             services.AddScoped<IApproveEmployerAggregatorService, ApproveEmployerAggregatorService>();
             services.AddScoped<IAutoJobLogService, AutoJobLogService>();

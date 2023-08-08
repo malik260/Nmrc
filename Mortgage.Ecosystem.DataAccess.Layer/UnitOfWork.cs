@@ -10,6 +10,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IAgentTypeRepository? _agentTypes;
         private IAlertTypeRepository? _alertTypes;
         private IAllNHFSubscriberRepository? _allnhfsubscribers;
+        private IApprovalLogRepository? _approvalLogs;
+        private IApprovalSetupRepository? _approvalSetups;
         private IAutoJobLogRepository? _autoJobLogs;
         private IAutoJobRepository? _autoJobs;
         private IApproveAgentsRepository? _approveAgents;
@@ -81,6 +83,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public IAllNHFSubscriberRepository AllNHFSubscribers =>
            _allnhfsubscribers ??= new AllNHFSubscriberRepository();
+
+        public IApprovalLogRepository ApprovalLogs =>
+            _approvalLogs ??= new ApprovalLogRepository();
+
+        public IApprovalSetupRepository ApprovalSetups =>
+            _approvalSetups ??= new ApprovalSetupRepository();
 
         public IAutoJobLogRepository AutoJobLogs =>
             _autoJobLogs ??= new AutoJobLogRepository();

@@ -78,16 +78,27 @@ $(function () {
     $("#btnExpandAll").click(function () {
         if (expandFlag) {
             $('#gridTable').bootstrapTreeTable('expandAll');
+            $('#grid1Table').bootstrapTreeTable('expandAll');
         } else {
             $('#gridTable').bootstrapTreeTable('collapseAll');
+            $('#grid1Table').bootstrapTreeTable('collapseAll');
         }
         expandFlag = expandFlag ? false : true;
     });
 
-
     // bootstraple table row selected button style state change
     $("#gridTable").on("check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table", function () {
         var ids = $("#gridTable").bootstrapTable("getSelections");
+        if ($('#btnDelete')) {
+            $('#btnDelete').toggleClass('disabled', !ids.length);
+        }
+        if ($('#btnEdit')) {
+            $('#btnEdit').toggleClass('disabled', ids.length != 1);
+        }
+    });
+
+    $("#grid1Table").on("check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table", function () {
+        var ids = $("#grid1Table").bootstrapTable("getSelections");
         if ($('#btnDelete')) {
             $('#btnDelete').toggleClass('disabled', !ids.length);
         }

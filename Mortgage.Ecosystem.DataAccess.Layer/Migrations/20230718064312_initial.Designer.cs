@@ -12,7 +12,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models;
 namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230628014432_initial")]
+    [Migration("20230718064312_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -97,6 +101,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -142,6 +150,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -162,11 +174,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.AllNHFSubscriberEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -186,6 +195,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -236,14 +249,26 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.ToTable("tbl_AllNHFSubscriber", (string)null);
                 });
 
-            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ApproveAgentsEntity", b =>
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ApprovalLogEntity", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ApprovalCount")
+                        .HasColumnType("int")
+                        .HasColumnName("ApprovalCount");
+
+                    b.Property<int>("ApprovalLevel")
+                        .HasColumnType("int")
+                        .HasColumnName("ApprovalLevel");
+
+                    b.Property<long>("Authority")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Authority");
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -263,6 +288,130 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
+                    b.Property<int>("BaseVersion")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseVersion");
+
+                    b.Property<long?>("Branch")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Branch");
+
+                    b.Property<long>("Company")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Company");
+
+                    b.Property<long>("MenuId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("MenuId");
+
+                    b.Property<int>("MenuType")
+                        .HasColumnType("int")
+                        .HasColumnName("MenuType");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_ApprovalLog", (string)null);
+                });
+
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ApprovalSetupEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("Authority")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Authority");
+
+                    b.Property<DateTime>("BaseCreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("BaseCreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseCreatorId");
+
+                    b.Property<int>("BaseIsDelete")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseIsDelete");
+
+                    b.Property<long>("BaseModifierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseModifierId");
+
+                    b.Property<DateTime>("BaseModifyTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
+                    b.Property<int>("BaseVersion")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseVersion");
+
+                    b.Property<long>("Branch")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Branch");
+
+                    b.Property<long>("Company")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Company");
+
+                    b.Property<long>("MenuId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("MenuId");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_ApprovalSetup", (string)null);
+                });
+
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ApproveAgentsEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("BaseCreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("BaseCreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseCreatorId");
+
+                    b.Property<int>("BaseIsDelete")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseIsDelete");
+
+                    b.Property<long>("BaseModifierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseModifierId");
+
+                    b.Property<DateTime>("BaseModifyTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -308,11 +457,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ApproveEmployerAggregatorEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -332,6 +478,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -373,11 +523,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.AutoJobEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -397,6 +544,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -434,11 +585,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.AutoJobLogEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -446,6 +594,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<long>("BaseCreatorId")
                         .HasColumnType("bigint")
                         .HasColumnName("BaseCreatorId");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<string>("JobGroupName")
                         .HasColumnType("nvarchar(max)");
@@ -492,6 +644,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -516,11 +672,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.BranchEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)")
@@ -544,6 +697,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -585,11 +742,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ChangeEmployerEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -609,6 +763,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -646,11 +804,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ChangePasswordEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -670,6 +825,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -720,6 +879,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -740,11 +903,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.CompanyEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)")
@@ -768,6 +928,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -890,6 +1054,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -910,11 +1078,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ContributionEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -934,6 +1099,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -1034,6 +1203,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -1054,11 +1227,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ContributionHistoryEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<decimal?>("AmountContributed")
                         .HasColumnType("decimal(18,2)")
@@ -1082,6 +1252,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -1127,11 +1301,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ContributionRefundPostingEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -1151,6 +1322,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -1203,6 +1378,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -1277,6 +1456,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -1309,11 +1492,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.DiasporaUserEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -1333,6 +1513,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -1362,11 +1546,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.EmployeeEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<int>("AccountType")
                         .HasColumnType("int")
@@ -1403,6 +1584,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -1434,14 +1619,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<string>("EmailAddress")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("EmailAddress");
-
-                    b.Property<string>("Employer")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Employer");
-
-                    b.Property<string>("EmployerNo")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("EmployerNumber");
 
                     b.Property<int>("EmploymentType")
                         .HasColumnType("int")
@@ -1479,22 +1656,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("NIN");
 
-                    b.Property<string>("NOKAddress")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("NOKAddress");
-
-                    b.Property<string>("NOKEmailAddress")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("NOKEmailAddress");
-
-                    b.Property<string>("NOKName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("NOKName");
-
-                    b.Property<string>("NOKNumber")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("NOKNumber");
-
                     b.Property<string>("OtherName")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("OtherName");
@@ -1511,17 +1672,21 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("PostalAddress");
 
-                    b.Property<string>("Relationship")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Relationship");
-
                     b.Property<string>("StaffNumber")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("StaffNumber");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
+
                     b.Property<int>("Title")
                         .HasColumnType("int")
                         .HasColumnName("Title");
+
+                    b.Property<int>("UserType")
+                        .HasColumnType("int")
+                        .HasColumnName("UserType");
 
                     b.HasKey("Id");
 
@@ -1531,11 +1696,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ETicketEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("ApprovalStatus")
                         .HasColumnType("nvarchar(max)")
@@ -1563,6 +1725,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -1596,11 +1762,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.FeedBackFormEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -1620,6 +1783,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -1649,11 +1816,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.FinanceCounterpartyTransactionEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<int?>("AcctTransaction")
                         .HasColumnType("int")
@@ -1686,6 +1850,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -1813,11 +1981,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.FinanceTransactionEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("AccountId")
                         .IsRequired()
@@ -1856,6 +2021,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -2010,6 +2179,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -2030,11 +2203,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.InternetBankingUsersEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("AccountName")
                         .HasColumnType("nvarchar(max)")
@@ -2063,6 +2233,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -2087,11 +2261,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.LoanInitiationEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Amount")
                         .HasColumnType("nvarchar(max)")
@@ -2115,6 +2286,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -2180,11 +2355,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.LoanRepaymentEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)")
@@ -2208,6 +2380,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -2288,11 +2464,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.LoanScheduleEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<int>("AccountNo")
                         .HasColumnType("int")
@@ -2320,6 +2493,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -2386,6 +2563,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("BaseCreatorId");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<string>("Browser")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Browser");
@@ -2438,6 +2619,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<long>("BaseCreatorId")
                         .HasColumnType("bigint")
                         .HasColumnName("BaseCreatorId");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<string>("BusinessType")
                         .HasColumnType("nvarchar(max)")
@@ -2516,6 +2701,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -2536,11 +2725,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.MenuAuthorizeEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<long>("AuthorizeId")
                         .HasColumnType("bigint")
@@ -2557,6 +2743,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("BaseCreatorId");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<long>("MenuId")
                         .HasColumnType("bigint")
                         .HasColumnName("MenuId");
@@ -2569,19 +2759,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.MenuEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<int>("ApprovalLevel")
                         .HasColumnType("int")
                         .HasColumnName("ApprovalLevel");
-
-                    b.Property<int>("Approved")
-                        .HasColumnType("int")
-                        .HasColumnName("Approved");
 
                     b.Property<string>("Authorize")
                         .HasColumnType("nvarchar(max)")
@@ -2605,6 +2788,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -2679,6 +2866,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -2740,6 +2931,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -2780,11 +2975,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.NHFCustomerRequestEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("AccountNumber")
                         .HasColumnType("nvarchar(max)")
@@ -2808,6 +3000,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -2841,11 +3037,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.NHFRegUsersEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)")
@@ -2885,6 +3078,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -2970,11 +3167,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.PaymentHistoryEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Amount")
                         .HasColumnType("nvarchar(max)")
@@ -2998,6 +3192,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3031,11 +3229,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.PropertyGalleryEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -3055,6 +3250,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3096,11 +3295,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.PropertyRegistrationEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -3120,6 +3316,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3165,11 +3365,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.PropertySubscriptionEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -3189,6 +3386,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3234,11 +3435,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.RefundConditionEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -3258,6 +3456,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3294,11 +3496,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.RefundEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<int>("Age")
                         .HasColumnType("int")
@@ -3342,6 +3541,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3411,11 +3614,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.RefundProfilingEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<decimal?>("AmountApproved")
                         .HasColumnType("decimal(18,2)")
@@ -3476,6 +3676,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3610,6 +3814,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -3630,11 +3838,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.RemitaPaymentDetailsEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("Amount")
                         .IsRequired()
@@ -3659,6 +3864,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3710,11 +3919,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.RoleEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -3734,6 +3940,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3796,6 +4006,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -3840,6 +4054,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
@@ -3898,6 +4116,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -3947,6 +4169,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -3967,11 +4193,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.UnlockNhfPortalEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<string>("AccountName")
                         .HasColumnType("nvarchar(max)")
@@ -4000,6 +4223,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
 
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
@@ -4020,11 +4247,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.UserBelongEntity", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
@@ -4032,6 +4256,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<long>("BaseCreatorId")
                         .HasColumnType("bigint")
                         .HasColumnName("BaseCreatorId");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<long>("Belong")
                         .HasColumnType("bigint")
@@ -4085,6 +4313,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<DateTime>("BaseModifyTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
 
                     b.Property<int>("BaseVersion")
                         .HasColumnType("int")

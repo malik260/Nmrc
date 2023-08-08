@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers.Web;
@@ -39,7 +38,7 @@ namespace Mortgage.Ecosystem.Web.Filter
                     Operator.Instance.RemoveCurrent();
                 }
 
-                #region not logged in
+                #region Not logged in
                 if (context.HttpContext.Request.IsAjaxRequest())
                 {
                     TData obj = new TData();

@@ -14,5 +14,6 @@
         public string? UserEmail { get; set; }
         public string? UserPassword { get; set; }
         public string? UserCompany { get; set; }
+        public string? ProcessName { get; set; }
     }
 }

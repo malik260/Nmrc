@@ -32,6 +32,18 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
 
         [NotMapped]
         public string? RoleIds { get; set; } // Role Ids
+
+        [NotMapped]
+        public long CurrentMenu { get; set; } // Current Menu ID
+
+        [NotMapped]
+        public List<EmployeeEntity>? ApprovalEmployeeItems { get; set; } // Approval Employee Items
+
+        [NotMapped]
+        public List<CompanyEntity>? ApprovalEmployerItems { get; set; } // Approval Employer Items
+
+        [NotMapped]
+        public int ApprovalItemCount { get; set; } // Approval Items Count
     }
 
     // Character information
@@ -39,5 +51,4 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
     {
         public long RoleId { get; set; } // Character ID
     }
-
 }

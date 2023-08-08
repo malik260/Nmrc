@@ -29,6 +29,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<CompanyEntity>> GetApprovalPageList(CompanyListParam param, Pagination pagination)
+        {
+            var list = await new DataRepository().GetCompanyApprovalItems();
+            return list.ToList();
+        }
+
         public async Task<CompanyEntity> GetEntity(long id)
         {
             return await BaseRepository().FindEntity<CompanyEntity>(id);
@@ -102,6 +108,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 // Individual employee record
                 if (!string.IsNullOrEmpty(entity.IndBVN) && !string.IsNullOrEmpty(entity.IndFirstName) && !string.IsNullOrEmpty(entity.IndLastName))
                 {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.EMPLOYEE_MENU_URL);
                     EmployeeEntity employeeEntity = new()
                     {
                         Company = entity.Id,
@@ -129,7 +136,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                         MonthlySalary = GlobalConstant.ZERO,
                         AlertType = GlobalConstant.ZERO,
                         Portrait = null,
-                        PortraitType = string.Empty
+                        PortraitType = string.Empty,
+                        BaseProcessMenu = currentMenu
                     };
                     await employeeEntity.Create();
                     entity.Employee = employeeEntity.Id;
@@ -139,6 +147,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 // User login record
                 if (!string.IsNullOrEmpty(entity.UserName) && !entity.Role.IsNullOrZero())
                 {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.USER_MENU_URL);
                     UserEntity userEntity = new()
                     {
                         Company = entity.Id,
@@ -152,7 +161,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                         IsSystem = GlobalConstant.ZERO,
                         IsOnline = GlobalConstant.ZERO,
                         WebToken = SecurityHelper.GetGuid(true),
-                        ApiToken = string.Empty
+                        ApiToken = string.Empty,
+                        BaseProcessMenu = currentMenu
                     };
                     await userEntity.Create();
                     entity.User = userEntity.Id;

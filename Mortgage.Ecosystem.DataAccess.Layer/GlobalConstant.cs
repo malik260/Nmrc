@@ -38,6 +38,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public const int SMTP_PORT = 587;
         public const bool SMTP_SSL = true;
+        public const string USER_MENU_URL = "User/UserIndex";
+        public const string EMPLOYEE_MENU_URL = "Employee/EmployeeIndex";
+        public const string COMPANY_MENU_URL = "Company/CompanyIndex";
 
         // System Type
         public static PlatformID SystemType

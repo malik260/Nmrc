@@ -26,6 +26,13 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<List<EmployeeEntity>> obj = new TData<List<EmployeeEntity>>();
             obj.Data = await _iUnitOfWork.Employees.GetList(param);
+            if (obj.Data.Count > 0)
+            {
+                foreach (EmployeeEntity employee in obj.Data)
+                {
+                    employee.FullName = $"{employee.LastName} {employee.FirstName}";
+                }
+            }
             obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
@@ -35,6 +42,39 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<List<EmployeeEntity>> obj = new TData<List<EmployeeEntity>>();
             obj.Data = await _iUnitOfWork.Employees.GetPageList(param, pagination);
+            if (obj.Data.Count > 0)
+            {
+                List<CompanyEntity> companyList = await _iUnitOfWork.Companies.GetList(new CompanyListParam { Ids = obj.Data.Select(p => p.Company).ToList() });
+                List<BranchEntity> branchList = await _iUnitOfWork.Branches.GetList(new BranchListParam { Ids = obj.Data.Select(p => p.Branch).ToList() });
+                List<DepartmentEntity> departmentList = await _iUnitOfWork.Departments.GetList(new DepartmentListParam { Ids = obj.Data.Select(p => p.Department).ToList() });
+                List<TitleEntity> titleList = await _iUnitOfWork.Titles.GetList(new TitleListParam { Ids = obj.Data.Select(p => p.Title).ToList() });
+                List<GenderEntity> genderList = await _iUnitOfWork.Genders.GetList(new GenderListParam { Ids = obj.Data.Select(p => p.Gender).ToList() });
+                List<MaritalStatusEntity> maritalStatusList = await _iUnitOfWork.MaritalStatus.GetList(new MaritalStatusListParam { Ids = obj.Data.Select(p => p.MaritalStatus).ToList() });
+                List<BankEntity> bankList = await _iUnitOfWork.Banks.GetList(new BankListParam { Codes = obj.Data.Select(p => p.CustomerBank.ToStr()).ToList() });
+                List<AccountTypeEntity> accountTypeList = await _iUnitOfWork.AccountTypes.GetList(new AccountTypeListParam { Ids = obj.Data.Select(p => p.AccountType).ToList() });
+                List<AlertTypeEntity> alertTypeList = await _iUnitOfWork.AlertTypes.GetList(new AlertTypeListParam { Ids = obj.Data.Select(p => p.AlertType).ToList() });
+                foreach (EmployeeEntity employee in obj.Data)
+                {
+                    employee.CompanyName = companyList.Where(p => p.Id == employee.Company).Select(p => p.Name).FirstOrDefault();
+                    employee.BranchName = branchList.Where(p => p.Id == employee.Branch && p.Company == employee.Company).Select(p => p.Name).FirstOrDefault();
+                    employee.DepartmentName = departmentList.Where(p => p.Id == employee.Department && p.Company == employee.Company && p.Branch == employee.Branch).Select(p => p.Name).FirstOrDefault();
+                    employee.TitleName = titleList.Where(p => p.Id == employee.Title).Select(p => p.Name).FirstOrDefault();
+                    employee.GenderName = genderList.Where(p => p.Id == employee.Gender).Select(p => p.Name).FirstOrDefault();
+                    employee.MaritalStatusName = maritalStatusList.Where(p => p.Id == employee.MaritalStatus).Select(p => p.Name).FirstOrDefault();
+                    employee.BankName = bankList.Where(p => p.Code == employee.CustomerBank).Select(p => p.Name).FirstOrDefault();
+                    employee.AccountTypeName = accountTypeList.Where(p => p.Id == employee.AccountType).Select(p => p.Name).FirstOrDefault();
+                    employee.AlertTypeName = alertTypeList.Where(p => p.Id == employee.AlertType).Select(p => p.Name).FirstOrDefault();
+                }
+            }
+            obj.Total = pagination.TotalCount;
+            obj.Tag = 1;
+            return obj;
+        }
+
+        public async Task<TData<List<EmployeeEntity>>> GetApprovalPageList(EmployeeListParam param, Pagination pagination)
+        {
+            TData<List<EmployeeEntity>> obj = new TData<List<EmployeeEntity>>();
+            obj.Data = await _iUnitOfWork.Employees.GetApprovalPageList(param, pagination);
             if (obj.Data.Count > 0)
             {
                 List<CompanyEntity> companyList = await _iUnitOfWork.Companies.GetList(new CompanyListParam { Ids = obj.Data.Select(p => p.Company).ToList() });

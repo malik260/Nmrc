@@ -3899,6 +3899,21 @@ button.dim:active:before {
     text-shadow: none;
 }
 
+.label-custom {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    min-width: 16px;
+    padding: 2px;
+    text-align: center;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    font-weight: bold;
+    font-size: 10px;
+    text-shadow: none;
+    border-radius: 4px;
+}
+
 .badge {
     background-color: #d1dade;
     color: #5e5e5e;

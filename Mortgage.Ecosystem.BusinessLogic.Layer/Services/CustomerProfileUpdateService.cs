@@ -3,7 +3,6 @@ using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
-using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
@@ -124,20 +123,20 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             // Update the existing entity with the new data
             string[] fullName = entity.FullName.Split(' ');
-              
-            existingEntity.MobileNumber = entity.MobileNumber; 
-            existingEntity.PostalAddress = entity.Address; 
+
+            existingEntity.MobileNumber = entity.MobileNumber;
+            existingEntity.PostalAddress = entity.Address;
             existingEntity.MaritalStatus = entity.MaritalStatus;
             existingEntity.BankAccountNumber = entity.BankAccountNumber;
             existingEntity.CustomerBank = entity.CustomerBank;
             existingEntity.MonthlySalary = entity.MonthlyIncome;
-            existingEntity.NOKName = entity.NOKName;
-            existingEntity.NOKNumber = entity.NOKNumber;
-            existingEntity.LastName = fullName[0];
-            existingEntity.FirstName = fullName[1];
-            existingEntity.OtherName = fullName[2];
-            existingEntity.NOKAddress = entity.NOKAddress;
-            existingEntity.Relationship= entity.Relationship;
+            //existingEntity.NOKName = entity.NOKName;
+            //existingEntity.NOKNumber = entity.NOKNumber;
+            //existingEntity.LastName = fullName[0];
+            //existingEntity.FirstName = fullName[1];
+            //existingEntity.OtherName = fullName[2];
+            //existingEntity.NOKAddress = entity.NOKAddress;
+            //existingEntity.Relationship= entity.Relationship;
             // Save the changes to the database
             await _iUnitOfWork.Employees.SaveForm(existingEntity);
             await _iUnitOfWork.CustomerProfileUpdates.SaveForm(entity);
