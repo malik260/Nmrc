@@ -1,0 +1,169 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<script src = "https://code.jquery.com/jquery-3.3.1.min.js" > </script>   
+@*<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+*@
+
+<script src ="https://cdn.tiny.cloud/1/97ihdj4pizrgnyrwd26euodeyfufnv6r4f4r656es9h2jdj5/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+
+<div class="propertyRegistration" id="propertyRegistration">
+        <form id="form1" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Add Document</span>
+                <div class="form-group">
+                   
+                    <div class="col-sm-6">
+                        <label for="documentTitle" class="form-label">Document Title</label>
+                        <input id="documentTitle" col="DocumentTitle" class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label" ></label>
+                        <button class="btn btn-success" type="button" id="upload">
+                            <i class="fa fa-upload"></i> Upload Document
+                        </button>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="form-group">                    
+                    <div class="col-sm-12">
+                        <h4>Microsoft text editor</h4>
+                        <textarea id="itextarea"></textarea>
+                       @*<input type="button" id="btnvalue" value="get value" />*@
+                       @* <div id="divkarea"></div>*@
+                    </div>
+                </div>
+
+               
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <label for="comment" class="form-label">Comments</label>
+                        <textarea id="comment" style="height: 150px;" col="Comments" class="form-control"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="nextLevelStaff" class="form-label">Next Level Staff</label>
+                        <div id="nextLevelStaff" col="NextLevelStaff"></div>
+                    </div>
+
+                </div>
+
+
+                </div>
+            </div>
+        
+   </form>
+    <form id="form2" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Upload</span>
+                <title>Drag and Drop Form with File Upload</title>
+                <style>
+                    .form-container {
+                      width: 300px;
+                      height: 300px;
+                      border: 1px dashed #ccc;
+                      padding: 20px;
+                    }
+                    .droppable-area {
+                      width: 100%;
+                      height: 100%;
+                      border: 1px solid #ccc;
+                      text-align: center;
+                      line-height: 200px;
+                      background-color: #f7f7f7;
+                    }
+                    .upload-icon {
+                      font-size: 50px;
+                    }
+                </style>
+                <div class="form-container">
+                    <div class="col-sm-6">
+                        Drag and Drop Form with File Upload
+                        <div class="droppable-area" ondrop="drop(event)" ondragover="allowDrop(event)">
+                           <i class="upload-icon">📤</i>
+                        </div>
+                </div>
+                </div>
+                <div class="form-grup">  
+                <div class="col-sm-7">
+                        <label class="control-label">Select Document</label>
+                        <input id="logo" col="Logo" type="file">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+ <script type ="text/javascript">
+
+ tinymce.init({
+  selector: '#itextarea',
+  width: 500
+ });
+
+  $(document).ready(function () {
+        // hide the form initially
+        $('#form1').show();
+        $('#form2').hide();
+
+
+        // add click event listener to the button
+        $('#upload').click(function () {
+            // unhide the form
+            $('#form1').hide();
+            $('#form2').show();
+
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+    });
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        var files = event.dataTransfer.files;
+        var validFileTypes = ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/csv"];
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (validFileTypes.includes(file.type)) {
+                // Handle the valid file here (e.g., upload or process it)
+                console.log("Valid file:", file);
+            } else {
+                console.log("Invalid file:", file);
+            }
+        }
+    }
+    $("#logo").fileinput({
+        language: 'en',
+        showPreview: false,
+        allowedFileExtensions: ['jpeg', 'jpg', 'png', 'gif', 'tiff']
+    }).on("fileuploaded", function (event, data) {
+        var obj = data.response;
+        if (obj.Tag == @GlobalConstant.ONE) {
+            filePath = obj.Data;
+        }
+        else {
+            filePath = '';
+        }
+    });
+
+ </script>
+
+
+

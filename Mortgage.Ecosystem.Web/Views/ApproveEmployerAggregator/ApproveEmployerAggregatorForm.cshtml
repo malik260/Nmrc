@@ -1,0 +1,649 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
+}
+
+    <div class="wrapper animated fadeInRight">
+        <form id="form" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Payment History Record</span>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="margin-right: -22px;">Email<font class="red"> *</font></label>
+                        <div class="col-sm-4">
+                            <input id="email" col="Email" type="text" class="form-control" />
+                        </div>
+                        <label class="col-sm-2 control-label" style="margin-right: -22px;">Telephone<font class="red"> *</font></label>
+                        <div class="col-sm-4">
+                            <input id="telephone" col="Telephone" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-3" style="margin-bottom: 0px;">
+                <button class="btn btn-success" type="button" id="generateOTP" style="margin-top: 10px;">
+                    <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Generate OTP</span>
+                </button>
+            </div>
+            <div id="paymenthistory" style="margin-top: 10px;">
+                <div class="dialogblockborder dialogblockborderheadline">
+                    <div class="dialogblock-body" style="height: auto; padding-top: 20px;">
+                        <div class="container" style="margin-top: 20px; padding-right: 100px;">
+                            <div class="panel-body">
+
+                                <ul class="nav nav-tabs nav-justified nav-inline">
+                                    <li class="active"><a href="#primary" data-toggle="tab">REMITA REPAYMENTS</a></li>
+                                    <li><a href="#secondary" data-toggle="tab">ETRANSACTS REPAYMENTS</a></li>
+                                </ul>
+                                <div class="tab-content tab-validate" style="margin-top:30px;">
+                                    <div class="tab-pane active" id="primary">
+                                        <div class="container" style="padding-right: 120px; padding-top: 20px;">
+                                            <div class="row justify-content-center">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-body p-0">
+                                                            <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px; padding-top: 30px;">
+                                                                <table class="table table-striped mb-0" style="text-align: center">
+                                                                    <thead style="background-color: #002d72; padding-right: 120px;">
+                                                                        <tr>
+                                                                            <th scope="col" style="text-align: center;">NHF Number<br /><input class="search" placeholder="search" style="width: 100px;text-align: center; color: black;" /></th>
+                                                                            <th scope="col" style="text-align: center;">Transaction&nbsp;Date<br /><input class="search" placeholder="search" style="width: 100px;text-align: center; color: black;" /></th>
+                                                                            <th scope="col" style="text-align: center;">Amount</th>
+                                                                            <th scope="col" style="text-align: center;">RRR<br /><input class="search" placeholder="search" style="width: 100px; text-align: center; color: black;" /></th>
+                                                                            <th scope="col" style="text-align: center;">Transaction&nbsp;ID<br /><input class="search" placeholder="search" style="width: 100px;text-align: center; color: black;" /></th>
+                                                                            <th scope="col" style="text-align: center;">Status</th>
+                                                                            <th scope="col" style="text-align: center; padding-left: 50px"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>2001849832</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>2001849832</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>2001849832</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>2001849832</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>2001849832</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>2001849832</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="secondary">
+
+                                        <div class="container" style="padding-right: 120px; padding-top: 20px;">
+                                            <div class="row justify-content-center">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-body p-0">
+                                                            <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px; padding-top: 30px;">
+                                                                <table class="table table-striped mb-0" style="text-align: center">
+                                                                    <thead style="background-color: #002d72; padding-right: 120px;">
+                                                                        <tr>
+                                                                            <th scope="col" style="text-align: center;">NHF Number<br /><input class="search" placeholder="search" style="width: 100px;text-align: center; color: black;" /></th>
+                                                                            <th scope="col" style="text-align: center;">Transaction&nbsp;Date<br /><input class="search" type="date" placeholder="search" style="width: 100px;text-align: center; color: black;" /></th>
+                                                                            <th scope="col" style="text-align: center;">Amount</th>
+                                                                            <th scope="col" style="text-align: center;">RRR<br /><input class="search" placeholder="search" style="width: 100px; text-align: center; color: black;" /></th>
+                                                                            <th scope="col" style="text-align: center;">Transaction&nbsp;ID<br /><input class="search" placeholder="search" style="width: 100px;text-align: center; color: black;" /></th>
+                                                                            <th scope="col" style="text-align: center;">Status</th>
+                                                                            <th scope="col" style="text-align: center; padding-left: 50px"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>2001849832</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>2001987954</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>2001849832</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>2001849832</td>
+                                                                            <td>03/09/2023</td>
+                                                                            <td>280,000.00</td>
+                                                                            <td>210794974855</td>
+                                                                            <td>1622377763</td>
+                                                                            <td>Contribution</td>
+                                                                            <td>
+
+                                                                                <button type="button" class="btn-sm px-3" style="background-color: darkblue; height: 20px; justify-content: center; padding-bottom: 20px; padding-top: 0px;">
+                                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: white;"></i>
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: #0076CE; border-color:#0076CE; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    STATUS
+                                                                                </button>
+
+                                                                                <button type="button" style="background-color: darkgreen; border-color: darkgreen; border-radius: 3px; color: white; font-size: 10px;">
+                                                                                    PAID
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <style>
+
+        table td, table th {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        thead th {
+            color: #fff;
+        }
+
+        .card {
+            border-radius: .5rem;
+        }
+
+        .table-scroll {
+            border-radius: .5rem;
+        }
+
+        /* .table-scroll table thead th {
+                  font-size: 1.25rem;
+                }*/
+        thead {
+            top: 0;
+            position: sticky;
+        }
+    </style>
+
+
+
+    <script type="text/javascript">
+        var id = cn.request("id");
+        var selectedAgent = 1;
+        $(function () {
+            $('#email').attr('readonly', false);
+            $('#telephone').attr('readonly', false);
+            $("#generateOTP").attr("enable", "disabled");
+            $('#paymenthistory').hide();
+            $('#subSector').attr('readonly', true);
+
+
+            $("#accType").cnComboBox({
+                url: '@Url.Content("~/AccountType/GetListJson")',
+                key: "Id",
+                value: "Name",
+                class: "form-control"
+            });
+
+            $("#sector").cnComboBox({
+                url: '@Url.Content("~/Sector/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+            $("#subSector").cnComboBox({
+                url: '@Url.Content("~/SubSector/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+            laydate.render({ elem: '#dateOfIncorporation', format: 'yyyy-MM-dd' });
+
+            $("#companyClass").cnComboBox({
+                url: '@Url.Content("~/CompanyClass/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+            $("#companyType").cnComboBox({
+                url: '@Url.Content("~/CompanyType/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+            $("#contributionFrequency").cnComboBox({
+                url: '@Url.Content("~/ContributionFrequency/GetListJson")',
+                key: "Id",
+                value: "Name"
+            });
+
+
+            $('#accType').change(function () {
+                selectedAgent = $("#accType").cnComboBox('getValue');
+                if (selectedAgent > 0) {
+                    $('#email').val('');
+                    $('#email').attr('readonly', false);
+                    $('#telephone').val('');
+                    $('#telephone').attr('readonly', false);
+                    $('#generateOTP').removeAttr("disabled");
+                    $('#generateOTP').show();
+                    $('#paymenthistory').hide();
+                }
+            });
+
+            $('#generateOTP').on('click', function () {
+                if ($('#email').val() == "") {
+                    cn.msgError("Please enter email!");
+                    return false;
+                }
+                else if ($('#telephone').val() == "") {
+                    cn.msgError("Please enter telephone!");
+                    return false;
+                }
+
+
+                if (selectedAgent == 1) {
+                    $('#employer').hide();
+                    $('#pmbdevelopercooperativesociety').hide();
+                    $('#individualcontributor').hide();
+                    $('#paymenthistory').show();
+                    $('#employeraggregator').hide();
+
+                    $("#title").cnComboBox({
+                        url: '@Url.Content("~/Title/GetListJson")',
+                        key: "Id",
+                        value: "Name",
+                        class: "form-control"
+                    });
+
+                    $("#gender").cnCheckBox({
+                        url: '@Url.Content("~/Gender/GetListJson")',
+                        key: "Id",
+                        value: "Name",
+                        class: "form-control"
+                    });
+
+                    $("#marital").cnComboBox({
+                        url: '@Url.Content("~/MaritalStatus/GetListJson")',
+                        key: "Id",
+                        value: "Name",
+                        class: "form-control"
+                    });
+
+                    $("#empType").cnComboBox({
+                        data: cn.getJson(@Html.Raw(typeof(EmploymentTypeEnum).EnumToDictionaryString()))
+                    });
+
+                    $("#branch").cnComboBox({
+                        url: '@Url.Content("~/State/GetListJson")',
+                        key: "Id",
+                        value: "Name",
+                        class: "form-control"
+                    });
+
+                    $("#accountType").cnComboBox({
+                        data: cn.getJson(@Html.Raw(typeof(AccountTypeEnum).EnumToDictionaryString()))
+                    });
+
+                    $("#alertType").cnComboBox({
+                        data: cn.getJson(@Html.Raw(typeof(AlertTypeEnum).EnumToDictionaryString()))
+                    });
+                }
+                $('#generateOTP').hide();
+            });
+
+            $('#sector').change(function () {
+                $('#subSector').attr('readonly', false);
+            });
+
+            getForm();
+
+            $("#form").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    telephone: {
+                        required: true,
+                        pattern: "^[0-9-+s()]*$",
+                    }
+                },
+                messages: {
+                    email: { required: "Email is required" },
+                    telephone: { required: "Telephone is required" }
+                }
+            });
+        });
+
+        function getForm() {
+            if (id > 0) {
+                cn.ajax({
+                    url: '@Url.Content("~/PaymentHistory/GetFormJson")' + '?id=' + id,
+                    type: "get",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            var result = obj.Data;
+                            $("#form").setWebControls(result);
+                        }
+                    }
+                });
+            }
+            else {
+                cn.ajax({
+                    url: '@Url.Content("~/PaymentHistory/GetMaxSortJson")',
+                    type: "get",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            $("#paymentHistorySort").val(obj.Data);
+                        }
+                    }
+                });
+            }
+        }
+
+        function saveForm(index) {
+            if ($("#form").validate().form()) {
+                var postData = $("#form").getWebControls({ Id: id });
+                postData.Parent = cn.getLastValue(postData.Parent);
+                postData.PrincipalId = cn.getLastValue(postData.PrincipalId);
+                cn.ajax({
+                    url: '@Url.Content("~/PaymentHistory/SaveFormJson")',
+                    type: "post",
+                    data: postData,
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            parent.searchTreeGrid(obj.Data);
+                            parent.layer.close(index);
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+
+
+    @{
+    Layout = "~/Views/Shared/_FormGray.cshtml";
+}
+
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Heading Name <small>Brief Description (if any)</small></h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#tab-1" aria-expanded="true"> first tab</a>
+                            </li>
+                            <li class="">
+                                <a data-toggle="tab" href="#tab-2" aria-expanded="false">Second Tab</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <strong>HTML5 document type</strong>
+                                    <p>Some HTML elements and CSS properties used by Bootstrap require the page to be set to the HTML5 doctype. Every page in your project should follow the format below. </p>
+                                </div>
+                            </div>
+                            <div id="tab-2" class="tab-pane">
+                                <div class="panel-body">
+                                    <strong>Mobile first</strong>
+                                    <p>In Bootstrap 2, we've added mobile-friendly styles to some key parts of the framework. In Bootstrap 3, we rewrote the entire framework to be mobile-friendly from the start. This time, instead of simply adding some optional styles for mobile devices, it is directly integrated into the core of the framework. That said, Bootstrap is mobile-first. Instead of adding an extra file, styles for mobile devices are incorporated into every corner of the frame. </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="panel blank-panel">
+                        <div class="panel-heading">
+                            <div class="panel-options">
+
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="tabs_panels.html#tab-4"><i class="fa fa-laptop"></i></a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="tabs_panels.html#tab-5"><i class="fa fa-desktop"></i></a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="tabs_panels.html#tab-6"><i class="fa fa-signal"></i></a>
+                                    </li>
+                                    <li class="">
+                                        <a data-toggle="tab" href="tabs_panels.html#tab-7"><i class="fa fa-bar-chart-o"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="tab-4" class="tab-pane active">
+                                    <strong>Typesetting and linking</strong>
+                                    <p>Bootstrap typography, link styles set basic global styles. They are: set the background-color for the body element: #fff; use the @@font-family-base, @@font-size-base and @@line-height-base a variables as the basic parameters of typesetting for all links The basic color @@link-color , and the underline is added when the link is in the :hover state. These styles can be found in the scaffolding.less file. The corresponding source code. </p>
+                                </div>
+                                <div id="tab-5" class="tab-pane">
+                                    <strong>Normalize.css</strong>
+                                    <p>To enhance consistency across browser performance, we use Normalize.css, a CSS reset style library maintained by Nicolas Gallagher and Jonathan Neal. </p>
+                                </div>
+                                <div id="tab-6" class="tab-pane">
+                                    <strong>Layout container</strong>
+                                    <p>Bootstrap needs to wrap a .container container for the page content and grid system. We provide two classes for this purpose. Note that due to properties such as padding, these two container classes cannot be nested within each other. </p>
+                                </div>
+                                <div id="tab-7" class="tab-pane">
+                                    <strong>Grid system</strong>
+                                    <p>Bootstrap provides a responsive, mobile-first fluid grid system that automatically divides into up to 12 columns as the screen or viewport size increases. It includes easy-to-use predefined classes, and powerful mixins for generating more semantic layouts. </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

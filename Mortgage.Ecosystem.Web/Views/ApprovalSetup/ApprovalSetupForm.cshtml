@@ -1,0 +1,368 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="col-sm-6" style="height: auto; border-right: 1px solid #bbb9b9;">
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <label class="control-label">Employer<font class="red"> *</font></label>
+                    <div id="company" col="Company" data-toggle="tooltip" data-placement="right" title="xxxxxxxxx"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <label class="control-label">Branch</label>
+                    <div id="branch" col="Branch" data-toggle="tooltip" data-placement="right" title="xxxxxxxxx"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <label class="control-label">Process Name&nbsp;&nbsp;<font class="red">*</font></label>
+                    <div id="menuId" col="MenuId"></div>
+                </div>
+            </div>
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-body" style="height: auto;">
+                    <span id="authorityTitle" class="dialogblockheader">Provide approval authority</span>
+                    <div class="form-group">
+                        <div id="zero" class="col-sm-10">
+                            <label class="control-label">1. Staff Name&nbsp;&nbsp;<font class="red">*</font></label>
+                            <div id="authority" col="Authority"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="one" class="col-sm-10">
+                            <label class="control-label">1. Staff Name&nbsp;&nbsp;<font class="red">*</font></label>
+                            <div id="authority1" col="Authority1"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="two" class="col-sm-10">
+                            <label class="control-label">2. Staff Name&nbsp;&nbsp;<font class="red">*</font></label>
+                            <div id="authority2" col="Authority2"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="three" class="col-sm-10">
+                            <label class="control-label">3. Staff Name&nbsp;&nbsp;<font class="red">*</font></label>
+                            <div id="authority3" col="Authority3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <label class="control-label">Remark</label>
+                    <textarea id="remark" class="form-control" style="height:60px"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div style="padding: 15px 0px 5px 0px;">
+                <font style="font-weight: bold; color: #e70e0e;">
+                    Setting up approval authority necessitates the following steps. <font style="color: black">(All fields marked <font style="color: red">*</font> are required)</font>:
+                </font>
+                <ul style="padding-left: 15px; padding-top: 20px; text-shadow: 1px 0px 1px #9E9E9E;">
+                    <li style="list-style-type: square; margin-bottom: 5px;">Choose an <strong>employer</strong> who exhibits all of the organization's authorities.</li>
+                    <li style="list-style-type: square; margin-bottom: 5px;">If a <strong>branch</strong> is available, <strong>choose it</strong>.</li>
+                    <li style="list-style-type: square; margin-bottom: 5px;">Choose the <strong>name of the approval procedure</strong> that requires authorisation, which defines the <strong>number of authorities</strong> for approval.</li>
+                    <li style="list-style-type: square; margin-bottom: 5px;">Provide <strong>approval authorization</strong> from the list of personnel in the organization.</li>
+                    <li style="list-style-type: square; margin-bottom: 5px;"><strong>Narration/description</strong> of the process</li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = cn.request("id");
+    var level = @GlobalConstant.ZERO;
+    $(function () {
+        $('#company').cnComboBox({
+            url: '@Url.Content("~/Company/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+
+        $("#branch").cnComboBox({
+            url: '@Url.Content("~/State/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+
+        $('#menuId').cnComboBoxTree({ url: '@Url.Content("~/Menu/GetMenuTreeListJson")' });
+
+        $('#authority').cnComboBox({
+            url: '@Url.Content("~/Employee/GetListJson")',
+            key: "Id",
+            value: "FullName",
+            class: "form-control"
+        });
+
+        $("#branch_select").attr("disabled", "disabled");
+        $("#menuId_input").attr("disabled", "disabled");
+        $("#authority_select").attr("disabled", "disabled");
+        $("#authority1_select").attr("disabled", "disabled");
+        $("#authority2_select").attr("disabled", "disabled");
+        $("#authority3_select").attr("disabled", "disabled");
+        $("#zero").parents(".form-group").show();
+        $("#one").parents(".form-group").hide();
+        $("#two").parents(".form-group").hide();
+        $("#three").parents(".form-group").hide();
+
+        $('#company').change(function () {
+            coy = $("#company").cnComboBox('getValue');
+            $("#branch").cnComboBox({
+                url: '@Url.Content("~/Branch/GetListJson")' + '?company=' + coy,
+                key: "Id",
+                value: "Name",
+                class: "form-control"
+            });
+
+            if (coy > @GlobalConstant.ZERO) {
+                $("#branch_select").removeAttr("disabled");
+                $("#menuId_input").removeAttr("disabled");
+            }
+            else {
+                $("#branch_select").attr("disabled", "disabled");
+                $("#menuId_input").attr("disabled", "disabled");
+                $("#authority_select").attr("disabled", "disabled");
+                $("#authority1_select").attr("disabled", "disabled");
+                $("#authority2_select").attr("disabled", "disabled");
+                $("#authority3_select").attr("disabled", "disabled");
+            }
+        });
+
+        $('#menuId_tree').click(function () {
+            selectedCoy = $("#company").cnComboBox('getValue');
+            selectedProcessId = cn.getLastValue($("#menuId").cnComboBoxTree('getValue'));
+
+            getApprovalLevel(selectedProcessId);
+        });
+
+        getForm();
+
+        $("#form").validate({
+            rules: {
+                company: { required: true },
+                menuId: { required: true },
+                authority: { required: true }
+            },
+            messages: {
+                company: { required: "Employer is required" },
+                menuId: { required: "{Process name is required" },
+                authority: { required: "Staff name is required" }
+            }
+        });
+    });
+
+    function getApprovalLevel(processId) {
+        var postData = { Id: processId };
+        cn.ajax({
+            url: '@Url.Content("~/Menu/GetFormJson")',
+            type: "get",
+            data: postData,
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    level = obj.Data.ApprovalLevel;
+                    switch (level) {
+                        case 1:
+                            $('#authority1').cnComboBox({
+                                url: '@Url.Content("~/Employee/GetListJson")' + '?company=' + selectedCoy,
+                                key: "Id",
+                                value: "FullName",
+                                class: "form-control"
+                            });
+                            document.getElementById("authorityTitle").innerHTML = "Provide " + level + " approval authority";
+                            $("#zero").parents(".form-group").hide();
+                            $("#one").parents(".form-group").show();
+                            $("#two").parents(".form-group").hide();
+                            $("#three").parents(".form-group").hide();
+                            break;
+                        case 2:
+                            $('#authority1').cnComboBox({
+                                url: '@Url.Content("~/Employee/GetListJson")' + '?company=' + selectedCoy,
+                                key: "Id",
+                                value: "FullName",
+                                class: "form-control"
+                            });
+                            $('#authority2').cnComboBox({
+                                url: '@Url.Content("~/Employee/GetListJson")' + '?company=' + selectedCoy,
+                                key: "Id",
+                                value: "FullName",
+                                class: "form-control"
+                            });
+                            document.getElementById("authorityTitle").innerHTML = "Provide " + level + " approval authorities";
+                            $("#zero").parents(".form-group").hide();
+                            $("#one").parents(".form-group").show();
+                            $("#two").parents(".form-group").show();
+                            $("#three").parents(".form-group").hide();
+                            break;
+                        case 3:
+                            $('#authority1').cnComboBox({
+                                url: '@Url.Content("~/Employee/GetListJson")' + '?company=' + selectedCoy,
+                                key: "Id",
+                                value: "FullName",
+                                class: "form-control"
+                            });
+                            $('#authority2').cnComboBox({
+                                url: '@Url.Content("~/Employee/GetListJson")' + '?company=' + selectedCoy,
+                                key: "Id",
+                                value: "FullName",
+                                class: "form-control"
+                            });
+                            $('#authority3').cnComboBox({
+                                url: '@Url.Content("~/Employee/GetListJson")' + '?company=' + selectedCoy,
+                                key: "Id",
+                                value: "FullName",
+                                class: "form-control"
+                            });
+                            document.getElementById("authorityTitle").innerHTML = "Provide " + level + " approval authorities";
+                            $("#zero").parents(".form-group").hide();
+                            $("#one").parents(".form-group").show();
+                            $("#two").parents(".form-group").show();
+                            $("#three").parents(".form-group").show();
+                            break;
+                        default:
+                            $("#zero").parents(".form-group").show();
+                            $("#one").parents(".form-group").hide();
+                            $("#two").parents(".form-group").hide();
+                            $("#three").parents(".form-group").hide();
+                            document.getElementById("authorityTitle").innerHTML = "Provide approval authority";
+                    }
+                }
+                if (selectedProcessId > @GlobalConstant.ZERO) {
+                    $("#authority_select").removeAttr("disabled");
+                    $("#authority1_select").removeAttr("disabled");
+                    $("#authority2_select").removeAttr("disabled");
+                    $("#authority3_select").removeAttr("disabled");
+                    if (level <= @GlobalConstant.ZERO) {
+                        $("#authority_select").attr("disabled", "disabled");
+                        $("#authority1_select").attr("disabled", "disabled");
+                        $("#authority2_select").attr("disabled", "disabled");
+                        $("#authority3_select").attr("disabled", "disabled");
+                        cn.msgError("Selected process has no approval level");
+                    }
+                }
+                else {
+                    $("#authority_select").attr("disabled", "disabled");
+                    $("#authority1_select").attr("disabled", "disabled");
+                    $("#authority2_select").attr("disabled", "disabled");
+                    $("#authority3_select").attr("disabled", "disabled");
+                }
+            }
+        });
+    }
+
+    function getForm() {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/ApprovalSetup/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        $("#form").setWebControls(obj.Data);
+                    }
+                }
+            });
+        }
+        else {
+
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var authorities = [];
+            var postData = $("#form").getWebControls({ Id: id });
+            postData.MenuId = cn.getLastValue($("#menuId").cnComboBoxTree('getValue'));
+            postData.ApprovalLevel = level;
+
+            if (postData.Company <= 0) {
+                cn.msgError("Please choose an employer !");
+                return false;
+            }
+            else if (postData.MenuId <= 0) {
+                cn.msgError("Please choose a process name !");
+                return false;
+            }
+            else {
+                switch (level) {
+                    case 1:
+                        if (postData.Authority1 <= 0) {
+                            cn.msgError("Pls, specify approval authority !");
+                            return false;
+                        }
+                        else {
+                            authorities.push(postData.Authority1);
+                        }
+                        break;
+                    case 2:
+                        if (postData.Authority1 <= 0) {
+                            cn.msgError("Pls, specify first approval authority !");
+                            return false;
+                        }
+                        else if (postData.Authority2 <= 0) {
+                            cn.msgError("Pls, specify second approval authority !");
+                            return false;
+                        }
+                        else if (postData.Authority1 == postData.Authority2) {
+                            cn.msgError("Please note that approval authority cannot be the same !");
+                            return false;
+                        }
+                        else {
+                            authorities.push(postData.Authority1);
+                            authorities.push(postData.Authority2);
+                        }
+                        break;
+                    case 3:
+                        if (postData.Authority1 <= 0) {
+                            cn.msgError("Pls, specify first approval authority !");
+                            return false;
+                        }
+                        else if (postData.Authority2 <= 0) {
+                            cn.msgError("Pls, specify second approval authority !");
+                            return false;
+                        }
+                        else if (postData.Authority3 <= 0) {
+                            cn.msgError("Pls, specify third approval authority !");
+                            return false;
+                        }
+                        else if ((postData.Authority1 == postData.Authority2) || (postData.Authority1 == postData.Authority3) || (postData.Authority2 == postData.Authority3)) {
+                            cn.msgError("Please note that approval authority cannot be the same !");
+                            return false;
+                        }
+                        else {
+                            authorities.push(postData.Authority1);
+                            authorities.push(postData.Authority2);
+                            authorities.push(postData.Authority3);
+                        }
+                        break;
+                    default:
+                }
+            }
+            postData.Authorities = authorities.join(",").toString();
+            //console.dir(postData);
+            cn.ajax({
+                url: '@Url.Content("~/ApprovalSetup/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+</script>

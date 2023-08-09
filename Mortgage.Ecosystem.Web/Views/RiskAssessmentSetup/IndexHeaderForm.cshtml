@@ -1,0 +1,131 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="eTicket" id="eTicket">
+        <form id="form1" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Index Header</span>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label class="assessment control-label" style="margin-left: 100px;">Assessment Factor</label>
+                       @* <input type="text" col="messageType" style="margin-left: 100px; width: 550px;" class="form-control" id="messageType">*@
+                        <div id="assessment" col="Assessment" style="margin-left: 100px; width: 550px;"></div>
+                    </div>
+                
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="indexHead" style="margin-left: 100px;" class="form-label">Index Head</label>
+                       @* <input type="text" style="margin-left: 100px; width: 550px;" col="subject" class="form-control">*@
+                        <div id="head" col="Head" style="margin-left: 100px; width: 550px;"></div>
+
+                    </div>
+                   
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="indexItem" style="margin-left: 100px;" class="form-label">Index Item</label>
+                       @* <input type="text" style="margin-left: 100px; width: 550px;" class="form-control" id="indexItem">    *@
+                        <div id="indexItem" col="IndexItem" style="margin-left: 100px; width: 550px;"></div>
+                    </div>                 
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="weight" style="margin-left: 100px;" class="form-label">Weight</label>
+                        <div id="weight" col="Weight" style="margin-left: 100px; width: 550px;"></div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+        </form>
+</div>
+
+<script>
+    $("#assessment").cnComboBox({
+        url: '@Url.Content("~/AssessmentFactor/GetListJson")',
+        key: "Id",
+        value: "Name"
+    });
+
+    $("#head").cnComboBox({
+        url: '@Url.Content("~/Index/GetListJson")',
+        key: "Head",
+        value: "HeadCaption"
+    });
+
+     $("#indexItem").cnComboBox({
+            url: '@Url.Content("~/Index/GetItemListJson")',
+            key: "Head",
+            value: "Item"
+        });
+
+     $("#weight").cnComboBox({
+            url: '@Url.Content("~/Index/GetWeightListJson")',
+            key: "Head",
+            value: "Weight"
+        });
+
+    $("#head_select").attr("disabled", "disabled");
+    $("#indexItem_select").attr("disabled", "disabled");
+     $("#weight_select").attr("disabled", "disabled");
+
+
+    $("#assessment").change(function(){
+        var selectedAssessment = $("#assessment").cnComboBox('getValue');
+
+        $("#head").cnComboBox({
+            url: '@Url.Content("~/Index/GetListJson")' + '?assessment=' + selectedAssessment,
+            key: "Head",
+            value: "HeadCaption"
+        });
+
+        if (selectedAssessment > 0){
+            $("#head_select").removeAttr("disabled");
+        } else {
+            $("#head_select").attr("disabled", "disabled");
+        }
+    });
+
+    $("#head").change(function(){
+         var selectedAssessment = $("#assessment").cnComboBox('getValue');
+        var selectedIndexHead = $("#head").cnComboBox('getValue');
+      
+        $("#indexItem").cnComboBox({
+            url: '@Url.Content("~/Index/GetItemListJson")' + '?assessment=' + selectedAssessment + '&head=' + selectedIndexHead,
+            key: "Head",
+            value: "Item"
+        });
+
+        if (selectedIndexHead > 0){
+            $("#indexItem_select").removeAttr("disabled");
+        } else {
+            $("#indexItem_select").attr("disabled", "disabled");
+        }
+    });
+
+     $("#indexItem").change(function(){
+         var selectedAssessment = $("#assessment").cnComboBox('getValue');
+         var selectedIndexHead = $("#head").cnComboBox('getValue');
+         var selectedIndexItem = $("#indexItem").cnComboBox('getValue');
+      
+        $("#weight").cnComboBox({
+            url: '@Url.Content("~/Index/GetWeightListJson")' + '?assessment=' + selectedAssessment + '&head=' + selectedIndexHead + '&indexItem=' + selectedIndexItem,
+            key: "Head",
+            value: "Weight"
+        });
+
+        if (selectedIndexItem > 0){
+            $("#weight_select").removeAttr("disabled");
+        } else {
+            $("#weight_select").attr("disabled", "disabled");
+        }
+    });
+  
+</script>
+
+

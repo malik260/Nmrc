@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
+{
+    public class LoanRepaymentDto
+    {
+        public decimal Totalamount { get; set; }
+        public decimal Amount { get; set; }
+
+        public string Year { get; set; }
+
+        public string Narration { get; set; }
+
+        public string Month { get; set; }
+
+        public string Paymentoption { get; set; }
+
+    }
+}

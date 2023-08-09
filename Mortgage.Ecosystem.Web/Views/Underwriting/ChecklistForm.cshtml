@@ -1,0 +1,172 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<script src = "https://code.jquery.com/jquery-3.3.1.min.js" > </script>   
+@*<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+*@
+
+
+
+
+<div class="ChecklistForm" id="checklistForm">
+        <form id="form1" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Checklist Form</span>
+                <style>
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    th, td {
+                        border: 1px solid #ccc;
+                        padding: 8px;
+                        
+                    }
+
+                    textarea {
+                        width: 100%;
+                        height: 80px;
+                    }
+
+                    .checkbox-container {
+                        text-align: center;
+                    }
+
+                    textarea {
+                        width: 100%;
+                        height: 80px;
+                    }
+
+                   
+                </style>
+
+                <table id="checklistForm">
+                    <tr>
+                        <th><strong>Checklist</strong></th>
+                        <th><strong>App</strong></th>
+                        <th><strong>Not App</strong></th>
+                        <th><strong>Remarks</strong></th>
+                    </tr>
+                    <tr>
+                        <td>Open a Current ITMB</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Deposit of at least 40-60% Equity Contribution into Account(Current) with ITMB or evidence of payment of Equity Contribution to Vendor</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Application for Loan Starting tenor, collateral and attacking photocopies of Title Documents of the colateral (must be landed property) (where application) </td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Execution of Mortgage Questionnaire attaching all relevant income statements/Cash flow analysis</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Visitation report by ITMB officer (where applicable)</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td class="checkbox-container"><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Submission of valuation report (where applicable)</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td class="checkbox-container"><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Legal Search Report at the expense of customer (where applicable)</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Submission of original Receipt/Title Document of the property upon full payment</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Statement of A/C for 6months pay slip</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Credit Search Report</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Submission of Office Identity Card</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Submission of Letter of Introduction/Confirmation of Employment (Pesionable/Contract) staff from employer</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Execution of Loan Documents</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+
+                    <tr>
+                        <td>Execution of Insurance policy on the property to be purchased</td>
+                        <td class="checkbox-container"><input type="checkbox" name="app" /></td>
+                        <td class="checkbox-container"><input type="checkbox" name="notApp" /></td>
+                        <td><textarea name="remarks"></textarea></td>
+                    </tr>
+                   
+                </table>
+                
+   </form>
+   
+</div>
+
+ <script type ="text/javascript">
+
+    function handleCheckboxChange(checkbox) {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="' + checkbox.name + '"]');
+        checkboxes.forEach((cb) => {
+            if (cb !== checkbox) {
+                cb.checked = false;
+            }
+        });
+    }
+
+ 
+ </script>
+
+
+

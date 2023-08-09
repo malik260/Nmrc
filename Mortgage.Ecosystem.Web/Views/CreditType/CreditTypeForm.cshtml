@@ -1,0 +1,70 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="creditType" id="creditType">
+        <form id="form1" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Credit Type Setup</span>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label class="Name control-label" style="margin-left: 100px;">Name</label>
+                        <input type="text" col="Name" style="margin-left: 100px; width: 550px;" class="form-control" id="Name">
+                       @* <div id="messageType" col="MessageType" style="margin-left: 100px; width: 550px;"></div>*@
+                    </div>
+                
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="description" style="margin-left: 100px;" class="form-label">Description</label>
+                        <input type="text" style="margin-left: 100px; width: 550px;" col="Description" class="form-control">
+                         
+                    </div>
+                   
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="code" style="margin-left: 100px;" class="form-label">Code</label>
+                        <input type="text" style="margin-left: 100px; width: 550px;" col="Code" class="form-control" id="code">
+                          
+                    </div>
+                  
+                </div>     
+                
+                </div>
+            </div>
+        </form>
+</div>
+
+<script>
+    var id = cn.request("id");
+
+    function saveForm(index) {
+        if ($("#form1").validate().form()) {
+            var postData = $("#form1").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/CreditType/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+
+    
+
+
+

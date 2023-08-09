@@ -1,0 +1,82 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="creditScore" id="creditScore">
+        <form id="form1" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Credit Score</span>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="creditType control-label">Credit Type</label>
+                        <input type="text" col="CreditType"  class="form-control" id="creditType">
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="remark control-label">Remark</label>
+                        <input type="text" col="Remark" class="form-control" id="remark">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="productCode"  class="form-label">Product&nbsp;Code</label>
+                        <input id="productCode" type="number"  col="ProductCode" class="form-control" readonly>
+                         
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="interestRate" class="form-label">Interest&nbsp;Rate</label>
+                        <input type="text" class="form-control" id="interestRate">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="rangeMax"  class="form-label">Range Max.</label>
+                        <input id="rangeMax" type="text" col="RangeMax" class="form-control">
+                          
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="creditGrades"  class="form-label">Credit&nbsp;Grades</label>
+                        <input id="creditGrades" type="text"  col="CreditGrades" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="rangeMin"  class="form-label">Range Min.</label>
+                        <input id="rangeMin" type="text" col="RangeMin" class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="creditGradeDefinitions"  class="form-label">Credit&nbsp;Grade&nbsp;Definitions</label>
+                        <textarea id="creditGradeDefinitions" type="text" style="height: 60px;" col="CreditGradeDefinitions" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="rating"  class="form-label">Rating</label>
+                        <input id="rating" type="text" col="Ratings" class="form-control">
+                    </div>
+                 </div>
+               @* <div class="row">
+                    <div class="col-sm-4">
+                        <label for="geoTagging" class="form-label" style="margin-left: 100px;">
+                            Geo-Tagging<i class="fa fa-map-marker" aria-hidden="true" style="font-size: 24px; background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, skyblue, red); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control mr-2" style="width: 30%; margin-left: 100px;" placeholder="Longitude">
+                            <span style="width: 0%;"></span>
+                            <input type="text" class="form-control ml-2" style="width: 30%; margin-left: 100px;" placeholder="Latitude">
+
+                        </div>
+                    </div>*@
+
+                </div>
+            </div>
+        
+   </form>
+</div>
+
+  
+
+
+

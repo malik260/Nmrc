@@ -1,0 +1,75 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="eTicket" id="eTicket">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Write Message</span>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <label class="messageType control-label">Message Type<font class="red">&nbsp;*</font></label>
+                        @* <input type="text" col="messageType" style="margin-left: 100px; width: 550px;" class="form-control" id="messageType">*@
+                        <div id="messageType" col="MessageType"></div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" col="Subject" class="form-control">
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="mailBody" class="form-label">Mail Body</label>
+                        <textarea col="Message" type="text" style=" height: 100px;" class="form-control" id="mailBody"></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<script type="text/javascript">
+
+    $("#messageType").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(MessageTypeEnum).EnumToDictionaryString())) });
+
+
+    var id = cn.request("id");
+
+    function saveForm(index) {
+        if ($("#form1").validate().form()) {
+            var postData = $("#form1").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/ETicket/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+
+
+
+

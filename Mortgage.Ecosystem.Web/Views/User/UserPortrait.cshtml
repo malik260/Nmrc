@@ -1,0 +1,135 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/cropbox/1.0/cropbox.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/cropbox/1.0/cropbox.min.js"))
+}
+
+    <div class="container">
+        <div class="imageBox">
+            <div class="thumbBox"></div>
+            <div class="spinner" style="display: none">Loading...</div>
+        </div>
+        <div class="action">
+            <div class="new-contentarea tc">
+                <a href="javascript:void(0)" class="upload-img"> <label for="avatar">Upload Image</label> </a>
+                <input type="file" id="portrait" accept="image/*" />
+            </div>
+            <input type="button" id="btnCrop" class="Btnsty_peyton" value="Crop" />
+            <input type="button" id="btnZoomIn" class="Btnsty_peyton" value="+" />
+            <input type="button" id="btnZoomOut" class="Btnsty_peyton" value="-" />
+            <input type="button" id="btnSave" class="Btnsty_peyton" value="Submit" />
+        </div>
+        <div class="cropped"></div>
+    </div>
+
+    <script type="text/javascript">
+        var id = cn.request("id");
+        var cropper;
+        var imgFileName;
+
+        $(function () {
+            var portrait = '@ViewBag.OperatorInfo.Portrait';
+            if (cn.isNullOrEmpty(portrait)) {
+                portrait = ctx + 'image/portrait.png';
+            }
+            else {
+                portrait = '@GlobalContext.SystemConfig.ApiSite' + portrait;
+            }
+            var options = {
+                thumbBox: '.thumbBox',
+                spinner: '.spinner',
+                imgSrc: portrait
+            };
+            cropper = $('.imageBox').cropbox(options);
+            $('#portrait').on('change', function () {
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    options.imgSrc = e.target.result;
+                    / / Determine whether the uploaded file is a picture type according to MIME
+                    if ((options.imgSrc).indexOf("image/") == -1) {
+                        cn.msgError("The file format is incorrect, please upload the image type, such as: JPG, JPEG, PNG suffixed files.");
+                    } else {
+                        cropper = $('.imageBox').cropbox(options);
+                    }
+                }
+                reader.readAsDataURL(file);
+                imgFileName = file.name;
+            });
+            $('#btnSave').on('click', function () {
+                saveForm(parent.layer.getFrameIndex(window.name));
+            });
+            $('#btnCrop').on('click', function () {
+                if (!checkImageFileName()) {
+                    return;
+                }
+                var img = cropper.getDataURL();
+                $('.cropped').html('');
+                $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow: 0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
+                $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:128px;margin-top:4px;border-radius:128px;box-shadow: 0px 0px 12px #7E7E7E;"><p>128px*128px</p>');
+                $('.cropped').append('<img src="' + img + '" align="absmiddle" style="width:180px;margin-top:4px;border-radius:180px;box-shadow: 0px 0px 12px #7E7E7E;"><p>180px*180px</p>');
+            });
+            $('#btnZoomIn').on('click', function () {
+                cropper.zoomIn();
+            });
+            $('#btnZoomOut').on('click', function () {
+                cropper.zoomOut();
+            });
+        });
+
+        function saveForm(index) {
+            if (!checkImageFileName()) {
+                return;
+            }
+            var img = cropper.getBlob();
+            var formdata = new FormData();
+            formdata.append("fileList", img, imgFileName);
+            cn.ajaxUploadFile({
+                url: '@GlobalContext.SystemConfig.ApiSite' + '/File/UploadFile?fileModule=@UploadFileType.Portrait.ToInt()',
+                data: formdata,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        saveUserPortrait(obj);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            })
+        }
+
+        function saveUserPortrait(data) {
+            var postData = {};
+            postData.Id = id;
+            postData.Portrait = data.Data;
+            cn.ajax({
+                url: '@Url.Content("~/User/ChangeUserJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        $("#portrait", parent.document).attr("src", '@GlobalContext.SystemConfig.ApiSite' + data.Data);
+                        cn.closeDialog();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+
+        function checkImageFileName() {
+            if (cn.isNullOrEmpty(imgFileName)) {
+                cn.msgError("Please upload the picture first");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    </script>

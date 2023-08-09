@@ -1,0 +1,124 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="ibox-title">
+    <h5>E-TICKET</h5>
+</div>
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        Name: <input id="name" col="Name" type="text" />
+                    </li>
+                    <li>
+                        Status: <span id="status" col="Status"></span>
+                    </li>
+                    <li class="select-time">
+                        <label>Created: </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                        <span>-</span>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="btn-group-sm" id="toolbar">
+            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-plus"></i> Sent Message(s)</a>
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-edit"></i> Write Message(s)</a>
+            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
+           
+@*            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
+*@        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/ETicket/GetEticketPageListJson")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'RequestNumber', title: 'Request No', sortable: true },
+                { field: 'Subject', title: 'Subject', sortable: true },
+                { field: 'Message', title: 'Message', sortable: true },
+                { field: 'DateSent', title: 'Date Sent', sortable: true },
+                { field: 'ApprovalStatus', title: 'Approval Status', visible: true, sortable: true },
+              
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+    function showSaveForm(bAdd) {
+        var id = 0;
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        cn.openDialog({
+            title: id > 0 ? "Edit Agent" : "E-TICKET",
+            content: '@Url.Content("~/ETicket/ETicketForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (cn.checkRowDelete(selectedRow)) {
+            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
+                var ids = cn.getIds(selectedRow);
+                cn.ajax({
+                    url: '@Url.Content("~/ETicket/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            searchGrid();
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+</script>

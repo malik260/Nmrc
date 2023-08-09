@@ -1,0 +1,501 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+    Layout = "~/Views/Shared/_Index.cshtml";
+
+}
+
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.min.css" rel="stylesheet" />
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+
+
+<div class="RiskAssessmentForm" id="RiskAssessmentForm">
+    <div id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            @*                <form class="dialogblock-header" style="height: auto;">
+            <span class="dialogblockheader">Risk Assesstment Form</span>
+
+            </form>*@
+            <div class="col-sm-12 select-table table-striped">
+                <table id="productAssessmentSetupTable" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+<script ="text/javascript">
+
+
+    function AddRiskFactor() {
+
+        var riskFactorId = $('#riskfactorid').val();
+        var postData = {
+            RiskFactorId: riskFactorId,
+            ProductCode: $('#txtRiskFactorProductCode').val(),
+            RiskFactorsDescription: $('#txtRiskFactor').val(),
+            Weight: $('#txtRiskFactorWeight').val(),
+            Id: $('#iid').val(),
+
+        };
+
+        // Determine if it's an update or insert operation
+        var url = riskFactorId
+            ? '@Url.Content("~/CreditAssessmentRiskFactor/UpdateFormJson")'
+            : '@Url.Content("~/CreditAssessmentRiskFactor/SaveFormJson")';
+
+        cn.ajax({
+            url: url,
+            type: "post",
+            data: postData,
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    cn.msgSuccess(obj.Message);
+                    // parent.searchGrid(); // Perform necessary actions after success
+                    parent.layer.close(index);
+                } else {
+                    cn.msgError(obj.Message);
+                }
+            }
+        });
+    }
+    function riskFormatter(value, row, index) {
+        
+        return [
+            '<div class="btn-group" role="group" aria-label="Basic example">' +
+            '<button type="button" class="editrisk btn btn-sm btn-xs btn-danger" title="Edit Risk">' +
+            '<i class="fa fa-list"></i>' + '</button >' +
+            '</div>'
+        ].join('');
+    }
+    window.riskEvents = {
+        
+        'click .editrisk': function (e, value, row, index) { 
+            debugger
+            $('#txtRiskFactorProductCode').val(row.ProductCode);
+            $('#txtRiskFactor').val(row.RiskFactorsDescription);
+            $('#txtRiskFactorWeight').val(row.Weight);
+            $('#riskfactorid').val(row.RiskFactorId);
+            $('#iid').val(row.Id);
+            //alert($('#txtriskfactorid').val());
+        },
+    }
+
+
+    function AddRiskFactorIndex() {
+       
+        var result = ValidateRiskFactorWeight($('#FactorTable'), $('#FactorIndexTable'), $('#txtriskfactorid'), $('#Factorindexid'), $('#txtRiskFactorIndexWeight'));
+        var factorIndexId = $('#Factorindexid').val();
+        if (result) {
+            var postData = {
+                ProductCode: $('#txtRiskFactorIndexProductCode').val(),
+                FactorIndexId: $('#Factorindexid').val(),
+                FactorIndexDescription: $('#txtRiskFactorIndex').val(),
+                Weight: $('#txtRiskFactorIndexWeight').val(),
+                RiskFactorId: $('#txtriskfactorid').val(),
+                Id: $('#iid').val(),
+            };
+            // Determine if it's an update or insert operation
+            var url = factorIndexId
+                ? '@Url.Content("~/CreditAssessmentFactorIndex/UpdateFormJson")'
+                : '@Url.Content("~/CreditAssessmentFactorIndex/SaveFormJson")';
+
+            cn.ajax({
+                url: url,
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+
+
+    }
+    function factorIndexFormatter(value, row, index) {
+        return [
+            '<div class="btn-group" role="group" aria-label="Basic example">' +
+            '<button type="button" class="editfactor btn btn-sm btn-xs btn-danger" title="Edit Factor Index">' +
+            '<i class="fa fa-list"></i>' + '</button >' +
+            '</div>'
+        ].join('');
+    }
+    window.factorIndexEvents = {
+        'click .editfactor': function (e, value, row, index) {
+            $('#txtRiskFactorIndexProductCode').val(row.ProductCode);
+            $('#txtRiskFactorIndex').val(row.FactorIndexDescription);
+            $('#txtRiskFactorIndexWeight').val(row.Weight);
+            $('#Factorindexid').val(row.FactorIndexId);
+            $('#iid').val(row.Id);
+            //alert($('#txtriskfactorid').val());
+        },
+    }
+   
+
+    function AddRiskFactorIndexTitle() {
+        debugger
+        var result = ValidateRiskFactorIndexWeight($('#FactorIndexTable'), $('#FactorIndexTitleTable'), $('#txtFactorIndexId'), $('#Indextitleid'), $('#txtFactorIndexTitleWeight'));
+        
+        if(result){
+       
+            var postData = {
+                              ProductCode: $('#txtFactorIndexTitleProductCode').val(),
+                              IndexTitleDescription: $('#txtFactorIndexTitle').val(),
+                              Weight: $('#txtFactorIndexTitleWeight').val(),
+                              FactorIndexId: $('#txtFactorIndexId').val(),
+                              IndexTitleId: $('#Indextitleid').val()
+                            };
+                  
+            cn.ajax({
+                url: '@Url.Content("~/CreditAssessmentIndexTitle/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    
+    }
+
+    
+    function indexTitleFormatter(value, row, index) {
+        return [
+            '<div class="btn-group" role="group" aria-label="Basic example">' +
+            '<button type="button" class="edittitle btn btn-sm btn-xs btn-danger" title="Edit Index Title">' +
+            '<i class="now-ui-icons design_bullet-list-67"></i>' + ' </button > ' +
+            '</div>'
+        ].join('');
+    }
+    window.indexTitleEvents = {
+        'click .edittitle': function (e, value, row, index) {
+            $('#txtFactorIndexTitleProductCode').val(row.ProductCode);
+            $('#txtFactorIndexTitle').val(row.IndexTitleDescription);
+            $('#txtFactorIndexTitleWeight').val(row.Weight);
+            $('#Indextitleid').val(row.IndexTitleId);
+            //alert($('#txtriskfactorid').val());
+        },
+    }
+
+
+    function AddIndex(){
+            var postData = {
+                Productcode: $('#txtIndexProductCode').val(),
+                Assessmentindex: $('#txtIndex').val(),
+                Weight: $('#txtIndexWeight').val(),
+                Indextitleid: $('#txtIndexTitleId').val(),
+                Indexid: $('#Indexid').val()
+            };
+            cn.ajax({
+                url: '@Url.Content("~/CreditAssessmentIndex/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    function indexFormatter(value, row, index) {
+        return [
+            '<div class="btn-group" role="group" aria-label="Basic example">' +
+            '<button type="button" class="editindex btn btn-sm btn-xs btn-danger" title="Edit Assessment Index">' +
+            '<i class="fa fa-list"></i>' + ' </button > ' +
+            '</div>'
+        ].join('');
+    }
+    window.indexEvents = {
+        'click .editindex': function (e, value, row, index) {
+            $('#txtIndexProductCode').val(row.productcode);
+            $('#txtIndex').val(row.assessmentIndex);
+            $('#txtIndexWeight').val(row.weight);
+            $('#Indexid').val(row.indexId);
+            //alert($('#txtriskfactorid').val());
+        },
+    }
+       
+    
+    function ValidateRiskFactorWeight($upperTable, $lowerTable, $upperTableId, $lowerTableId, $lowerTableNewWeight) {
+               
+        var upperTableFactor = $upperTable.bootstrapTable('getData');
+        var totalUpperTableWeight = 0;
+        //test varaible
+        var test = $upperTableId.val();
+        $.each(upperTableFactor, function (index, itemUpperTable) {
+            console.log(itemUpperTable.RiskFactorId);
+            console.log(test);
+            //Boolean result;
+            if (itemUpperTable.RiskFactorId == parseInt(test)) {
+                //result = true;
+                //console.log(result);
+                totalUpperTableWeight += parseInt(itemUpperTable.Weight);
+            }
+        });
+        var lowerTableFactor = $lowerTable.bootstrapTable('getData');
+        var totalLowerTableWeight = 0;
+        /// If an update is being made to the weight.
+        var factorIndexId = $lowerTableId.val();;
+        var oldWeight = 0;
+        ///
+        $.each(lowerTableFactor, function (index, itemLowerTable) {
+            totalLowerTableWeight += itemLowerTable.Weight;
+            if (factorIndexId != 0 && itemLowerTable.FactorIndexId == factorIndexId) {
+                oldWeight = itemLowerTable.Weight;
+            }
+        });
+        var weight = $lowerTableNewWeight.val();
+        var newWeight = totalLowerTableWeight + parseInt(weight) - oldWeight;
+        if (totalUpperTableWeight < newWeight) {
+            swal('Total weight should not exceed ' + totalUpperTableWeight);
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function ValidateIndexTitleWeight($upperTable, $lowerTable, $upperTableId, $lowerTableId, $lowerTableNewWeight) {
+        debugger
+        var upperTableFactor = $upperTable.bootstrapTable('getData');
+        // alert(JSON.stringify(upperTableFactor));
+        var totalUpperTableWeight = 0;
+        $.each(upperTableFactor, function (index, itemUpperTable) {
+            if (itemUpperTable.IndexTitleId == $upperTableId.val()) {
+                totalUpperTableWeight += itemUpperTable.Weight;
+            }
+        });
+        var lowerTableFactor = $lowerTable.bootstrapTable('getData');
+        var totalLowerTableWeight = 0;
+        /// If an update is being made to the weight.
+        var indexId = $lowerTableId.val();;
+        var oldWeight = 0;
+        ///
+        $.each(lowerTableFactor, function (index, itemLowerTable) {
+            totalLowerTableWeight += itemLowerTable.Weight;
+            if (indexId != 0 && itemLowerTable.IndexId == indexId) {
+                oldWeight = itemLowerTable.Weight;
+            }
+        });
+        var weight = $lowerTableNewWeight.val();
+        var newWeight = totalLowerTableWeight + parseInt(Weight) - oldWeight;
+        if (totalUpperTableWeight < newWeight) {
+            swal('Total weight should not exceed ' + totalUpperTableWeight);
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function ValidateRiskFactorIndexWeight($upperTable, $lowerTable, $upperTableId, $lowerTableId, $lowerTableNewWeight) {
+    
+        var upperTableFactor = $upperTable.bootstrapTable('getData');
+        //alert(JSON.stringify(upperTableFactor));
+        var totalUpperTableWeight = 0;
+        var test = $upperTableId.val();
+        $.each(upperTableFactor, function (index, itemUpperTable) {
+            console.log(itemUpperTable.FactorIndexId);
+            console.log(test);
+
+            if (itemUpperTable.FactorIndexId == parseInt(test)) {
+                totalUpperTableWeight += parseInt(itemUpperTable.Weight);
+            }
+        });
+        var lowerTableFactor = $lowerTable.bootstrapTable('getData');
+        var totalLowerTableWeight = 0;
+        /// If an update is being made to the weight.
+        var indexTitleId = $lowerTableId.val();;
+        var oldWeight = 0;
+        ///
+        $.each(lowerTableFactor, function (index, itemLowerTable) {
+            totalLowerTableWeight += itemLowerTable.Weight;
+            if (indexTitleId != 0 && itemLowerTable.IndexTitleId == indexTitleId) {
+                oldWeight = itemLowerTable.Weight;
+            }
+        });
+        var weight = $lowerTableNewWeight.val();
+        var newWeight = totalLowerTableWeight + parseInt(Weight) - oldWeight;
+        if (totalUpperTableWeight < newWeight) {
+            swal('Total weight will be more than ' + totalUpperTableWeight);
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    
+
+
+    $(function () {
+        initGrid();
+    });
+    
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/CreditType/GetListJson")';
+        $('#productAssessmentSetupTable').cnTable({
+            url: queryUrl,
+            columns: [
+                //{ checkbox: false, visible: false },
+                { field: 'Code', title: 'Code', visible: true },
+                { field: 'Name', title: 'Product', visible: true },
+            ],
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                
+                var riskFactorUrl = '@Url.Content("~/CreditAssessmentRiskFactor/GetListJson")' + '?productcode=' + row.Code;
+                $('#ProductAssessmentSetupTable').find('.detail-view').each(function () {
+                    if (!$(this).is($detail.parent())) {
+                        $(this).prev().find('.detail-icon').click()
+                    }
+                })
+               
+                $detail.html(
+
+                    '<div class="card"><div class="card-header"> <h6 class="card-title text-center"> <small class="description"> Add Risk Factor for ' + row.Name + '</small></h6></div >' +
+                    '<div class="card-body"><div class="row">' +
+                    '<div class="col-sm-4"> Risk Factor: <input type="text" id="txtRiskFactor" placeholder="Risk Factor" class="form-control text-right" /></div>' +
+                    '<div class="col-sm-4"> Weight: <input type="text" id="txtRiskFactorWeight" placeholder="Weight" class="form-control text-right" /></div>' +
+                    '<div class="col-sm-4 text-right"> <br/> <input type="hidden" id="iid"/> <input type="hidden" id="riskfactorid"/> <input type="hidden" id="txtRiskFactorProductCode" value=' + row.Code + ' />' +
+                    
+                    '<button id="btnAddRiskFactor" type="button" onclick="AddRiskFactor();" class="btn btn-sm btn-success"  title="Register Risk">Register Risk<i class="fa fa-check"></i></button>' +
+                    '</div></div>' +
+                    '<br/><table class="data-table" ' +
+                    'data-url=' + riskFactorUrl + ' ' +
+                    'id="FactorTable"' +
+                    'data-toggle="table" >' +
+                    '<thead><tr>' +
+                    '<th data-field="RiskFactorsDescription"><b>Risk Factor</b></th>' +
+                    '<th data-field="Weight"><b>Weight</b></th>' +
+                    '<th data-events="riskEvents" data-width="10%" data-formatter="riskFormatter"></th>' +
+                    '</tr></thead>' +
+                    '</table></div></div>').find('table').bootstrapTable({
+                        detailView: true,
+                        onExpandRow: function (factorindex, factorrow, $factorindexdetail) {
+                            var riskFactorIndexUrl = '@Url.Content("~/CreditAssessmentFactorIndex/GetListJson")' + '?riskFactorId=' + factorrow.RiskFactorId;
+
+                            $('#FactorTable').find('.detail-view').each(function () {
+                                if (!$(this).is($factorindexdetail.parent())) {
+                                    $(this).prev().find('.detail-icon').click()
+                                }
+                            })
+                           
+                            $factorindexdetail.html('<div class="card"><div class="card-header"> <h6 class="card-title text-center"> <small class="description"> Add Risk Factor Index for ' + factorrow.RiskFactorsDescription + '</small></h6></div >' +
+                                '<div class="card-body"><div class="row">' +
+                                '<div class="col-sm-4"> Risk Factor Index: <input type="text" id="txtRiskFactorIndex" placeholder="Risk Factor Index" class="form-control text-right" /></div>' +
+                                '<div class="col-sm-4"> Weight: <input type="text" id="txtRiskFactorIndexWeight" placeholder="Weight" class="form-control text-right" /></div>' +
+                                '<div class="col-sm-4 text-right"> <br/> <input type="hidden" id="Factorindexid"/> <input type="hidden" id="txtRiskFactorIndexProductCode" value=' + factorrow.ProductCode + ' />' +
+                                '<input type="hidden" id="iid"/> <input type="hidden" id="txtriskfactorid" value=' + factorrow.RiskFactorId + ' />' +
+                                '<button type="button" id="btnAddRiskFactorIndex" onclick="AddRiskFactorIndex();" class="btn btn-sm btn-success"  title="Register Risk">Register Risk Index<i class="fa fa-check"></i></a>' +
+                                '</div></div>' +
+                                '<br/><table class="data-table" ' +
+                                'data-url=' + riskFactorIndexUrl + ' ' +
+                                'id="FactorIndexTable"' +
+                                'data-toggle="table" >' +
+                                '<thead><tr>' +
+                                '<th data-field="FactorIndexDescription"><b>Factor Index</b></th>' +
+                                '<th data-field="Weight"><b>Weight</b></th>' +
+                                '<th data-events="factorIndexEvents" data-width="10%" data-formatter="factorIndexFormatter"></th>' +
+                                '</tr></thead>' +
+                                '</table></div></div>').find('table').bootstrapTable({                                    
+                                    detailView: true,
+                                    onExpandRow: function (titleindex, titlerow, $titledetail) {
+                                        
+                                        var riskFactorIndexTitleUrl = '@Url.Content("~/CreditAssessmentIndexTitle/GetListJson")' + '?factorIndexId=' + titlerow.FactorIndexId;
+                                        //var riskfactorIndexTitleUrl = url_path2 + "/ListCreditAssessmentIndexTitle?factorIndexId=" + titlerow.factorindexid;
+                                        $('#FactorIndexTable').find('.detail-view').each(function () {                                            
+                                            if (!$(this).is($titledetail.parent())) {
+                                                $(this).prev().find('.detail-icon').click()
+                                            }
+                                        })
+                                        //debugger
+                                       
+                                        $titledetail.html('<div class="card"><div class="card-header"> <h6 class="card-title text-center"> <small class="description"> Add Risk Factor Index for ' + titlerow.FactorIndexDescription + '</small></h6></div >' +
+                                            '<div class="card-body"><div class="row">' +
+                                            '<div class="col-sm-4"> Factor Index Title: <input type="text" id="txtFactorIndexTitle" placeholder="Factor Index Title" class="form-control text-right" /></div>' +
+                                            '<div class="col-sm-4"> Weight: <input type="text" id="txtFactorIndexTitleWeight" placeholder="Weight" class="form-control text-right" /></div>' +
+                                            '<div class="col-sm-4 text-right"> <br/><input type="hidden" id="Indextitleid"/> <input type="hidden" id="txtFactorIndexTitleProductCode" value=' + titlerow.ProductCode + ' />' +
+                                            '<input type="hidden" id="txtFactorIndexId" value=' + titlerow.FactorIndexId + ' />' +
+                                            '<button type="button" id="btnAddRiskFactorIndextitle" onclick="AddRiskFactorIndexTitle();" class="btn btn-sm btn-success"  title="Register Risk">Register Risk Index Title<i class="fa fa-check"></i></a>' +
+                                            '</div></div>' +
+                                            '<br/><table class="data-table" ' +
+                                            'data-url=' + riskFactorIndexTitleUrl + ' ' +
+                                            'id="FactorIndexTitleTable"' +
+                                            'data-toggle="table" >' +
+                                            '<thead><tr>' +
+                                            '<th data-field="IndexTitleDescription"><b>Index Title</b></th>' +
+                                            '<th data-field="Weight"><b>Weight</b></th>' +
+                                            '<th data-events="indexTitleEvents" data-width="10%" data-formatter="indexTitleFormatter"></th>' +
+                                            '</tr></thead>' +
+                                            '</table></div></div>').find('table').bootstrapTable({
+                                                detailView: true,
+                                                onExpandRow: function (iindex, indexrow, $indexdetail) {
+                                                    var indexUrl = '@Url.Content("~/CreditAssessmentIndex/GetListJson")' + '?indexTitleId=' + indexrow.IndexTitleId;
+                                                    
+                                                    $('#FactorIndexTitleTable').find('.detail-view').each(function () {
+                                                        if (!$(this).is($indexdetail.parent())) {
+                                                            $(this).prev().find('.detail-icon').click()
+                                                        }
+                                                    })
+                                                    
+                                                    $indexdetail.html('<div class="card"><div class="card-header"> <h6 class="card-title text-center"> <small class="description"> Add Assessment Index for ' + indexrow.IndexTitleDescription + '</small></h6></div >' +
+                                                        '<div class="card-body"><div class="row">' +
+                                                        '<div class="col-md-6"> Assessment Index: <input type="text" id="txtIndex" placeholder="Index" class="form-control" /></div>' +
+                                                        '<div class="col-md-4"> Weight: <input type="text" id="txtIndexWeight" placeholder="Weight" class="form-control text-right" /></div>' +
+                                                        '<div class="col-md-2"> <br/><input type="hidden" id="Indexid"/>  <input type="hidden" id="txtIndexProductCode" value=' + indexrow.ProductCode + ' />' +
+                                                        '<input type="hidden" id="txtIndexTitleId" value=' + indexrow.IndexTitleId + ' />' +
+                                                        '<button type="button" id="btnAddIndex" onclick="AddIndex();" class="btn btn-sm btn-default"  title="Register Risk"><i class="now-ui-icons ui-1_check"></i></a>' +
+                                                        '</div></div>' +
+                                                        '<br/><table class="data-table" ' +
+                                                        'data-url=' + indexUrl + ' ' +
+                                                        'id="IndexTable"' +
+                                                        'data-toggle="table" >' +
+                                                        '<thead><tr>' +
+                                                        '<th data-field="AssessmentIndex"><b>Index</b></th>' +
+                                                        '<th data-field="Weight"><b>Weight</b></th>' +
+                                                        '<th data-events="indexEvents" data-width="10%" data-formatter="indexFormatter"></th>' +
+                                                        '</tr></thead>' +
+                                                        '</table></div></div>').find('table').bootstrapTable({});
+                                                }
+                                            });
+
+                                    }
+                                });
+                        }
+                    });
+            }
+        });
+
+    }
+
+
+</script>
+
+
+
+

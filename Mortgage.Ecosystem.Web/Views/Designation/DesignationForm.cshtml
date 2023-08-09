@@ -1,0 +1,97 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Job Title<font class="red"> *</font></label>
+            <div class="col-sm-8">
+                <input id="name" col="Name" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Display order</label>
+            <div class="col-sm-8">
+                <input id="sort" col="Sort" type="text" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Status</label>
+            <div id="status" col="Status" class="col-sm-8"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Notes</label>
+            <div class="col-sm-8">
+                <textarea id="remark" col="Remark" class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = cn.request("id");
+    $(function () {
+        $("#status").cnRadioBox({
+            data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString()))
+        });
+
+        getForm();
+
+        $("#form").validate({
+            rules: {
+                name: { required: true }
+            }
+        });
+    });
+
+    function getForm() {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/Designation/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Data;
+                        $("#form").setWebControls(result);
+                    }
+                }
+            });
+        }
+        else {
+            cn.ajax({
+                url: '@Url.Content("~/Designation/GetMaxSortJson")',
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var defaultData = {};
+                        defaultData.Sort = obj.Data;
+                        defaultData.Status = "@StatusEnum.Yes.ToInt()";
+                        $("#form").setWebControls(defaultData);
+                    }
+                }
+            });
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/Designation/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>

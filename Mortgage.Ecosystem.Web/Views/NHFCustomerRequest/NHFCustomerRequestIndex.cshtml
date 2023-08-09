@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+
+    <div class="row">
+        <div class="ibox-title">
+            <h5>Pending NHF Request Validation </h5>
+        </div>
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        Name: <input id="cname" col="Name" type="text" />
+
+                    </li>
+                    <li>
+                        Status: <span id="status" col="Status"></span>
+                    </li>
+
+                    <li class="select-time">
+                        <label>Created: </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                        <span>-</span>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="nhfCustomerRequestTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/NHFCustomerRequest/GetNHFCustomerRequestTreeListJson")';
+        $('#nhfCustomerRequestTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'Phone', title: 'Phone Number', sortable: true },
+                { field: 'AccountNumber', title: 'Account Number', sortable: true },
+                { field: 'Email', title: 'Email Address', sortable: true },
+                { field: 'NextOfKin', title: 'Next Of Kin', sortable: true },
+                { field: 'MonthlyIncome', title: 'Monthly Income', sortable: true },
+                { field: 'RequestedDate', title: 'Requested Date', sortable: true },
+                { field: 'Year', title: 'Year', sortable: true }
+
+
+            ],
+            queryParams: function (params) {
+                var pagination = $('#nhfCustomerRequestTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#nhfCustomerRequestTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+
+</script>

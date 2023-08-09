@@ -1,0 +1,134 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="propertyRegistration" id="propertyRegistration">
+        <form id="form1" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-header" style="height: auto;">
+                    <span class="dialogblockheader">Property Registration</span>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label class="companyNumber control-label" style="margin-left: 100px;">Company&nbsp;Number<font class="red">&nbsp;*</font></label>
+                        <input type="text" col="companyNumber" style="margin-left: 100px;" class="form-control" id="companyName">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="companyName control-label" style="margin-left: 200px;">Company&nbsp;Name<font class="red">&nbsp;*</font></label>
+                        <input type="text" col="NIN" style="margin-left: 200px;" class="form-control" id="companyName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="propertyType" style="margin-left: 100px;" class="form-label">Property&nbsp;Type</label>
+                        <input type="text" style="margin-left: 100px;" col="propertyType" class="form-control">
+                         
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="propertyDescription" style="margin-left: 200px;" class="form-label">Property&nbsp;Description</label>
+                        <textarea type="text" style="margin-left: 200px; height: 60px;" class="form-control" id="propertyDescription"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="propertyLocation" style="margin-left: 100px;" class="form-label">Property&nbsp;Location</label>
+                        <input type="text" style="margin-left: 100px;" col="PropertyLocation" class="form-control">
+                          
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="propertySize" style="margin-left: 200px;" class="form-label">Property&nbsp;Size</label>
+                        <input type="text" style="margin-left: 200px;" col="propertySize" class="form-control">
+                    </div>
+                </div>
+              @*  <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="geoTagging" style="margin-left: 100px;" class="form-label">Geo-Tagging</label>
+                        <input type="text" style="margin-left: 100px;" class="form-control" id="geoTagging">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="neighbourhood" style="margin-left: 200px;" class="form-label">Neighbourhood</label>
+                        <textarea type="text" style="margin-left: 200px; height: 60px;" class="form-control" id="neighbourhood"></textarea>
+                    </div>
+                </div>*@
+
+               @* <div class="row">
+                    <div class="col-sm-4">
+                        <label for="geoTagging" class="form-label" style="margin-left: 100px;">
+                            Geo-Tagging<i class="fa fa-map-marker" aria-hidden="true" style="font-size: 24px; background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, skyblue, red); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control mr-2" style="width: 30%; margin-left: 100px;" placeholder="Longitude">
+                            <span style="width: 0%;"></span>
+                            <input type="text" class="form-control ml-2" style="width: 30%; margin-left: 100px;" placeholder="Latitude">
+
+                        </div>
+                    </div>*@
+
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="geoTagging" class="form-label" style="margin-left: 100px;">
+                            Geo-Tagging
+                            <i class="fa fa-map-marker" aria-hidden="true" style="font-size: 24px; margin-left: 5px; vertical-align: middle; color: #000;"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control mr-2" style="width: 30%; margin-left: 100px;" placeholder="Longitude">
+                            <span style="width: 0%;"></span>
+                            <input type="text" class="form-control ml-2" style="width: 30%; margin-left: 100px;" placeholder="Latitude">
+                        </div>
+                    </div>
+                 <div class="col-sm-4">
+                    <label for="neighbourhood" style="margin-left: 200px;" class="form-label">Neighbourhood</label>
+                    <textarea type="text" style="margin-left: 200px; height: 60px;" class="form-control" id="neighbourhood"></textarea>
+                </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="email" style="margin-left: 100px;" class="form-label">Email</label>
+                        <input type="text" style="margin-left: 100px;" class="form-control" id="email">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="phoneNumber" style="margin-left: 200px;" class="form-label">Phone&nbsp;Number</label>
+                        <input type="text" style="margin-left: 200px;" class="form-control" id="phoneNumber">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="documentTitle" style="margin-left: 100px;" class="form-label">Document Title</label>
+                        <input type="text" col="DocumentTitle" style="margin-left: 100px;" class="form-control" id="documentTitle">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="uploadProperty control-label" style="margin-left: 200px;">Upload&nbsp;Property</label>
+                        <input type="text" col="UploadProperty" placeholder="Search" style="margin-left: 200px;" class="form-control" id="uploadDocument">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        
+                        <input type="file" style="margin-left: 100px;" id="logo">
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <div class="col-sm-4">
+                        <input type="file" style="display: none; margin-left: 100px;" id="addDocument" accept=".doc,.docx,.pdf,.xlsx,.txt,.rtf,.jpg,.png,.gif,.mp3,.wav,.aac,.mp4,.avi,.mov,.zip,.rar,.tar,.exe,.dmg,.apk,.db,.mdb,.sql,.ttf,.otf,.fon,.dll,.sys,.ini" multiple />
+                        <label for="addDocument" style=" width:140px; border: 0;  margin-left: 100px; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
+                            &nbsp; Add Document
+                        </label>
+
+                    </div>
+                </div>
+                </div>
+            </div>
+        
+   </form>
+</div>
+
+  
+
+
+

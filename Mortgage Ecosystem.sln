@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mortgage.Ecosystem.Web", "Mortgage.Ecosystem.Web\Mortgage.Ecosystem.Web.csproj", "{8E05177A-B6EE-4194-874F-06FE2B90BE54}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mortgage.Ecosystem.DataAccess.Layer", "Mortgage.Ecosystem.DataAccess.Layer\Mortgage.Ecosystem.DataAccess.Layer.csproj", "{F45B5A38-3F6A-43FE-B37E-75FE04467562}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mortgage.Ecosystem.BusinessLogic.Layer", "Mortgage.Ecosystem.BusinessLogic.Layer\Mortgage.Ecosystem.BusinessLogic.Layer.csproj", "{55C1B5BA-F215-4497-B335-3F770EBD4DC2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E05177A-B6EE-4194-874F-06FE2B90BE54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E05177A-B6EE-4194-874F-06FE2B90BE54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E05177A-B6EE-4194-874F-06FE2B90BE54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E05177A-B6EE-4194-874F-06FE2B90BE54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F45B5A38-3F6A-43FE-B37E-75FE04467562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F45B5A38-3F6A-43FE-B37E-75FE04467562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F45B5A38-3F6A-43FE-B37E-75FE04467562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F45B5A38-3F6A-43FE-B37E-75FE04467562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55C1B5BA-F215-4497-B335-3F770EBD4DC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55C1B5BA-F215-4497-B335-3F770EBD4DC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55C1B5BA-F215-4497-B335-3F770EBD4DC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55C1B5BA-F215-4497-B335-3F770EBD4DC2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B0CAF57-D892-4CBF-86A5-C02CF0A2249E}
+	EndGlobalSection
+EndGlobal

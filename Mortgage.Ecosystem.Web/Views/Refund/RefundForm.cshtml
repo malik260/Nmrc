@@ -1,0 +1,282 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<div class="refundApplication" id="refundApplication">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Customer Details</span>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="nhfNumber" class="form-label">NHF&nbsp;Number</label>
+                        <input id="nhfNumber" col="NhfNumber" class="form-control" readonly />
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="customerName" class="form-label">Customer&nbsp;Name</label>
+                        <input id="customerName" col="Name" class="form-control" readonly />
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="dateOfBirth" class="form-label">Date&nbsp;Of&nbsp;Birth</label>
+                        <input id="dateOfBirth" col="DateOfBirth" class="form-control" readonly />
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="employerNumber" class="form-label">Employer&nbsp;Number</label>
+                        <input id="employerNumber" col="EmployerNumber" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="employmentDate" class="form-label">Employment&nbsp;Date</label>
+                        <input id="employmentDate" col="EmploymentDate" class="form-control" readonly />
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="bvn" class="form-label">BVN</label>
+                        <input id="bvn" col="BVN" class="form-control" readonly />
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="nin" class="form-label">NIN</label>
+                        <input id="nin" col="NIN" class="form-control" readonly />
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="mobileNumber" class="form-label">Mobile&nbsp;Number</label>
+                        <input id="mobileNumber" col="MobileNumber" class="form-control" readonly />
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="contactAddress" class="form-label">Contact&nbsp;Address</label>
+                        <input id="contactAddress" col="ContactAddress" class="form-control" readonly />
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="employer Name" class="form-label">Employer&nbsp;Name</label>
+                        <input id="employerName" col="EmployerName" class="form-control" readonly />
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-success" type="button" id="proceed">
+                            <span class="bold">Proceed To Application</span>  <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <form id="form2" class="form-horizontal m ">
+
+        <div id="refundApplication" style="margin-top: 10px; margin-bottom:5%">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-body" style="height: 100%;">
+                    <span class="dialogblockheader">Refund Application</span>
+                    <div Class="form-group">
+                        <div class="col-sm-6">
+
+                            <label for="conditionForApplication" class="form-label">Condition&nbsp;For&nbsp;Application</label>
+                            <div id="conditionForApplication" col="ConditionForApplication"></div>
+
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="backName" class="form-label">Bank&nbsp;Name</label>
+                            <input id="bankName" col="BankName" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="bankAccountNo" class="form-label">Bank&nbsp;Account&nbsp;No</label>
+                            <input id="bankAccountNo" col="BankAccountNumber" class="form-control" readonly />
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="age" class="form-label">Age</label>
+                            <input id="age" col="Age" class="form-control" readonly />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="customerNo" class="form-label">Customer&nbsp;No</label>
+                            <input id="customerNo" col="CustomerNo" class="form-control" readonly />
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="availableBalance" class="form-label">Available&nbsp;Balance </label>
+                            <input id="availableBalance" col="AvailableBalance" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="yearsOfService" class="form-label">Years&nbsp;of&nbsp;Service</label>
+                            <input id="yearsOfService" col="YearOfService" class="form-control" readonly />
+
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="" class="form-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="documentUpload" class="form-label">Document&nbsp;Upload</label>
+                            <select id="file-dropdown" class="form-control">
+                                <option></option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label style="margin-left: 200px;" class="form-label"></label>
+                            <input type="file" id="chooseFile" style="margin-left: 5px; margin-top:5%">
+                            <button id="addDcument" style="margin-left: 10px; margin-top:10%">Add Document</button>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <button class="btn btn-danger" type="button" id="back">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                        </div>
+
+                        <div class="col-sm-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<script type="text/javascript">
+    var id = cn.request("id");
+    function saveForm(index) {
+        if ($("#form2").validate().form()) {
+            var postData = $("#form2").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/Refund/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                        parent.layer.close(index);
+                    }
+                }
+            });
+        }
+    }
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Content("~/Refund/ViewCustomerInformation")', // The URL of your controller method
+            type: 'GET',
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var data = obj.Data;
+                    $('#nhfNumber').val(data.Nhfno);
+                    $('#customerName').val(data.Name);
+                    $('#dateOfBirth').val(data.Dob);
+                    $('#employerNumber').val(data.EmployerNo);
+                    $('#employmentDate').val(data.EmploymentDate);
+                    $('#bvn').val(data.Bvn);
+                    $('#nin').val(data.Nin);
+                    $('#mobileNumber').val(data.MobileNo);
+                    $('#contactAddress').val(data.ContactAddress);
+                    $('#employerName').val(data.EmployerName);
+                    $('#bankName').val(data.BankName);
+                    $('#bankAccountNo').val(data.BankAccountNumber);
+                    $('#age').val(data.Age);
+                    $('#customerNo').val(data.CustNo);
+                    $('#availableBalance').val(data.Amount);
+                    $('#yearsOfService').val(data.YearsOfService);
+                } else {
+                    cn.msgError(obj.Message);
+                    $('#form1').hide();
+                    $('#form2').hide();
+                    //$("#proceed").attr("disabled", "disabled");
+                    //cn.closeDialog();
+                    setTimeout(function () {
+                        cn.closeDialog();
+                    }, 3000); // 5000 milliseconds = 5 seconds
+                }
+
+            },
+            error: function () {
+                // Handle error, if any
+            }
+        });
+        // Perform the refund process here
+
+        // hide the form initially
+        $('#form1').show();
+        $('#form2').hide();
+
+
+        // add click event listener to the button
+        $('#proceed').click(function () {
+            // unhide the form
+            $('#form1').hide();
+            $('#form2').show();
+
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+
+        // add click event listener to buttons in form2
+        $('#form2 button').click(function (event) {
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+
+        $('#back').click(function () {
+            // unhide the form
+            $('#form2').hide();
+            $('#form1').show();
+
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+        $("#conditionForApplication").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(ConditionForApplicationEnum).EnumToDictionaryString())) });
+
+    });
+</script>
