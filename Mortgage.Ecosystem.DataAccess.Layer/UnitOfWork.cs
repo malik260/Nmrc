@@ -27,6 +27,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IContributionRepository? _contributions;
         private IContributionHistoryRepository? _contributionHistories;
         private IContributionRefundPostingRepository? _contributionRefundPostings;
+        private ICreditScoreRepository? _creditScores;
         private ICustomerProfileUpdateRepository? _customerProfileUpdates;
         private IDepartmentRepository? _departments;
         private IDesignationRepository? _designations;
@@ -135,6 +136,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public IContributionRefundPostingRepository ContributionRefundPostings =>
          _contributionRefundPostings ??= new ContributionRefundPostingRepository();
+
+        public ICreditScoreRepository CreditScores =>
+      _creditScores ??= new CreditScoreRepository();
 
         public IFinanceCounterpartyTransactionRepository FinanceCounterpartyTransactions =>
           _financeCounterpartyTransactions ??= new FinanceCounterpartyTransactionRepository();

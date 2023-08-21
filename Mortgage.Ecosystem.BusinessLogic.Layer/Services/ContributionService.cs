@@ -145,7 +145,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             RemitaPaymentDetailsEntity remitaPaymentDetailsEntity = new RemitaPaymentDetailsEntity();
             remitaPaymentDetailsEntity.TransactionId = Rrrgenerator.Data.TransactionId;
             remitaPaymentDetailsEntity.TransactionDate = DateTime.Now;
-            remitaPaymentDetailsEntity.Status = 0;
+            remitaPaymentDetailsEntity.Status = 1;
             remitaPaymentDetailsEntity.Rrr = Rrrgenerator.Data.RRR;
             remitaPaymentDetailsEntity.Amount = PaymentDetails.amount.ToStr();
             remitaPaymentDetailsEntity.EmployeeNumber = Convert.ToString(loggedUser.EmployeeInfo.NHFNumber.ToStr());
@@ -153,7 +153,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             FinanceCounterpartyTransactionEntity CPT = new FinanceCounterpartyTransactionEntity();
             CPT.Ref = loggedUser.EmployeeInfo.NHFNumber.ToStr();
-            CPT.Approved = 0;
+            CPT.Approved = 1;
             CPT.Branch = employeedetails.Branch.ToStr();
             CPT.TransactionType = "70";
             CPT.PostDate = DateTime.Now;
@@ -164,7 +164,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             FinanceTransactionEntity FTT = new FinanceTransactionEntity();
             FTT.DebitAmt = 0;
-            FTT.Approved = 0;
+            FTT.Approved = 1;
             FTT.CreditAmt = entity.contributionAmount;
             FTT.DestinationBranch = employeedetails.Branch.ToStr();
             FTT.TransactionDate = DateTime.Now;
