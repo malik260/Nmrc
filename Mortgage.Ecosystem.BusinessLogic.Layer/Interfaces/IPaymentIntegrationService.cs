@@ -11,5 +11,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
     {
         Task<TData<TransactionDetails>> GenerateRRR(RemitaPaymentDTO remitaPayment);
         Task<TData<GetRemitaResponse>> CheckRRRStatus(string Rrr);
+        Task<TData<TransactionDetails>> Generate(RemitaPaymentDTO remitaPayment);
+
     }
 }

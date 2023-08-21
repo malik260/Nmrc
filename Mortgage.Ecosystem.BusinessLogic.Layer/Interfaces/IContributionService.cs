@@ -17,5 +17,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<RemitaPaymentDetailsEntity>> SingleContribution(ContributionEntity entity);
         Task<TData<string>> SaveForm(ContributionEntity entity);
         Task<TData> DeleteForm(string ids);
+        Task<TData<EmployeeDetailsVM>> GetCustomerDetails();
     }
 }
