@@ -324,6 +324,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 throw;
             }
         }
+        public async Task<EmployeeEntity> GetEntityByNhfNumber(long nhfNo)
+        {
+            return await BaseRepository().FindEntity<EmployeeEntity>(x => x.NHFNumber == nhfNo);
+        }
+
 
         public async Task DeleteForm(string ids)
         {

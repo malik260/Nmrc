@@ -14,10 +14,12 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
     {
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly IPaymentIntegrationService paymentIntegrationService;
-        public ContributionService(IUnitOfWork iUnitOfWork, IPaymentIntegrationService _ipaymentintegrationservice)
+        private readonly IEmployeeService _employeeService;
+        public ContributionService(IUnitOfWork iUnitOfWork, IPaymentIntegrationService _ipaymentintegrationservice, IEmployeeService employeeService)
         {
             _iUnitOfWork = iUnitOfWork;
             paymentIntegrationService = _ipaymentintegrationservice;
+            _employeeService = employeeService;
         }
 
         #region Retrieve data
@@ -122,57 +124,85 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<TData<RemitaPaymentDetailsEntity>> SingleContribution(ContributionEntity entity)
         {
             string message = "";
-            var employeedetails = await _iUnitOfWork.Employees.GetEntity(entity.Id);
+            TData<RemitaPaymentDetailsEntity> obj = new TData<RemitaPaymentDetailsEntity>();
+            var loggedUser = await Operator.Instance.Current();
+            var employeedetails = await _iUnitOfWork.Employees.GetEntityByNhfNumber(loggedUser.EmployeeInfo.NHFNumber);
             RemitaPaymentDTO PaymentDetails = new RemitaPaymentDTO();
             PaymentDetails.amount = entity.contributionAmount;
-            PaymentDetails.description = entity.naration;
+            PaymentDetails.description = entity.remarks;
             PaymentDetails.payerEmail = entity.Email;
             PaymentDetails.payerPhone = entity.phoneNumber;
-            PaymentDetails.payerName = employeedetails.FirstName + " " + employeedetails.LastName;
+            PaymentDetails.payerName = loggedUser.UserName;
 
-            var Rrrgenerator = await paymentIntegrationService.GenerateRRR(PaymentDetails);
+            var Rrrgenerator = await paymentIntegrationService.Generate(PaymentDetails);
             if (Rrrgenerator.Data == null)
             {
                 message = "Failed to Generate RRR";
+                obj.Message = message;
+                obj.Tag = 0;
+                return obj;
             }
             RemitaPaymentDetailsEntity remitaPaymentDetailsEntity = new RemitaPaymentDetailsEntity();
             remitaPaymentDetailsEntity.TransactionId = Rrrgenerator.Data.TransactionId;
             remitaPaymentDetailsEntity.TransactionDate = DateTime.Now;
-            remitaPaymentDetailsEntity.Status = 0;
+            remitaPaymentDetailsEntity.Status = 1;
             remitaPaymentDetailsEntity.Rrr = Rrrgenerator.Data.RRR;
             remitaPaymentDetailsEntity.Amount = PaymentDetails.amount.ToStr();
-            remitaPaymentDetailsEntity.EmployeeNumber = entity.employeeNumber;
+            remitaPaymentDetailsEntity.EmployeeNumber = Convert.ToString(loggedUser.EmployeeInfo.NHFNumber.ToStr());
+            remitaPaymentDetailsEntity.EmployerNumber = employeedetails.Company.ToStr();
 
             FinanceCounterpartyTransactionEntity CPT = new FinanceCounterpartyTransactionEntity();
-            CPT.Ref = entity.employeeNumber;
-            CPT.Approved = 0;
+            CPT.Ref = loggedUser.EmployeeInfo.NHFNumber.ToStr();
+            CPT.Approved = 1;
             CPT.Branch = employeedetails.Branch.ToStr();
             CPT.TransactionType = "70";
             CPT.PostDate = DateTime.Now;
             CPT.TransactionDate = DateTime.Now;
             CPT.Description = entity.naration;
             CPT.CreditAmount = entity.contributionAmount;
+            CPT.TransactionId = remitaPaymentDetailsEntity.Rrr.ToInt();
 
             FinanceTransactionEntity FTT = new FinanceTransactionEntity();
             FTT.DebitAmt = 0;
-            FTT.Approved = 0;
+            FTT.Approved = 1;
             FTT.CreditAmt = entity.contributionAmount;
             FTT.DestinationBranch = employeedetails.Branch.ToStr();
             FTT.TransactionDate = DateTime.Now;
             FTT.TransactionType = 70;
             FTT.ValueDate = DateTime.Now;
-            FTT.Ref = entity.employeeNumber;
+            FTT.Ref = loggedUser.EmployeeInfo.NHFNumber.ToStr();
             FTT.SourceBranch = employeedetails.Branch.ToStr();
+            FTT.TransactionId = remitaPaymentDetailsEntity.Rrr;
 
             await _iUnitOfWork.RemitaPaymentDetails.SaveForm(remitaPaymentDetailsEntity);
             await _iUnitOfWork.FinanceCounterpartyTransactions.SaveForm(CPT);
             await _iUnitOfWork.FinanceTransactions.SaveForm(FTT);
 
-            TData<RemitaPaymentDetailsEntity> obj = new TData<RemitaPaymentDetailsEntity>();
             obj.Data = remitaPaymentDetailsEntity;
+            obj.Message = "Payment Initiated Successfully";
             obj.Tag = 1;
             return obj;
 
+        }
+
+        public async Task<TData<EmployeeDetailsVM>> GetCustomerDetails()
+        {
+            TData<EmployeeDetailsVM> obj = new TData<EmployeeDetailsVM>();
+            var user = await Operator.Instance.Current();
+            var employeedetails = await _iUnitOfWork.Employees.GetEntityByNhfNumber(user.EmployeeInfo.NHFNumber);
+
+
+            var custDetails = new EmployeeDetailsVM
+            {
+                Nhfno = employeedetails.NHFNumber.ToString(),
+                EmployerNo = employeedetails.Company.ToString(),
+                Name = employeedetails.FirstName + " " + employeedetails.LastName,
+
+            };
+
+            obj.Data = custDetails;
+            obj.Tag = 1;
+            return obj;
         }
 
     }

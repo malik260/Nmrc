@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Resources;
+using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
+using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
+using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,23 +15,28 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using static Mortgage.Ecosystem.DataAccess.Layer.Helpers.WebClientUtil;
+using Header = Mortgage.Ecosystem.DataAccess.Layer.Helpers.WebClientUtil.Header;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 {
-    public class PaymentIntegrationService: IPaymentIntegrationService
+    public class PaymentIntegrationService : IPaymentIntegrationService
     {
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly HttpClient _client;
+        private readonly IConfiguration _configuration;
+        public static Headers _header;
+        public static List<Header> headers;
 
-        public PaymentIntegrationService(IUnitOfWork iUnitOfWork)
+        public PaymentIntegrationService(IUnitOfWork iUnitOfWork, IConfiguration configuration)
         {
             _iUnitOfWork = iUnitOfWork;
             _client = new HttpClient
             {
                 BaseAddress = new Uri(ApiResource.generateRRR)
             };
-            _client.DefaultRequestHeaders.Accept.Clear();
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ApiResource.ApplicationJson));
+
+            _configuration = configuration;
         }
         public static string SHA512(string hash_string)
         {
@@ -43,13 +53,104 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
 
+        public async Task<TData<TransactionDetails>> Generate(RemitaPaymentDTO remitaPayment)
+        {
+            RemitaKeysVM remitaCredentials = new RemitaKeysVM();
+            var baseurl = remitaCredentials.Baseurl;
+            string merchantId = remitaCredentials.merchantId;
+            string apiKey = remitaCredentials.apiKey;
+            string serviceTypeId = remitaCredentials.serviceTypeId;
+            var generateRRR = remitaCredentials.PaymentInit;
+
+            string orderId = GetNumber(11);
+            string apiHashString = merchantId + serviceTypeId + orderId + remitaPayment.amount.ToStr() + apiKey;
+            string apiHash = WebClientUtil.SHA512(apiHashString);
+
+            _header = new Headers();
+            headers = new List<Header>();
+            headers.Add(new Header { header = "Content-Type", value = "application/json" });
+            headers.Add(new Header { header = "Authorization", value = "remitaConsumerKey=" + merchantId + ",remitaConsumerToken=" + apiHash });
+            _header.headers = headers;
+            var request = new GenerateRRRVM
+            {
+                amount = remitaPayment.amount.ToStr(),
+                serviceTypeId = serviceTypeId,
+                description = remitaPayment.description,
+                orderId = orderId,
+                payerEmail = remitaPayment.payerEmail,
+                payerPhone = remitaPayment.payerPhone,
+                payerName = remitaPayment.payerName,
+
+            };
+
+            String jsonGenerateRRRRequest = JsonConvert.SerializeObject(request);
+            var response = WebClientUtil.PostResponse(baseurl, generateRRR, jsonGenerateRRRRequest, _header);
+            response = response.Replace("jsonp (", "");
+            response = response.Replace(")", "");
+            response = response.Trim();
+            var deserialized = JsonConvert.DeserializeObject<RemitaResponse>(response);
+            TransactionDetails Results = new TransactionDetails();
+            Results.TransactionId = orderId;
+            Results.RRR = deserialized.RRR;
+            if (deserialized.statuscode == "025")
+            {
+                // GenerateRRR was successful
+                TData<TransactionDetails> obj = new TData<TransactionDetails>();
+
+                obj.Data = Results;
+                obj.Tag = 1;
+                return obj;
+            }
+            else
+            {
+                TData<TransactionDetails> obj = new TData<TransactionDetails>();
+
+                obj.Data = Results;
+                obj.Tag = 0;
+                return obj;
+            }
+
+
+
+
+        }
+
+
+        //public RRRStatusResponseVM CheckRRRStatus(string Rrr)
+        //{
+        //    string DEMO = "https://remitademo.net";
+        //    string merchantId = "2547916";
+        //    string apiKey = "1946";
+        //    string apiHash = WebClientUtil.SHA512(Rrr + apiKey + merchantId);
+        //    string rrrStatusPath = "/remita/exapp/api/v1/send/api/echannelsvc/" + merchantId + "/" + Rrr + "/" + apiHash + "/status.reg";
+
+        //    _header = new Headers();
+        //    headers = new List<Header>();
+        //    headers.Add(new Header { header = "Content-Type", value = "application/json" });
+        //    // headers.Add(new Header { header = "Authorization", value = "remitaConsumerKey=" + merchantId + ",remitaConsumerToken=" + apiHash });
+        //    _header.headers = headers;
+
+
+        //    var response = WebClientUtil.GetResponse(DEMO, rrrStatusPath, _header);
+        //    var deserialized = JsonConvert.DeserializeObject<RRRStatusResponseVM>(response);
+
+        //    return deserialized;
+
+
+
+
+        //}
+
+
+
+
 
         public async Task<TData<TransactionDetails>> GenerateRRR(RemitaPaymentDTO remitaPayment)
-
         {
-            string merchantId = "2547916";
-            string apiKey = "1946";
-            string serviceTypeId = "4430731";
+            RemitaKeysVM remitaCredentials = new RemitaKeysVM();
+            string merchantId = remitaCredentials.merchantId;
+            string apiKey = remitaCredentials.apiKey;
+            string serviceTypeId = remitaCredentials.serviceTypeId;
             string orderId = GetNumber(11);
             string apiHashString = merchantId + serviceTypeId + orderId + remitaPayment.amount + apiKey;
             string apiHash = SHA512(apiHashString);
@@ -93,8 +194,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
         public async Task<TData<GetRemitaResponse>> CheckRRRStatus(string Rrr)
         {
-            string merchantId = "2547916";
-            string apiKey = "1946";
+            RemitaKeysVM remitaCredentials = new RemitaKeysVM();
+            string merchantId = remitaCredentials.merchantId;
+            string apiKey = remitaCredentials.apiKey;
             string apiHash = SHA512(Rrr + apiKey + merchantId);
 
             try
@@ -104,7 +206,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 var result = JsonConvert.DeserializeObject<GetRemitaResponse>(response1);
 
                 if (result.status == "025")
-
                 {
                     TData<GetRemitaResponse> obj = new TData<GetRemitaResponse>();
                     obj.Data = result;
@@ -121,10 +222,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             };
 
         }
     }
-
 }

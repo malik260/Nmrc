@@ -40,6 +40,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<CompanyEntity>? CompanyEntity { get; set; }
         public DbSet<CompanyTypeEntity>? CompanyTypeEntity { get; set; }
         public DbSet<ContributionFrequencyEntity>? ContributionFrequencyEntity { get; set; }
+        public DbSet<CreditScoreEntity>? CreditScoreEntity { get; set; }
+
         public DbSet<DepartmentEntity>? DepartmentEntity { get; set; } // Department table
         public DbSet<DesignationEntity>? DesignationEntity { get; set; }
         public DbSet<DiasporaUserEntity>? DiasporaUserEntity { get; set; }

@@ -18,5 +18,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task SaveForm(EmployeeEntity entity);
         Task SaveForms(EmployeeEntity entity);
         Task DeleteForm(string ids);
+        Task<EmployeeEntity> GetEntityByNhfNumber(long nhfNo);
+
     }
 }
