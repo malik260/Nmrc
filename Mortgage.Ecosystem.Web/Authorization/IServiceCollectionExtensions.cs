@@ -55,7 +55,9 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IContributionHistoryService, ContributionHistoryService>();
             services.AddScoped<IContributionService, ContributionService>();
             services.AddScoped<IContributionRefundPostingService, ContributionRefundPostingService>();
-            services.AddScoped<ICustomerProfileUpdateService, CustomerProfileUpdateService>(); services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<ICustomerProfileUpdateService, CustomerProfileUpdateService>();
+            services.AddScoped<ICreditTypeService, CreditTypeService>(); 
+            services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IDesignationService, DesignationService>();
             services.AddScoped<IDiasporaUserService, DiasporaUserService>();
             services.AddScoped<IEmployeeService, EmployeeService>();

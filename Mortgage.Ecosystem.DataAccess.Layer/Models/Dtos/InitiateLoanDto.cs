@@ -14,7 +14,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
         public decimal InterestRate { get; set; }
         public decimal MaturityAmount { get; set; }
         public string narration { get; set; }
-        [Required(ErrorMessage = " Principal Amount cannot be null")]
+        [Required(ErrorMessage = "Principal Amount cannot be null")]
         public decimal? PrincipalAmount { get; set; }
         public int? Tenor { get; set; }
         public string TypeOfLoan { get; set; }

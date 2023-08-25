@@ -26,6 +26,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IContributionRefundPostingRepository ContributionRefundPostings { get; }
         IContributionHistoryRepository ContributionHistories { get; }
         ICreditScoreRepository CreditScores { get; }
+        ICreditTypeRepository CreditTypes { get; }
         ICustomerProfileUpdateRepository CustomerProfileUpdates { get; }
         IDepartmentRepository Departments { get; }
         IDesignationRepository Designations { get; }
