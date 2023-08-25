@@ -41,7 +41,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         // Contact Address
         [Column("ContactAddress")]
-        public string? ContactAddress{ get; set; }
+        public string? ContactAddress { get; set; }
 
         // Employer Name
         [Column("EmployerName")]
@@ -87,6 +87,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Files")]
         public byte[]? Files { get; set; }
 
-       
+
     }
 }

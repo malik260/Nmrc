@@ -31,7 +31,7 @@
         </div>
 
         <div class="col-sm-12 select-table table-striped">
-            <table id="gridTable" data-mobile-responsive="true"></table>
+            <table id="refundTable" data-mobile-responsive="true"></table>
         </div>
     </div>
 </div>
@@ -44,11 +44,14 @@
 
         laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
-    }); 
+    });
+
+
+
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/Refund/GetPageListJson")';
-        $('#gridTable').cnTable({
+        var queryUrl = '@Url.Content("~/Refund/GetRefundPageListJson")';
+        $('#refundTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
@@ -77,7 +80,7 @@
                 }
             ],
             queryParams: function (params) {
-                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var pagination = $('#refundTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
             }
@@ -85,14 +88,14 @@
     }
 
     function searchGrid() {
-        $('#gridTable').cnTable('search');
+        $('#refundTable').cnTable('search');
         resetToolbarStatus();
     }
 
     function showSaveForm(bAdd) {
         var id = 0;
         if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            var selectedRow = $("#refundTable").bootstrapTable("getSelections");
             if (!cn.checkRowEdit(selectedRow)) {
                 return;
             }
@@ -109,10 +112,14 @@
                 iframeWin.saveForm(index);
             }
         });
+
+
     }
 
+
+
     function deleteForm() {
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        var selectedRow = $("#refundTable").bootstrapTable("getSelections");
         if (cn.checkRowDelete(selectedRow)) {
             cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
                 var ids = cn.getIds(selectedRow);
@@ -132,4 +139,6 @@
             });
         }
     }
+
+
 </script>

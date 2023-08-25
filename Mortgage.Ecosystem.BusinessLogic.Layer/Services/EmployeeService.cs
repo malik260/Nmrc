@@ -26,18 +26,10 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<List<EmployeeEntity>> obj = new TData<List<EmployeeEntity>>();
             obj.Data = await _iUnitOfWork.Employees.GetList(param);
-            if (obj.Data.Count > 0)
-            {
-                foreach (EmployeeEntity employee in obj.Data)
-                {
-                    employee.FullName = $"{employee.LastName} {employee.FirstName}";
-                }
-            }
             obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
         }
-
         public async Task<TData<List<EmployeeEntity>>> GetPageList(EmployeeListParam param, Pagination pagination)
         {
             TData<List<EmployeeEntity>> obj = new TData<List<EmployeeEntity>>();
@@ -305,6 +297,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+        public async Task<TData<EmployeeEntity>> GetEntityByNhfNo(long nhfNo)
+        {
+            TData<EmployeeEntity> obj = new TData<EmployeeEntity>();
+            EmployeeEntity employeeEntity = await _iUnitOfWork.Employees.GetEntityByNhfNumber(nhfNo);
+            obj.Data = employeeEntity;
+            obj.Tag = 1;
+            return obj;
+        }
         public async Task<TData> DeleteForm(string ids)
         {
             TData<long> obj = new TData<long>();

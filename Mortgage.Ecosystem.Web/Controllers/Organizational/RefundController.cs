@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
@@ -19,6 +21,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         #region View function
+
         [AuthorizeFilter("refund:view")]
         public IActionResult RefundIndex()
         {
@@ -29,14 +32,24 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         {
             return View();
         }
-        #endregion
+
+        #endregion View function
 
         #region Get data
+
         [HttpGet]
         [AuthorizeFilter("refund:search,user:search")]
         public async Task<IActionResult> GetListJson(RefundListParam param)
         {
             TData<List<RefundEntity>> obj = await _iRefundService.GetList(param);
+            return Json(obj);
+        }
+
+        [HttpGet]
+        [AuthorizeFilter("eticket:search,user:search")]
+        public async Task<IActionResult> GetRefundPageListJson(RefundListParam param, Pagination pagination)
+        {
+            TData<List<RefundEntity>> obj = await _iRefundService.GetPageList(param, pagination);
             return Json(obj);
         }
 
@@ -60,7 +73,16 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("refund:view")]
         public async Task<IActionResult> GetFormJson(int id)
         {
-            TData<RefundEntity> obj = await _iRefundService.GetEntity(id);
+            TData<RefundEntity> obj = await _iRefundService.GetEntity(id)
+;
+            return Json(obj);
+        }
+
+        [HttpGet]
+        //[AuthorizeFilter("refund:view")]
+        public async Task<IActionResult> ViewCustomerInformation()
+        {
+            TData<CustomerDetailsViewModel> obj = await _iRefundService.GetCustomerDetails();
             return Json(obj);
         }
 
@@ -70,9 +92,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             TData<int> obj = await _iRefundService.GetMaxSort();
             return Json(obj);
         }
-        #endregion
+
+        #endregion Get data
 
         #region Submit data
+
         [HttpPost]
         [AuthorizeFilter("refund:add,company:edit")]
         public async Task<IActionResult> SaveFormJson(RefundEntity entity)
@@ -88,6 +112,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             TData obj = await _iRefundService.DeleteForm(ids);
             return Json(obj);
         }
-        #endregion
+
+        #endregion Submit data
     }
 }
