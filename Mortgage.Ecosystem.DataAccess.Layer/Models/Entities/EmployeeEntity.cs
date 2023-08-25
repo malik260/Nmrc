@@ -44,15 +44,15 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Title"), Description("Title")]
         public int Title { get; set; }
 
-        // First Name
+        // FirstName
         [Column("FirstName"), Description("First Name")]
         public string? FirstName { get; set; }
 
-        // Last Name
+        // LastName
         [Column("LastName"), Description("Last Name")]
         public string? LastName { get; set; }
 
-        // Other Name(s)
+        // OtherName
         [Column("OtherName"), Description("Other Name(s)")]
         public string? OtherName { get; set; }
 
@@ -60,31 +60,31 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Gender"), Description("Gender")]
         public int Gender { get; set; }
 
-        // Date Of Birth
+        // DateOfBirth
         [Column("DateOfBirth"), Description("DOB")]
         public string? DateOfBirth { get; set; }
 
-        // Marital Status
+        // MaritalStatus
         [Column("MaritalStatus"), Description("Marital Status")]
         public int MaritalStatus { get; set; }
 
-        // Postal Address
+        // PostalAddress
         [Column("PostalAddress"), Description("Postal Address")]
         public string? PostalAddress { get; set; }
 
-        // Email Address
+        // EmailAddress
         [Column("EmailAddress"), Description("Email Address")]
         public string? EmailAddress { get; set; }
 
-        // Mobile Number
+        // MobileNumber
         [Column("MobileNumber"), Description("Mobile/Telephone")]
         public string? MobileNumber { get; set; }
 
-        // Staff Number
+        // StaffNumber
         [Column("StaffNumber"), Description("Staff Number")]
         public string? StaffNumber { get; set; }
 
-        // Customer's Bank
+        // CustomerBank
         [Column("CustomerBank"), Description("Customer Bank")]
         public string? CustomerBank { get; set; }
 
@@ -100,7 +100,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("MonthlySalary"), Description("Monthly Salary")]
         public decimal MonthlySalary { get; set; }
 
-        // Alert Type
+        // AlertType
         [Column("AlertType"), Description("Alert Type")]
         public int AlertType { get; set; }
 
@@ -111,14 +111,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // Portrait Type
         [Column("PortraitType")]
         public string? PortraitType { get; set; }
-
-        // User type
-        [Column("UserType"), Description("User type")]
-        public int UserType { get; set; }
-
-        // Status
-        [Column("Status"), Description("Status")]
-        public int Status { get; set; }
 
         // Designation
         [NotMapped]
@@ -213,7 +205,37 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [NotMapped]
         public string? MenuIds { get; set; }
 
+        // Next of Kin Name
         [NotMapped]
-        public string? FullName { get; set; }
+        [Column("NOKName")]
+        public string? NOKName { get; set; }
+
+        // Next of Kin Number
+        [NotMapped]
+        [Column("NOKNumber")]
+        public string? NOKNumber { get; set; }
+
+        // Next of Kin EmailAddress
+        [NotMapped]
+        [Column("NOKEmailAddress")]
+        public string? NOKEmailAddress { get; set; }
+
+        // Next of Kin Address
+        [NotMapped]
+        [Column("NOKAddress")]
+        public string? NOKAddress { get; set; }
+
+        // Relationship
+        [NotMapped]
+        [Column("Relationship")]
+        public string? Relationship { get; set; }
+
+        [NotMapped]
+        [Column("Employer")]
+        public string? Employer { get; set; }
+
+        [NotMapped]
+        [Column("EmployerNumber")]
+        public string? EmployerNo { get; set; }
     }
 }
