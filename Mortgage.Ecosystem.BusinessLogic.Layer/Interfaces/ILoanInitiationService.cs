@@ -17,7 +17,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<string>> SaveForm(LoanInitiationEntity entity);
         Task<TData> DeleteForm(string ids);
         Task<TData<AffordabilityResponseDto>> Performaffordability(InitiateLoanDto initiateLoanDto);
-        Task<TData<string>> LoanApplication(InitiateLoanDto initiateLoanDto);
-        Task<TData<List<LoanApplications>>> GetLoans(string nhfNo);
+        Task<TData<LoanInitiationEntity>> LoanApplication(InitiateLoanDto initiateLoanDto); Task<TData<List<LoanApplications>>> GetLoans(string nhfNo);
     }
 }
