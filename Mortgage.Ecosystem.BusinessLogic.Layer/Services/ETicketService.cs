@@ -1,5 +1,6 @@
 ﻿using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -39,6 +40,16 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
+
+        public async Task<TData<List<ETicketEntity>>> GetApprovalPageList(ETicketListParam param, Pagination pagination)
+        {
+            TData<List<ETicketEntity>> obj = new TData<List<ETicketEntity>>();
+            obj.Data = await _iUnitOfWork.ETickets.GetApprovalPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
+            obj.Tag = 1;
+            return obj;
+        }
+
 
         public async Task<TData<List<ZtreeInfo>>> GetZtreeETicketList(ETicketListParam param)
         {
@@ -107,8 +118,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             TData<string> obj = new TData<string>();
             var user = await Operator.Instance.Current();
             var customerDetails = await _employeeService.GetEntityByNhfNo(user.EmployeeInfo.NHFNumber);
+            entity.EmploymentType = EmploymentTypeEnum.Employed.ToInt();
+            entity.CompanyName = _iUnitOfWork.Companies.GetEntity(customerDetails.Data.Company).Result.Name;
             entity.NHFNumber = customerDetails.Data.NHFNumber.ToString();
             entity.Branch = Convert.ToInt32(customerDetails.Data.Branch);
+            entity.EmailAddress = customerDetails.Data.EmailAddress;
 
             // Generate a random five-digit number
             Random random = new Random();
@@ -116,27 +130,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             // Set the RequestNumber with the generated random number
             entity.RequestNumber = randomNumber.ToString();
-
-            // Determine the ApprovalStatus...
-            //if (entity.Approved == 1 && entity.Disapproved == 0)
-            //{
-            //    entity.ApprovalStatus = "Approved";
-            //}
-            //else if (entity.Approved == 0 && entity.Disapproved == 1)
-            //{
-            //    entity.ApprovalStatus = "Disapproved";
-            //}
-            //else
-            //{
-            //    entity.ApprovalStatus = "Pending";
-            //}
-            entity.Approved = 0;
-            entity.Disapproved = 0;
-            entity.ApprovalStatus = "pending";
-
+            entity.DateSent = DateTime.Now;
             await _iUnitOfWork.ETickets.SaveForm(entity);
             obj.Data = entity.Id.ToString();
             obj.Tag = 1;
+            obj.Message = "Message Sent Successful";
             return obj;
         }
 
@@ -148,6 +146,29 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
+
+        public async Task<TData<string>> ApproveForm(ETicketEntity entity)
+        {
+            TData<string> obj = new TData<string>();
+            var user = await Operator.Instance.Current();
+            var entityRecord = await _iUnitOfWork.ETickets.GetEntity(entity.Id);
+            var menuRecord = await _iUnitOfWork.Menus.GetEntity(entityRecord.BaseProcessMenu);
+            var approvalLogListParam = new ApprovalLogListParam()
+            {
+                Company = user.Company,
+                MenuId = menuRecord.Id,
+                //Authority = user.Employee,
+                Record = entity.Id
+            };
+            var approvalLogRecords = await _iUnitOfWork.ApprovalLogs.GetList(approvalLogListParam);
+            menuRecord.ApprovalLogList = approvalLogRecords;
+            await _iUnitOfWork.ETickets.ApproveForm(entityRecord, menuRecord, user);
+            obj.Data = entity.Id.ParseToString();
+            obj.Message = "Approved successfully";
+            obj.Tag = 1;
+            return obj;
+        }
+
         #endregion
     }
 }

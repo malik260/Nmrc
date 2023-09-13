@@ -13,14 +13,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
     public class StatementOfAccountRepository : DataRepository, IStatementOfAccountRepository
     {
         #region Retrieve data
-        public async Task<List<StatementOfAccountEntity>> GetList(StatementOfAccountListParam param)
+        public async Task<List<FinanceCounterpartyTransactionEntity>> GetList(StatementOfAccountListParam param)
         {
             var expression = ListFilter(param);
             var list = await BaseRepository().FindList(expression);
             return list.ToList();
         }
 
-        public async Task<List<StatementOfAccountEntity>> GetPageList(StatementOfAccountListParam param, Pagination pagination)
+        public async Task<List<FinanceCounterpartyTransactionEntity>> GetPageList(StatementOfAccountListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
             var list = await BaseRepository().FindList(expression, pagination);
@@ -93,14 +93,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #endregion
 
         #region Private method
-        private Expression<Func<StatementOfAccountEntity, bool>> ListFilter(StatementOfAccountListParam param)
+        private Expression<Func<FinanceCounterpartyTransactionEntity, bool>> ListFilter(StatementOfAccountListParam param)
         {
-            var expression = ExtensionLinq.True<StatementOfAccountEntity>();
+            var expression = ExtensionLinq.True<FinanceCounterpartyTransactionEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.FirstName))
+                if (!string.IsNullOrEmpty(param.NHFNumber))
                 {
-                    expression = expression.And(t => t.FirstName.Contains(param.FirstName));
+                    expression = expression.And(t => t.Ref == param.NHFNumber && t.PostDate <= param.StartDate && t.PostDate >= param.EndDate);
                 }
             }
             return expression;

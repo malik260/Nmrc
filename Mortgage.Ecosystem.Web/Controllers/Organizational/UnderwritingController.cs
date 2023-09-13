@@ -27,20 +27,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
-        public IActionResult AddDocumentForm()
+        public IActionResult UnderwritingForm()
         {
             return View();
         }
 
-        public IActionResult ChecklistForm()
-        {
-            return View();
-        }
-
-        public IActionResult RiskAssessmentForm()
-        {
-            return View();
-        }
 
 
         #endregion
@@ -121,5 +112,5 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
         #endregion
-    }
+    }
 }

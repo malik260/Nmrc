@@ -50,6 +50,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IChangeEmployerService, ChangeEmployerService>();
             services.AddScoped<IChangePasswordService, ChangePasswordService>();
             services.AddScoped<IChargeSetupService, ChargeSetupService>();
+            services.AddScoped<IChecklistService, ChecklistService>();
             services.AddScoped<ICompanyClassService, CompanyClassService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<ICompanyTypeService, CompanyTypeService>();
@@ -83,6 +84,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<INationalityService, NationalityService>();
             services.AddScoped<INextOfKinService, NextOfKinService>();
+            services.AddScoped<INHFRegCompanyService, NHFRegCompanyService>();
             services.AddScoped<INHFRegUsersService, NHFRegUsersService>();
             services.AddScoped<INHFCustomerRequestService, NHFCustomerRequestService>();
             services.AddScoped<IPaymentIntegrationService, PaymentIntegrationService>();
@@ -102,6 +104,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IStatementOfAccountService, StatementOfAccountService>();
             services.AddScoped<ISubSectorService, SubSectorService>();
             services.AddScoped<ITitleService, TitleService>();
+            services.AddScoped<IUnlockAdminUserService, UnlockAdminUserService>();
             services.AddScoped<IUnderwritingService, UnderwritingService>();
             services.AddScoped<IUnlockNhfPortalService, UnlockNhfPortalService>();
             services.AddScoped<IUserService, UserService>();

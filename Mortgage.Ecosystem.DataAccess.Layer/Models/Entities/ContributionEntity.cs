@@ -15,16 +15,24 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("EmployeeNumber")]
         public string? employeeNumber { get; set; }
 
+        //// Employee Number
+        //[Column("NHFNumber")]
+        //public string? NHFNumber { get; set; }
+
+        // Employee Number
+        [Column("NHFNo")]
+        public string? NhfNo { get; set; }
+
         // Employee Name
-        [Column("Employer Name")]
-        public string? Name { get; set; }
+        [Column("EmployeeName")]
+        public string? EmployeeName { get; set; }
 
         // Contribution Amount
         [Column("ContributionAmount")]
         public decimal contributionAmount { get; set; }
 
         // Employer Number
-        [Column("Employer Number")]
+        [Column("EmployerNumber")]
         public string? employerNumber { get; set; }
 
         // Month
@@ -71,5 +79,30 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // File Logo
         [Column("File")]
         public byte[]? file { get; set; }
+
+        [Column("ContributionType")]
+        public int ContributionType { get; set; }
+
+        [Column("Status")]
+        public string Status { get; set; }
+
+        [Column("TransactionDate")]
+        public DateTime TransactionDate { get; set; }
+
+        [Column("TransactionId")]
+        public string TransactionId { get; set; }
+
+        [Column("PaymentDate")]
+        public DateTime PaymentDate { get; set; }
+
+        [Column("TotalAmount")]
+        public decimal TotalAmount { get; set; }
+
+        [Column("ContributionDate")]
+        public DateTime ContributionDate { get; set; }
+      
+
+
+
     }
 }

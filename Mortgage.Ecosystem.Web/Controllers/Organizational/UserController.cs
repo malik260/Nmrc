@@ -23,7 +23,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             _iMenuAuthorizeService = iMenuAuthorizeService;
         }
 
-        #region view function
+        #region View function
 
         [AuthorizeFilter("user:view")]
         public IActionResult UserIndex()
@@ -71,7 +71,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         #endregion view function
 
-        #region get data
+        #region Get data
 
         [HttpGet]
         [AuthorizeFilter("user:search")]

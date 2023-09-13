@@ -62,19 +62,25 @@
                 { field: 'CompanyClassName', title: 'Class', sortable: true },
                 { field: 'CompanyTypeName', title: 'Type', sortable: true },
                 {
-                    field: 'Status', title: 'Status', align: 'center',
-                    formatter: function (value, row, index) {
-                        value = "1";
-                        if (value == "@StatusEnum.Yes.ToInt()") {
-                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
-                        } else {
-                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
-                        }
+                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
                     }
                 },
                 {
-                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
-                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    field: 'Status',
+                    title: 'Status',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@ApprovalEnum.Pending.ToInt()") {
+                            return '<span class="badge badge-warning">' + "@ApprovalEnum.Pending.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Approved.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@ApprovalEnum.Approved.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Rejected.ToInt()") {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Rejected.GetDescription()" + '</span>';
+                        }
+                        else {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Cancelled.GetDescription()" + '</span>';
+                        }
                     }
                 }
             ],
@@ -84,6 +90,14 @@
                 return queryString;
             }
         });
+    }
+
+    function searchGrid(callBackId) {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').cnTreeTable('search', param);
+        if (callBackId) {
+            id = callBackId;
+        }
     }
 
     function searchGrid() {

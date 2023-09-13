@@ -13,5 +13,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
         public string? Narration { get; set; }
 
         public string? Nationality { get; set; }
+
+        [NotMapped]
+        public List<int>? Ids { get; set; }
     }
 }

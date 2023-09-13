@@ -21,7 +21,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IChangeEmployerRepository ChangeEmployers { get; }
         IChangePasswordRepository ChangePasswords { get; }
         IChargeSetupRepository ChargeSetups { get; }
-
+        IChecklistRepository Checklists { get; }
         ICompanyRepository Companies { get; }
         ICompanyClassRepository CompanyClasses { get; }
         ICompanyTypeRepository CompanyTypes { get; }
@@ -57,6 +57,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         INationalityRepository Nationalities { get; }
         INextOfKinRepository NextOfKins { get; }
         INHFCustomerRequestRepository NHFCustomerRequests { get; }
+        INHFRegCompanyRepository NHFRegCompanies { get; }
         INHFRegUsersRepository NHFRegUsers { get; }
         IRefundRepository Refunds { get; }
         IRefundConditionRepository RefundConditions { get; }
@@ -76,6 +77,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         ISubSectorRepository SubSectors { get; }
         ITitleRepository Titles { get; }
         IUnderwritingRepository Underwritings { get; }
+        IUnlockAdminUserRepository UnlockAdminUsers { get; }
         IUnlockNhfPortalRepository UnlockNhfPortals { get; }
         IUserBelongRepository UserBelongs { get; }
         IUserRepository Users { get; }

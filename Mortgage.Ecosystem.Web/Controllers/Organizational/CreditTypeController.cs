@@ -76,9 +76,9 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         [HttpGet]
         [AuthorizeFilter("credittype:view")]
-        public async Task<IActionResult> GetFormJson(int id)
+        public async Task<IActionResult> GetFormJson(string code)
         {
-            TData<CreditTypeEntity> obj = await _iCreditTypeService.GetEntity(id);
+            TData<CreditTypeEntity> obj = await _iCreditTypeService.GetEntity(code);
             return Json(obj);
         }
 
@@ -117,5 +117,5 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
 
         #endregion
-    }
+    }
 }

@@ -7,6 +7,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
     [Table("tbl_CustomerProfileUpdate")]
     public class CustomerProfileUpdateEntity : BaseExtensionEntity
     {
+        // ** Old Customer Details **
+
         // FullName
         [Column("FullName")]
         public string? FullName { get; set; }
@@ -82,6 +84,66 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("ApprovalStatus")]
         public string? ApprovalStatus { get; set; }
 
+        // ** New Customer Details **
+
+        // New FullName
+        [Column("NewFullName")]
+        public string? NewFullName { get; set; }
+        // New Phone Number
+        [Column("NewMobileNumber")]
+        public string? NewMobileNumber { get; set; }
+
+        // New Email address
+        [Column("NewEmailAddress")]
+        public string? NewEmailAddress { get; set; }
+
+        // New Address
+        [Column("NewAddress")]
+        public string? NewAddress { get; set; }
+
+        // New Marital Status
+        [Column("NewMaritalStatus")]
+        public int NewMaritalStatus { get; set; }
+
+        // New Account Name
+        [Column("NewAccountName")]
+        public string? NewAccountName { get; set; }
+
+        // New Account Number
+        [Column("NewBankAccountNumber")]
+        public string? NewBankAccountNumber { get; set; }
+
+        // New Bank Name
+        [Column("NewCustomerBank")]
+        public string? NewCustomerBank { get; set; }
+
+        // New Monthly Income
+        [Column("NewMonthlyIncome")]
+        public decimal NewMonthlyIncome { get; set; }
+
+        // New Company Subsector
+        [Column("NewSubsector")]
+        public int NewSubsector { get; set; }
+
+        // New Next of Kin Name
+        [Column("NewNOKName")]
+        public string? NewNOKName { get; set; }
+
+        // New Next of Kin Number
+        [Column("NewNOKNumber")]
+        public string? NewNOKNumber { get; set; }
+
+        // New Next of Kin EmailAddress
+        [Column("NewNOKEmailAddress")]
+        public string? NewNOKEmailAddress { get; set; }
+
+        // New Next of Kin Address
+        [Column("NewNOKAddress")]
+        public string? NewNOKAddress { get; set; }
+
+        // New Relationship
+        [Column("NewRelationship")]
+        public string? NewRelationship { get; set; }
 
     }
 }

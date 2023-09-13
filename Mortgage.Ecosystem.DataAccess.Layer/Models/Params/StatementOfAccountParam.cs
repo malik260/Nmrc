@@ -2,10 +2,8 @@
 {
     public class StatementOfAccountListParam
     {
-        public string? FirstName { get; set; }    
-        public string? LastName { get; set; }
-        public DateOnly? ContributionDate { get; set; }
-        public DateOnly? PaymentDate { get; set; }
-        public decimal? Amount { get; set; }
+        public DateTime StartDate { get; set; }    
+        public DateTime EndDate { get; set; }    
+        public string? NHFNumber { get; set; }
     }
 }

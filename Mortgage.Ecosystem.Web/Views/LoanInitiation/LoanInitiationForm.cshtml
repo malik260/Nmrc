@@ -4,78 +4,70 @@
 
 
 <div class="refundApplication" id="refundApplication">
-    <form id="form1" class="form-horizontal m">
+    <form id="form" class="form-horizontal m">
         <div class="dialogblockborder dialogblockborderheadline">
             <div class="dialogblock-header" style="height: auto;">
                 <span class="dialogblockheader">Initiate Loan</span>
                 <div class="form-group">
-                    <div class="col-sm-4">
-                        <label class="companyNumber control-label" style="margin-left: 100px;">Loan Product</label>
-                        <select id="loanProduct" col="LoanProduct" class="form-control" style="margin-left: 100px;" required>
-                            <option>--Select Loan Product--</option>
-
-                        </select>
+                    <div class="col-sm-6">
+                        <label class="companyNumber control-label">Loan Product <font class="red"> *</font></label>
+                        <div id="loanProduct" col="Product" required>
+                        </div>
                     </div>
-                    <div class="col-sm-4">
-                        <label class="sector control-label" style="margin-left: 200px;">Customer&nbsp;Sector</label>
-                        <div id="sector" style="margin-left: 200px;" col="Sector"></div>
+                    <div class="col-sm-6">
+                        <label for="principal" class="form-label">Principal</label>
+                        <input type="text" col="PrincipalAmount" class="form-control">
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+
+                    <div class="col-sm-6">
+                        <label for="rate" class="form-label">Rate</label>
+                        <input type="text" col="InterestRate" class="form-control">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="tenor" class="form-label">Tenor</label>
+                        <input type="text" col="Tenor" class="form-control">
+
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-4">
-                        <label for="principal" style="margin-left: 100px;" class="form-label">Principal</label>
-                        <input type="text" style="margin-left: 100px;" col="principal" class="form-control">
 
+                    <div class="col-sm-6">
+                        <label for="netIncomeMonthly" class="form-label">Net&nbsp;Income&nbsp;Monthly</label>
+                        <input type="text" col="propertySize" class="form-control">
                     </div>
-                    <div class="col-sm-4">
-                        <label for="rate" style="margin-left: 200px;" class="form-label">Rate</label>
-                        <input type="text" style="margin-left: 200px;" col="principal" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-4">
-                        <label for="tenor" style="margin-left: 100px;" class="form-label">Tenor</label>
-                        <input type="text" style="margin-left: 100px;" col="tenor" class="form-control">
 
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="netIncomeMonthly" style="margin-left: 200px;" class="form-label">Net&nbsp;Income&nbsp;Monthly</label>
-                        <input type="text" style="margin-left: 200px;" col="propertySize" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-4">
-                        <label for="repaymentPattern" style="margin-left: 100px;" class="form-label">Repayment Pattern</label>
-                        <input type="text" style="margin-left: 100px;" class="form-control" id="repaymentPattern">
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="loanPurpose" style="margin-left: 200px;" class="form-label">Loan&nbsp;Purpose</label>
-                        <input type="text" style="margin-left: 200px;" class="form-control" id="loanPurpose">
+                    <div class="col-sm-6">
+                        <label for="repaymentPattern" class="form-label">Repayment Pattern</label>
+                        <input type="text" class="form-control" id="repaymentPattern">
                     </div>
                 </div>
 
 
                 <div class="form-group">
 
-                    <div class="col-sm-4">
-                        <label class="uploadDocument control-label" style="margin-left: 100px;">Document&nbsp;Uploads</label>
-                        <select id="loanProduct" col="documentUpload" class="form-control" style="margin-left: 100px;" required>
+                    <div class="col-sm-6">
+                        <label class="uploadDocument control-label">Document&nbsp;Uploads</label>
+                        <select id="loanProduct" col="documentUpload" class="form-control" required>
                             <option>--Select Document Title--</option>
 
                         </select>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-4">
-
-                        <input type="file" style="margin-left: 100px;" id="logo">
+                    <div class="col-sm-6">
+                        <label for="loanPurpose" class="form-label">Loan&nbsp;Purpose</label>
+                        <input type="text" col="Purpose" class="form-control" id="loanPurpose">
                     </div>
                 </div>
                 <div class="form-group">
+                    <div class="col-sm-6">
+                        <input type="file" id="addDocument" accept=".doc,.docx,.pdf,.xlsx,.txt,.rtf,.jpg,.png,.gif,.mp3,.wav,.aac,.mp4,.avi,.mov,.zip,.rar,.tar,.exe,.dmg,.apk,.db,.mdb,.sql,.ttf,.otf,.fon,.dll,.sys,.ini" multiple />
+                        <br />
 
-                    <div class="col-sm-4">
-                        <input type="file" style="display: none; margin-left: 100px;" id="addDocument" accept=".doc,.docx,.pdf,.xlsx,.txt,.rtf,.jpg,.png,.gif,.mp3,.wav,.aac,.mp4,.avi,.mov,.zip,.rar,.tar,.exe,.dmg,.apk,.db,.mdb,.sql,.ttf,.otf,.fon,.dll,.sys,.ini" multiple />
-                        <label for="addDocument" style=" width:140px; border: 0;  margin-left: 100px; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
+                        <label for="addDocument" style=" width:140px; border: 0; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
                             &nbsp; Add Document
                         </label>
 
@@ -88,13 +80,39 @@
 </div>
 
 <script>
+    var id = cn.request("id");
 
-    $("#sector").cnComboBox({
-        url: '@Url.Content("~/Sector/GetListJson")',
-        key: "Id",
+    //$("#sector").cnComboBox({
+    //    url: '@Url.Content("~/Sector/GetListJson")',
+    //    key: "Id",
+    //    value: "Name"
+    //});
+    $("#loanProduct").cnComboBox({
+        url: '@Url.Content("~/CreditType/GetListJson")',
+        key: "Code",
         value: "Name"
     });
+    function saveForm(index) {
+        //debugger
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+
+            cn.ajax({
+                url: '@Url.Content("~/LoanInitiation/LoanInitiation")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
 </script>
-
-
-

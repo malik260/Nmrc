@@ -113,7 +113,24 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Helpers
                 return false;
             }
 
-            if (!ValidatorHelper.IsNumberic(bvnNumber))
+            if (!ValidatorHelper.IsNumeric(bvnNumber))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool ValidateAccountNumber(string accountNumber)
+        {
+            accountNumber = accountNumber.Replace(" ", "");
+
+            if (accountNumber.Length != 10)
+            {
+                return false;
+            }
+
+            if (!ValidatorHelper.IsNumeric(accountNumber))
             {
                 return false;
             }

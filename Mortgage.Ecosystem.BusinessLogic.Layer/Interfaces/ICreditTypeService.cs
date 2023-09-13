@@ -12,7 +12,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<List<CreditTypeEntity>>> GetPageList(CreditTypeListParam param, Pagination pagination);
         Task<TData<List<ZtreeInfo>>> GetZtreeCreditTypeList(CreditTypeListParam param);
         Task<TData<List<ZtreeInfo>>> GetZtreeUserList(CreditTypeListParam param);
-        Task<TData<CreditTypeEntity>> GetEntity(long id);
+        Task<TData<CreditTypeEntity>> GetEntity(string code);
         //Task<TData<int>> GetMaxSort();
         Task<TData<string>> SaveForm(CreditTypeEntity entity);
         Task<TData<string>> UpdateForm(CreditTypeEntity entity);

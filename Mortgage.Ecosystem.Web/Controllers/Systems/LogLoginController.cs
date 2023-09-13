@@ -18,7 +18,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
             _iLogLoginService = iLogLoginService;
         }
 
-        #region view function
+        #region View function
         [AuthorizeFilter("loglogin:view")]
         public IActionResult LogLoginIndex()
         {
@@ -26,7 +26,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
         }
         #endregion
 
-        #region get data
+        #region Get data
         [HttpGet]
         [AuthorizeFilter("loglogin:search")]
         public async Task<IActionResult> GetListJson(LogLoginListParam param)

@@ -22,6 +22,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IChangeEmployerRepository? _changeEmployers;
         private IChangePasswordRepository? _changePasswords;
         private IChargeSetupRepository? _chargeSetups;
+        private IChecklistRepository? _checklists;
         private ICompanyRepository? _companies;
         private ICompanyClassRepository? _companyClasses;
         private ICompanyTypeRepository? _companyTypes;
@@ -57,6 +58,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private INationalityRepository? _nationalities;
         private INextOfKinRepository? _nextOfKins;
         private INHFCustomerRequestRepository? _nhfcustomerrequests;
+        private INHFRegCompanyRepository? _nhfregcompanies;
         private INHFRegUsersRepository? _nhfregusers;
         private IPaymentHistoryRepository? _paymentHistories;
         private IPropertyRegistrationRepository? _propertyRegistrations;
@@ -75,6 +77,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private ISubSectorRepository? _subSectors;
         private ITitleRepository? _titles;
         private IUnderwritingRepository? _underwritings;
+        private IUnlockAdminUserRepository? _unlockAdminUsers;
         private IUnlockNhfPortalRepository? _unlockNhfPortals;
         private IUserBelongRepository? _userBelongs;
         private IUserRepository? _users;
@@ -128,6 +131,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public IChargeSetupRepository ChargeSetups =>
          _chargeSetups ??= new ChargeSetupRepository();
+        public IChecklistRepository Checklists =>
+        _checklists ??= new ChecklistRepository();
 
         public ICompanyRepository Companies =>
             _companies ??= new CompanyRepository();
@@ -226,6 +231,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public INHFRegUsersRepository NHFRegUsers =>
           _nhfregusers ??= new NHFRegUsersRepository();
+        public INHFRegCompanyRepository NHFRegCompanies =>
+         _nhfregcompanies ??= new NHFRegCompanyRepository();
 
         public INHFCustomerRequestRepository NHFCustomerRequests =>
             _nhfcustomerrequests ??= new NHFCustomerRequestRepository();
@@ -273,6 +280,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
             _titles ??= new TitleRepository();
         public IUnderwritingRepository Underwritings =>
        _underwritings ??= new UnderwritingRepository();
+        public IUnlockAdminUserRepository UnlockAdminUsers =>
+       _unlockAdminUsers ??= new UnlockAdminUserRepository();
 
         public IUnlockNhfPortalRepository UnlockNhfPortals =>
          _unlockNhfPortals ??= new UnlockNhfPortalRepository();

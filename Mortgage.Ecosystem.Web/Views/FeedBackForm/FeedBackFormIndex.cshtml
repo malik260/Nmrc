@@ -71,6 +71,14 @@
         });
     }
 
+    function searchGrid(callBackId) {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').cnTreeTable('search', param);
+        if (callBackId) {
+            id = callBackId;
+        }
+    }
+
     function searchGrid() {
         $('#gridTable').cnTable('search');
         resetToolbarStatus();

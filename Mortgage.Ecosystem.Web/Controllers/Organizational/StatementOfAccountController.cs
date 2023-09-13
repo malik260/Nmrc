@@ -40,7 +40,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("statementofaccount:search,user:search")]
         public async Task<IActionResult> GetListJson(StatementOfAccountListParam param)
         {
-            TData<List<StatementOfAccountEntity>> obj = await _iStatementOfAccountService.GetList(param);
+            TData<List<FinanceCounterpartyTransactionEntity>> obj = await _iStatementOfAccountService.GetList(param);
             return Json(obj);
         }
 
@@ -48,26 +48,26 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("statementofaccount:search,user:search")]
         public async Task<IActionResult> GetStatementOfAccountPageListJson(StatementOfAccountListParam param, Pagination pagination)
         {
-            TData<List<StatementOfAccountEntity>> obj = await _iStatementOfAccountService.GetPageList(param, pagination);
+            TData<List<FinanceCounterpartyTransactionEntity>> obj = await _iStatementOfAccountService.GetPageList(param, pagination);
             return Json(obj);
         }
 
 
-        [HttpGet]
-        [AuthorizeFilter("statementofaccount:search,user:search")]
-        public async Task<IActionResult> GetStatementOfAccountTreeListJson(StatementOfAccountListParam param)
-        {
-            TData<List<ZtreeInfo>> obj = await _iStatementOfAccountService.GetZtreeStatementOfAccountList(param);
-            return Json(obj);
-        }
+        //[HttpGet]
+        //[AuthorizeFilter("statementofaccount:search,user:search")]
+        //public async Task<IActionResult> GetStatementOfAccountTreeListJson(StatementOfAccountListParam param)
+        //{
+        //    TData<List<ZtreeInfo>> obj = await _iStatementOfAccountService.GetZtreeStatementOfAccountList(param);
+        //    return Json(obj);
+        //}
 
-        [HttpGet]
-        [AuthorizeFilter("riskassessmentsetup:view")]
-        public async Task<IActionResult> GetUserTreeListJson(StatementOfAccountListParam param)
-        {
-            TData<List<ZtreeInfo>> obj = await _iStatementOfAccountService.GetZtreeUserList(param);
-            return Json(obj);
-        }
+        //[HttpGet]
+        //[AuthorizeFilter("riskassessmentsetup:view")]
+        //public async Task<IActionResult> GetUserTreeListJson(StatementOfAccountListParam param)
+        //{
+        //    TData<List<ZtreeInfo>> obj = await _iStatementOfAccountService.GetZtreeUserList(param);
+        //    return Json(obj);
+        //}
 
         [HttpGet]
         [AuthorizeFilter("riskassessmentsetup:view")]

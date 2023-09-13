@@ -27,9 +27,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
-        public async Task<LoanInitiationEntity> GetEntity(long id)
+        public async Task<LoanInitiationEntity> GetEntity(string code)
         {
-            return await BaseRepository().FindEntity<LoanInitiationEntity>(id);
+            return await BaseRepository().FindEntity<LoanInitiationEntity>(code);
         }
 
         public async Task<int> GetMaxSort()
@@ -62,15 +62,26 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(LoanInitiationEntity entity)
         {
-            if (entity.Id.IsNullOrZero())
+            var db = await BaseRepository().BeginTrans();
+            try
             {
-                await entity.Create();
-                await BaseRepository().Insert<LoanInitiationEntity>(entity);
+                if (entity.Id.IsNullOrZero())
+                {
+
+                    await entity.Create();
+                    await db.Insert(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await db.Update(entity);
+                }
+                await db.CommitTrans();
             }
-            else
+            catch
             {
-                await entity.Modify();
-                await BaseRepository().Update<LoanInitiationEntity>(entity);
+                await db.RollbackTrans();
+                throw;
             }
         }
 
@@ -95,5 +106,5 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return expression;
         }
         #endregion
-    }
+    }
 }

@@ -8,14 +8,19 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface IContributionService
     {
-        Task<TData<List<ContributionEntity>>> GetList(ContributionParam param);
-        Task<TData<List<ContributionEntity>>> GetPageList(ContributionParam param, Pagination pagination);
-        Task<TData<List<ZtreeInfo>>> GetZtreeSingleContributionList(ContributionParam param);
-        Task<TData<List<ZtreeInfo>>> GetZtreeUserList(ContributionParam param);
+        Task<TData<List<ContributionEntity>>> GetList(ContributionListParam param);
+        Task<TData<List<ContributionEntity>>> GetPageList(ContributionListParam param, Pagination pagination);
+        Task<TData<List<ZtreeInfo>>> GetZtreeSingleContributionList(ContributionListParam param);
+        Task<TData<List<ZtreeInfo>>> GetZtreeUserList(ContributionListParam param);
         Task<TData<ContributionEntity>> GetEntity(long id);
         Task<TData<int>> GetMaxSort();
+        Task<TData<EmployeeDetailsVM>> GetCustomerDetails();
+
         Task<TData<RemitaPaymentDetailsEntity>> SingleContribution(ContributionEntity entity);
+        Task<TData<BacklogSingleContributionResultVM>> BacklogSingleContribution(BacklogUploadVM entity);
+        Task<TData<BatchContributionResultVM>> BatchContribution(BatchUploadVM entity);
         Task<TData<string>> SaveForm(ContributionEntity entity);
         Task<TData> DeleteForm(string ids);
+        
     }
 }

@@ -10,12 +10,7 @@
         <div id="searchDiv" class="col-sm-12 search-collapse">
             <div class="select-list">
                 <ul>
-                    <li>
-                        Name: <input id="name" col="Name" type="text" />
-                    </li>
-                    <li>
-                        Status: <span id="status" col="Status"></span>
-                    </li>
+
                     <li class="select-time">
                         <label>Created: </label>
                         <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start date" />
@@ -23,8 +18,8 @@
                         <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end date" />
                     </li>
                     <li>
-                        <a id="btnAdd" class="btn btn-success" onclick="showTable()" ><i class="fa fa-edit"></i> VIEW STATEMENT</a>
-                        <a id="btnEdit" class="btn btn-danger" onclick="hideTable()" ><i class="fa fa-close"></i> CLEAR</a>
+                        <a id="btnAdd" class="btn btn-success" onclick="showTable()"><i class="fa fa-edit"></i> VIEW STATEMENT</a>
+                        <a id="btnEdit" class="btn btn-danger" onclick="hideTable()"><i class="fa fa-close"></i> CLEAR</a>
                     </li>
                 </ul>
             </div>
@@ -100,20 +95,32 @@
     }
 
     function showTable() {
+        debugger
         // Check if both start time and end time have been selected
-        var startTime = $("#startTime").val();
-        var endTime = $("#endTime").val();
+        var json_data = {};
+        json_data.StartDate = $('#startTime').val();
+        json_data.EndDate = $('#endTime').val();
+        $.ajax({
+            url: '@Url.Content("~/StatementOfAccount/GetListJson")',
+            method: "GET",
+            data: json_data,
+            dataType: "json",
+            success: function (Obj) {
 
-        if (startTime && endTime) {
-            // Enable both "View Statement" and "Clear" buttons and show the grid table
-            $("#btnAdd").prop('disabled', false);
-            $("#btnEdit").prop('disabled', false);
-            $(".select-table").show();
-        } else {
-            // Display a message asking the user to select both start time and end time
-           // alert("Please select both start time and end time.");
-            $('#alertModal').modal('show');
-        }
+                initGrid(Obj);
+            }
+        })
+
+        //if (startTime && endTime) {
+        //    // Enable both "View Statement" and "Clear" buttons and show the grid table
+        //    $("#btnAdd").prop('disabled', false);
+        //    $("#btnEdit").prop('disabled', false);
+        //    $(".select-table").show();
+        //} else {
+        //    // Display a message asking the user to select both start time and end time
+        //   // alert("Please select both start time and end time.");
+        //    $('#alertModal').modal('show');
+        //}
     }
 
     function hideTable() {

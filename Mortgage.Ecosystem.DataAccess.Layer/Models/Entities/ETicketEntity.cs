@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
@@ -7,6 +8,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
     [Table("tbl_ETicket")]
     public class ETicketEntity : BaseExtensionEntity
     {
+        // Company Number
+        [Column("Company"), Description("Company")]
+        public long Company { get; set; }
+
         [Column("Branch")]
         public int? Branch { get; set; }
 
@@ -32,18 +37,20 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("DateSent")]
         public DateTime? DateSent { get; set; }
 
-        // E-Ticket Approval Status
-        [Column("ApprovalStatus")]
-        public string? ApprovalStatus { get; set; }
+        // Status
+        [Column("Status"), Description("Status")]
+        public int Status { get; set; }
 
-        // E-Ticket Approved
-        [Column("Approved")]
-        public int Approved { get; set; }
+        // Email Address
+        [Column("EmailAddress"), Description("Email Address")]
+        public string? EmailAddress { get; set; }
 
-        // E-Ticket Disapproved
-        [Column("Disapproved")]
-        public int Disapproved { get; set; }
+        [NotMapped]
+        public string? CompanyName { get; set; }
 
+        // Employee Type
+        [Column("EmploymentType"), Description("EmploymentType")]
+        public int EmploymentType { get; set; }
 
     }
 }

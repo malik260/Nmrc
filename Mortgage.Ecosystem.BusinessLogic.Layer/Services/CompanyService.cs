@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mortgage.Ecosystem.BusinessLogic.Layer.Helpers;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Resources;
 using Mortgage.Ecosystem.DataAccess.Layer;
@@ -6,6 +7,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
@@ -172,14 +174,15 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             if (_iUnitOfWork.Users.CheckUserName(entity.EmailAddress))
             {
-                obj.Message = "Username already exists!";
+                obj.Message = "Email already exists!";
                 return obj;
             }
             else
             {
                 entity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
                 entity.DecryptedPassword = new UserService(_iUnitOfWork).GenerateDefaultPassword();
-                entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                //entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                entity.Password = EncryptionHelper.Encrypt(entity.DecryptedPassword, entity.Salt);
             }
 
             if (string.IsNullOrEmpty(entity.Address))
@@ -205,6 +208,12 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             else if (_iUnitOfWork.Companies.ExistRCNumber(entity))
             {
                 obj.Message = "Company RC-Number already exists!";
+                return obj;
+            }
+
+            if (!string.IsNullOrEmpty(entity.IndBVN) && entity.IndBVN.Length != 11)
+            {
+                obj.Message = "BVN must be 11 digits if provided!";
                 return obj;
             }
 
@@ -244,6 +253,28 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<long> obj = new TData<long>();
             await _iUnitOfWork.Companies.DeleteForm(ids);
+            obj.Tag = 1;
+            return obj;
+        }
+
+        public async Task<TData> ApproveForm(CompanyEntity entity)
+        {
+            TData<long> obj = new TData<long>();
+            var user = await Operator.Instance.Current();
+            var entityRecord = await _iUnitOfWork.Companies.GetEntity(entity.Id);
+            var menuRecord = await _iUnitOfWork.Menus.GetEntity(entityRecord.BaseProcessMenu);
+            var approvalLogListParam = new ApprovalLogListParam()
+            {
+                Company = user.Company,
+                MenuId = menuRecord.Id,
+                //Authority = user.Employee,
+                Record = entity.Id
+            };
+            var approvalLogRecords = await _iUnitOfWork.ApprovalLogs.GetList(approvalLogListParam);
+            menuRecord.ApprovalLogList = approvalLogRecords;
+            await _iUnitOfWork.Companies.ApproveForm(entityRecord, menuRecord, user);
+            //obj.Message = string.Empty;
+            obj.Data = entity.Id;
             obj.Tag = 1;
             return obj;
         }

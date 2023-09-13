@@ -8,7 +8,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
     public class FinanceCounterpartyTransactionEntity : BaseExtensionEntity
     {
         [Column("TransactionId")]
-        public int TransactionId { get; set; }
+        public string? TransactionId { get; set; }
 
         [Column("TransactionDate")]
         public DateTime? TransactionDate { get; set; }

@@ -14,9 +14,10 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<List<ZtreeInfo>>> GetZtreeEmployeeList(EmployeeListParam param);
         Task<TData<EmployeeEntity>> GetEntity(long id);
         Task<TData<EmployeeEntity>> GetEntityByNhfNo(long nhfNo);
-
         Task<TData<string>> SaveForm(EmployeeEntity entity);
         Task<TData<string>> SaveForms(EmployeeEntity entity);
         Task<TData> DeleteForm(string ids);
+        Task<EmployeeEntity> GetEntityByNhf(long nhfNo);
+        Task<TData> ApproveForm(EmployeeEntity entity);
     }
 }

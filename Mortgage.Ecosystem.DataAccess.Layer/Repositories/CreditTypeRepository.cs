@@ -25,11 +25,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var expression = ListFilter(param);
             var list = await BaseRepository().FindList(expression, pagination);
             return list.ToList();
-        }       
+        }
 
-        public async Task<CreditTypeEntity> GetEntity(long id)
+        public async Task<CreditTypeEntity> GetEntity(string code)
         {
-            return await BaseRepository().FindEntity<CreditTypeEntity>(id);
+            return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Code == code);
         }
         #endregion
 
@@ -68,5 +68,5 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return expression;
         }
         #endregion
-    }
+    }
 }

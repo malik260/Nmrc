@@ -80,12 +80,12 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             }
             obj.Tag = 1;
             return obj;
-        }       
+        }
 
-        public async Task<TData<CreditTypeEntity>> GetEntity(long id)
+        public async Task<TData<CreditTypeEntity>> GetEntity(string code)
         {
             TData<CreditTypeEntity> obj = new TData<CreditTypeEntity>();
-            obj.Data = await _iUnitOfWork.CreditTypes.GetEntity(id);
+            obj.Data = await _iUnitOfWork.CreditTypes.GetEntity(code);
             obj.Tag = 1;
             return obj;
         }

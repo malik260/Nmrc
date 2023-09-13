@@ -197,52 +197,129 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #endregion
 
         #region Submit data
+
         public async Task<TData<string>> SaveForm(CustomerProfileUpdateEntity entity)
         {
             TData<string> obj = new TData<string>();
-            await _iUnitOfWork.CustomerProfileUpdates.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
-            obj.Tag = 1;
-            return obj;
-        }
-
-        public async Task<TData<string>> UpdateCustomerProfile(CustomerProfileUpdateEntity entity)
-        {
-            TData<string> obj = new TData<string>();
-
-            // Check if the entity exists in the database
-            EmployeeEntity existingEntity = await _iUnitOfWork.Employees.GetById(entity.Id);
-            if (existingEntity == null)
+            try
             {
-                obj.Message = "Entity not found";
-                obj.Tag = -1;
-                return obj;
+                var user = await Operator.Instance.Current();
+                var customerDetails = await _employeeService.GetEntityByNhf(user.EmployeeInfo.NHFNumber);
+
+                if (customerDetails == null)
+                {
+                    obj.Tag = 0;
+                    obj.Message = "Customer details not found.";
+                    return obj;
+                }
+
+                entity.NHFNumber = customerDetails.NHFNumber.ToStr();
+                customerDetails.BankAccountNumber = entity.NewBankAccountNumber;
+
+                if (!string.IsNullOrEmpty(entity.FullName))
+                {
+                    var fullNameParts = entity.FullName.Split(" ");
+                    if (fullNameParts.Length > 0)
+                    {
+                        customerDetails.FirstName = fullNameParts[0];
+                        if (fullNameParts.Length > 1)
+                        {
+                            customerDetails.LastName = string.Join(" ", fullNameParts.Skip(1));
+                        }
+                        else
+                        {
+                            customerDetails.LastName = string.Empty;
+                        }
+                    }
+                }
+
+                customerDetails.MaritalStatus = entity.NewMaritalStatus;
+                customerDetails.MobileNumber = entity.NewMobileNumber;
+                customerDetails.BankName = entity.NewCustomerBank;
+                customerDetails.PostalAddress = entity.NewAddress;
+                customerDetails.MonthlySalary = entity.NewMonthlyIncome;
+                customerDetails.NOKName = entity.NewNOKName;
+                customerDetails.NOKNumber = entity.NewNOKNumber;
+                customerDetails.NOKAddress = entity.NewNOKAddress;
+                customerDetails.Relationship = entity.NewRelationship;
+
+                await _iUnitOfWork.Employees.SaveForm(customerDetails);
+                obj.Data = entity.Id.ParseToString();
+                obj.Tag = 1;
+                obj.Message = "Customer Profile Updated Successfully";
             }
-
-            // Update the existing entity with the new data
-            string[] fullName = entity.FullName.Split(' ');
-
-            existingEntity.MobileNumber = entity.MobileNumber;
-            existingEntity.PostalAddress = entity.Address;
-            existingEntity.MaritalStatus = entity.MaritalStatus;
-            existingEntity.BankAccountNumber = entity.BankAccountNumber;
-            existingEntity.CustomerBank = entity.CustomerBank;
-            existingEntity.MonthlySalary = entity.MonthlyIncome;
-            existingEntity.NOKName = entity.NOKName;
-            existingEntity.NOKNumber = entity.NOKNumber;
-            existingEntity.LastName = fullName[0];
-            existingEntity.FirstName = fullName[1];
-            existingEntity.OtherName = fullName[2];
-            existingEntity.NOKAddress = entity.NOKAddress;
-            existingEntity.Relationship = entity.Relationship;
-            // Save the changes to the database
-            await _iUnitOfWork.Employees.SaveForm(existingEntity);
-            await _iUnitOfWork.CustomerProfileUpdates.SaveForm(entity);
-
-            obj.Data = existingEntity.Id.ParseToString();
-            obj.Tag = 1;
+            catch (Exception ex)
+            {
+                // Log the exception for debugging purposes
+                Console.WriteLine($"Exception: {ex}");
+                obj.Tag = -1;
+                obj.Message = "An error occurred while updating the customer profile.";
+            }
             return obj;
         }
+
+        //public async Task<TData<string>> SaveForm(CustomerProfileUpdateEntity entity)
+        //{
+        //    TData<string> obj = new TData<string>();
+        //    var user = await Operator.Instance.Current();
+        //    var customerDetails = await _employeeService.GetEntityByNhf(user.EmployeeInfo.NHFNumber);
+        //    entity.NHFNumber = customerDetails.NHFNumber.ToStr();
+        //    customerDetails.BankAccountNumber = entity.NewBankAccountNumber;
+        //    // customerDetails.Data.LastName + " " + customerDetails.Data.FirstName = entity.FullName
+        //    entity.FullName = customerDetails.LastName + " " + customerDetails.FirstName;
+        //    customerDetails.MaritalStatus = entity.NewMaritalStatus;
+        //    customerDetails.MobileNumber = entity.NewMobileNumber;
+        //    customerDetails.BankName = entity.NewCustomerBank;
+        //    customerDetails.PostalAddress = entity.NewAddress;
+        //    customerDetails.MonthlySalary = entity.NewMonthlyIncome;
+        //    customerDetails.NOKName = entity.NewNOKName;
+        //    customerDetails.NOKNumber = entity.NewNOKNumber;
+        //    customerDetails.NOKAddress = entity.NewNOKAddress;
+        //    customerDetails.Relationship = entity.NewRelationship;
+        //    await _iUnitOfWork.Employees.SaveForm(customerDetails);
+        //    obj.Data = entity.Id.ParseToString();
+        //    obj.Tag = 1;
+        //    obj.Message = "Customer Profile Updated Successfully";
+        //    return obj;
+        //}
+
+        //public async Task<TData<string>> UpdateCustomerProfile(CustomerProfileUpdateEntity entity)
+        //{
+        //    TData<string> obj = new TData<string>();
+
+        //    // Check if the entity exists in the database
+        //    EmployeeEntity existingEntity = await _iUnitOfWork.Employees.GetById(entity.Id);
+        //    if (existingEntity == null)
+        //    {
+        //        obj.Message = "Entity not found";
+        //        obj.Tag = -1;
+        //        return obj;
+        //    }
+
+        //    // Update the existing entity with the new data
+        //    string[] fullName = entity.FullName.Split(' ');
+
+        //    existingEntity.MobileNumber = entity.MobileNumber;
+        //    existingEntity.PostalAddress = entity.Address;
+        //    existingEntity.MaritalStatus = entity.MaritalStatus;
+        //    existingEntity.BankAccountNumber = entity.BankAccountNumber;
+        //    existingEntity.CustomerBank = entity.CustomerBank;
+        //    existingEntity.MonthlySalary = entity.MonthlyIncome;
+        //    existingEntity.NOKName = entity.NOKName;
+        //    existingEntity.NOKNumber = entity.NOKNumber;
+        //    existingEntity.LastName = fullName[0];
+        //    existingEntity.FirstName = fullName[1];
+        //    existingEntity.OtherName = fullName[2];
+        //    existingEntity.NOKAddress = entity.NOKAddress;
+        //    existingEntity.Relationship = entity.Relationship;
+        //    // Save the changes to the database
+        //    await _iUnitOfWork.Employees.SaveForm(existingEntity);
+        //    await _iUnitOfWork.CustomerProfileUpdates.SaveForm(entity);
+
+        //    obj.Data = existingEntity.Id.ParseToString();
+        //    obj.Tag = 1;
+        //    return obj;
+        //}
         public async Task<TData> DeleteForm(string ids)
         {
             TData<long> obj = new TData<long>();

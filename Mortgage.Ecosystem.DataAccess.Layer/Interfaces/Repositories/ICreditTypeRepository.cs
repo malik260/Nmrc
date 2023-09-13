@@ -8,7 +8,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
     {
         Task<List<CreditTypeEntity>> GetList(CreditTypeListParam param);
         Task<List<CreditTypeEntity>> GetPageList(CreditTypeListParam param, Pagination pagination);
-        Task<CreditTypeEntity> GetEntity(long id);
+        Task<CreditTypeEntity> GetEntity(string code);
         //Task<int> GetMaxSort();
         Task SaveForm(CreditTypeEntity entity);
         Task DeleteForm(string ids);

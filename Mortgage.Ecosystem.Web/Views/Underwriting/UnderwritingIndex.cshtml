@@ -13,9 +13,7 @@
                     <li>
                         Name: <input id="name" col="Name" type="text" />
                     </li>
-                    <li>
-                        Status: <span id="status" col="Status"></span>
-                    </li>
+
                     <li class="select-time">
                         <label>Created: </label>
                         <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
@@ -29,9 +27,10 @@
             </div>
         </div>
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-upload"></i> Add Document</a>
-            <a id="btnAddChecklist" class="btn btn-success" onclick="showSaveChecklistForm(true)"><i class="fa fa-list"></i> Checklist</a>
-            <a id="btnAddRiskAssesstment" class="btn btn-danger" onclick="showSaveRiskAssessmentForm(true)"><i class="fa fa-exclamation-triangle"></i> Risk Assessment</a>          
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-upload"></i> Add</a>
+            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>
+            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
+
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -52,18 +51,30 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/Underwriting/GetUnderwritingPageListJson")';
+        var queryUrl = '@Url.Content("~/LoanInitiation/GetLoanInitiationPageListJson")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'Name', title: 'Customer Name', sortable: true },
-                { field: 'ProductName', title: 'Product Name', sortable: true },
-                { field: 'Tenor', title: 'Tenor', sortable: true },
-                { field: 'InterestRate', title: 'Interest Rate', sortable: true },
-                { field: 'LoanAmount', title: 'Loan Amount', visible: false, sortable: true },
-               
+                { field: 'LoanProduct', title: 'Product Name', sortable: true },
+                {
+                    field: 'Tenor', title: 'Tenor', sortable: true, formatter: function (value) {
+                        return value + " years";
+                    }
+                },
+                {
+                    field: 'Rate', title: 'Interest Rate', sortable: true, formatter: function (value) {
+                        return value + "%";
+                    }
+                },
+                { field: 'Principal', title: 'Loan Amount', sortable: true },                               
+                {
+                  field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                  }
+                }
+
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);
@@ -90,59 +101,17 @@
             }
         }
         cn.openDialog({
-            title: id > 0 ? "Edit Document" : "Add Document",
-            content: '@Url.Content("~/Underwriting/AddDocumentForm")' + '?id=' + id,
+            title: id > 0 ? "Edit Undewriting" : "Add Underwriting",
+            content: '@Url.Content("~/Underwriting/UnderwritingForm")' + '?id=' + id,
             width: "780px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
             }
         });
-    }
+    }   
 
-    function showSaveChecklistForm(bAdd) {
-        var id = 0;
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        cn.openDialog({
-            title: id > 0 ? "Edit Checklist" : "Checklist Form",
-            content: '@Url.Content("~/Underwriting/ChecklistForm")' + '?id=' + id,
-            width: "780px",
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.saveForm(index);
-            }
-        });
-    }
 
-    function showSaveRiskAssessmentForm(bAdd) {
-        var id = 0;
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        cn.openDialog({
-            title: id > 0 ? "Edit Risk Assessment Form" : "Risk Assessment Form",
-            content: '@Url.Content("~/Underwriting/RiskAssessmentForm")' + '?id=' + id,
-            width: "780px",
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.saveForm(index);
-            }
-        });
-    }
 
     function deleteForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
@@ -166,19 +135,6 @@
         }
     }
 
-     //$("#btnEdit").on("click", showConfirmation);
-     //function showConfirmation() {
-     //       if (confirm("You are about to subscribe to this property. Are you sure?")) {
-     //           subscribeProperty();
-     //       }
-     //   }
 
-     //   function subscribeProperty() {
-     //       // Perform the subscription logic here
-     //       // You can make an AJAX request to the server to handle the subscription
-
-     //       // Show success message
-     //       alert("Property Subscribed Successfully");
-     //   }
 
 </script>

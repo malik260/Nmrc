@@ -104,6 +104,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("AlertType"), Description("Alert Type")]
         public int AlertType { get; set; }
 
+        // Contribution Branch
+        [Column("ContributionBranch"), Description("Contribution Branch")]
+        public int ContributionBranch { get; set; }
+
         // Portrait
         [Column("Portrait")]
         public byte[]? Portrait { get; set; }
@@ -188,6 +192,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [NotMapped]
         public string? BranchName { get; set; }
+
+        [NotMapped]
+        public string? ContributionBranchName { get; set; }
 
         [NotMapped]
         public string? DepartmentName { get; set; }

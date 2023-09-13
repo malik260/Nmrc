@@ -35,7 +35,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<ChangeEmployerEntity>? ChangeEmployerEntity { get; set; }
         public DbSet<ChangePasswordEntity>? ChangePasswordEntity { get; set; }
         public DbSet<ChargeSetupEntity>? ChargeSetupEntity { get; set; }
-
+        public DbSet<ChecklistEntity>? ChecklistEntity { get; set; }
         public DbSet<ContributionEntity>? ContributionEntity { get; set; }
         public DbSet<ContributionHistoryEntity>? ContributionHistoryEntity { get; set; }
         public DbSet<ContributionRefundPostingEntity>? ContributionRefundPostingEntity { get; set; }
@@ -53,6 +53,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<CreditScoreEntity>? CreditScoreEntity { get; set; }
 
         public DbSet<CreditTypeEntity>? CreditTypeEntity { get; set; }
+        public DbSet<CustomerProfileUpdateEntity>? CustomerProfileUpdateEntity { get; set; }
 
         public DbSet<DepartmentEntity>? DepartmentEntity { get; set; } // Department table
         public DbSet<DesignationEntity>? DesignationEntity { get; set; }
@@ -70,6 +71,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<LoanInitiationEntity>? LoanInitiationEntity { get; set; }
         public DbSet<LoanScheduleEntity>? LoanScheduleEntity { get; set; }
         public DbSet<NHFCustomerRequestEntity>? NHFCustomerRequestEntity { get; set; }
+        public DbSet<NHFRegCompanyEntity>? NHFRegCompanyEntity { get; set; }
+
         public DbSet<NHFRegUsersEntity>? NHFRegUsersEntity { get; set; }
         public DbSet<MaritalStatusEntity>? MaritalStatusEntity { get; set; }
         public DbSet<MenuAuthorizeEntity>? MenuAuthorizeEntity { get; set; } // Menu permission table        
@@ -93,6 +96,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<StatementOfAccountEntity>? StatementOfAccountEntity { get; set; }
         public DbSet<SubSectorEntity>? SubSectorEntity { get; set; }
         public DbSet<TitleEntity>? TitleEntity { get; set; }
+        public DbSet<UnderwritingEntity>? UnderwritingEntity { get; set; }
+
+        public DbSet<UnlockAdminUserEntity>? UnlockAdminUserEntity { get; set; }
         public DbSet<UnlockNhfPortalEntity>? UnlockNhfPortalEntity { get; set; }
         public DbSet<UserBelongEntity>? UserBelongEntity { get; set; } // User role table        
         public DbSet<UserEntity>? UserEntity { get; set; } // User table

@@ -1,146 +1,97 @@
 ﻿@{
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+<div class="container-div">
 
-<div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox">
-                <div class="ibox-title">
-                    <h3>Unlock Users</h3>
-                </div>                
-                  </div>
-                            <div id="requests" class="tab-pane">
-                                <div class="panel-body">
-                                    <div class="container-div">
-                                        <div class="row">
-                                            <div id="searchDiv" class="col-sm-12 search-collapse">
-                                                <div class="select-list">
-                                                    <ul>
-                                                        <li>
-                                                            Name: <input id="name" col="Name" type="text" />
-                                                        </li>
-                                                        <li>
-                                                            Status: <span id="status" col="Status"></span>
-                                                        </li>
-                                                        <li class="select-time">
-                                                            <label>Created: </label>
-                                                            <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                                                            <span>-</span>
-                                                            <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                                                        </li>
-                                                        <li>
-                                                            <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
+        <div class="ibox-title">
+            <h5>Unlock Users</h5>
+        </div>
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        <label>Name: &nbsp;</label><input id="name" col="Name" type="text" autocomplete="off" />
+                    </li>
+                    <li class="select-time">
+                        <label>Created: </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                        <span>-</span>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group-sm" id="toolbar">
+                @*                <a id="btnViewStatement" class="btn btn-success">View Statement</a>
+                *@                <a id="btnUnlockUsers" class="btn btn-danger disabled">Unlock User(s)</a>
+
+            </div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="unlockUsersTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/UnlockNhfPortal/GetUnlockNhfPortalPageListJson")';
+        $('#unlockUsersTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'AccountNo', title: 'Account No', sortable: true },
+                { field: 'AccountName', title: 'Account Name', sortable: true },
+                { field: 'CustomerCode', title: 'Customer Code', sortable: true },
+                { field: 'UnlockBy', title: 'Unlock By', sortable: true },
+
+                //{ field: 'AmountContributed', title: 'Amount Contributed', sortable: true },
+                //{ field: 'Remarks', title: 'Remarks', sortable: true },
+                //{ field: 'Month', title: 'Month', sortable: true },
+                //{ field: 'Year', title: 'Year', sortable: true },
+
+                {
+                    field: 'Status', title: 'Status', align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@StatusEnum.Yes.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                //{
+                //    field: 'Date Created', title: 'Date Created', formatter: function (value, row, index)
+                //    {
+                //        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                //    }
+                //}
+            ],
+            queryParams: function (params) {
+                var pagination = $('#unlockUsersTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#unlockUsersTable').cnTable('search');
+        resetToolbarStatus();
+    }
 
 
-                                            <div class="col-sm-12">
-                                                <table id="gridRequestTable" data-mobile-responsive="true"></table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <script type="text/javascript">
-                                        $(function () {
-                                            initGrid();
-
-                                            $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
-
-                                            laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
-                                            laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
-                                        });
-
-                                        function initGrid() {
-                                            var queryUrl = '@Url.Content("~/Company/GetPageListJson")';
-                                            $('#gridRequestTable').cnTable({
-                                                url: queryUrl,
-                                                columns: [
-                                                    { checkbox: true, visible: true },
-                                                    { field: 'Id', title: 'Id', visible: false },
-                                                    { field: 'AccountNo', title: 'Account No', sortable: true },
-                                                    { field: 'AccountName', title: 'Account Name', sortable: true },
-                                                    { field: 'CustomerCode', title: 'Customer Code', sortable: true },
-                                                    { field: 'UnlockBy', title: 'Unlock By', sortable: true },
-
-                                                    
-                                                    //{
-                                                    //    field: 'Status', title: 'Status', align: 'center',
-                                                    //    formatter: function (value, row, index) {
-                                                    //        if (value == "@StatusEnum.Yes.ToInt()") {
-                                                    //            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
-                                                    //        } else {
-                                                    //            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
-                                                    //        }
-                                                    //    }
-                                                    //},
-                                                    //{
-                                                    //    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
-                                                    //        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
-                                                    //    }
-                                                    //}
-                                                ],
-                                                queryParams: function (params) {
-                                                    var pagination = $('#gridRequestTable').cnTable('getPagination', params);
-                                                    var queryString = $("#searchDiv").getWebControls(pagination);
-                                                    return queryString;
-                                                }
-                                            });
-                                        }
-
-                                        function searchGrid() {
-                                            $('#gridRequestTable').cnTable('search');
-                                            resetToolbarStatus();
-                                        }
-
-                                        function showSaveForm(bAdd) {
-                                            var id = 0;
-                                            if (!bAdd) {
-                                                var selectedRow = $("#gridRequestTable").bootstrapTable("getSelections");
-                                                if (!cn.checkRowEdit(selectedRow)) {
-                                                    return;
-                                                }
-                                                else {
-                                                    id = selectedRow[0].Id;
-                                                }
-                                            }
-                                            cn.openDialog({
-                                                title: id > 0 ? "Edit Agent" : "Add Agent",
-                                                content: '@Url.Content("~/Company/CompanyForm")' + '?id=' + id,
-                                                width: "780px",
-                                                callback: function (index, layero) {
-                                                    var iframeWin = window[layero.find('iframe')[0]['name']];
-                                                    iframeWin.saveForm(index);
-                                                }
-                                            });
-                                        }
-
-                                        function deleteForm() {
-                                            var selectedRow = $("#gridRequestTable").bootstrapTable("getSelections");
-                                            if (cn.checkRowDelete(selectedRow)) {
-                                                cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
-                                                    var ids = cn.getIds(selectedRow);
-                                                    cn.ajax({
-                                                        url: '@Url.Content("~/Company/DeleteFormJson")' + '?ids=' + ids,
-                                                        type: "post",
-                                                        success: function (obj) {
-                                                            if (obj.Tag == 1) {
-                                                                cn.msgSuccess(obj.Message);
-                                                                searchGrid();
-                                                            }
-                                                            else {
-                                                                cn.msgError(obj.Message);
-                                                            }
-                                                        }
-                                                    });
-                                                });
-                                            }
-                                        }
-                                    </script>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+</script>

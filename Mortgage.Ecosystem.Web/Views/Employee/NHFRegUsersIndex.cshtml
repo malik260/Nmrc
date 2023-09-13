@@ -9,9 +9,6 @@
                     <li class="active">
                         <a data-toggle="tab" href="#employee" aria-expanded="true">Pending Employee Registration(s)</a>
                     </li>
-                    <li class="">
-                        <a data-toggle="tab" href="#employer" aria-expanded="false">Pending Employer Registration(s)</a>
-                    </li>
                 </ul>
                 <div class="tab-content">
                     <div id="employee" class="tab-pane active">
@@ -37,49 +34,89 @@
                                         </div>
                                     </div>
                                     <div class="btn-group-sm" id="toolbar">
-                                        <a id="btnAdd" class="btn btn-success" onclick="showViewEmployeeForm(false)"><i class="fa fa-eye"></i> View</a>
-                                        <a id="btnEdit" class="btn btn-primary disabled" onclick="approveEmployeeForm()"><i class="fa fa-check"></i> Approve</a>
-                                        <a id="btnDelete" class="btn btn-danger disabled" onclick="rejectEmployeeForm()"><i class="fa fa-remove"></i> Reject</a>
+                                        <a id="btnView" class="btn btn-success disabled" onclick="showViewEmployeeForm(false)"><i class="fa fa-eye"></i> View</a>
+                                        <a id="btnApprove" class="btn btn-primary disabled" onclick="approveEmployeeForm()"><i class="fa fa-check"></i> Approve</a>
+                                        <a id="btnReject" class="btn btn-danger disabled" onclick="rejectEmployeeForm()"><i class="fa fa-remove"></i> Reject</a>
                                     </div>
 
                                     <div class="col-sm-12 select-table table-striped">
                                         <table id="gridTable" data-mobile-responsive="true"></table>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="employer" class="tab-pane">
-                        <div class="panel-body">
-                            <div class="container-div">
-                                <div class="row">
-                                    <div id="searchDiv" class="col-sm-12 search-collapse">
-                                        <div class="select-list">
-                                            <ul>
-                                                <li>
-                                                    <label>Name: </label> <input id="name" col="Name" type="text" />
-                                                </li>
-                                                <li class="select-time">
-                                                    <label>Created: </label>
-                                                    <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                                                    <span>-</span>
-                                                    <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                                                </li>
-                                                <li>
-                                                    <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchEmployerGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
-                                                </li>
-                                            </ul>
+
+                                    <div class="form-row">
+                                        <div class="form-container">
+                                            <div id="myForm">
+                                                <form id="myForm">
+                                                    <h4 id="registrationHeader" style="text-align:center;"></h4>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-6">
+                                                            <label for="effectiveDate" class="form-label">Effective Date</label>
+                                                            <input type="dateTime" id="effectiveDate" name="EffectiveDate" class="form-control" readonly />
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="email" class="form-label">Email Address</label>
+                                                            <input type="email" id="email" name="Email" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="margin-top:8%">
+                                                        <div class="col-sm-6">
+                                                            <label for="phone" class="form-label">Phone No</label>
+                                                            <input type="tel" id="phone" name="Phone" class="form-control" readonly />
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="remark" class="form-label">Remark</label>
+                                                            <textarea type="text" id="remark" name="Remark" class="form-control" style="height:60px"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="margin-top:16%">
+                                                        <div class="col-sm-6">
+                                                            <label for="maritalStatus" class="form-label">Marital Status</label>
+                                                            <input type="text" id="maritalStatus" name="MaritalStatus" class="form-control" readonly />
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="gender" class="form-label">Gender</label>
+                                                            <input type="text" id="gender" name="Gender" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="margin-top:24%">
+                                                        <div class="col-sm-6">
+                                                            <label for="bvn" class="form-label">BVN</label>
+                                                            <input type="tel" id="bvn" name="BVN" class="form-control" readonly />
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="nin" class="form-label">NIN</label>
+                                                            <input type="tel" id="nin" name="NIN" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group" style="margin-top:32%">
+                                                        <div class="col-sm-6">
+                                                            <label for="bankName" class="form-label">Bank Name</label>
+                                                            <input type="text" id="bankName" name="BankName" class="form-control" readonly />
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="bankAccountNumber" class="form-label">Bank Account Number</label>
+                                                            <input type="text" id="bankAccountNumber" name="BankAccountNumber" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="margin-top:40%">
+                                                        <div class="col-sm-6">
+                                                            <label for="contributionLocation" class="form-label">Contribution Location</label>
+                                                            <input type="text" id="contributionLocation" name="ContributionLocation" class="form-control" readonly />
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="registrationLocation" class="form-label">Registration Location</label>
+                                                            <input type="text" id="registrationLocation" name="RegistrationLocation" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+
+
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div>
-                                    </div>
-                                    <div class="btn-group-sm" id="toolbar">
-                                        <a id="btnEdit" class="btn btn-success" onclick="showViewEmployerForm(false)"><i class="fa fa-eye"></i> View</a>
+
                                     </div>
 
-                                    <div class="col-sm-12 select-table table-striped">
-                                        <table id="gridTable" data-mobile-responsive="true"></table>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -93,21 +130,68 @@
 <script type="text/javascript">
     $(function () {
         initGrid();
-        secondGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
 
         laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
     });
 
+    var fullName = "";
+
+
     function initGrid() {
         var queryEmployeeUrl = '@Url.Content("~/Employee/GetApprovalPageListJson")';
+
+        var formOpen = false; // flag to track if form is currently open
         $('#gridTable').cnTable({
             url: queryEmployeeUrl,
             columns: [
+                {
+                    field: 'plus',
+                    title: '',
+                    formatter: function (value, row) {
+                        var iconClass = formOpen ? 'fa fa-times' : 'fa fa-plus';
+                        return '<button type="button" class="btn btn-sm btn-primary plus-button" data-row-id="' + row.Id + '"><i class="' + iconClass + '"></i></button>';
+                    },
+                    events: {
+                        'click .plus-button': function (e, value, row, index) {
+                            // toggle the form on/off
+                            fullName = row.FirstName + ' ' + row.LastName;
+                            $("#registrationHeader").text("NHF Registration for " + fullName);
+                            if (formOpen) {
+                                $('#myForm').slideUp();
+                                $(this).removeClass('btn-danger').addClass('btn-primary'); // Change button background to btn-primary
+                            } else {
+                                var form = $('#myForm');
+                                //var gen = row.GenderName;
+                                form.find('input[name="EffectiveDate"]').val(row.BaseCreateTime);
+                                form.find('input[name="Email"]').val(row.EmailAddress);
+                                form.find('input[name="Phone"]').val(row.MobileNumber);
+                                form.find('input[name="MaritalStatus"]').val(row.MaritalStatusName);
+                                form.find('input[name="Gender"]').val(row.GenderName);
+                                form.find('input[name="BVN"]').val(row.BVN);
+                                form.find('input[name="NIN"]').val(row.NIN);
+                                form.find('input[name="BankName"]').val(row.CustomerBank);
+                                form.find('input[name="BankAccountNumber"]').val(row.BankAccountNumber);
+                                form.find('input[name="ContributionLocation"]').val(row.ContributionBranchName);
+                                form.find('input[name="RegistrationLocation"]').val(row.PostalAddress);
+                                form.slideDown();
+                                $(this).removeClass('btn-primary').addClass('btn-danger'); // Change button background to btn-danger
+                            }
+                            formOpen = !formOpen; // update flag
+
+                            // update the plus button icon
+                            var iconClass = formOpen ? 'fa fa-times' : 'fa fa-plus';
+                            $(this).html('<i class="' + iconClass + '"></i>');
+                        }
+
+                    }
+                },
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
                 { field: 'CompanyName', title: 'Company', sortable: true },
-                { field: 'BranchName', title: 'Branch', visible: false, sortable: true },
+                { field: 'ContributionBranchName', title: 'Branch', visible: false, sortable: true },
                 { field: 'DepartmentName', title: 'Department', visible: false, sortable: true },
                 { field: 'TitleName', title: 'Title', visible: false, sortable: true },
                 { field: 'FirstName', title: 'FirstName', sortable: true },
@@ -133,7 +217,7 @@
                 },
                 { field: 'DateOfEmployment', title: 'Date Of Employment', visible: false, sortable: true },
                 { field: 'StaffNumber', title: 'Staff Number', visible: false, sortable: true },
-                { field: 'BankName', title: 'Bank Name', visible: false, sortable: true },
+                { field: 'CustomerBank', title: 'Bank Name', visible: false, sortable: true },
                 { field: 'BankAccountNumber', title: 'Account Number', visible: false, sortable: true },
                 { field: 'AccountTypeName', title: 'Account Type', visible: false, sortable: true },
                 { field: 'MonthlySalary', title: 'Monthly Salary', visible: false, sortable: true },
@@ -150,54 +234,19 @@
                 return queryString;
             }
         });
+        $('#myForm').hide();
     }
 
-    function secondGrid() {
-        var queryEmployerUrl = '@Url.Content("~/Company/GetApprovalPageListJson")';
-        $('#gridTable').cnTable({
-            url: queryEmployerUrl,
-            columns: [
-                { checkbox: true, visible: true },
-                { field: 'Id', title: 'Id', visible: false },
-                { field: 'Name', title: 'Name', sortable: true },
-                { field: 'RCNumber', title: 'RC Number', sortable: true },
-                { field: 'SectorName', title: 'Sector', sortable: true },
-                { field: 'DateOfIncorporation', title: 'Date Of Incorporation', visible: false, sortable: true },
-                { field: 'NatureOfBusiness', title: 'Nature Of Business', visible: false, sortable: true },
-                { field: 'NameOfRegistrar', title: 'Name Of Registrar', visible: false, sortable: true },
-                { field: 'CompanyClassName', title: 'Class', sortable: true },
-                { field: 'CompanyTypeName', title: 'Type', sortable: true },
-                {
-                    field: 'Status', title: 'Status', align: 'center',
-                    formatter: function (value, row, index) {
-                        value = "1";
-                        if (value == "@StatusEnum.Yes.ToInt()") {
-                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
-                        } else {
-                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
-                        }
-                    }
-                },
-                {
-                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
-                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
-                    }
-                }
-            ],
-            queryParams: function (params) {
-                var pagination = $('#gridTable').cnTable('getPagination', params);
-                var queryString = $("#searchDiv").getWebControls(pagination);
-                return queryString;
-            }
-        });
-    }
+    var firstName = employee.FullName;
+    var lastName = EmployeeEntity.LastName;
+
+    // Construct the sentence
+    var sentence = 'NHF Registration for ' + firstName + ' ' + lastName;
+
+    // Update the <h4> element with the sentence
+    $('#myForm h4').text(sentence);
 
     function searchEmployeeGrid() {
-        $('#gridTable').cnTable('search');
-        resetToolbarStatus();
-    }
-
-    function searchEmployerGrid() {
         $('#gridTable').cnTable('search');
         resetToolbarStatus();
     }
@@ -223,54 +272,40 @@
         });
     }
 
-    function showViewEmployerForm(bView) {
-        var id = 0;
-        if (!bView) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        cn.openDialog({
-            title: id > 0 ? "View Company Record" : "",
-            content: '@Url.Content("~/Company/NHFRegUserForm")' + '?id=' + id,
-            width: "780px",
-        });
-    }
-
     function approveEmployeeForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        cn.confirm("Confirm to approve form?", function () {
-            var id = selectedRow[0].Id;
-            cn.ajax({
-                url: '@Url.Content("~/Employee/ApproveFormJson")' + '?id=' + id,
-                type: "post",
-                success: function (obj) {
-                    if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
-                        searchGrid();
+        if (cn.checkRowDelete(selectedRow)) {
+            cn.confirm("Confirm to approve this record?", function () {
+                var id = cn.getIds(selectedRow);
+                cn.ajax({
+                    url: '@Url.Content("~/Employee/ApproveFormJson")' + '?id=' + id,
+                    type: "post",
+                    error: cn.ajaxError,
+                    success: function (obj) {
+                        //alert(obj.Tag + " --- " + obj.Message);
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            searchGrid();
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
                     }
-                    else {
-                        cn.msgError(obj.Message);
-                    }
-                }
+                });
             });
-        });
+        }
     }
 
     function rejectEmployeeForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        cn.confirm("Confirm to reject form?", function () {
+        cn.confirm("Confirm to reject this record?", function () {
             var id = selectedRow[0].Id;
             cn.ajax({
                 url: '@Url.Content("~/Employee/RejectFormJson")' + '?id=' + id,
                 type: "post",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
+                        cn.msgSuccess("Rejected");
                         searchGrid();
                     }
                     else {

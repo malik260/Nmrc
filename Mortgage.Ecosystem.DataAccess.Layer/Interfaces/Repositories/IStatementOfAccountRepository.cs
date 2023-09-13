@@ -6,8 +6,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
 {
     public interface IStatementOfAccountRepository
     {
-        Task<List<StatementOfAccountEntity>> GetList(StatementOfAccountListParam param);
-        Task<List<StatementOfAccountEntity>> GetPageList(StatementOfAccountListParam param, Pagination pagination);
+        Task<List<FinanceCounterpartyTransactionEntity>> GetList(StatementOfAccountListParam param);
+        Task<List<FinanceCounterpartyTransactionEntity>> GetPageList(StatementOfAccountListParam param, Pagination pagination);
         Task<StatementOfAccountEntity> GetEntity(long id);
         Task<int> GetMaxSort();
         Task SaveForm(StatementOfAccountEntity entity);

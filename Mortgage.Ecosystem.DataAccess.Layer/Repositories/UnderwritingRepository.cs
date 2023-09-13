@@ -63,15 +63,25 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(UnderwritingEntity entity)
         {
-            if (entity.Id.IsNullOrZero())
+            var db = await BaseRepository().BeginTrans();
+            try
             {
-                await entity.Create();
-                await BaseRepository().Insert<UnderwritingEntity>(entity);
+                if (entity.Id.IsNullOrZero())
+                {
+                    await entity.Create();
+                    await db.Insert(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await db.Update(entity);
+                }
+                await db.CommitTrans();
             }
-            else
+            catch
             {
-                await entity.Modify();
-                await BaseRepository().Update<UnderwritingEntity>(entity);
+                await db.RollbackTrans();
+                throw;
             }
         }
 
@@ -96,5 +106,5 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return expression;
         }
         #endregion
-    }
+    }
 }
