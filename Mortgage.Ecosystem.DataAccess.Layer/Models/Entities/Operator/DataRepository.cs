@@ -28,6 +28,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                                     a.UserName,
                                     a.RealName,
                                     a.WebToken,
+                                    a.Password,
+                                    a.Salt,
                                     a.ApiToken,
                                     a.IsSystem
                             FROM tbl_User a
@@ -205,8 +207,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                 Company = user.Company,
                 Authority = user.Employee
             };
-            var approvalLogRecords = new ApprovalLogRepository().GetList(approvalLogListParam);
-            if (approvalLogRecords != null)
+            var approvalLogRecords = await new ApprovalLogRepository().GetList(approvalLogListParam);
+            var approvalLogList = approvalLogRecords.Select(el => $"{el.Record},").Aggregate("", (el1, el2) => el1 + el2).TrimEnd(',');
+            var approvalLogBracketList = $"({approvalLogList})".Replace("\"", "");
+            if (approvalLogRecords.Count <= 0)
             {
                 strSql.Append(@"SELECT a.* FROM tbl_Employee a
                                 INNER JOIN tbl_ApprovalSetup b ON a.Company = b.Company
@@ -219,10 +223,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                                 INNER JOIN tbl_ApprovalSetup b ON a.Company = b.Company
                                 INNER JOIN tbl_ApprovalLog c ON b.Company = c.Company AND b.Authority = c.Authority AND b.MenuId = c.MenuId
                                 INNER JOIN tbl_Menu d ON a.BaseProcessMenu = d.Id AND b.MenuId = d.Id
-                                WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND c.ApprovalCount <= 0 AND d.ApprovalLevel > 0 AND c.ApprovalCount < d.ApprovalLevel");
+                                WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND a.Id NOT IN " + approvalLogBracketList + " AND d.ApprovalLevel > 0 AND c.ApprovalCount < d.ApprovalLevel");
             }
             IEnumerable<EmployeeEntity> employeeList = await BaseRepository().FindList<EmployeeEntity>(strSql.ToString());
-            return employeeList;
+            return employeeList.GroupBy(x => new { x.Id, x.Company })
+                      .SelectMany(x => x.OrderByDescending(y => y.BaseCreateTime).Take(1))
+                      .OrderByDescending(x => x.BaseModifyTime)
+                      .ToList();
         }
 
         public async Task<IEnumerable<CompanyEntity>> GetCompanyApprovalItems()
@@ -235,7 +242,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                 Company = user.Company,
                 Authority = user.Employee
             };
-            var approvalLogRecords = new ApprovalLogRepository().GetList(approvalLogListParam);
+
+            var approvalLogRecords = await new ApprovalLogRepository().GetList(approvalLogListParam);
+            var approvalLogList = approvalLogRecords.Select(el => $"{el.Record},").Aggregate("", (el1, el2) => el1 + el2).TrimEnd(',');
+            var approvalLogBracketList = $"({approvalLogList})".Replace("\"", "");
             if (approvalLogRecords != null)
             {
                 strSql.Append(@"SELECT a.* FROM tbl_Company a
@@ -249,10 +259,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                                 INNER JOIN tbl_ApprovalSetup b ON a.Id = b.Company
                                 INNER JOIN tbl_ApprovalLog c ON b.Company = c.Company AND b.Authority = c.Authority AND b.MenuId = c.MenuId
                                 INNER JOIN tbl_Menu d ON a.BaseProcessMenu = d.Id AND b.MenuId = d.Id
-                                WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND c.ApprovalCount <= 0 AND d.ApprovalLevel > 0 AND c.ApprovalCount < d.ApprovalLevel");
+                                WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND a.Id NOT IN " + approvalLogBracketList + " AND c.ApprovalCount <= 0 AND d.ApprovalLevel > 0 AND c.ApprovalCount < d.ApprovalLevel");
             }
             IEnumerable<CompanyEntity> companyList = await BaseRepository().FindList<CompanyEntity>(strSql.ToString());
-            return companyList;
+            return companyList.GroupBy(x => new { x.Id, x.Name })
+                      .SelectMany(x => x.OrderByDescending(y => y.BaseCreateTime).Take(1))
+                      .OrderByDescending(x => x.BaseModifyTime)
+                      .ToList();
         }
     }
 }

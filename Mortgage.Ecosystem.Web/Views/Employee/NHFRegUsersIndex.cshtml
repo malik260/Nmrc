@@ -9,9 +9,6 @@
                     <li class="active">
                         <a data-toggle="tab" href="#employee" aria-expanded="true">Pending Employee Registration(s)</a>
                     </li>
-                    <li class="">
-                        <a data-toggle="tab" href="#employer" aria-expanded="false">Pending Employer Registration(s)</a>
-                    </li>
                 </ul>
                 <div class="tab-content">
                     <div id="employee" class="tab-pane active">
@@ -37,44 +34,9 @@
                                         </div>
                                     </div>
                                     <div class="btn-group-sm" id="toolbar">
-                                        <a id="btnAdd" class="btn btn-success" onclick="showViewEmployeeForm(false)"><i class="fa fa-eye"></i> View</a>
+                                        <a id="btnEdit" class="btn btn-success disabled" onclick="showViewEmployeeForm(false)"><i class="fa fa-eye"></i> View</a>
                                         <a id="btnEdit" class="btn btn-primary disabled" onclick="approveEmployeeForm()"><i class="fa fa-check"></i> Approve</a>
                                         <a id="btnDelete" class="btn btn-danger disabled" onclick="rejectEmployeeForm()"><i class="fa fa-remove"></i> Reject</a>
-                                    </div>
-
-                                    <div class="col-sm-12 select-table table-striped">
-                                        <table id="gridTable" data-mobile-responsive="true"></table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="employer" class="tab-pane">
-                        <div class="panel-body">
-                            <div class="container-div">
-                                <div class="row">
-                                    <div id="searchDiv" class="col-sm-12 search-collapse">
-                                        <div class="select-list">
-                                            <ul>
-                                                <li>
-                                                    <label>Name: </label> <input id="name" col="Name" type="text" />
-                                                </li>
-                                                <li class="select-time">
-                                                    <label>Created: </label>
-                                                    <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                                                    <span>-</span>
-                                                    <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                                                </li>
-                                                <li>
-                                                    <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchEmployerGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div>
-                                    </div>
-                                    <div class="btn-group-sm" id="toolbar">
-                                        <a id="btnEdit" class="btn btn-success" onclick="showViewEmployerForm(false)"><i class="fa fa-eye"></i> View</a>
                                     </div>
 
                                     <div class="col-sm-12 select-table table-striped">
@@ -93,7 +55,6 @@
 <script type="text/javascript">
     $(function () {
         initGrid();
-        secondGrid();
 
         laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
@@ -152,52 +113,7 @@
         });
     }
 
-    function secondGrid() {
-        var queryEmployerUrl = '@Url.Content("~/Company/GetApprovalPageListJson")';
-        $('#gridTable').cnTable({
-            url: queryEmployerUrl,
-            columns: [
-                { checkbox: true, visible: true },
-                { field: 'Id', title: 'Id', visible: false },
-                { field: 'Name', title: 'Name', sortable: true },
-                { field: 'RCNumber', title: 'RC Number', sortable: true },
-                { field: 'SectorName', title: 'Sector', sortable: true },
-                { field: 'DateOfIncorporation', title: 'Date Of Incorporation', visible: false, sortable: true },
-                { field: 'NatureOfBusiness', title: 'Nature Of Business', visible: false, sortable: true },
-                { field: 'NameOfRegistrar', title: 'Name Of Registrar', visible: false, sortable: true },
-                { field: 'CompanyClassName', title: 'Class', sortable: true },
-                { field: 'CompanyTypeName', title: 'Type', sortable: true },
-                {
-                    field: 'Status', title: 'Status', align: 'center',
-                    formatter: function (value, row, index) {
-                        value = "1";
-                        if (value == "@StatusEnum.Yes.ToInt()") {
-                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
-                        } else {
-                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
-                        }
-                    }
-                },
-                {
-                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
-                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
-                    }
-                }
-            ],
-            queryParams: function (params) {
-                var pagination = $('#gridTable').cnTable('getPagination', params);
-                var queryString = $("#searchDiv").getWebControls(pagination);
-                return queryString;
-            }
-        });
-    }
-
     function searchEmployeeGrid() {
-        $('#gridTable').cnTable('search');
-        resetToolbarStatus();
-    }
-
-    function searchEmployerGrid() {
         $('#gridTable').cnTable('search');
         resetToolbarStatus();
     }
@@ -223,28 +139,10 @@
         });
     }
 
-    function showViewEmployerForm(bView) {
-        var id = 0;
-        if (!bView) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        cn.openDialog({
-            title: id > 0 ? "View Company Record" : "",
-            content: '@Url.Content("~/Company/NHFRegUserForm")' + '?id=' + id,
-            width: "780px",
-        });
-    }
-
     function approveEmployeeForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         cn.confirm("Confirm to approve form?", function () {
-            var id = selectedRow[0].Id;
+            var id = cn.getIds(selectedRow);
             cn.ajax({
                 url: '@Url.Content("~/Employee/ApproveFormJson")' + '?id=' + id,
                 type: "post",
@@ -252,6 +150,7 @@
                     if (obj.Tag == 1) {
                         cn.msgSuccess(obj.Message);
                         searchGrid();
+                        return;
                     }
                     else {
                         cn.msgError(obj.Message);
@@ -270,7 +169,7 @@
                 type: "post",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
+                        cn.msgSuccess("Rejected");
                         searchGrid();
                     }
                     else {

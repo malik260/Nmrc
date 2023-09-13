@@ -27,6 +27,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Authority")]
         public long Authority { get; set; }
 
+        // Record Approved
+        [Column("Record")]
+        public long Record { get; set; }
+
         // Approval count
         [Column("ApprovalCount")]
         public int ApprovalCount { get; set; }

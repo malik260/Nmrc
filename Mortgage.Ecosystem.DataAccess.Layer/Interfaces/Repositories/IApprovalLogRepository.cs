@@ -9,6 +9,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<List<ApprovalLogEntity>> GetList(ApprovalLogListParam param);
         Task<List<ApprovalLogEntity>> GetPageList(ApprovalLogListParam param, Pagination pagination);
         Task<ApprovalLogEntity> GetEntity(long id);
+        Task<ApprovalLogEntity> GetEntity(long company, long menu, long record);
         Task SaveForm(ApprovalLogEntity entity);
         Task DeleteForm(string ids);
     }

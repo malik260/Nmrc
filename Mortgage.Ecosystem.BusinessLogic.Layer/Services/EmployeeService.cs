@@ -6,6 +6,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
@@ -191,7 +192,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 entity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
                 entity.DecryptedPassword = new UserService(_iUnitOfWork).GenerateDefaultPassword();
-                entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                //entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                entity.Password = EncryptionHelper.Encrypt(entity.DecryptedPassword, entity.Salt);
             }
 
             entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
@@ -294,7 +296,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 entity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
                 entity.DecryptedPassword = new UserService(_iUnitOfWork).GenerateDefaultPassword();
-                entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                //entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                entity.Password = EncryptionHelper.Encrypt(entity.DecryptedPassword, entity.Salt);
             }
 
             entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
@@ -309,6 +312,28 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<long> obj = new TData<long>();
             await _iUnitOfWork.Employees.DeleteForm(ids);
+            obj.Tag = 1;
+            return obj;
+        }
+
+        public async Task<TData<string>> ApproveForm(EmployeeEntity entity)
+        {
+            TData<string> obj = new TData<string>();
+            var user = await Operator.Instance.Current();
+            var entityRecord = await _iUnitOfWork.Employees.GetEntity(entity.Id);
+            var menuRecord = await _iUnitOfWork.Menus.GetEntity(entityRecord.BaseProcessMenu);
+            var approvalLogListParam = new ApprovalLogListParam()
+            {
+                Company = user.Company,
+                MenuId = menuRecord.Id,
+                //Authority = user.Employee,
+                Record = entity.Id
+            };
+            var approvalLogRecords = await _iUnitOfWork.ApprovalLogs.GetList(approvalLogListParam);
+            menuRecord.ApprovalLogList = approvalLogRecords;
+            await _iUnitOfWork.Employees.ApproveForm(entityRecord, menuRecord, user);
+            obj.Data = entity.Id.ParseToString();
+            obj.Message = "Approved successfully";
             obj.Tag = 1;
             return obj;
         }

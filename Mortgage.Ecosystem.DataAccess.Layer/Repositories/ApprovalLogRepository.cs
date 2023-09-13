@@ -31,6 +31,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         {
             return await BaseRepository().FindEntity<ApprovalLogEntity>(id);
         }
+
+        public async Task<ApprovalLogEntity> GetEntity(long company, long menu, long record)
+        {
+            return await BaseRepository().FindEntity<ApprovalLogEntity>(p => p.Company == company && p.MenuId == menu && p.Record == record);
+        }
         #endregion
 
         #region Submit data
@@ -78,6 +83,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 if (param.Authority > 0)
                 {
                     expression = expression.And(t => t.Authority == param.Authority);
+                }
+
+                if (param.Record > 0)
+                {
+                    expression = expression.And(t => t.Record == param.Record);
                 }
             }
             return expression;

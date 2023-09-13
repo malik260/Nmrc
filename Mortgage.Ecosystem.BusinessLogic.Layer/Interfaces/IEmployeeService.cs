@@ -16,5 +16,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<string>> SaveForm(EmployeeEntity entity);
         Task<TData<string>> SaveForms(EmployeeEntity entity);
         Task<TData> DeleteForm(string ids);
+        Task<TData<string>> ApproveForm(EmployeeEntity entity);
     }
 }

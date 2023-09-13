@@ -17,6 +17,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
         public string? WebToken { get; set; } // WebToken
         public string? ApiToken { get; set; } // ApiToken
         public int IsSystem { get; set; } // Whether the system user
+        public string? Password { get; set; }
+        public string? Salt { get; set; }
 
         [NotMapped]
         public CompanyListParam? CompanyInfo { get; set; } // Company Information

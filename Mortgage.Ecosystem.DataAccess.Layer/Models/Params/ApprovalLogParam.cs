@@ -7,6 +7,7 @@
         public long MenuId { get; set; }
         public int MenuType { get; set; }
         public long Authority { get; set; }
+        public long Record { get; set; }
         public int ApprovalCount { get; set; }
         public int ApprovalLevel { get; set; }
         public int Status { get; set; }

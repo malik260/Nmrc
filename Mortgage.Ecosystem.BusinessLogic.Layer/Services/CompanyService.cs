@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mortgage.Ecosystem.BusinessLogic.Layer.Helpers;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Resources;
 using Mortgage.Ecosystem.DataAccess.Layer;
@@ -179,7 +180,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 entity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
                 entity.DecryptedPassword = new UserService(_iUnitOfWork).GenerateDefaultPassword();
-                entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                //entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                entity.Password = EncryptionHelper.Encrypt(entity.DecryptedPassword, entity.Salt);
             }
 
             if (string.IsNullOrEmpty(entity.Address))
