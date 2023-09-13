@@ -4,6 +4,7 @@ using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
@@ -35,11 +36,15 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         public IActionResult ContributionForm()
         {
+
             return View();
         }
 
 
         #endregion
+
+
+
 
         #region Get data
         [HttpGet]
@@ -223,6 +228,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
         #endregion
 
+        public async Task<IActionResult> GetEmployeeDetails()
+        {
+            TData obj = await _iContributionService.GetCustomerDetails();
+            return Json(obj);
+        }
 
         #region Check RRR status 
         public async Task<IActionResult> CheckPaymentStatus(string RRR)

@@ -34,9 +34,25 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public bool ExistingRefund(string nhfNo, string employerNumber, long id)
+        {
+            var expression = ExtensionLinq.True<RefundEntity>();
+            expression = expression.And(t => t.BaseIsDelete == 0);
+            if (id.IsNullOrZero())
+            {
+                expression = expression.And(t => t.NhfNumber == nhfNo && t.EmployerNumber == employerNumber);
+            }
+            else
+            {
+                expression = expression.And(t => t.NhfNumber == nhfNo && t.EmployerNumber == employerNumber && t.Id != id);
+            }
+            return BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+        }
+
         public async Task<RefundEntity> GetEntity(long id)
         {
-            return await BaseRepository().FindEntity<RefundEntity>(id);
+            return await BaseRepository().FindEntity<RefundEntity>(id)
+;
         }
 
         public async Task<int> GetMaxSort()

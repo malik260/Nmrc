@@ -73,7 +73,16 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("refund:view")]
         public async Task<IActionResult> GetFormJson(int id)
         {
-            TData<RefundEntity> obj = await _iRefundService.GetEntity(id);
+            TData<RefundEntity> obj = await _iRefundService.GetEntity(id)
+;
+            return Json(obj);
+        }
+
+        [HttpGet]
+        //[AuthorizeFilter("refund:view")]
+        public async Task<IActionResult> ViewCustomerInformation()
+        {
+            TData<CustomerDetailsViewModel> obj = await _iRefundService.GetCustomerDetails();
             return Json(obj);
         }
 
