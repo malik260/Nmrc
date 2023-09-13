@@ -1,0 +1,137 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="ibox-title">
+    <h5>STATEMENT OF ACCOUNT</h5>
+</div>
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+
+                    <li class="select-time">
+                        <label>Created: </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start date" />
+                        <span>-</span>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end date" />
+                    </li>
+                    <li>
+                        <a id="btnAdd" class="btn btn-success" onclick="showTable()"><i class="fa fa-edit"></i> VIEW STATEMENT</a>
+                        <a id="btnEdit" class="btn btn-danger" onclick="hideTable()"><i class="fa fa-close"></i> CLEAR</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<div id="alertModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Attention!!!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="alertMessage">Please select both start date and end date.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+
+        // Disable the "View Statement" button on page load
+        $("#btnAdd").prop('disabled', true);
+        $("#btnEdit").prop('disabled', true);
+
+        // Hide the grid table after the page loads
+        $(".select-table").hide();
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/StatementOfAccount/GetStatementOfAccountPageListJson")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'FirstName', title: 'FIRST NAME', sortable: true },
+                { field: 'LastName', title: 'LAST NAME', sortable: true },
+                { field: 'ContributionDate', title: 'CONTRIBUTION DATE', sortable: true },
+                { field: 'PaymentDate', title: 'PAYMENT DATE', sortable: true },
+                { field: 'Amount', title: 'AMOUNT(&#8358;)', visible: true, sortable: true },
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+    function showTable() {
+        debugger
+        // Check if both start time and end time have been selected
+        var json_data = {};
+        json_data.StartDate = $('#startTime').val();
+        json_data.EndDate = $('#endTime').val();
+        $.ajax({
+            url: '@Url.Content("~/StatementOfAccount/GetListJson")',
+            method: "GET",
+            data: json_data,
+            dataType: "json",
+            success: function (Obj) {
+
+                initGrid(Obj);
+            }
+        })
+
+        //if (startTime && endTime) {
+        //    // Enable both "View Statement" and "Clear" buttons and show the grid table
+        //    $("#btnAdd").prop('disabled', false);
+        //    $("#btnEdit").prop('disabled', false);
+        //    $(".select-table").show();
+        //} else {
+        //    // Display a message asking the user to select both start time and end time
+        //   // alert("Please select both start time and end time.");
+        //    $('#alertModal').modal('show');
+        //}
+    }
+
+    function hideTable() {
+        // Hide the grid table and disable both "View Statement" and "Clear" buttons when "Clear" button is clicked
+        $("#btnAdd").prop('disabled', true);
+        $("#btnEdit").prop('disabled', true);
+        $(".select-table").hide();
+        // Clear the start time and end time fields
+        $("#startTime").val('');
+        $("#endTime").val('');
+    }
+</script>
+
+

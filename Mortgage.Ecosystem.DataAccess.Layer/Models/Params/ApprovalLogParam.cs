@@ -1,4 +1,7 @@
-﻿namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
+﻿using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
 {
     public class ApprovalLogListParam
     {

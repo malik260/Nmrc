@@ -36,7 +36,7 @@
                 <span class="dialogblockheader"></span>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">BVN<font class="red"> *</font></label>
+                        <label class="control-label">BVN (optional)</label>
                         <input id="bvn" col="BVN" type="text" class="form-control" />
                     </div>
                     <div class="col-sm-6">
@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Date of Birth<font class="red"> *</font></label>
-                        <input id="dateOfBirth" col="DateOfBirth" type="text" class="form-control" placeholder="yyyy-MM-dd" />
+                        <input id="dateOfBirth" col="DateOfBirth" type="date" class="form-control" placeholder="yyyy-MM-dd" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -81,7 +81,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Marital Status</label>
-                        <div id="marital" col="Marital"></div>
+                        <div id="marital" col="MaritalStatus"></div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -90,8 +90,8 @@
                         <input id="kinLastName" col="KinLastName" type="text" class="form-control" />
                     </div>
                     <div class="col-sm-6">
-                        <label class="control-label">Kin's FIrst Number</label>
-                        <input id="kinFirstNumber" col="KinFirstNumber" type="text" class="form-control" />
+                        <label class="control-label">Kin's FIrst Name</label>
+                        <input id="kinFirstNumber" col="KinFirstName" type="text" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -108,7 +108,7 @@
                 <div class="form-group">
                     <div class="col-sm-6">
                         <label class="control-label">Contribution Branch</label>
-                        <div id="branch" col="Branch"></div>
+                        <div id="branch" col="ContributionBranch"></div>
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Date of Employment</label>
@@ -130,13 +130,13 @@
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Bank Name</label>
-                        <input id="bankName" col="BankName" type="text" class="form-control" />
+                            <div id="bankName" col="CustomerBank"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
                         <label class="control-label">Account Number</label>
-                        <input id="accountNumber" col="AccountNumber" type="text" class="form-control" />
+                        <input id="accountNumber" col="BankAccountNumber" type="text" class="form-control" />
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Monthly Salary (Net Pay)</label>
@@ -194,6 +194,11 @@
             value: "Name",
             class: "form-control"
         });
+        $("#bankName").cnComboBox({
+            url: '@Url.Content("~/Bank/GetListJson")',
+            key: "Name",
+            value: "Name"
+        });
         $("#branch").cnComboBox({
             url: '@Url.Content("~/State/GetListJson")',
             key: "Id",
@@ -234,6 +239,8 @@
             }
         });
     });
+
+       
 
     function loadMenuTree() {
         $('#menuTree').cnTree({

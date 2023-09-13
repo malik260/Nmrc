@@ -101,6 +101,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         General = 5
     }
 
+  
+
     public enum ApprovalEnum
     {
         [Description("Pending")]
@@ -123,5 +125,61 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
 
         [Description("Diaspora")]
         Diaspora = 2
+    }
+
+    public enum ConditionForApplicationEnum
+    {
+        [Description("Age")]
+        Age = 1,
+
+        [Description("Incapacitation")]
+        Incapacitation = 2,
+
+        [Description("Death")]
+
+        Death = 3,
+    }
+
+    public enum FeeCategoryEnum
+    {
+        [Description("Flat")]
+        Flat = 1,
+
+        [Description("Rate")]
+        Rate = 2,
+
+        [Description("No Charges")]
+
+        NoCharges = 3,
+    }
+
+    public enum ContributionMonthsEnum
+    {
+        [Description("January")]
+        January = 1,
+
+        [Description("February")]
+        February = 2,
+
+        [Description("March")]
+        March = 3,
+        [Description("April")]
+        April = 4,
+        [Description("May")]
+        May = 5,
+        [Description("June")]
+        June = 6,
+        [Description("July")]
+        July = 7,
+        [Description("August")]
+        August = 8,
+        [Description("September")]
+        September = 9,
+        [Description("October")]
+        October = 10,
+        [Description("November")]
+        November = 11,
+        [Description("December")]
+        December = 12
     }
 }

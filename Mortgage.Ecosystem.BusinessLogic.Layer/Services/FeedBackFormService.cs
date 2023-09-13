@@ -106,6 +106,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             await _iUnitOfWork.FeedBackForms.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
+            obj.Message = "Feedback added successfully";
             return obj;
         }
 

@@ -80,9 +80,9 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         [HttpGet]
         [AuthorizeFilter("loanInitiation:view")]
-        public async Task<IActionResult> GetFormJson(int id)
+        public async Task<IActionResult> GetFormJson(string code)
         {
-            TData<LoanInitiationEntity> obj = await _iLoanInitiationService.GetEntity(id);
+            TData<LoanInitiationEntity> obj = await _iLoanInitiationService.GetEntity(code);
             return Json(obj);
         }
 
@@ -104,6 +104,14 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         [HttpPost]
+        [AuthorizeFilter("refund:delete")]
+        public async Task<IActionResult> DeleteFormJson(string ids)
+        {
+            TData obj = await _iLoanInitiationService.DeleteForm(ids);
+            return Json(obj);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> PerformLoanAffordability(InitiateLoanDto initiateLoanDto)
         {
             TData obj = await _iLoanInitiationService.Performaffordability(initiateLoanDto);
@@ -112,11 +120,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #endregion
         #region
         [HttpPost]
-        public async Task<IActionResult> LoanInitiation( InitiateLoanDto initiateLoanDto)
+        public async Task<IActionResult> LoanInitiation(InitiateLoanDto initiateLoanDto)
         {
             TData obj = await _iLoanInitiationService.LoanApplication(initiateLoanDto);
             return Json(obj);
         }
         #endregion
-    }
+    }
 }

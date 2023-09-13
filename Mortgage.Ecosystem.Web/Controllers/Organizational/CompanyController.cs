@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -42,13 +43,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
-        [AuthorizeFilter("nhfregusers:view")]
-        public IActionResult NHFRegUsersIndex()
+        [AuthorizeFilter("nhfregcompany:view")]
+        public IActionResult NHFRegCompanyIndex()
         {
             return View();
         }
 
-        public IActionResult NHFRegUserForm()
+        public IActionResult NHFRegCompanyForm()
         {
             return View();
         }
@@ -127,6 +128,14 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
             TData obj = await _iCompanyService.DeleteForm(ids);
+            return Json(obj);
+        }
+
+        [HttpPost]
+        [AuthorizeFilter("company:add,company:edit")]
+        public async Task<IActionResult> ApproveFormJson(CompanyEntity entity)
+        {
+            TData obj = await _iCompanyService.ApproveForm(entity);
             return Json(obj);
         }
         #endregion

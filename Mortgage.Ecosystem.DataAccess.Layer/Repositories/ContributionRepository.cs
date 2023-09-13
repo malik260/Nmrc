@@ -13,14 +13,16 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
     public class ContributionRepository : DataRepository, IContributionRepository
     {
         #region Retrieve data
-        public async Task<List<ContributionEntity>> GetList(ContributionParam param)
+        public async Task<List<ContributionEntity>> GetList(ContributionListParam param)
         {
             var expression = ListFilter(param);
             var list = await BaseRepository().FindList(expression);
             return list.ToList();
         }
 
-        public async Task<List<ContributionEntity>> GetPageList(ContributionParam param, Pagination pagination)
+
+
+        public async Task<List<ContributionEntity>> GetPageList(ContributionListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
             var list = await BaseRepository().FindList(expression, pagination);
@@ -49,11 +51,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
-                expression = expression.And(t => t.Name == entity.Name);
+                expression = expression.And(t => t.employeeNumber == entity.employeeNumber);
             }
             else
             {
-                expression = expression.And(t => t.Name == entity.Name && t.Id != entity.Id);
+                expression = expression.And(t => t.employeeNumber == entity.employeeNumber && t.Id != entity.Id);
             }
             return BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
         }
@@ -62,16 +64,46 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(ContributionEntity entity)
         {
-            if (entity.Id.IsNullOrZero())
+            var db = await BaseRepository().BeginTrans();
+            try
             {
-                await entity.Create();
-                await BaseRepository().Insert<ContributionEntity>(entity);
+                if (entity.Id.IsNullOrZero())
+                {
+                    await entity.Create();
+                    await db.Insert(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await db.Update(entity);
+                }
+                await db.CommitTrans();
             }
-            else
+            catch
             {
-                await entity.Modify();
-                await BaseRepository().Update<ContributionEntity>(entity);
+                await db.RollbackTrans();
+                throw;
             }
+        }
+
+        public async Task SaveForms(List<ContributionEntity> entity)
+        {
+            foreach (var item in entity)
+            {
+                if (item.Id.IsNullOrZero())
+                {
+                    await item.Create();
+                    await BaseRepository().Insert<ContributionEntity>(item);
+                }
+                else
+                {
+                    await item.Modify();
+                    await BaseRepository().Update<ContributionEntity>(item);
+                }
+
+            }
+
+
         }
 
         public async Task DeleteForm(string ids)
@@ -82,18 +114,19 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #endregion
 
         #region Private method
-        private Expression<Func<ContributionEntity, bool>> ListFilter(ContributionParam param)
+        private Expression<Func<ContributionEntity, bool>> ListFilter(ContributionListParam param)
         {
             var expression = ExtensionLinq.True<ContributionEntity>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.Name))
                 {
-                    expression = expression.And(t => t.Name.Contains(param.Name));
+                    expression = expression.And(t => t.employeeNumber.Contains(param.EmployerNumber));
                 }
             }
             return expression;
         }
+
         #endregion
     }
 }

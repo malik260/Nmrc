@@ -104,6 +104,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("AlertType"), Description("Alert Type")]
         public int AlertType { get; set; }
 
+        // Contribution Branch
+        [Column("ContributionBranch"), Description("Contribution Branch")]
+        public int ContributionBranch { get; set; }
+
         // Portrait
         [Column("Portrait")]
         public byte[]? Portrait { get; set; }
@@ -190,6 +194,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         public string? BranchName { get; set; }
 
         [NotMapped]
+        public string? ContributionBranchName { get; set; }
+
+        [NotMapped]
         public string? DepartmentName { get; set; }
 
         [NotMapped]
@@ -215,5 +222,38 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [NotMapped]
         public string? FullName { get; set; }
+
+        // Next of Kin Name
+        [NotMapped]
+        [Column("NOKName")]
+        public string? NOKName { get; set; }
+
+        // Next of Kin Number
+        [NotMapped]
+        [Column("NOKNumber")]
+        public string? NOKNumber { get; set; }
+
+        // Next of Kin EmailAddress
+        [NotMapped]
+        [Column("NOKEmailAddress")]
+        public string? NOKEmailAddress { get; set; }
+
+        // Next of Kin Address
+        [NotMapped]
+        [Column("NOKAddress")]
+        public string? NOKAddress { get; set; }
+
+        // Relationship
+        [NotMapped]
+        [Column("Relationship")]
+        public string? Relationship { get; set; }
+
+        [NotMapped]
+        [Column("Employer")]
+        public string? Employer { get; set; }
+
+        [NotMapped]
+        [Column("EmployerNumber")]
+        public string? EmployerNo { get; set; }
     }
 }

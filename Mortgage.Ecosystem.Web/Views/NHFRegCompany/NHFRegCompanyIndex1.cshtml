@@ -1,0 +1,346 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>NHF Pending Registration Approval </h5>
+                </div>
+                <div>
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#employee" aria-expanded="true"> Pending Employee Registration(s)</a>
+                            </li>
+                            <li class="">
+                                <a data-toggle="tab" href="#employer" aria-expanded="false">Pending Employer Registration(s)</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="employee" class="tab-pane active">
+                                <div class="panel-body">
+                                    <div class="container-div">
+                                        <div class="row">
+                                            <div id="searchEmployeeDiv" class="col-sm-12 search-collapse">
+                                                <div class="select-list">
+                                                    <ul>
+                                                        <li>
+                                                            Name: <input id="name" col="Name" type="text" />
+                                                        </li>
+                                                        <li class="select-time">
+                                                            <label>Created: </label>
+                                                            <input id="employeeStartTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                                                            <span>-</span>
+                                                            <input id="employeeEndTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                                                        </li>
+                                                        <li>
+                                                            <a id="btnEmployeeSearch" class="btn btn-primary btn-sm" onclick="searchEmployeeGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="btn-group-sm" id="toolbar">
+                                                <a id="btnEmployeeView" class="btn btn-primary" onclick="showEmployeeForm(false)"><i class="fa fa-edit"></i> View</a>
+                                            </div>
+
+                                            <div class="col-sm-12 select-table table-striped">
+                                                <table id="gridEmployeeTable" data-mobile-responsive="true"></table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="employer" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="container-div">
+                                        <div class="row">
+                                            <div id="searchEmployerDiv" class="col-sm-12 search-collapse">
+                                                <div class="select-list">
+                                                    <ul>
+                                                        <li>
+                                                            Name: <input id="name" col="Name" type="text" />
+                                                        </li>
+
+                                                        <li class="select-time">
+                                                            <label>Created: </label>
+                                                            <input id="employerStartTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                                                            <span>-</span>
+                                                            <input id="employerEndTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                                                        </li>
+                                                        <li>
+                                                            <a id="btnEmployerSearch" class="btn btn-primary btn-sm" onclick="searchEmployerGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="btn-group-sm" id="toolbar">
+                                                <a id="btnEmployeerView" class="btn btn-primary" onclick="showEmployeerForm(false)"><i class="fa fa-edit"></i> View</a>
+                                            </div>
+                                            <div class="col-sm-12 select-table table-striped">
+                                                <table id="gridEmployerTable" data-mobile-responsive="true"></table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#pEmployeeStatus").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+        $("#pEmployerStatus").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#employeeStartTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#employeeEndTime', format: 'yyyy-MM-dd', theme: 'molv' });
+
+        laydate.render({ elem: '#employerStartTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#employerEndTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        var queryEmployeeUrl = '@Url.Content("~/NHFRegUsers/GetEmployeePageListJson")';
+        var queryEmployerUrl = '@Url.Content("~/NHFRegUsers/GetEmployerPageListJson")';
+
+        $('#gridEmployeeTable').cnTable({
+            url: queryEmployeeUrl,
+            toolbar: '#toolbar',
+            columns: [
+                //{
+                //    field: 'plus',
+                //    title: '',
+                //    formatter: function (value, row) {
+                //        var iconClass = formOpen ? 'fa fa-times' : 'fa fa-plus';
+                //        return '<button type="button" class="btn btn-sm btn-primary plus-button" data-row-id="' + row.Id + '"><i class="' + iconClass + '"></i></button>';
+                //    },
+                //    events: {
+                //        'click .plus-button': function (e, value, row, index) {
+                //            // toggle the form on/off
+                //            if (formOpen) {
+                //                $('#myForm').slideUp();
+                //                $(this).removeClass('btn-danger').addClass('btn-primary'); // Change button background to btn-primary
+                //            } else {
+                //                var form = $('#myForm');
+                //                form.find('input[name="EffectiveDate"]').val(row.EffectiveDate);
+                //                form.find('input[name="Email"]').val(row.Email);
+                //                form.find('input[name="Phone"]').val(row.Phone);
+                //                form.find('input[name="MaritalStatus"]').val(row.MaritalStatus);
+                //                form.find('input[name="Gender"]').val(row.Gender);
+                //                form.find('input[name="BVN"]').val(row.BVN);
+                //                form.find('input[name="NIN"]').val(row.NIN);
+                //                form.find('input[name="BankName"]').val(row.BankName);
+                //                form.find('input[name="BankAccountNumber"]').val(row.BankAccountNumber);
+                //                form.find('input[name="ContributionLocation"]').val(row.ContributionLocation);
+                //                form.find('input[name="RegistrationLocation"]').val(row.RegistrationLocation);
+                //                form.slideDown();
+                //                $(this).removeClass('btn-primary').addClass('btn-danger'); // Change button background to btn-danger
+                //            }
+                //            formOpen = !formOpen; // update flag
+
+                //            // update the plus button icon
+                //            var iconClass = formOpen ? 'fa fa-times' : 'fa fa-plus';
+                //            $(this).html('<i class="' + iconClass + '"></i>');
+                //        }
+
+                //    }
+                //},
+                //{
+                //    field: 'plus',
+                //    title: '',
+                //    formatter: function (value, row) {
+                //        var iconClass = formOpen ? 'fa fa-times' : 'fa fa-plus';
+                //        return '<button type="button" class="btn btn-sm btn-primary plus-button" data-row-id="' + row.Id + '"><i class="' + iconClass + '"></i></button>';
+                //    },
+                //    events: {
+                //        'click .plus-button': function (e, value, row, index) {
+                //            var $row = $(this).closest('tr');
+                //            var $formRow = $row.next('.form-row');
+
+                //            // toggle the form on/off
+                //            if (formOpen) {
+                //                $formRow.slideUp();
+                //                $(this).removeClass('btn-danger').addClass('btn-primary');
+                //            } else {
+                //                var form = $('#myForm').clone();
+                //                form.find('input[name="EffectiveDate"]').val(row.EffectiveDate);
+                //                form.find('input[name="Email"]').val(row.Email);
+                //                form.find('input[name="Phone"]').val(row.Phone);
+                //                form.find('input[name="MaritalStatus"]').val(row.MaritalStatus);
+                //                form.find('input[name="Gender"]').val(row.Gender);
+                //                form.find('input[name="BVN"]').val(row.BVN);
+                //                form.find('input[name="NIN"]').val(row.NIN);
+                //                form.find('input[name="BankName"]').val(row.BankName);
+                //                form.find('input[name="BankAccountNumber"]').val(row.BankAccountNumber);
+                //                form.find('input[name="ContributionLocation"]').val(row.ContributionLocation);
+                //                form.find('input[name="RegistrationLocation"]').val(row.RegistrationLocation);
+                //                $formRow.html(form.html());
+                //                $formRow.slideDown();
+                //                $(this).removeClass('btn-primary').addClass('btn-danger');
+                //            }
+                //            formOpen = !formOpen;
+
+                //            var iconClass = formOpen ? 'fa fa-times' : 'fa fa-plus';
+                //            $(this).html('<i class="' + iconClass + '"></i>');
+                //        }
+                //    }
+                //},
+
+
+
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'EffectiveDate', title: 'Effective Date', sortable: true },
+                { field: 'Phone', title: 'Phone', sortable: true },
+                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: true },
+                { field: 'Name', title: 'Employee Name', sortable: true },
+                { field: 'Email', title: 'Email Address', sortable: true },
+                {
+                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridEmployeeTable').cnTable('getPagination', params);
+                var queryString = $("#searchEmployeeDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+
+        $('#gridEmployerTable').cnTable({
+            url: queryEmployerUrl,
+            toolbar: '#toolbar',
+            columns: [
+                //{
+                //    field: 'plus',
+                //    title: '',
+                //    formatter: function (value, row) {
+                //        var iconClass = formOpenEmployer ? 'fa fa-times' : 'fa fa-plus';
+                //        return '<button type="button" class="btn btn-sm btn-primary plus-button" data-row-id="' + row.Id + '"><i class="' + iconClass + '"></i></button>';
+                //    },
+                //    events: {
+                //        'click .plus-button': function (e, value, row, index) {
+                //            // toggle the form on/off
+                //            if (formOpenEmployer) {
+                //                $('#myEmployerForm').slideUp();
+                //                $(this).removeClass('btn-danger').addClass('btn-primary'); // Change button background to btn-primary
+                //            } else {
+                //                var form = $('#myEmployerForm');
+
+                //                form.find('input[name="Email"]').val(row.Email);
+                //                form.find('input[name="Phone"]').val(row.Phone);
+                //                form.find('input[name="Sector"]').val(row.Sector);
+                //                form.find('input[name="SubSector"]').val(row.SubSector);
+                //                form.find('input[name="Address"]').val(row.Address);
+                //                form.find('input[name="Address2"]').val(row.Address2);
+                //                form.find('input[name="ContactPersonDesignation"]').val(row.ContactPersonDesignation);
+                //                form.find('input[name="ContributionFrequency"]').val(row.ContributionFrequency);
+                //                form.find('input[name="ContributionLocation"]').val(row.ContributionLocation);
+                //                form.find('input[name="PostalAddress"]').val(row.PostalAddress);
+                //                form.slideDown();
+                //                $(this).removeClass('btn-primary').addClass('btn-danger'); // Change button background to btn-danger
+                //            }
+                //            formOpenEmployer = !formOpenEmployer; // update flag
+
+                //            // update the plus button icon
+                //            var iconClass = formOpenEmployer ? 'fa fa-times' : 'fa fa-plus';
+                //            $(this).html('<i class="' + iconClass + '"></i>');
+                //        }
+
+                //    }
+                //},
+
+
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: true },
+                { field: 'Name', title: 'Employee Name', sortable: true },
+                { field: 'ContactPerson', title: 'Contact Person', sortable: true },
+                { field: 'RCNumber', title: 'RC Number', sortable: true },
+                {
+                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridEmployerTable').cnTable('getPagination', params);
+                var queryString = $("#searchEmployerDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+
+        //$('#cancelEmployerButton').click(function () {
+        //    $('#myEmployerForm').slideUp();
+        //    formOpenEmployer = false;
+        //    $('.plus-button').removeClass('btn-danger').addClass('btn-primary');
+        //    $('.plus-button').html('<i class="fa fa-plus"></i>');
+        //});
+    }
+
+    function searchEmployeeGrid() {
+        $('#gridEmployeeTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+    function searchEmployeerGrid() {
+        $('#gridEmployerTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+    function showEmployeeForm(bView) {
+        var id = 0;
+        if (!bView) {
+            var selectedRow = $("#gridEmployeeTable").bootstrapTable("getSelections");
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        cn.openDialog({
+            title: id > 0 ? "View Record Employee" : "Employee",
+            content: '@Url.Content("~/Employee/EmployeeForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showEmployeerForm(bView) {
+        var id = 0;
+        if (!bView) {
+            var selectedRow = $("#gridEmployeeTable").bootstrapTable("getSelections");
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        cn.openDialog({
+            title: id > 0 ? "View Record Employee" : "Employee",
+            content: '@Url.Content("~/Employee/EmployeeForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+</script>
+

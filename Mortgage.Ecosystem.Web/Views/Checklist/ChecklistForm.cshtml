@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="checklist" id="checklist">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Checklist Setup</span>
+                <div class="form-group">
+                    @* <div class="col-sm-4">
+                    <label class="productName control-label" style="margin-left: 100px;">Product Name</label>
+                    <input type="text" col="ProductName" style="margin-left: 100px; width: 550px;" class="form-control" id="Name">
+                    </div>  *@
+                    <div class="col-sm-4">
+                        <label class="productName control-label" style="margin-left: 100px;">Product Name</label>
+                        @* <input type="text" col="CreditType" style="margin-left: 100px;" class="form-control" id="creditType">*@
+                        <div id="ProductName" col="ProductName" style="margin-left: 100px; width: 550px;"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label class="productCode control-label" style="margin-left: 100px;">Product Code</label>
+                        <input type="text" col="ProductCode" style="margin-left: 100px; width: 550px;" class="form-control" id="ProductCode" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="checklist" style="margin-left: 100px;" class="form-label">Checklist</label>
+                        <input type="text" style="margin-left: 100px; width: 550px;" col="Checklist" class="form-control" id="checklist">
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label for="remark" style="margin-left: 100px;" class="form-label">Remark</label>
+                        <input type="text" style="margin-left: 100px; width: 550px; height:70px;" col="Remark" class="form-control" id="remark">
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    //debugger
+    var id = cn.request("id");
+
+    $("#ProductName").cnComboBox({
+        url: '@Url.Content("~/CreditType/GetListJson")',
+        key: "Code",
+        value: "Name"
+    });
+
+    $("#ProductName").change(function () {
+        //debugger
+        var selectedCredit = $("#ProductName").cnComboBox('getValue');
+        //var id = selectedCredit;
+        $("#ProductCode").val(selectedCredit);
+    });
+
+
+    function saveForm(index) {
+        if ($("#form1").validate().form()) {
+            var postData = $("#form1").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/Checklist/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>

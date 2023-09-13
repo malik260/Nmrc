@@ -238,7 +238,7 @@
     function getForm() {
         if (id > 0) {
             cn.ajax({
-                url: '@Url.Content("~/Employee/GetFormJson")' + '?id=' + id,
+                url: '@Url.Content("~/Company/GetFormJson")' + '?id=' + id,
                 type: "get",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -287,7 +287,6 @@
 
         cn.confirm("Confirm the approval process？", function () {
             cn.ajax({
-                url: '@Url.Content("~/Employee/SaveFormJson")' + '?id=' + id,
                 type: "post",
                 error: cn.ajaxError,
                 success: function (obj) {

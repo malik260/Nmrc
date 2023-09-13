@@ -20,6 +20,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<RefundEntity>> GetRefundList(RefundParam paramss)
+        {
+            var expression = ListRefundFilter(paramss);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
+
         public async Task<List<RefundEntity>> GetPageList(RefundListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
@@ -27,9 +34,25 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public bool ExistingRefund(string nhfNo, string employerNumber, long id)
+        {
+            var expression = ExtensionLinq.True<RefundEntity>();
+            expression = expression.And(t => t.BaseIsDelete == 0);
+            if (id.IsNullOrZero())
+            {
+                expression = expression.And(t => t.NhfNumber == nhfNo && t.EmployerNumber == employerNumber);
+            }
+            else
+            {
+                expression = expression.And(t => t.NhfNumber == nhfNo && t.EmployerNumber == employerNumber && t.Id != id);
+            }
+            return BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+        }
+
         public async Task<RefundEntity> GetEntity(long id)
         {
-            return await BaseRepository().FindEntity<RefundEntity>(id);
+            return await BaseRepository().FindEntity<RefundEntity>(id)
+;
         }
 
         public async Task<int> GetMaxSort()
@@ -62,15 +85,25 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(RefundEntity entity)
         {
-            if (entity.Id.IsNullOrZero())
+            var db = await BaseRepository().BeginTrans();
+            try
             {
-                await entity.Create();
-                await BaseRepository().Insert<RefundEntity>(entity);
+                if (entity.Id.IsNullOrZero())
+                {
+                    await entity.Create();
+                    await BaseRepository().Insert<RefundEntity>(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await BaseRepository().Update<RefundEntity>(entity);
+                }
+                await db.CommitTrans();
             }
-            else
+            catch (Exception)
             {
-                await entity.Modify();
-                await BaseRepository().Update<RefundEntity>(entity);
+                await db.RollbackTrans();
+                throw;
             }
         }
 
@@ -95,5 +128,23 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return expression;
         }
         #endregion
+
+        private Expression<Func<RefundEntity, bool>> ListRefundFilter(RefundParam param)
+        {
+            var expression = ExtensionLinq.True<RefundEntity>();
+            if (param != null)
+            {
+                if (!string.IsNullOrEmpty(param.Name))
+                {
+                    expression = expression.And(t => t.Name.Contains(param.Name));
+                }
+                if (!string.IsNullOrEmpty(param.NhfNumber))
+                {
+                    expression = expression.And(t => t.NhfNumber.Contains(param.NhfNumber));
+                }
+            }
+            return expression;
+        }
+
     }
 }

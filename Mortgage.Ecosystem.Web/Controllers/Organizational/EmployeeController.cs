@@ -86,6 +86,8 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             TData<EmployeeEntity> obj = await _employeeService.GetEntity(id);
             return Json(obj);
         }
+
+
         #endregion Get data
 
         #region Submit data
@@ -117,9 +119,10 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("employee:add,employee:edit")]
         public async Task<IActionResult> ApproveFormJson(EmployeeEntity entity)
         {
-            TData<string> obj = await _employeeService.ApproveForm(entity);
+            TData obj = await _employeeService.ApproveForm(entity);
             return Json(obj);
         }
+
         #endregion Submit data
     }
 }

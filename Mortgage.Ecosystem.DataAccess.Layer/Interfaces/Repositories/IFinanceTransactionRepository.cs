@@ -11,6 +11,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<FinanceTransactionEntity> GetEntity(long id);
         Task<int> GetMaxSort();
         Task SaveForm(FinanceTransactionEntity entity);
+
+        Task SaveForms(List<FinanceTransactionEntity> entity);
         Task DeleteForm(string ids);
     }
 }

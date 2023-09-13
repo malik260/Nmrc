@@ -6,6 +6,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
@@ -46,6 +47,15 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetFeedBackFormTreeListJson(FeedBackFormListParam param)
         {
             TData<List<ZtreeInfo>> obj = await _iFeedBackFormService.GetZtreeFeedBackFormList(param);
+            return Json(obj);
+        }
+
+
+        [HttpGet]
+        [AuthorizeFilter("feedbackform:search,user:search")]
+        public async Task<IActionResult> GetFeedBackFormPageListJson(FeedBackFormListParam param, Pagination pagination)
+        {
+            TData<List<FeedBackFormEntity>> obj = await _iFeedBackFormService.GetPageList(param, pagination);
             return Json(obj);
         }
 

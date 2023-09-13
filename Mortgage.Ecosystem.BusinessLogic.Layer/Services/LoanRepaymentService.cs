@@ -145,7 +145,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             PaymentDetails.payerPhone = employeeinfo.MobileNumber.ToStr();
             PaymentDetails.payerName = employeeinfo.FirstName + " " + employeeinfo.LastName;
 
-            var Rrrgenerator = await paymentIntegrationService.GenerateRRR(PaymentDetails);
+            var Rrrgenerator = await paymentIntegrationService.Generate(PaymentDetails);
             if (Rrrgenerator.Data == null)
             {
                 obj.Message = "Coult not generate RRR";
@@ -185,7 +185,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             CPT.CreditAmount = entity.Amount;
             CPT.TransactionDate = DateTime.Now;
             CPT.TransactionType = "71";
-            CPT.TransactionId = int.Parse(Rrrgenerator.Data.RRR);
+            CPT.TransactionId = Rrrgenerator.Data.RRR;
             CPT.Approved = 0;
             CPT.Branch = employeeinfo.Branch.ToStr();
             CPT.Description = entity.Narration;

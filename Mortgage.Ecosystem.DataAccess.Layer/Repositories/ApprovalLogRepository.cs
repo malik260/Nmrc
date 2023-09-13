@@ -36,6 +36,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         {
             return await BaseRepository().FindEntity<ApprovalLogEntity>(p => p.Company == company && p.MenuId == menu && p.Record == record);
         }
+
         #endregion
 
         #region Submit data

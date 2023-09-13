@@ -31,6 +31,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Record")]
         public long Record { get; set; }
 
+
         // Approval count
         [Column("ApprovalCount")]
         public int ApprovalCount { get; set; }

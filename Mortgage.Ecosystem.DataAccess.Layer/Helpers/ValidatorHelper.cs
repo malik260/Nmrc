@@ -16,7 +16,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Helpers
         // Verify that the input string is a positive or negative number with a decimal point
         // <param name="str">Enter character</param>
         // <returns>Returns a value of type bool</returns>
-        public static bool IsNumberic(this string str)
+        public static bool IsNumeric(this string str)
         {
             return Regex.IsMatch(str, "^-?\\d+$|^(-?\\d+)(\\.\\d+)?$");
         }

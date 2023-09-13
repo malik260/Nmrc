@@ -94,6 +94,26 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             }
             return expression;
         }
+
+        public async Task SaveForms(List<FinanceCounterpartyTransactionEntity> entity)
+        {
+            foreach (var item in entity)
+            {
+                if (item.Id.IsNullOrZero())
+                {
+                    await item.Create();
+                    await BaseRepository().Insert<FinanceCounterpartyTransactionEntity>(item);
+                }
+                else
+                {
+                    await item.Modify();
+                    await BaseRepository().Update<FinanceCounterpartyTransactionEntity>(item);
+                }
+
+            }
+
+
+        }
         #endregion
     }
 }

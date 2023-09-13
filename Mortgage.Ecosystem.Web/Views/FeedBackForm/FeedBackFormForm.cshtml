@@ -8,30 +8,56 @@
         <div class="dialogblockborder dialogblockborderheadline">
             <div class="dialogblock-header" style="height: auto;">
                 <span class="dialogblockheader">FeedBack Form</span>
-                <div class="form-group" >
+                <div class="form-group">
                     <div class="col-sm-6">
                         <label class="control-label">Name</label>
                         <input id="name" col="Name" type="text" class="form-control" />
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Email Address</label>
-                        <input id="email" col="Email" type="text" class="form-control" />
+                        <input id="email" col="EmailAddress" type="email" class="form-control" />
                     </div>
-                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-sm-12">
                         <label class="control-label">Subject</label>
                         <input id="subject" col="Subject" type="text" class="form-control" />
                     </div>
 
-                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-sm-12">
                         <label class="control-label">Messages</label>
-                        <textarea id="messages" class="form-control" style="height:70px"></textarea>
+                        <textarea id="messages" class="form-control" style="height:70px" col="Messages"></textarea>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
+
+<script>
+    var id = cn.request("id");
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/FeedBackForm/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+</script>

@@ -159,6 +159,36 @@
             });
             return ids;
         },
+        checkRowView: function (row) {
+            if (row.length == 0) {
+                cn.msgError("You did not select any row!");
+            } else if (row.length > 1) {
+                cn.msgError("Your selection is larger than 1 row!");
+            } else if (row.length == 1) {
+                return true;
+            }
+            return false;
+        },
+        checkRowApprove: function (row) {
+            if (row.length == 0) {
+                cn.msgError("You did not select any row!");
+            } else if (row.length > 1) {
+                cn.msgError("Your selection is larger than 1 row!");
+            } else if (row.length == 1) {
+                return true;
+            }
+            return false;
+        },
+        checkRowReject: function (row) {
+            if (row.length == 0) {
+                cn.msgError("You did not select any row!");
+            } else if (row.length > 1) {
+                cn.msgError("Your selection is larger than 1 row!");
+            } else if (row.length == 1) {
+                return true;
+            }
+            return false;
+        },
         checkRowEdit: function (row) {
             if (row.length == 0) {
                 cn.msgError("You did not select any row!");

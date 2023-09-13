@@ -81,9 +81,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var expression = ExtensionLinq.True<BankEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.Code))
+                if (!string.IsNullOrEmpty(param.Name))
                 {
-                    expression = expression.And(t => t.Code.Contains(param.Code));
+                    expression = expression.And(t => t.Name.Contains(param.Name));
                 }
             }
             return expression;

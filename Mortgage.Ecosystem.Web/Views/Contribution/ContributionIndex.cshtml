@@ -51,25 +51,25 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/Contribution/GetPageListJson")';
+        var queryUrl = '@Url.Content("~/Contribution/GetListJson")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'EmployeeNumber', title: 'Employee Number', sortable: true },
+                { field: 'NhfNo', title: 'NHF Number', sortable: true },
                 { field: 'EmployeeName', title: 'Employee Name', sortable: true },
-                { field: 'ContributionAmount', title: 'Contribution Amount', sortable: true },
-                { field: 'Month', title: 'Month', sortable: true },
-                { field: 'Year', title: 'Year', visible: false, sortable: true },
+                { field: 'contributionAmount', title: 'Contribution Amount', sortable: true },
+                { field: 'month', title: 'Month', sortable: true },
+                { field: 'year', title: 'Year', visible: true, sortable: true },
                 { field: 'EmployerName', title: 'Employer Name', visible: false, sortable: true },
-                { field: 'PaymentOption', title: 'Payment Option', visible: false, sortable: true },
-                { field: 'AccountName', title: 'Account Name', sortable: true },
-                { field: 'DocumentTitle', title: 'Document Tile', sortable: true },
+                { field: 'PaymentOption', title: 'Payment Option', visible: true, sortable: true },
+                { field: 'accountName', title: 'Account Name', sortable: true },
                 { field: 'Email', title: 'Email Address', sortable: true },
                 {
                     field: 'Status', title: 'Status', align: 'center',
                     formatter: function (value, row, index) {
+                        value = "2";
                         if (value == "@StatusEnum.Yes.ToInt()") {
                             return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
                         } else {
