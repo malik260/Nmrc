@@ -228,11 +228,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
         #endregion
 
-        public async Task<IActionResult> GetEmployeeDetails()
-        {
-            TData obj = await _iContributionService.GetCustomerDetails();
-            return Json(obj);
-        }
+        //public async Task<IActionResult> GetEmployeeDetails()
+        //{
+        //    TData obj = await _iContributionService.GetCustomerDetails();
+        //    return Json(obj);
+        //}
 
         #region Check RRR status 
         public async Task<IActionResult> CheckPaymentStatus(string RRR)

@@ -16,7 +16,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<EmployeeEntity>> GetEntityByNhfNo(long nhfNo);
         Task<TData<string>> SaveForm(EmployeeEntity entity);
         Task<TData<string>> SaveForms(EmployeeEntity entity);
-        Task<TData<EmployeeEntity>> GetEntityByNhfNo(long nhfNo);
+        //Task<TData<EmployeeEntity>> GetEntityByNhfNo(long nhfNo);
         Task<TData> DeleteForm(string ids);
         Task<EmployeeEntity> GetEntityByNhf(long nhfNo);
         Task<TData> ApproveForm(EmployeeEntity entity);

@@ -13,11 +13,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
     public class CreditTypeController : BaseController
     {
-        private readonly ICreditTypeService _iCreditTypeService;
+        private readonly ICreditTypeService _icreditTypeService;
 
         public CreditTypeController(IUnitOfWork iUnitOfWork, ICreditTypeService iCreditTypeService) : base(iUnitOfWork)
         {
-            _iCreditTypeService = iCreditTypeService;
+            _icreditTypeService = iCreditTypeService;
         }
 
         #region View function

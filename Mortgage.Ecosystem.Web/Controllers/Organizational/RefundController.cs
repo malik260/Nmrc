@@ -86,13 +86,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
-        [HttpGet]
-        //[AuthorizeFilter("refund:view")]
-        public async Task<IActionResult> ViewCustomerInformation()
-        {
-            TData<CustomerDetailsViewModel> obj = await _iRefundService.GetCustomerDetails();
-            return Json(obj);
-        }
+        //[HttpGet]
+        ////[AuthorizeFilter("refund:view")]
+        //public async Task<IActionResult> ViewCustomerInformation()
+        //{
+        //    TData<CustomerDetailsViewModel> obj = await _iRefundService.GetCustomerDetails();
+        //    return Json(obj);
+        //}
 
         [HttpGet]
         public async Task<IActionResult> GetMaxSortJson()

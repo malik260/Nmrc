@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
 {
-    public enum ConditionForApplicationEnum
-    {
-        [Description("Age")]
-        Age = 1,
+    //public enum ConditionForApplicationEnum
+    //{
+    //    [Description("Age")]
+    //    Age = 1,
 
-        [Description("Incapacitation")]
-        Incapacitation = 2,
+    //    [Description("Incapacitation")]
+    //    Incapacitation = 2,
 
-        [Description("Death")]
+    //    [Description("Death")]
 
-        Death = 3,
-    }
+    //    Death = 3,
+    //}
 }
