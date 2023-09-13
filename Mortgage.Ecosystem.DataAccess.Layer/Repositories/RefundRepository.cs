@@ -20,6 +20,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<RefundEntity>> GetRefundList(RefundParam paramss)
+        {
+            var expression = ListRefundFilter(paramss);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
+
         public async Task<List<RefundEntity>> GetPageList(RefundListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
@@ -62,15 +69,25 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(RefundEntity entity)
         {
-            if (entity.Id.IsNullOrZero())
+            var db = await BaseRepository().BeginTrans();
+            try
             {
-                await entity.Create();
-                await BaseRepository().Insert<RefundEntity>(entity);
+                if (entity.Id.IsNullOrZero())
+                {
+                    await entity.Create();
+                    await BaseRepository().Insert<RefundEntity>(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await BaseRepository().Update<RefundEntity>(entity);
+                }
+                await db.CommitTrans();
             }
-            else
+            catch (Exception)
             {
-                await entity.Modify();
-                await BaseRepository().Update<RefundEntity>(entity);
+                await db.RollbackTrans();
+                throw;
             }
         }
 
@@ -95,5 +112,23 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return expression;
         }
         #endregion
+
+        private Expression<Func<RefundEntity, bool>> ListRefundFilter(RefundParam param)
+        {
+            var expression = ExtensionLinq.True<RefundEntity>();
+            if (param != null)
+            {
+                if (!string.IsNullOrEmpty(param.Name))
+                {
+                    expression = expression.And(t => t.Name.Contains(param.Name));
+                }
+                if (!string.IsNullOrEmpty(param.NhfNumber))
+                {
+                    expression = expression.And(t => t.NhfNumber.Contains(param.NhfNumber));
+                }
+            }
+            return expression;
+        }
+
     }
 }

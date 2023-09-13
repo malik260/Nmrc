@@ -8,7 +8,12 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 using Mortgage.Ecosystem.DataAccess.Layer.Request;
+using NPOI.HSSF.Record;
+using NPOI.POIFS.Crypt;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing.Drawing2D;
 using System.Linq.Expressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 {
@@ -40,9 +45,21 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return await BaseRepository().FindEntity<EmployeeEntity>(id);
         }
 
+        public async Task<EmployeeEntity> GetEntityByNhfNumber(long nhfNo)
+        {
+            return await BaseRepository().FindEntity<EmployeeEntity>(x => x.NHFNumber == nhfNo);
+        }
+
         public async Task<EmployeeEntity> GetById(long id)
         {
             return await BaseRepository().FindEntity<EmployeeEntity>(id);
+        }
+
+        public async Task<List<EmployeeEntity>> GetLists()
+        {
+
+            var list = await BaseRepository().FindList<EmployeeEntity>();
+            return list.ToList();
         }
 
         public bool ExistEmployee(EmployeeEntity entity)
@@ -86,6 +103,20 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
         }
 
+        public bool ExistEmployeeAccountNumber(EmployeeEntity entity)
+        {
+            var expression = ExtensionLinq.True<EmployeeEntity>();
+            expression = expression.And(t => t.BaseIsDelete == 0);
+            if (entity.Id.IsNullOrZero())
+            {
+                expression = expression.And(t => t.BankAccountNumber == entity.BankAccountNumber);
+            }
+            else if (!string.IsNullOrEmpty(entity.BankAccountNumber))
+            {
+                expression = expression.And(t => t.BankAccountNumber == entity.BankAccountNumber && t.Id != entity.Id);
+            }
+            return BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
+        }
         // Generate Employee NHF Number
         public long GenerateNHFNumber()
         {
@@ -198,13 +229,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     UserCompany = entity.CompanyName
                 };
 
-                if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
-                {
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        await db.CommitTrans();
-                    }
-                }
+                //if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
+                //{
+                //    if (string.IsNullOrEmpty(message))
+                //    {
+                //        await db.CommitTrans();
+                //    }
+                //}
+                await db.CommitTrans();
             }
             catch (Exception ex)
             {
@@ -309,14 +341,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     UserPassword = entity.DecryptedPassword
                 };
 
-                if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
-                {
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        await db.CommitTrans();
-                    }
-                }
-                //await db.CommitTrans();
+                //if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
+                //{
+                //    if (string.IsNullOrEmpty(message))
+                //    {
+                //        await db.CommitTrans();
+                //    }
+                //}
+                await db.CommitTrans();
             }
             catch
             {
@@ -329,6 +361,66 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
             await BaseRepository().Delete<EmployeeEntity>(idArr);
+        }
+
+        public async Task ApproveForm(EmployeeEntity entity, MenuEntity menu, OperatorInfo user)
+        {
+            var message = string.Empty;
+            var approvalLog = new ApprovalLogEntity();
+            var db = await BaseRepository().BeginTrans();
+            try
+            {
+                if (menu.ApprovalLogList?.Count < menu.ApprovalLevel)
+                {
+                    approvalLog.Company = user.Company;
+                    approvalLog.Branch = entity.Branch;
+                    approvalLog.MenuId = menu.Id;
+                    approvalLog.MenuType = menu.MenuType;
+                    approvalLog.Authority = user.Employee;
+                    approvalLog.Record = entity.Id;
+                    approvalLog.ApprovalCount = (int)(menu.ApprovalLogList?.Count + 1);
+                    approvalLog.ApprovalLevel = menu.ApprovalLevel;
+                    approvalLog.Status = approvalLog.ApprovalCount == approvalLog.ApprovalLevel ? (int)ApprovalEnum.Approved : (int)ApprovalEnum.Pending;
+                    approvalLog.Remark = approvalLog.ApprovalCount == approvalLog.ApprovalLevel ? "Approved" : "Partial approval";
+
+                    await approvalLog.Create();
+                    await db.Insert(approvalLog);
+                }
+
+                if (approvalLog.ApprovalCount == approvalLog.ApprovalLevel)
+                {
+                    entity.Status = (int)ApprovalEnum.Approved;
+                    await entity.Modify();
+                    await db.Update(entity);
+                }
+
+                if (approvalLog.ApprovalCount < approvalLog.ApprovalLevel)
+                {
+                    await db.CommitTrans();
+                }
+                else if (approvalLog.ApprovalCount == approvalLog.ApprovalLevel)
+                {
+                    MailParameter mailParameter = new()
+                    {
+                        UserName = user.UserName,
+                        UserEmail = entity.EmailAddress,
+                        UserPassword = user.DecryptedPassword
+                    };
+
+                    if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
+                    {
+                        if (string.IsNullOrEmpty(message))
+                        {
+                            await db.CommitTrans();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                await db.RollbackTrans();
+                throw;
+            }
         }
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+﻿using Mortgage.Ecosystem.BusinessLogic.Layer.Helpers;
+using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer;
 using Mortgage.Ecosystem.DataAccess.Layer.Caching;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
@@ -91,7 +92,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 if (user.UserStatus == (int)StatusEnum.Yes)
                 {
-                    if (user.Password == EncryptUserPassword(password, user.Salt))
+                    if (password == EncryptionHelper.Decrypt(user.Password, user.Salt))
                     {
                         #region Check for multiple logins
                         if (!GlobalContext.SystemConfig.LoginMultiple)

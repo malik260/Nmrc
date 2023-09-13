@@ -74,6 +74,26 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             }
         }
 
+        public async Task SaveForms(List<FinanceTransactionEntity> entity)
+        {
+            foreach (var item in entity)
+            {
+                if (item.Id.IsNullOrZero())
+                {
+                    await item.Create();
+                    await BaseRepository().Insert<FinanceTransactionEntity>(item);
+                }
+                else
+                {
+                    await item.Modify();
+                    await BaseRepository().Update<FinanceTransactionEntity>(item);
+                }
+
+            }
+
+
+        }
+
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');

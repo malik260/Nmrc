@@ -32,6 +32,18 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
+        [AuthorizeFilter("approveeticket:view")]
+        public IActionResult ApproveETicketIndex()
+        {
+            return View();
+        }
+
+        public IActionResult ApproveETicketForm()
+        {
+            return View();
+        }
+
+
 
         #endregion
 
@@ -52,14 +64,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
-
-        //[HttpGet]
-        //[AuthorizeFilter("loaninitiation:search,user:search")]
-        //public async Task<IActionResult> GetEtransactPageListJson(PaymentHistoryListParam param, Pagination pagination)
-        //{
-        //    TData<List<PaymentHistoryEntity>> obj = await _iPaymentHistoryService.GetPageList(param, pagination);
-        //    return Json(obj);
-        //}
+        [HttpGet]
+        [AuthorizeFilter("eticket:search,user:search")]
+        public async Task<IActionResult> GetApprovalPageListJson(ETicketListParam param, Pagination pagination)
+        {
+            TData<List<ETicketEntity>> obj = await _iETicketService.GetApprovalPageList(param, pagination);
+            return Json(obj);
+        }
 
 
         [HttpGet]
@@ -72,19 +83,28 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         [HttpGet]
         [AuthorizeFilter("eticket:view")]
+        public async Task<IActionResult> GetFormJson(long id)
+        {
+            TData<ETicketEntity> obj = await _iETicketService.GetEntity(id);
+            return Json(obj);
+        }
+
+
+        [HttpGet]
+        [AuthorizeFilter("eticket:view")]
         public async Task<IActionResult> GetUserTreeListJson(ETicketListParam param)
         {
             TData<List<ZtreeInfo>> obj = await _iETicketService.GetZtreeUserList(param);
             return Json(obj);
         }
 
-        [HttpGet]
-        [AuthorizeFilter("eticket:view")]
-        public async Task<IActionResult> GetFormJson(int id)
-        {
-            TData<ETicketEntity> obj = await _iETicketService.GetEntity(id);
-            return Json(obj);
-        }
+        //[HttpGet]
+        //[AuthorizeFilter("eticket:view")]
+        //public async Task<IActionResult> GetFormJson(int id)
+        //{
+        //    TData<ETicketEntity> obj = await _iETicketService.GetEntity(id);
+        //    return Json(obj);
+        //}
 
         [HttpGet]
         public async Task<IActionResult> GetMaxSortJson()
@@ -115,25 +135,10 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
             // Set the RequestNumber with the generated random number
             entity.RequestNumber = randomNumber.ToString();
-
-            // Determine the ApprovalStatus...
-            if (entity.Approved == 1 && entity.Disapproved == 0)
-            {
-                entity.ApprovalStatus = "Approved";
-            }
-            else if (entity.Approved == 0 && entity.Disapproved == 1)
-            {
-                entity.ApprovalStatus = "Disapproved";
-            }
-            else
-            {
-                entity.ApprovalStatus = "Pending";
-            }
-
             obj = await _iETicketService.SaveForm(entity);
             return Json(obj);
-        }
 
+        }
 
         [HttpPost]
         [AuthorizeFilter("eticket:delete")]
@@ -142,6 +147,15 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             TData obj = await _iETicketService.DeleteForm(ids);
             return Json(obj);
         }
+
+        [HttpPost]
+        [AuthorizeFilter("eticket:add,eticket:edit")]
+        public async Task<IActionResult> ApproveFormJson(ETicketEntity entity)
+        {
+            TData<string> obj = await _iETicketService.ApproveForm(entity);
+            return Json(obj);
+        }
+
         #endregion
     }
 }

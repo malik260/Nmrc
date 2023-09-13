@@ -1,0 +1,101 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+
+    <div class="row">
+        <div class="ibox-title">
+            <h5>Unlock Admin User</h5>
+        </div>
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+
+                    <li class="select-time">
+                        <label>Created: </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                        <span>-</span>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group-sm" id="toolbar">
+@*                <a id="btnViewStatement" class="btn btn-success">View Statement</a>
+*@                <a id="btnUnlockAdminUser" class="btn btn-danger disabled">Unlock Admin User(s)</a>
+
+            </div>
+        </div>
+
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="unlockAdminUserTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/UnlockAdminUser/GetUnlockAdminUserPageListJson")';
+        $('#unlockAdminUserTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'MobileNo', title: 'Mobile No', sortable: true },
+                { field: 'AccountName', title: 'Account Name', sortable: true },
+                {
+                    field: 'DateCreated', title: 'Date Created', sortable: true, formatter: function (value, row, index) 
+                    {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                },
+
+                //{ field: 'AmountContributed', title: 'Amount Contributed', sortable: true },
+                //{ field: 'Remarks', title: 'Remarks', sortable: true },
+                //{ field: 'Month', title: 'Month', sortable: true },
+                //{ field: 'Year', title: 'Year', sortable: true },
+
+                {
+                    field: 'Status', title: 'Status', align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@StatusEnum.Yes.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                //{
+                //    field: 'Date Created', title: 'Date Created', formatter: function (value, row, index) 
+                //    {
+                //        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                //    }
+                //}
+            ],
+            queryParams: function (params) {
+                var pagination = $('#unlockAdminUserTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#unlockAdminUserTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+
+</script>

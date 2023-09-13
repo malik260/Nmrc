@@ -62,15 +62,25 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(FeedBackFormEntity entity)
         {
-            if (entity.Id.IsNullOrZero())
+            var db = await BaseRepository().BeginTrans();
+            try
             {
-                await entity.Create();
-                await BaseRepository().Insert<FeedBackFormEntity>(entity);
+                if (entity.Id.IsNullOrZero())
+                {
+                    await entity.Create();
+                    await BaseRepository().Insert<FeedBackFormEntity>(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await BaseRepository().Update<FeedBackFormEntity>(entity);
+                }
+                await db.CommitTrans();
             }
-            else
+            catch (Exception)
             {
-                await entity.Modify();
-                await BaseRepository().Update<FeedBackFormEntity>(entity);
+                await db.RollbackTrans();
+                throw;
             }
         }
 

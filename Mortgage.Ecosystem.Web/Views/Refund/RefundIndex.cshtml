@@ -44,10 +44,13 @@
 
         laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
-    }); 
+    });
+
+
+
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/Refund/GetPageListJson")';
+        var queryUrl = '@Url.Content("~/Refund/GetRefundPageListJson")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
@@ -109,7 +112,11 @@
                 iframeWin.saveForm(index);
             }
         });
+
+
     }
+
+
 
     function deleteForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
@@ -132,4 +139,6 @@
             });
         }
     }
+
+
 </script>

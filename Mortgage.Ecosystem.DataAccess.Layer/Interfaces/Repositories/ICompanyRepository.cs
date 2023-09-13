@@ -1,4 +1,5 @@
 ﻿using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 
@@ -15,5 +16,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task SaveForm(CompanyEntity entity);
         Task SaveForms(CompanyEntity entity);
         Task DeleteForm(string ids);
+        Task ApproveForm(CompanyEntity entity, MenuEntity menu, OperatorInfo user);
     }
 }

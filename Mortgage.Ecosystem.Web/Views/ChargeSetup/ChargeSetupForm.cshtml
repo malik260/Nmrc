@@ -1,0 +1,61 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="refundApplication" id="refundApplication">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Charges Setup</span>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="chargeName"  class="form-label">Charge Name</label>
+                        <input id="chargeName" type="text"  col="chargename" class="form-control">
+
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="rate"  class="form-label">Rate</label>
+                        <input id="rate" type="text" col="Rate" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="feeCatergory"  class="form-label">Fee Catergory</label>
+@*                        <select id="feecatergory" style="margin-left: 100px;" class="form-control">
+                            <option value="Flat">Flat</option>
+                            <option value="Rate">Rate</option>
+                            <option value="NoCharges">No Charges</option>
+                        </select>*@
+                        <div id="feeCatergory" col="FeeCatergory"></div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="propertyType"  class="form-label">Property&nbsp;Type&nbsp;</label>
+                        <input id="propertyType" type="text" col="PropertyType" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="amount" class="form-label">Amount</label>
+                        <input id="amount" col="Amount" class="form-control" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+<script>
+
+        $("#feeCatergory").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(FeeCategoryEnum).EnumToDictionaryString())) });
+    
+</script>
+
+
+
+

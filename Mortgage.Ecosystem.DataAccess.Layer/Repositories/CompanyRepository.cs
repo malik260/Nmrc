@@ -190,14 +190,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     UserCompany = entity.Name
                 };
 
-                if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
-                {
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        await db.CommitTrans();
-                    }
-                }
-                //await db.CommitTrans();
+                //if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
+                //{
+                //    if (string.IsNullOrEmpty(message))
+                //    {
+                //        await db.CommitTrans();
+                //    }
+                //}
+                await db.CommitTrans();
             }
             catch
             {
@@ -210,6 +210,66 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
             await BaseRepository().Delete<CompanyEntity>(idArr);
+        }
+
+        public async Task ApproveForm(CompanyEntity entity, MenuEntity menu, OperatorInfo user)
+        {
+            var message = string.Empty;
+            var approvalLog = new ApprovalLogEntity();
+            var db = await BaseRepository().BeginTrans();
+            try
+            {
+                if (menu.ApprovalLogList?.Count < menu.ApprovalLevel)
+                {
+                    approvalLog.Company = user.Company;
+                    approvalLog.MenuId = menu.Id;
+                    approvalLog.MenuType = menu.MenuType;
+                    approvalLog.Authority = user.Employee;
+                    approvalLog.Record = entity.Id;
+                    approvalLog.ApprovalCount = (int)(menu.ApprovalLogList?.Count + 1);
+                    approvalLog.ApprovalLevel = menu.ApprovalLevel;
+                    approvalLog.Status = approvalLog.ApprovalCount == approvalLog.ApprovalLevel ? (int)ApprovalEnum.Approved : (int)ApprovalEnum.Pending;
+                    approvalLog.Remark = approvalLog.ApprovalCount == approvalLog.ApprovalLevel ? "Approved" : "Partial approval";
+
+                    await approvalLog.Create();
+                    await db.Insert(approvalLog);
+                }
+
+                if (approvalLog.ApprovalCount == approvalLog.ApprovalLevel)
+                {
+                    entity.Status = (int)ApprovalEnum.Approved;
+                    await entity.Modify();
+                    await db.Update(entity);
+                }
+
+                //if (approvalLog.ApprovalCount < approvalLog.ApprovalLevel)
+                //{
+                //    await db.CommitTrans();
+                //}
+                //else if (approvalLog.ApprovalCount == approvalLog.ApprovalLevel)
+                //{
+                //    MailParameter mailParameter = new()
+                //    {
+                //        UserName = user.UserName,
+                //        UserEmail = entity.EmailAddress,
+                //        UserPassword = user.DecryptedPassword
+                //    };
+
+                //    if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
+                //    {
+                //        if (string.IsNullOrEmpty(message))
+                //        {
+                //            await db.CommitTrans();
+                //        }
+                //    }
+                //}
+                await db.CommitTrans();
+            }
+            catch
+            {
+                await db.RollbackTrans();
+                throw;
+            }
         }
         #endregion
 

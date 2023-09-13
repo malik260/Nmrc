@@ -6,6 +6,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
@@ -53,6 +54,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 List<BankEntity> bankList = await _iUnitOfWork.Banks.GetList(new BankListParam { Codes = obj.Data.Select(p => p.CustomerBank.ToStr()).ToList() });
                 List<AccountTypeEntity> accountTypeList = await _iUnitOfWork.AccountTypes.GetList(new AccountTypeListParam { Ids = obj.Data.Select(p => p.AccountType).ToList() });
                 List<AlertTypeEntity> alertTypeList = await _iUnitOfWork.AlertTypes.GetList(new AlertTypeListParam { Ids = obj.Data.Select(p => p.AlertType).ToList() });
+                List<StateEntity> stateList = await _iUnitOfWork.States.GetList(new StateListParam { Ids = obj.Data.Select(p => p.ContributionBranch).ToList() });
                 foreach (EmployeeEntity employee in obj.Data)
                 {
                     employee.CompanyName = companyList.Where(p => p.Id == employee.Company).Select(p => p.Name).FirstOrDefault();
@@ -62,6 +64,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     employee.GenderName = genderList.Where(p => p.Id == employee.Gender).Select(p => p.Name).FirstOrDefault();
                     employee.MaritalStatusName = maritalStatusList.Where(p => p.Id == employee.MaritalStatus).Select(p => p.Name).FirstOrDefault();
                     employee.BankName = bankList.Where(p => p.Code == employee.CustomerBank).Select(p => p.Name).FirstOrDefault();
+                    employee.ContributionBranchName = stateList.Where(p => p.Id == employee.ContributionBranch).Select(p => p.Name).FirstOrDefault();
                     employee.AccountTypeName = accountTypeList.Where(p => p.Id == employee.AccountType).Select(p => p.Name).FirstOrDefault();
                     employee.AlertTypeName = alertTypeList.Where(p => p.Id == employee.AlertType).Select(p => p.Name).FirstOrDefault();
                 }
@@ -86,6 +89,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 List<BankEntity> bankList = await _iUnitOfWork.Banks.GetList(new BankListParam { Codes = obj.Data.Select(p => p.CustomerBank.ToStr()).ToList() });
                 List<AccountTypeEntity> accountTypeList = await _iUnitOfWork.AccountTypes.GetList(new AccountTypeListParam { Ids = obj.Data.Select(p => p.AccountType).ToList() });
                 List<AlertTypeEntity> alertTypeList = await _iUnitOfWork.AlertTypes.GetList(new AlertTypeListParam { Ids = obj.Data.Select(p => p.AlertType).ToList() });
+                List<StateEntity> stateList = await _iUnitOfWork.States.GetList(new StateListParam { Ids = obj.Data.Select(p => p.ContributionBranch).ToList() });
                 foreach (EmployeeEntity employee in obj.Data)
                 {
                     employee.CompanyName = companyList.Where(p => p.Id == employee.Company).Select(p => p.Name).FirstOrDefault();
@@ -95,6 +99,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     employee.GenderName = genderList.Where(p => p.Id == employee.Gender).Select(p => p.Name).FirstOrDefault();
                     employee.MaritalStatusName = maritalStatusList.Where(p => p.Id == employee.MaritalStatus).Select(p => p.Name).FirstOrDefault();
                     employee.BankName = bankList.Where(p => p.Code == employee.CustomerBank).Select(p => p.Name).FirstOrDefault();
+                    employee.ContributionBranchName = stateList.Where(p => p.Id == employee.ContributionBranch).Select(p => p.Name).FirstOrDefault();
                     employee.AccountTypeName = accountTypeList.Where(p => p.Id == employee.AccountType).Select(p => p.Name).FirstOrDefault();
                     employee.AlertTypeName = alertTypeList.Where(p => p.Id == employee.AlertType).Select(p => p.Name).FirstOrDefault();
                 }
@@ -138,6 +143,21 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+        public async Task<TData<EmployeeEntity>> GetEntityByNhfNo(long nhfNo)
+        {
+            TData<EmployeeEntity> obj = new TData<EmployeeEntity>();
+            EmployeeEntity employeeEntity = await _iUnitOfWork.Employees.GetEntityByNhfNumber(nhfNo);
+            obj.Data = employeeEntity;
+            obj.Tag = 1;
+            return obj;
+        }
+        public async Task<EmployeeEntity> GetEntityByNhf(long nhfNo)
+        {
+            EmployeeEntity obj = new EmployeeEntity();
+            EmployeeEntity employeeEntity = await _iUnitOfWork.Employees.GetEntityByNhfNumber(nhfNo);
+            return employeeEntity;
+        }
+
         #endregion
 
         #region Submit data
@@ -146,6 +166,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             TData<string> obj = new TData<string>();
             entity.EmploymentType = EmploymentTypeEnum.Employed.ToInt();
             entity.CompanyName = _iUnitOfWork.Companies.GetEntity(entity.Company).Result.Name;
+            //entity.DateOfEmployment = DateTime.Now.ToDate();
+            entity.DateOfEmployment = DateTime.Now.Date;
+
 
             if (_iUnitOfWork.Employees.ExistEmployee(entity))
             {
@@ -153,12 +176,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 return obj;
             }
 
-            if (string.IsNullOrEmpty(entity.BVN))
-            {
-                obj.Message = "BVN must not be empty!";
-                return obj;
-            }
-            else if (!ValidationHelper.ValidateBvn(entity.BVN))
+            if (entity.BVN.IsNotNull() && !ValidationHelper.ValidateBvn(entity.BVN))
             {
                 obj.Message = "BVN must be digit and 11 in length!";
                 return obj;
@@ -168,6 +186,17 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 obj.Message = "Employee BVN already exists!";
                 return obj;
             }
+
+            if (entity.BankAccountNumber.IsNotNull() && !ValidationHelper.ValidateAccountNumber(entity.BankAccountNumber))
+            {
+                obj.Message = "Bank account number must be digit and 10 in length!";
+                return obj;
+            }
+            //else if (_iUnitOfWork.Employees.ExistEmployeeAccountNumber(entity))
+            //{
+            //    obj.Message = "Employee Account Number already exists!";
+            //    return obj;
+            //}
 
             if (string.IsNullOrEmpty(entity.FirstName))
             {
@@ -191,7 +220,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 entity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
                 entity.DecryptedPassword = new UserService(_iUnitOfWork).GenerateDefaultPassword();
-                entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                //entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                entity.Password = EncryptionHelper.Encrypt(entity.DecryptedPassword, entity.Salt);
             }
 
             entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
@@ -216,12 +246,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 return obj;
             }
 
-            if (string.IsNullOrEmpty(entity.BVN))
-            {
-                obj.Message = "BVN must not be empty!";
-                return obj;
-            }
-            else if (!ValidationHelper.ValidateBvn(entity.BVN))
+            if (entity.BVN.IsNotNull() && !ValidationHelper.ValidateBvn(entity.BVN))
             {
                 obj.Message = "BVN must be digit and 11 in length!";
                 return obj;
@@ -294,7 +319,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 entity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
                 entity.DecryptedPassword = new UserService(_iUnitOfWork).GenerateDefaultPassword();
-                entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                //entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+                entity.Password = EncryptionHelper.Encrypt(entity.DecryptedPassword, entity.Salt);
             }
 
             entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
@@ -312,6 +338,32 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
+
+        public async Task<TData> ApproveForm(EmployeeEntity entity)
+        {
+            TData<long> obj = new TData<long>();
+            var user = await Operator.Instance.Current();
+            user.DecryptedPassword = EncryptionHelper.Decrypt(user.Password, user.Salt);
+            var entityRecord = await _iUnitOfWork.Employees.GetEntity(entity.Id);
+            var menuRecord = await _iUnitOfWork.Menus.GetEntity(entityRecord.BaseProcessMenu);
+            var approvalLogListParam = new ApprovalLogListParam()
+            {
+                Company = user.Company,
+                MenuId = menuRecord.Id,
+                //Authority = user.Employee,
+                Record = entity.Id
+            };
+            var approvalLogRecords = await _iUnitOfWork.ApprovalLogs.GetList(approvalLogListParam);
+            menuRecord.ApprovalLogList = approvalLogRecords;
+            await _iUnitOfWork.Employees.ApproveForm(entityRecord, menuRecord, user);
+            obj.Message = string.Empty;
+            obj.Data = entity.Id;
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+
         #endregion        
     }
 }

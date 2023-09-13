@@ -8,7 +8,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
     {
         Task<List<LoanInitiationEntity>> GetList(LoanInitiationListParam param);
         Task<List<LoanInitiationEntity>> GetPageList(LoanInitiationListParam param, Pagination pagination);
-        Task<LoanInitiationEntity> GetEntity(long id);
+        Task<LoanInitiationEntity> GetEntity(string code);
         Task<int> GetMaxSort();
         Task SaveForm(LoanInitiationEntity entity);
         Task DeleteForm(string ids);

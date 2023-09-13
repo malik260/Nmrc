@@ -95,6 +95,15 @@ $(function () {
         if ($('#btnEdit')) {
             $('#btnEdit').toggleClass('disabled', ids.length != 1);
         }
+        if ($('#btnApprove')) {
+            $('#btnApprove').toggleClass('disabled', ids.length != 1);
+        }
+        if ($('#btnReject')) {
+            $('#btnReject').toggleClass('disabled', ids.length != 1);
+        }
+        if ($('#btnView')) {
+            $('#btnView').toggleClass('disabled', ids.length != 1);
+        }
     });
 
     $("#grid1Table").on("check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table", function () {
@@ -104,6 +113,15 @@ $(function () {
         }
         if ($('#btnEdit')) {
             $('#btnEdit').toggleClass('disabled', ids.length != 1);
+        }
+        if ($('#btnApprove')) {
+            $('#btnApprove').toggleClass('disabled', ids.length != 1);
+        }
+        if ($('#btnReject')) {
+            $('#btnReject').toggleClass('disabled', ids.length != 1);
+        }
+        if ($('#btnView')) {
+            $('#btnView').toggleClass('disabled', ids.length != 1);
         }
     });
 
@@ -154,6 +172,15 @@ function resetToolbarStatus() {
     }
     if ($('#btnEdit')) {
         $('#btnEdit').addClass('disabled');
+    }
+    if ($('#btnApprove')) {
+        $('#btnApprove').addClass('disabled');
+    }
+    if ($('#btnReject')) {
+        $('#btnReject').addClass('disabled');
+    }
+    if ($('#btnView')) {
+        $('#btnView').addClass('disabled');
     }
 }
 

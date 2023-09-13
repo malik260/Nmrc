@@ -25,49 +25,45 @@
             <div id="singleContribution" style="margin-top: 10px; margin-bottom:5%">
                 <div class="dialogblockborder dialogblockborderheadline">
                     <div class="dialogblock-body" style="height: 100%;">
-                        <span class="dialogblockheader">Single Loan Repayment</span>
+                        <span id="singleLoan" class="dialogblockheader">Single Loan Repayment</span>
                         <div Class="form-group">
-                            <div class="col-sm-4">
-                                <label for="employeeNumber" style="margin-left: 100px;" class="form-label">Employee&nbsp;Number</label>
-
-                                <select id="employeeNumberRepayment" style="margin-left: 100px;" col="EmployeeNumber" class="form-control">
-                                    <option></option>
-
-                                </select>
-
+                            <div class="col-sm-6">
+                                <label for="nhfNumber" class="form-label">NHF Number</label>
+                                <input id="nhfNumberRepayment" col="employeeNumber" class="form-control" readonly />
 
                             </div>
 
-                            <div class="col-sm-4">
-                                <label for="employeeName" style="margin-left: 200px;" class="form-label">Employee&nbsp;Name</label>
-                                <input type="text" style="margin-left: 200px;" class="form-control" id="employeeNameRepayment">
+                            <div class="col-sm-6">
+                                <label for="employeeName" class="form-label">Employee&nbsp;Name</label>
+                                <input type="text" col="NHFNumber" class="form-control" id="employeeNameRepayment">
 
                             </div>
                         </div>
+
 
                         <div class="form-group">
-                            <div class="col-sm-4">
-                                <label for="amount" style="margin-left: 100px;" class="form-label">Amount</label>
-                                <input type="number" style="margin-left: 100px;" class="form-control" id="amountRepayment">
+                            <div class="col-sm-6">
+                                <label for="amount" class="form-label">Amount</label>
+                                <input type="number" col="Amount" class="form-control" id="amountRepayment">
 
                             </div>
 
-                            <div class="col-sm-4">
-                                <label for="narration" style="margin-left: 200px;" class="form-label">Narration</label>
-                                <input type="text" style="margin-left: 200px;" class="form-control" id="narrationRepayment">
+                            <div class="col-sm-6">
+                                <label for="narration" class="form-label">Narration</label>
+                                <input type="text" col="Narration" class="form-control" id="narrationRepayment">
                             </div>
                         </div>
 
                         <div Class="form-group">
-                            <div class="col-sm-4">
-                                <label for="accountName" style="margin-left: 100px;" class="form-label">Account&nbsp;Name</label>
-                                <input type="text" style="margin-left: 100px;" class="form-control" id="accountNameRepayment">
+                            <div class="col-sm-6">
+                                <label for="accountName" class="form-label">Account&nbsp;Name</label>
+                                <input type="text" class="form-control" id="accountNameRepayment">
 
                             </div>
 
-                            <div class="col-sm-4">
-                                <label for="phoneNumber" style="margin-left: 200px;" class="form-label">Phone&nbsp;Number</label>
-                                <input type="text" style="margin-left: 200px;" class="form-control" id="phoneNumberRepayment">
+                            <div class="col-sm-6">
+                                <label for="phoneNumber" class="form-label">Phone&nbsp;Number</label>
+                                <input type="text" class="form-control" id="phoneNumberRepayment">
 
                             </div>
                         </div>
@@ -75,18 +71,16 @@
 
 
                         <div class="form-group">
-                            <div class="col-sm-4">
-                                <label for="email" style="margin-left: 100px;" class="form-label">Email</label>
-                                <input type="text" style="margin-left: 100px;" class="form-control" id="emailRepayment">
+                            <div class="col-sm-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="text" class="form-control" id="emailRepayment">
 
 
                             </div>
 
-                            <div class="col-sm-4">
-                                <label for="paymentOption" style="margin-left: 200px;" class="form-label">Payment&nbsp;Option</label>
-                                <select id="paymentOptionRepayment" style="margin-left: 200px;" col="PaymentOption" class="form-control">
-                                    <option></option>
-                                </select>
+                            <div class="col-sm-6">
+                                <label for="paymentOption" class="form-label">Payment&nbsp;Option</label>
+                                <div id="paymentOption" col="PaymentOption"></div>
                             </div>
                         </div>
                     </div>
@@ -99,14 +93,14 @@
                         <span class="dialogblockheader">Batch Loan Repayment</span>
                         <div Class="form-group">
                             <div class="col-sm-6">
-                                <button class="btn btn-primary" type="button" id="downloadTemplateRepayment" style="margin-top: 10px;margin-left: 50px;width:50%">
+                                <button class="btn btn-primary" type="button" id="downloadTemplateRepayment">
                                     <i class="fa fa-file-excel-o"></i>
-                                    <span class="bold">Download Template</span>
+                                    <span class="bold">Download Loan Repayment Template</span>
                                 </button>
                             </div>
 
                             <div class="col-sm-6">
-                                <input id="templateFile" col="TemplateFile" type="file" style="margin-top: 15px;" />
+                                <input id="templateFile" col="TemplateFile" type="file" />
 
                             </div>
                         </div>
@@ -121,31 +115,187 @@
 
     <script>
         $(document).ready(function () {
+
+            $('#downloadTemplateRepayment').click(function () {
+                // Define the URL of the download endpoint
+                var downloadUrl = '@Url.Content("~/LoanRepayment/Download")'; // Replace with the actual controller and action name
+
+                // Create a hidden iframe to initiate the file download
+                var iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = downloadUrl;
+                document.body.appendChild(iframe);
+
+                // Clean up the iframe after the download is initiated
+                $(iframe).on('load', function () {
+                    document.body.removeChild(iframe);
+                });
+            });
+        });
+
+        function validateAndProcessUploadedFile(filePath) {
+
+            // Implement server-side validation logic here
+            // Compare the uploaded file with the template file
+            // If the uploaded file matches the template, proceed with further processing
+            // Otherwise, handle the case where the file is not valid
+            // You may need to make an AJAX request to the server for this validation
+            $.ajax({
+                url: '@Url.Content("~/LoanRepayment/ValidateUploadedFile")', // Replace with the actual validation endpoint
+                type: 'POST',
+                data: { filePath: filePath },
+                success: function (response) {
+                    if (response.isValid) {
+                        // The uploaded file matches the template; proceed with further processing
+                        alert('File is valid. Proceed with processing.');
+                    } else {
+                        // The uploaded file does not match the template; handle this case
+                        alert('Invalid uploaded file. Please upload the correct template.');
+                    }
+                },
+                error: function () {
+                    // Handle AJAX error
+                    alert('An error occurred during validation.');
+                }
+            });
+        }
+        //$(document).ready(function () {
+        //    $("#repaymentType").cnComboBox({
+        //        data: cn.getJson(@Html.Raw(typeof(LoanRepaymentEnum).EnumToDictionaryString()))
+        //    });
+        //    $("#singleContribution").hide();
+        //    $("#multipleUpload").hide();
+        //    // Show the singleContribution div when option value 1 is selected
+        //    $('#repaymentType').change(function () {
+
+        //        var repaymentType = $("#repaymentType").cnComboBox('getValue');
+
+        //        if (repaymentType == 1) {
+        //            $("#singleContribution").show();
+        //            $("#multipleUpload").hide();
+        //        }
+        //        else if (repaymentType == 2) {
+        //            $("#singleContribution").hide();
+        //            $("#multipleUpload").show();
+        //        }
+        //        else {
+        //            $("#singleContribution").hide();
+        //            $("#multipleUpload").hide();
+        //        }
+
+        //    });
+        //});
+
+        $("#nhfNumberRepayment").cnComboBox({
+            url: '@Url.Content("~/Employee/GetListJson")',
+            key: "Id",
+            value: "NHFNumber",
+            class: "form-control"
+        });
+
+
+        $(document).ready(function () {
             $("#repaymentType").cnComboBox({
                 data: cn.getJson(@Html.Raw(typeof(LoanRepaymentEnum).EnumToDictionaryString()))
             });
-            $("#singleContribution").hide();
-            $("#multipleUpload").hide();
-            // Show the singleContribution div when option value 1 is selected
-            $('#repaymentType').change(function () {
 
-                var repaymentType = $("#repaymentType").cnComboBox('getValue');
-                debugger;
-                if (repaymentType == 1) {
-                    $("#singleContribution").show();
-                    $("#multipleUpload").hide();
-                }
-                else if (repaymentType == 2) {
-                    $("#singleContribution").hide();
-                    $("#multipleUpload").show();
-                }
-                else {
-                    $("#singleContribution").hide();
-                    $("#multipleUpload").hide();
+
+            function handleAgentTypeChange() {
+                var selectedType = $("#repaymentType").cnComboBox('getValue');
+
+                if (selectedType == @GlobalConstant.ZERO) {
+
+                    $("#nhfNumberRepayment").attr("disabled", "disabled");
+                    $("#employeeNameRepayment").attr("disabled", "disabled");
+                    $("#amountRepayment").attr("disabled", "disabled");
+                    $("#narrationRepayment").attr("disabled", "disabled");
+                    $("#accountNameRepayment").attr("disabled", "disabled");
+                    $("#phoneNumberRepayment").attr("disabled", "disabled");
+                    $("#emailRepayment").attr("disabled", "disabled");
+                    $("#paymentOption_select").attr("disabled", "disabled");
+                    $('#singleContribution').show();
+                    $('#multipleUpload').hide();
                 }
 
-            });
+                if (selectedType == @GlobalConstant.ONE) {
+
+
+                    $("#nhfNumberRepayment").removeAttr("disabled");
+                    $("#employeeNameRepayment").removeAttr("disabled");
+                    $("#amountRepayment").removeAttr("disabled");
+                    $("#narrationRepayment").removeAttr("disabled");
+                    $("#accountNameRepayment").removeAttr("disabled");
+                    $("#phoneNumberRepayment").removeAttr("disabled");
+                    $("#emailRepayment").removeAttr("disabled");
+                    $("#paymentOption_select").removeAttr("disabled");
+                    $('#singleContribution').show();
+                    $('#multipleUpload').hide();
+
+                    document.getElementById("singleLoan").innerHTML = "Single Loan Repayment";
+
+                }
+
+                if (selectedType == @GlobalConstant.TWO) {
+                    $('#multipleUpload').show();
+                    $('#singleContribution').hide();
+                    $("#downloadTemplateRepayment").parents(".form-group").show();
+                    $("#templateFile").parents(".form-group").show();
+                    document.getElementById("singleLoan").innerHTML = "Batch Loan Repayment";
+                }
+
+            }
+            $('#repaymentType').change(handleAgentTypeChange);
+
+            // Initial setup when the page loads
+            handleAgentTypeChange();
         });
+
+
+        $("#paymentOption").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
+
+        $("#templateFile").fileinput({
+
+            language: 'en',
+            showPreview: false,
+            allowedFileExtensions: ['xlsx', 'xls']
+        }).on("fileuploaded", function (event, data) {
+            var obj = data.response;
+
+            if (obj && obj.Tag === @GlobalConstant.ONE) {
+                // The uploaded file is valid; you can use filePath as needed
+                var filePath = obj.Data;
+                // Here, you can proceed with processing the uploaded file
+                // Compare the uploaded file with the template, and perform any necessary actions
+                validateAndProcessUploadedFile(filePath);
+            } else {
+                // The uploaded file is not valid; you can handle this case as needed
+                var filePath = '';
+                alert('Invalid uploaded file. Please upload the correct template.');
+            }
+        });
+
+        var id = cn.request("id");
+
+        function saveForm(index) {
+            if ($("#form").validate().form()) {
+                var postData = $("#form").getWebControls({ Id: id });
+                cn.ajax({
+                    url: '@Url.Content("~/LoanRepayment/SingleLoanRepayment")',
+                    type: "post",
+                    data: postData,
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            parent.searchGrid();
+                            parent.layer.close(index);
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            }
+        }
 
 
 

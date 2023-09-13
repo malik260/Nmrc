@@ -2,6 +2,11 @@
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
 {
+    public class EmployeeProcessParam
+    {
+        public long BaseProcessMenu { get; set; }
+    }
+
     public class EmployeeListParam
     {
         public long Id { get; set; }

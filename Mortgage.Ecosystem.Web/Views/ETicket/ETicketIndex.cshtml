@@ -30,9 +30,11 @@
         <div class="btn-group-sm" id="toolbar">
             <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-plus"></i> Sent Message(s)</a>
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-edit"></i> Write Message(s)</a>
-           
-@*            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
-*@        </div>
+            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
+
+            @*            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
+            *@
+        </div>
 
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
@@ -61,8 +63,25 @@
                 { field: 'Subject', title: 'Subject', sortable: true },
                 { field: 'Message', title: 'Message', sortable: true },
                 { field: 'DateSent', title: 'Date Sent', sortable: true },
-                { field: 'ApprovalStatus', title: 'Approval Status', visible: true, sortable: true },
-              
+                // { field: 'ApprovalStatus', title: 'Approval Status', visible: true, sortable: true },
+                {
+                    field: 'Status',
+                    title: 'Approval Status',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@ApprovalEnum.Pending.ToInt()") {
+                            return '<span class="badge badge-warning">' + "@ApprovalEnum.Pending.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Approved.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@ApprovalEnum.Approved.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Rejected.ToInt()") {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Rejected.GetDescription()" + '</span>';
+                        }
+                        else {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Cancelled.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);

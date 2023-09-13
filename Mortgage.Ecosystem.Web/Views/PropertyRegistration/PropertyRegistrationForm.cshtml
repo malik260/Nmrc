@@ -2,133 +2,210 @@
     Layout = "~/Views/Shared/_FormWhite.cshtml";
 }
 
-
 <div class="propertyRegistration" id="propertyRegistration">
-        <form id="form1" class="form-horizontal m">
-            <div class="dialogblockborder dialogblockborderheadline">
-                <div class="dialogblock-header" style="height: auto;">
-                    <span class="dialogblockheader">Property Registration</span>
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Property Registration</span>
                 <div class="form-group">
-                    <div class="col-sm-4">
-                        <label class="companyNumber control-label" style="margin-left: 100px;">Company&nbsp;Number<font class="red">&nbsp;*</font></label>
-                        <input type="text" col="companyNumber" style="margin-left: 100px;" class="form-control" id="companyName">
+                    <div class="col-sm-6">
+                        <label class="companyNumber control-label">Company&nbsp;Number<font class="red">&nbsp;*</font></label>
+                        <input id="companyName" type="text" col="companyNumber" class="form-control">
                     </div>
-                    <div class="col-sm-4">
-                        <label class="companyName control-label" style="margin-left: 200px;">Company&nbsp;Name<font class="red">&nbsp;*</font></label>
-                        <input type="text" col="NIN" style="margin-left: 200px;" class="form-control" id="companyName">
+                    <div class="col-sm-6">
+                        <label class="companyName control-label">Company&nbsp;Name<font class="red">&nbsp;*</font></label>
+                        <input id="companyName" type="text" col="CompanyName" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-4">
-                        <label for="propertyType" style="margin-left: 100px;" class="form-label">Property&nbsp;Type</label>
-                        <input type="text" style="margin-left: 100px;" col="propertyType" class="form-control">
-                         
+                    <div class="col-sm-6">
+                        <label for="propertyType" class="form-label">Property&nbsp;Type</label>
+                        <input id="propertyType" type="text" col="PropertyType" class="form-control">
+
                     </div>
-                    <div class="col-sm-4">
-                        <label for="propertyDescription" style="margin-left: 200px;" class="form-label">Property&nbsp;Description</label>
-                        <textarea type="text" style="margin-left: 200px; height: 60px;" class="form-control" id="propertyDescription"></textarea>
+                    <div class="col-sm-6">
+                        <label for="propertyDescription" class="form-label">Property&nbsp;Description</label>
+                        <textarea id="propertyDescription" type="text" style="height: 60px;" class="form-control"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-4">
-                        <label for="propertyLocation" style="margin-left: 100px;" class="form-label">Property&nbsp;Location</label>
-                        <input type="text" style="margin-left: 100px;" col="PropertyLocation" class="form-control">
-                          
+                    <div class="col-sm-6">
+                        <label for="propertyLocation" class="form-label">Property&nbsp;Location</label>
+                        <input id="propertyLocation" type="text" col="PropertyLocation" class="form-control">
+
                     </div>
-                    <div class="col-sm-4">
-                        <label for="propertySize" style="margin-left: 200px;" class="form-label">Property&nbsp;Size</label>
-                        <input type="text" style="margin-left: 200px;" col="propertySize" class="form-control">
+                    <div class="col-sm-6">
+                        <label for="propertySize" class="form-label">Property&nbsp;Size</label>
+                        <input id="propertySize" type="text" col="PropertySize" class="form-control">
                     </div>
                 </div>
-              @*  <div class="form-group">
-                    <div class="col-sm-4">
-                        <label for="geoTagging" style="margin-left: 100px;" class="form-label">Geo-Tagging</label>
-                        <input type="text" style="margin-left: 100px;" class="form-control" id="geoTagging">
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="neighbourhood" style="margin-left: 200px;" class="form-label">Neighbourhood</label>
-                        <textarea type="text" style="margin-left: 200px; height: 60px;" class="form-control" id="neighbourhood"></textarea>
-                    </div>
-                </div>*@
-
-               @* <div class="row">
-                    <div class="col-sm-4">
-                        <label for="geoTagging" class="form-label" style="margin-left: 100px;">
-                            Geo-Tagging<i class="fa fa-map-marker" aria-hidden="true" style="font-size: 24px; background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, skyblue, red); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control mr-2" style="width: 30%; margin-left: 100px;" placeholder="Longitude">
-                            <span style="width: 0%;"></span>
-                            <input type="text" class="form-control ml-2" style="width: 30%; margin-left: 100px;" placeholder="Latitude">
-
-                        </div>
-                    </div>*@
-
-
                 <div class="form-group">
-                    <div class="col-sm-4">
-                        <label for="geoTagging" class="form-label" style="margin-left: 100px;">
+                    <div class="col-sm-6">
+                        <label for="geoTagging" class="form-label">
                             Geo-Tagging
                             <i class="fa fa-map-marker" aria-hidden="true" style="font-size: 24px; margin-left: 5px; vertical-align: middle; color: #000;"></i>
                         </label>
                         <div class="input-group">
-                            <input type="text" class="form-control mr-2" style="width: 30%; margin-left: 100px;" placeholder="Longitude">
-                            <span style="width: 0%;"></span>
-                            <input type="text" class="form-control ml-2" style="width: 30%; margin-left: 100px;" placeholder="Latitude">
+                            <input id="longitude" type="text" class="form-control mr-2" style="width: 30%; margin-right: 5px;" placeholder="Longitude">
+                            <input id="latitude" type="text" class="form-control ml-2" style="width: 30%; margin-left: 5px;" placeholder="Latitude">
+                            <button id="findLocation" type="button" class="btn btn-danger ml-2" data-toggle="modal" data-target="#mapModal" style="width: 35%; margin-left: 5px;">
+                                <i class="fa fa-search" aria-hidden="true"></i> Find Location
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="mapModalLabel">Location Map</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3">
+                                                <input id="searchLocation" type="text" class="form-control" placeholder="Search for a location">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-info" type="button" id="searchBtn" style="margin-top: 5px;">Search</button>
+                                                </div>
+                                            </div>
+                                            <div id="map" class="embed-responsive embed-responsive-16by9" style="margin-top: 6px;">
+                                                @*<iframe class="embed-responsive-item" frameborder="0" style="border:0"
+                                                src="https://www.google.com/maps/embed/v1/view?key=AIzaSyDBC6Wttc9nyJLMrXXKyP3I8DR2A-WQqEM&center=0,0&zoom=2"
+                                                allowfullscreen></iframe>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                 <div class="col-sm-4">
-                    <label for="neighbourhood" style="margin-left: 200px;" class="form-label">Neighbourhood</label>
-                    <textarea type="text" style="margin-left: 200px; height: 60px;" class="form-control" id="neighbourhood"></textarea>
-                </div>
+                    <div class="col-sm-6">
+                        <label for="neighbourhood" class="form-label">Neighbourhood</label>
+                        <textarea id="neighbourhood" type="text" style="height: 60px;" col="Neighbourhood" class="form-control"></textarea>
+                    </div>
                 </div>
 
 
 
                 <div class="form-group">
-                    <div class="col-sm-4">
-                        <label for="email" style="margin-left: 100px;" class="form-label">Email</label>
-                        <input type="text" style="margin-left: 100px;" class="form-control" id="email">
+                    <div class="col-sm-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" type="text" col="Email" class="form-control">
                     </div>
-                    <div class="col-sm-4">
-                        <label for="phoneNumber" style="margin-left: 200px;" class="form-label">Phone&nbsp;Number</label>
-                        <input type="text" style="margin-left: 200px;" class="form-control" id="phoneNumber">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <div class="col-sm-4">
-                        <label for="documentTitle" style="margin-left: 100px;" class="form-label">Document Title</label>
-                        <input type="text" col="DocumentTitle" style="margin-left: 100px;" class="form-control" id="documentTitle">
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="uploadProperty control-label" style="margin-left: 200px;">Upload&nbsp;Property</label>
-                        <input type="text" col="UploadProperty" placeholder="Search" style="margin-left: 200px;" class="form-control" id="uploadDocument">
+                    <div class="col-sm-6">
+                        <label for="phoneNumber" class="form-label">Phone&nbsp;Number</label>
+                        <input id="phoneNumber" type="text" class="form-control" col="PhoneNumber">
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <div class="col-sm-4">
-                        
-                        <input type="file" style="margin-left: 100px;" id="logo">
+                    <div class="col-sm-6">
+                        <label for="documentTitle" class="form-label">Document Title</label>
+                        <input id="documentTitle" type="text" col="DocumentTitle" class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="uploadProperty control-label">Upload&nbsp;Property</label>
+                        <input id="uploadDocument" type="text" col="UploadProperty" placeholder="Search" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+
+                        <input type="file" id="logo">
                     </div>
                 </div>
                 <div class="form-group">
 
-                    <div class="col-sm-4">
-                        <input type="file" style="display: none; margin-left: 100px;" id="addDocument" accept=".doc,.docx,.pdf,.xlsx,.txt,.rtf,.jpg,.png,.gif,.mp3,.wav,.aac,.mp4,.avi,.mov,.zip,.rar,.tar,.exe,.dmg,.apk,.db,.mdb,.sql,.ttf,.otf,.fon,.dll,.sys,.ini" multiple />
-                        <label for="addDocument" style=" width:140px; border: 0;  margin-left: 100px; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
+                    <div class="col-sm-6">
+                        <input type="file" style="display: none;" id="addDocument" accept=".doc,.docx,.pdf,.xlsx,.txt,.rtf,.jpg,.png,.gif,.mp3,.wav,.aac,.mp4,.avi,.mov,.zip,.rar,.tar,.exe,.dmg,.apk,.db,.mdb,.sql,.ttf,.otf,.fon,.dll,.sys,.ini" multiple />
+                        <label for="addDocument" style=" width:140px; border: 0; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
                             &nbsp; Add Document
                         </label>
 
                     </div>
                 </div>
-                </div>
             </div>
-        
-   </form>
+        </div>
+
+    </form>
 </div>
 
-  
+
+<iframe width="550" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?q=record+stores+in+Seattle&key=AIzaSyDBC6Wttc9nyJLMrXXKyP3I8DR2A-WQqEM" allowfullscreen></iframe>
 
 
+<!-- Include the Google Maps JavaScript API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBC6Wttc9nyJLMrXXKyP3I8DR2A-WQqEM&callback=initMap" async defer></script>
 
+@*<script>
+    var map;
+
+    function initMap() {
+        var mapContainer = document.getElementById('map');
+        var latitudeInput = document.getElementById('latitude');
+        var longitudeInput = document.getElementById('longitude');
+
+        // Create a new map instance
+        map = new google.maps.Map(mapContainer, {
+            center: { lat: 0, lng: 0 },
+            zoom: 2
+        });
+
+        // Listen for click events on the map
+        map.addListener('click', function (event) {
+            var clickedLatLng = event.latLng;
+            latitudeInput.value = clickedLatLng.lat();
+            longitudeInput.value = clickedLatLng.lng();
+        });
+    }
+
+    $(document).ready(function () {
+        $('#findLocation').click(function () {
+            initMap();
+        });
+    });
+</script>*@
+
+<script>
+    var map;
+
+    function initMap(center) {
+        var mapContainer = document.getElementById('map');
+        map = new google.maps.Map(mapContainer, {
+            center: center || { lat: 0, lng: 0 },
+            zoom: 2
+        });
+
+        map.addListener('click', function (event) {
+            var clickedLatLng = event.latLng;
+            updateCoordinates(clickedLatLng);
+        });
+    }
+
+    function updateCoordinates(latLng) {
+        var latitudeInput = document.getElementById('latitude');
+        var longitudeInput = document.getElementById('longitude');
+        latitudeInput.value = latLng.lat();
+        longitudeInput.value = latLng.lng();
+    }
+
+    $(document).ready(function () {
+        $('#findLocation').click(function () {
+            initMap();
+        });
+
+        $('#searchBtn').click(function () {
+            var searchInput = document.getElementById('searchLocation');
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: searchInput.value }, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK && results && results.length) {
+                    var location = results[0].geometry.location;
+                    map.setCenter(location);
+                    map.setZoom(15);
+                    updateCoordinates(location);
+                }
+            });
+        });
+    });
+</script>

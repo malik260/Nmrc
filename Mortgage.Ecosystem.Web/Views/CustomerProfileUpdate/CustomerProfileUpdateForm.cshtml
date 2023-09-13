@@ -4,272 +4,328 @@
 
 
 
+
 <div class="wrapper wrapper-content animated fadeIn">
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox">
-               <div id="customerUpdate">
-                            <div class="container" style="padding-right: 120px; padding-top: 20px;">
-                            <div class="row justify-content-center">
-                                <div class="wrapper animated fadeInRight">
-                                    <form id="form" class="form-horizontal m">
-                                       <div id="personalInformation" style="margin-top: 10px; margin-bottom:5%">
+                <div id="customerUpdate">
+                    <div class="container" >
+                        <div class="row justify-content-center">
+                            <div class="wrapper animated fadeInRight">
+                                <form id="form" class="form-horizontal m">
+                                    <div id="personalInformation" style="margin-top: 10px; margin-bottom:5%">
                                         <div class="dialogblockborder dialogblockborderheadline">
                                             <div class="dialogblock-header" style="height: auto;">
                                                 <span class="dialogblockheader">Profile Information</span>
-                                                <div style="margin-top:3%;margin-bottom:3%" >
-                                                
+                                                <div style="margin-top:3%;margin-bottom:3%">
+
                                                     <div class="form-group">
                                                          <div class="col-sm-6">
-                                                     
+                                                      <h5 style="color:red"><b>Old Details</b></h5>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <h5 style="color:green"><b>New Details</b></h5>
                                                     </div>
                                                     </div>
-                                               
+
                                                     <div class="form-group">
                                                         <div class="col-sm-6">
-                                                            <label for="oldFullName"  class="form-label">Full&nbsp;Name</label>
-                                                            <input id="oldFullName"  col="OldFullName" class="form-control" readonly/>
+                                                            <label for="oldFullName" class="form-label">Full&nbsp;Name</label>
+                                                            <input id="oldFullName" col="OldFullName" class="form-control" readonly />
 
                                                         </div>
 
                                                         <div class="col-sm-6">
-                                                             <label for="newFullName"  class="form-label">Full&nbsp;Name</label>
-                                                               <input id="newFullName" col="NewFullName" class="form-control" @*placeholder="Last Name, First Name and Others."*@/>
-                                                               <span class="message" style="display: inline-block;font-style: italic;border: none; background: none;">Last Name, First Name and Others.</span>
+                                                            <label for="newFullName" class="form-label">Full&nbsp;Name</label>
+                                                            <input id="newFullName" col="NewFullName" class="form-control" @*placeholder="Last Name, First Name and Others."*@ />
+                                                            <span class="message" style="display: inline-block;font-style: italic;border: none; background: none;">Last Name, First Name and Others.</span>
 
-                                                         </div>      
+                                                        </div>
                                                     </div>
 
-                                                <div class="form-group">
-                                                    <div class="col-sm-6">
-                                                        <label for="oldPhoneNumber"  class="form-label">Phone&nbsp;Number</label>
-                                                         <input id="oldPhoneNumber" class="form-control"readonly/>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-6">
+                                                            <label for="oldPhoneNumber" class="form-label">Phone&nbsp;Number</label>
+                                                            <input id="oldPhoneNumber" class="form-control" readonly />
 
+                                                        </div>
+
+                                                        <div class="col-sm-6">
+                                                            <label for="newPhoneNumber" class="form-label">Phone&nbsp;Number</label>
+                                                            <input id="newPhoneNumber" col="NewPhoneNumber" class="form-control" />
+                                                        </div>
                                                     </div>
 
-                                                    <div class="col-sm-6">
-                                                        <label for="newPhoneNumber"   class="form-label">Phone&nbsp;Number</label>
-                                                        <input id="newPhoneNumber" col="NewPhoneNumber" class="form-control" />
+                                                    <div class="form-group">
+                                                        <div class="col-sm-6">
+                                                            <label for="oldAddress" class="form-label">Address</label>
+                                                            <textarea id="oldAddress" class="form-control" readonly></textarea>
+
+                                                        </div>
+
+                                                        <div class="col-sm-6">
+                                                            <label for="newAddress" class="form-label">Address</label>
+                                                            <textarea id="newAddress" class="form-control"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-6">
+                                                            <label for="oldMarital" class="form-label">Marital&nbsp;Status</label>
+                                                            <input id="oldMaritalStatus" class="form-control" readonly />
+
+                                                        </div>
+
+                                                        <div class="col-sm-6">
+                                                            <label for="newMarital" class="form-label">Marital&nbsp;Status</label>
+                                                            <div id="marital" col="MaritalStatus"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                
-                                                <div class="form-group">
-                                                    <div class="col-sm-6">
-                                                        <label for="oldAddress"  class="form-label">Address</label>
-                                                         <textarea id="oldAddress" class="form-control"readonly></textarea>
-
-                                                    </div>
-
-                                                    <div class="col-sm-6">
-                                                        <label for="newAddress"  class="form-label">Address</label>
-                                                         <textarea id="newAddress" class="form-control"></textarea>
-                                                    </div>
-                                                </div>
-                                                 <div class="form-group">
-                                                    <div class="col-sm-6">
-                                                        <label for="oldMarital"  class="form-label">Marital&nbsp;Status</label>
-                                                         <input id="oldPhoneMarital" class="form-control"readonly/>
-
-                                                    </div>
-
-                                                    <div class="col-sm-6">
-                                                        <label for="newMarital"   class="form-label">Marital&nbsp;Status</label>
-                                                        <div id="marital" col="Marital"></div>
-                                                    </div>
-                                                </div>
-                                              </div>
                                             </div>
                                         </div>
-                                      </div>
-                                        <div id="accountDetail" style="margin-top: 10px; margin-bottom:5%">
-                                            <div class="dialogblockborder dialogblockborderheadline">
-                                                <div class="dialogblock-body" style="height: 100%;">
-                                                     <span class="dialogblockheader" style="margin-bottom:10%" >Account Detail</span>
-                                                      <div style="margin-top:3%;margin-bottom:3%" > 
+                                    </div>
+                                    <div id="accountDetail" style="margin-top: 10px; margin-bottom:5%">
+                                        <div class="dialogblockborder dialogblockborderheadline">
+                                            <div class="dialogblock-body" style="height: 100%;">
+                                                <span class="dialogblockheader" style="margin-bottom:10%">Account Detail</span>
+                                                <div style="margin-top:3%;margin-bottom:3%">
                                                     <div class="form-group">
-                                                         <div class="col-sm-6">
-                                                        
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <h5 style="color:green"><b>New Details</b></h5>
-                                                    </div>
+                                                        <div class="col-sm-6">
+                                                            <h5 style="color:red"><b>Old Details</b></h5>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <h5 style="color:green"><b>New Details</b></h5>
+                                                        </div>
+
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-sm-6">
-                                                            <label for="oldAccountNumber"  class="form-label">Account&nbsp;Number</label>
-                                                            <input id="oldAccountNumber"  col="OldAccountNumber" class="form-control" readonly/>
+                                                            <label for="oldAccountNumber" class="form-label">Account&nbsp;Number</label>
+                                                            <input id="oldAccountNumber" col="OldAccountNumber" class="form-control" readonly />
 
                                                         </div>
 
                                                         <div class="col-sm-6">
-                                                            <label for="newAccountNumber"  class="form-label">Account&nbsp;Number</label>
-                                                            <input id="newAccountNumber"  col="NewAccountNumber" class="form-control"/>
+                                                            <label for="newAccountNumber" class="form-label">Account&nbsp;Number</label>
+                                                            <input id="newAccountNumber" col="NewAccountNumber" class="form-control" />
                                                         </div>
-                                                    
+
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-sm-6">
-                                                            <label for="oldBankName"  class="form-label">Bank&nbsp;Name</label>
-                                                            <input id="oldBankName"  col="OldBankName" class="form-control" readonly/>
+                                                            <label class="form-label">Bank&nbsp;Name</label>
+                                                            <input id="oldBankName" col="OldBankName" class="form-control" readonly />
                                                         </div>
                                                         <div class="col-sm-6">
-                                                            <label for="newBankName"  class="form-label">Bank&nbsp;Name</label>
-                                                               <select id="newBankName"  col="NewBankName" class="form-control" >
-                                                                <option value="" disabled selected hidden>--Select Banks--</option>
-                                                                <option></option>
-                                                                </select>
+                                                            <label for="newBankName" class="control-label">Bank&nbsp;Name</label>
+                                                            <div id="bankName" col="CustomerBank"></div>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group">
                                                         <div class="col-sm-6">
-                                                            <label for="oldMonthlyIncome"  class="form-label">Monthly&nbsp;Income</label>
-                                                            <input id="oldMonthlyIncome"  col="OldMonthlyIncome" class="form-control" readonly/>
+                                                            <label for="oldMonthlyIncome" class="form-label">Monthly&nbsp;Income</label>
+                                                            <input id="oldMonthlyIncome" col="OldMonthlyIncome" class="form-control" readonly />
 
                                                         </div>
 
                                                         <div class="col-sm-6">
-                                                            <label for="newMonthlyIncome"  class="form-label">Monthly&nbsp;Income</label>
-                                                            <input id="newMonthlyIncome"  col="NewMonthlyIncome" class="form-control"/>
+                                                            <label for="newMonthlyIncome" class="form-label">Monthly&nbsp;Income</label>
+                                                            <input id="newMonthlyIncome" col="NewMonthlyIncome" class="form-control" />
                                                         </div>
-                                                    
-                                                    </div>
+
                                                     </div>
                                                 </div>
-                                             </div>
-                                         </div>
-                                        <div id="nokDetail" style="margin-top: 10px; margin-bottom:5%">
-                                            <div class="dialogblockborder dialogblockborderheadline">
-                                                <div class="dialogblock-body" style="height: 100%;">
-                                                    <span class="dialogblockheader">Next of Kin Detail</span>
-                                                    <div style="margin-top:3%;margin-bottom:3%" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="nokDetail" style="margin-top: 10px; margin-bottom:5%">
+                                        <div class="dialogblockborder dialogblockborderheadline">
+                                            <div class="dialogblock-body" style="height: 100%;">
+                                                <span class="dialogblockheader">Next of Kin Detail</span>
+                                                <div style="margin-top:3%;margin-bottom:3%">
                                                     <div class="form-group">
-                                                         <div class="col-sm-6">
-                                                     
+                                                        <div class="col-sm-6">
+                                                            <h5 style="color:red"><b>Old Details</b></h5>
                                                         </div>
                                                         <div class="col-sm-6">
-                                                        <h5 style="color:green"><b>New Details</b></h5>
+                                                            <h5 style="color:green"><b>New Details</b></h5>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-6">
+                                                            <label for="oldNOKName" class="form-label">Next&nbsp;Of&nbsp;Kin&nbsp;Name</label>
+                                                            <input id="oldNOKName" col="OldNOKName" class="form-control" readonly />
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="newNOKName" class="form-label">Next&nbsp;Of&nbsp;Kin&nbsp;Name</label>
+                                                            <input id="newNOKName" col="NewNOKName" class="form-control" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-sm-6">
-                                                            <label for="oldNOKName"  class="form-label">Next&nbsp;Of&nbsp;Kin&nbsp;Name</label>
-                                                            <input id="oldNOKName"  col="OldNOKName" class="form-control" readonly/>
+                                                            <label for="oldNOKPhoneNumber" class="form-label">Phone&nbsp;Number</label>
+                                                            <input id="oldNOKPhoneNumber" col="OldNOKPhoneNumber" class="form-control" readonly />
                                                         </div>
                                                         <div class="col-sm-6">
-                                                            <label for="newNOKName"  class="form-label">Next&nbsp;Of&nbsp;Kin&nbsp;Name</label>
-                                                            <input id="newNOKName"  col="NewNOKName" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="col-sm-6">
-                                                            <label for="oldNOKPhoneNumber"  class="form-label">Phone&nbsp;Number</label>
-                                                            <input id="oldNOKPhoneNumber"  col="OldNOKPhoneNumber" class="form-control" readonly/>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                          <label for="newNOKPhoneNumber"  class="form-label">Phone&nbsp;Number</label>
-                                                            <input id="newNOKPhoneNumber"  col="NewNOKPhoneNumber" class="form-control" />
+                                                            <label for="newNOKPhoneNumber" class="form-label">Phone&nbsp;Number</label>
+                                                            <input id="newNOKPhoneNumber" col="NewNOKPhoneNumber" class="form-control" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-sm-6">
-                                                            <label for="oldNOKAddress"  class="form-label">Address</label>
-                                                             <textarea id="oldNOKAddress" class="form-control" style="height:60px" readonly></textarea>
-                                                            </div>
-                                                        <div class="col-sm-6">
-                                                             <label for="newNOKAddress"  class="form-label">Address</label>
-                                                             <textarea id="newNOKAddress" class="form-control" style="height:60px"></textarea>
-                                                         </div>
-                                                    </div>
-                                                      <div class="form-group">
-                                                        <div class="col-sm-6">
-                                                            <label for="oldRelationship"  class="form-label">Relationship</label>
-                                                            <input id="oldRelationship"  col="Relationship" class="form-control" readonly/>
+                                                            <label for="oldNOKAddress" class="form-label">Address</label>
+                                                            <textarea id="oldNOKAddress" class="form-control" style="height:60px" readonly></textarea>
                                                         </div>
                                                         <div class="col-sm-6">
-                                                            <label for="newRelationship"  class="form-label">Relationship</label>                                                             
-                                                            <select id="newRelationship"  col="NewRelationship" class="form-control" >
-                                                                <option value="" disabled selected hidden>--Select Relationship Type--</option>
-                                                                <option></option>
-                                                                </select>
+                                                            <label for="newNOKAddress" class="form-label">Address</label>
+                                                            <textarea id="newNOKAddress" class="form-control" style="height:60px"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="col-sm-6">
-                                                            <label for="documentUpload"  class="form-label">Document&nbsp;Upload</label>
-                                                            <select id="documentTitle"  class="form-control">
+                                                            <label for="oldRelationship" class="form-label">Relationship</label>
+                                                            <input id="oldRelationship" col="Relationship" class="form-control" readonly />
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="newRelationship" class="form-label">Relationship</label>
+                                                           <div id="kinRelationship" col="KinRelationship"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-6">
+                                                            <label for="documentUpload" class="form-label">Document&nbsp;Upload</label>
+                                                            <select id="documentTitle" class="form-control">
                                                                 <option value="" disabled selected hidden>--Select Document Title--</option>
                                                                 <option></option>
                                                             </select>
                                                         </div>
                                                         <div class="col-sm-6">
-                                                            <label for="addDocument"  class="form-label"></label>
-                                                            <input type="file" id="chooseFile" style="margin-left: -10px; margin-top:5%">
-                                                            <button id="addDocument" style="margin-left: -1px; margin-top:10%; background-color: #a6a6a6; border-color: #a6a6a6; color: black;">Add Document</button>
+                                                            <label for="addDocument" class="form-label"></label>
+                                                            <input type="file" id="chooseFile">
+                                                            <button id="addDocument" style=" margin-top:5%; width:140px; border: 0; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">Add Document</button>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                    </form>
-                                </div>
+                                </form>
                             </div>
                         </div>
-                        </div>
-
-                       
                     </div>
                 </div>
+
+
             </div>
         </div>
+    </div>
+</div>
 
 
 
 
 <script type="text/javascript">
-        $(function () {
-        initGrid();
-        $("#marital").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(MaritalStatusEnum).EnumToDictionaryString())) })
 
-    }); 
-
- 
-    function marital() {
-                $("#marital").cnComboBox({
-                    url: '@Url.Content("~/MaritalStatus/GetListJson")',
-                    key: "Id",
-                    value: "Name",
-                    class: "form-control"
-                });
-    }
-
- function savedForm() {
-        var selectedRow = $("#customerProfileUpdateTable").bootstrapTable("getSelections");
-    
+     $(document).ready(function () {
     $.ajax({
-        url: '@Url.Content("~/CustomerProfileUpdate/SavedFormJson")',
-        type: "post",
-        data: JSON.stringify(selectedRow),
-        //contentType: "application/json",
+        url: '@Url.Content("~/CustomerProfileUpdate/ViewCustomerInformation")', // The URL of your controller method
+        type: 'GET',
+        dataType: 'json',
         success: function (obj) {
             if (obj.Tag == 1) {
-                cn.msgSuccess(obj.Message);
-                // Assuming customerProfileUpdateTable is the target table to save records
-                customerProfileUpdateTable.addRows(selectedRow);
-                cn.msgSuccess("Records saved successfully into customerProfileUpdateTable");
-                searchGrid();
+                var data = obj.Data;
+                $('#oldFullName').val(data.Name);
+                $('#oldPhoneNumber').val(data.MobileNo);
+                $('#oldAddress').val(data.ContactAddress);
+                $('#oldMaritalStatus').val(data.MaritalStatus);
+                $('#oldAccountNumber').val(data.AccountNum);
+                $('#oldBankName').val(data.BankName);
+                $('#oldMonthlyIncome').val(data.MonthlyIncome);
+                $('#oldNOKName').val(data.NOKName);
+                $('#oldNOKPhoneNumber').val(data.NOKPhoneNo);
+                $('#oldNOKAddress').val(data.NOKAddress);
+                $('#oldRelationship').val(data.NOKRelationship);
             } else {
                 cn.msgError(obj.Message);
+                $('#form').hide();
             }
         },
-        error: function (xhr, status, error) {
-            cn.msgError("An error occurred while saving the records.");
+        error: function () {
+            // Handle error, if any
         }
     });
-}
+});
+
+        
+    var id = cn.request("form");
+       // initGrid()
+        //$("#marital").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(MaritalStatusEnum).EnumToDictionaryString())) })
+ 
+     $("#marital").cnComboBox({
+        url: '@Url.Content("~/MaritalStatus/GetListJson")',
+        key: "Id",
+        value: "Name"
+    });
+     $("#bankName").cnComboBox({
+        url: '@Url.Content("~/Bank/GetListJson")',
+        key: "Id",
+        value: "Name"
+    });
+     $("#kinRelationship").cnComboBox({
+                url: '@Url.Content("~/Relation/GetListJson")',
+                key: "Id",
+                value: "Name",
+                class: "form-control"
+            });
+
+//    function savedForm() {
+        
+//    $.ajax({
+//        url: '@Url.Content("~/CustomerProfileUpdate/SavedFormJson")',
+//        type: "post",
+//        data: JSON.stringify(selectedRow),
+//        success: function (obj) {
+//            if (obj.Tag == 1) {
+//                cn.msgSuccess(obj.Message);
+
+//                // Assuming customerProfileUpdateTable is the target table to save records
+//                customerProfileUpdateTable.addRows(selectedRow);
+//                cn.msgSuccess("Records saved successfully into customerProfileUpdateTable");
+//                searchGrid();
+//            } else {
+//                cn.msgError(obj.Message);
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            cn.msgError("An error occurred while saving the records.");
+//        }
+//    });
+//}
+
+  function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/CustomerProfileUpdate/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+
   </Script>

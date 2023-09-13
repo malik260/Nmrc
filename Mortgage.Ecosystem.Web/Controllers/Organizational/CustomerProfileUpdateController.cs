@@ -81,6 +81,14 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             TData<int> obj = await _iCustomerProfileUpdateService.GetMaxSort();
             return Json(obj);
         }
+
+        [HttpGet]
+        //[AuthorizeFilter("refund:view")]
+        public async Task<IActionResult> ViewCustomerInformation()
+        {
+            TData<CustomerDetailsViewModel> obj = await _iCustomerProfileUpdateService.GetCustomerDetails();
+            return Json(obj);
+        }
         #endregion
 
         #region Submit data
@@ -93,13 +101,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
 
-        [HttpPost]
-        [AuthorizeFilter("customerprofileupdate:add,employee:edit")]
-        public async Task<IActionResult> SavedFormJson(CustomerProfileUpdateEntity entity)
-        {
-            TData<string> obj = await _iCustomerProfileUpdateService.UpdateCustomerProfile(entity);
-            return Json(obj);
-        }
+        //[HttpPost]
+        //[AuthorizeFilter("customerprofileupdate:add,employee:edit")]
+        //public async Task<IActionResult> SavedFormJson(CustomerProfileUpdateEntity entity)
+        //{
+        //    TData<string> obj = await _iCustomerProfileUpdateService.UpdateCustomerProfile(entity);
+        //    return Json(obj);
+        //}
 
 
 

@@ -1,6 +1,9 @@
 ﻿@{
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+<div class="ibox-title">
+    <h5>FEEDBACK FORM</h5>
+</div>
 <div class="container-div">
     <div class="row">
         <div id="searchDiv" class="col-sm-12 search-collapse">
@@ -31,7 +34,7 @@
         </div>
 
         <div class="col-sm-12 select-table table-striped">
-            <table id="feedBackFormTable" data-mobile-responsive="true"></table>
+            <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
     </div>
 </div>
@@ -44,67 +47,47 @@
 
         laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
-    }); 
+    });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/FeedBackForm/GetPageListJson")';
-        $('#feedBackFormTable').cnTable({
+        var queryUrl = '@Url.Content("~/FeedBackForm/GetFeedBackFormPageListJson")';
+        $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
-                //{
-                //    field: 'AddNewForm', title: '', align: 'center',
-                //    formatter: function (value, row, index) {
-                //        var html = '<div class="dropdown">' +
-                //            '<button class="btn btn-secondary dropdown-toggle" type="button" id="addNewFormDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-                //            'Add New Form' +
-                //            '</button>' +
-                //            '<div class="dropdown-menu" aria-labelledby="addNewFormDropdown">' +
-                //            '<a class="dropdown-item" href="#" onclick="showSaveForm(true)">Form 1</a>' +
-                //            '<a class="dropdown-item" href="#" onclick="showSaveForm(true)">Form 2</a>' +
-                //            '<a class="dropdown-item" href="#" onclick="showSaveForm(true)">Form 3</a>' +
-                //            '</div>' +
-                //            '</div>';
-                //        return html;
-                //    }
-                //},
+
                 { field: 'Id', title: 'Id', visible: false },
+                { field: 'Name', title: 'Name', sortable: true },
                 { field: 'EmailAddress', title: 'Email Address', sortable: true },
                 { field: 'Subject', title: 'Subject', sortable: true },
                 { field: 'Messages', title: 'Messages', sortable: true },
-                {
-                    field: 'Status', title: 'Status', align: 'center',
-                    formatter: function (value, row, index) {
-                        if (value == "@StatusEnum.Yes.ToInt()") {
-                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
-                        } else {
-                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
-                        }
-                    }
-                },
-                {
-                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
-                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
-                    }
-                }
+
             ],
             queryParams: function (params) {
-                var pagination = $('#feedBackFormTable').cnTable('getPagination', params);
+                var pagination = $('#gridTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
             }
         });
     }
 
+    function searchGrid(callBackId) {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').cnTreeTable('search', param);
+        if (callBackId) {
+            id = callBackId;
+        }
+    }
+
     function searchGrid() {
-        $('#feedBackFormTable').cnTable('search');
+        $('#gridTable').cnTable('search');
         resetToolbarStatus();
     }
 
     function showSaveForm(bAdd) {
         var id = 0;
         if (!bAdd) {
-            var selectedRow = $("#feedBackFormTable").bootstrapTable("getSelections");
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
             if (!cn.checkRowEdit(selectedRow)) {
                 return;
             }
@@ -124,7 +107,7 @@
     }
 
     function deleteForm() {
-        var selectedRow = $("#feedBackFormTable").bootstrapTable("getSelections");
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowDelete(selectedRow)) {
             cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
                 var ids = cn.getIds(selectedRow);

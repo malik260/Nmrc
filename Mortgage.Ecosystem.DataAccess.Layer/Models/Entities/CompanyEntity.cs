@@ -1,4 +1,5 @@
 ﻿using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
@@ -94,6 +95,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // Remark
         [Column("Remark")]
         public string? Remark { get; set; }
+
+        // Status
+        [Column("Status"), Description("Status")]
+        public int Status { get; set; }
 
         [NotMapped]
         public string? AgentType { get; set; }

@@ -17,6 +17,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<string>> SaveForm(CompanyEntity entity);
         Task<TData<string>> SaveForms(CompanyEntity entity);
         Task<TData> DeleteForm(string ids);
+        Task<TData> ApproveForm(CompanyEntity entity);
         Task<bool> IndividualExiting(CreateCustomerRequestDTO createCustomerRequestDTO);
         Task<bool> UpdateCustomer(CustomerUpdateRequestDTO customerUpdateRequestDTO);
         Task<bool> CustomerExist(string customerCode);

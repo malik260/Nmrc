@@ -7,6 +7,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
     public interface IRefundRepository
     {
         Task<List<RefundEntity>> GetList(RefundListParam param);
+        Task<List<RefundEntity>> GetRefundList(RefundParam paramss);
+
         Task<List<RefundEntity>> GetPageList(RefundListParam param, Pagination pagination);
         Task<RefundEntity> GetEntity(long id);
         Task<int> GetMaxSort();

@@ -5,6 +5,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
     public interface IUnitOfWork
     {
         IAccountTypeRepository AccountTypes { get; }
+        IAccreditationFeeRepository AccreditationFees { get; }
+
         IAgentTypeRepository AgentTypes { get; }
         IAlertTypeRepository AlertTypes { get; }
         IAllNHFSubscriberRepository AllNHFSubscribers { get; }
@@ -18,6 +20,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IBranchRepository Branches { get; }
         IChangeEmployerRepository ChangeEmployers { get; }
         IChangePasswordRepository ChangePasswords { get; }
+        IChargeSetupRepository ChargeSetups { get; }
+        IChecklistRepository Checklists { get; }
         ICompanyRepository Companies { get; }
         ICompanyClassRepository CompanyClasses { get; }
         ICompanyTypeRepository CompanyTypes { get; }
@@ -25,6 +29,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IContributionRepository Contributions { get; }
         IContributionRefundPostingRepository ContributionRefundPostings { get; }
         IContributionHistoryRepository ContributionHistories { get; }
+        ICreditAssessmentFactorIndexRepository CreditAssessmentFactorIndexes { get; }
+        ICreditAssessmentIndexRepository CreditAssessmentIndexes { get; }
+        ICreditAssessmentIndexTitleRepository CreditAssessmentIndexTitles { get; }
+        ICreditAssessmentRiskFactorRepository CreditAssessmentRiskFactors { get; }
+        ICreditScoreRepository CreditScores { get; }
+        ICreditTypeRepository CreditTypes { get; }
         ICustomerProfileUpdateRepository CustomerProfileUpdates { get; }
         IDepartmentRepository Departments { get; }
         IDesignationRepository Designations { get; }
@@ -47,10 +57,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         INationalityRepository Nationalities { get; }
         INextOfKinRepository NextOfKins { get; }
         INHFCustomerRequestRepository NHFCustomerRequests { get; }
+        INHFRegCompanyRepository NHFRegCompanies { get; }
         INHFRegUsersRepository NHFRegUsers { get; }
         IRefundRepository Refunds { get; }
         IRefundConditionRepository RefundConditions { get; }
         IRefundProfilingRepository RefundProfilings { get; }
+        IRiskAssessmentSetupRepository RiskAssessmentSetups { get; }
+
         IPaymentHistoryRepository PaymentHistories { get; }
         IPropertySubscriptionRepository PropertySubscriptions { get; }
         IPropertyRegistrationRepository PropertyRegistrations { get; }
@@ -59,9 +72,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IRelationRepository Relations { get; }
         IRoleRepository Roles { get; }
         IStateRepository States { get; }
+        IStatementOfAccountRepository StatementOfAccounts { get; }
         ISectorRepository Sectors { get; }
         ISubSectorRepository SubSectors { get; }
         ITitleRepository Titles { get; }
+        IUnderwritingRepository Underwritings { get; }
+        IUnlockAdminUserRepository UnlockAdminUsers { get; }
         IUnlockNhfPortalRepository UnlockNhfPortals { get; }
         IUserBelongRepository UserBelongs { get; }
         IUserRepository Users { get; }

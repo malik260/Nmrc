@@ -1,0 +1,104 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="creditScore" id="creditScore">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Credit Score</span>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="creditType control-label">Credit Type</label>
+                        <div col="CreditType" id="creditType"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="remark control-label">Remark</label>
+                        <input type="text" col="Remark" class="form-control" id="remark">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="productCode" class="form-label">Product&nbsp;Code</label>
+                        <input id="productCode" col="ProductCode" class="form-control" readonly>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="interestRate" class="form-label">Interest&nbsp;Rate</label>
+                        <input type="text" col="InterestRate" class="form-control" id="interestRate">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="rangeMax" class="form-label">Range Max.</label>
+                        <input id="rangeMax" type="text" col="RangeMax" class="form-control">
+
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="creditGrades" class="form-label">Credit&nbsp;Grades</label>
+                        <input id="creditGrades" type="text" col="CreditGrade" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="rangeMin" class="form-label">Range Min.</label>
+                        <input id="rangeMin" type="text" col="RangeMin" class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="creditGradeDefinitions" class="form-label">Credit&nbsp;Grade&nbsp;Definitions</label>
+                        <textarea id="creditGradeDefinitions" type="text" style="height: 60px;" col="CreditGradeDefinition" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="rating" class="form-label">Rating</label>
+                        <input id="rating" type="text" col="Rating" class="form-control">
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    var id = cn.request("id");
+
+    $("#creditType").cnComboBox({
+        url: '@Url.Content("~/CreditType/GetListJson")',
+        key: "Code",
+        value: "Name"
+    });
+
+    $("#creditType").change(function () {
+        //debugger
+        var selectedCredit = $("#creditType").cnComboBox('getValue');
+        //var id = selectedCredit;
+        $("#productCode").val(selectedCredit);
+    });
+    function saveForm(index) {
+        if ($("#form1").validate().form()) {
+            var postData = $("#form1").getWebControls({ Id: id });
+
+            cn.ajax({
+                url: '@Url.Content("~/CreditScore/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>

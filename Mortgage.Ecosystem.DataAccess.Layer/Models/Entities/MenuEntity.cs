@@ -54,5 +54,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // Parent name
         [NotMapped]
         public string? ParentName { get; set; }
+
+        // Approval Log List
+        [NotMapped]
+        public List<ApprovalLogEntity>? ApprovalLogList { get; set; }
+
     }
 }

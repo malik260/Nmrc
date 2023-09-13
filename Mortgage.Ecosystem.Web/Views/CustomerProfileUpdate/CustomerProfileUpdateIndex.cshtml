@@ -1,6 +1,9 @@
 ﻿@{
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+<div class="ibox-title">
+    <h5>CUSTOMER UPDATE PROFILE</h5>
+</div>
 <div class="container-div">
     <div class="row">
         <div id="searchDiv" class="col-sm-12 search-collapse">
@@ -31,7 +34,7 @@
         </div>
 
         <div class="col-sm-12 select-table table-striped">
-            <table id="customerProfileUpdateTable" data-mobile-responsive="true"></table>
+            <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
     </div>
 </div>
@@ -42,13 +45,13 @@
 
         $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
 
-        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd',theme:'molv' });
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
-    }); 
+    });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/CustomerProfileUpdate/GetPageListJson")';
-        $('#customerProfileUpdateTable').cnTable({
+        var queryUrl = '@Url.Content("~/CustomerProfileUpdate/GetCustomerProfileUpdatePageListJson")';
+        $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
@@ -76,22 +79,30 @@
                 }
             ],
             queryParams: function (params) {
-                var pagination = $('#customerProfileUpdateTable').cnTable('getPagination', params);
+                var pagination = $('#gridTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
             }
         });
     }
 
+    function searchGrid(callBackId) {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').cnTreeTable('search', param);
+        if (callBackId) {
+            id = callBackId;
+        }
+    }
+
     function searchGrid() {
-        $('#customerProfileUpdateTable').cnTable('search');
+        $('#gridTable').cnTable('search');
         resetToolbarStatus();
     }
 
     function showSaveForm(bAdd) {
         var id = 0;
         if (!bAdd) {
-            var selectedRow = $("#customerProfileUpdateTable").bootstrapTable("getSelections");
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
             if (!cn.checkRowEdit(selectedRow)) {
                 return;
             }
@@ -117,7 +128,7 @@
 
 
     function deleteForm() {
-        var selectedRow = $("#customerProfileUpdateTable").bootstrapTable("getSelections");
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowDelete(selectedRow)) {
             cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
                 var ids = cn.getIds(selectedRow);
