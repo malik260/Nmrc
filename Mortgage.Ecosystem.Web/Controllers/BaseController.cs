@@ -59,6 +59,8 @@ namespace Mortgage.Ecosystem.Web.Controllers
                 var approvalEmployerItems = await new DataRepository().GetCompanyApprovalItems();
                 user.ApprovalEmployerItems = approvalEmployerItems.ToList();
                 user.ApprovalItemCount += user.ApprovalEmployerItems.Count;
+
+                ViewBag.OperatorInfo = user;
             }
 
             var notLogAction = new string[] { "GetServerJson", "Error" };

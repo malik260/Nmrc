@@ -27,6 +27,13 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<List<EmployeeEntity>> obj = new TData<List<EmployeeEntity>>();
             obj.Data = await _iUnitOfWork.Employees.GetList(param);
+            if (obj.Data.Count > 0)
+            {
+                foreach (EmployeeEntity employee in obj.Data)
+                {
+                    employee.FullName = $"{employee.LastName} {employee.FirstName}";
+                }
+            }
             obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
@@ -46,7 +53,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 List<BankEntity> bankList = await _iUnitOfWork.Banks.GetList(new BankListParam { Codes = obj.Data.Select(p => p.CustomerBank.ToStr()).ToList() });
                 List<AccountTypeEntity> accountTypeList = await _iUnitOfWork.AccountTypes.GetList(new AccountTypeListParam { Ids = obj.Data.Select(p => p.AccountType).ToList() });
                 List<AlertTypeEntity> alertTypeList = await _iUnitOfWork.AlertTypes.GetList(new AlertTypeListParam { Ids = obj.Data.Select(p => p.AlertType).ToList() });
-                List<StateEntity> stateList = await _iUnitOfWork.States.GetList(new StateListParam { Ids = obj.Data.Select(p => p.ContributionBranch).ToList() });
+                //List<StateEntity> stateList = await _iUnitOfWork.States.GetList(new StateListParam { Ids = obj.Data.Select(p => p.ContributionBranch).ToList() });
                 foreach (EmployeeEntity employee in obj.Data)
                 {
                     employee.CompanyName = companyList.Where(p => p.Id == employee.Company).Select(p => p.Name).FirstOrDefault();
@@ -56,7 +63,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     employee.GenderName = genderList.Where(p => p.Id == employee.Gender).Select(p => p.Name).FirstOrDefault();
                     employee.MaritalStatusName = maritalStatusList.Where(p => p.Id == employee.MaritalStatus).Select(p => p.Name).FirstOrDefault();
                     employee.BankName = bankList.Where(p => p.Code == employee.CustomerBank).Select(p => p.Name).FirstOrDefault();
-                    employee.ContributionBranchName = stateList.Where(p => p.Id == employee.ContributionBranch).Select(p => p.Name).FirstOrDefault();
+                    //employee.ContributionBranchName = stateList.Where(p => p.Id == employee.ContributionBranch).Select(p => p.Name).FirstOrDefault();
                     employee.AccountTypeName = accountTypeList.Where(p => p.Id == employee.AccountType).Select(p => p.Name).FirstOrDefault();
                     employee.AlertTypeName = alertTypeList.Where(p => p.Id == employee.AlertType).Select(p => p.Name).FirstOrDefault();
                 }
@@ -81,7 +88,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 List<BankEntity> bankList = await _iUnitOfWork.Banks.GetList(new BankListParam { Codes = obj.Data.Select(p => p.CustomerBank.ToStr()).ToList() });
                 List<AccountTypeEntity> accountTypeList = await _iUnitOfWork.AccountTypes.GetList(new AccountTypeListParam { Ids = obj.Data.Select(p => p.AccountType).ToList() });
                 List<AlertTypeEntity> alertTypeList = await _iUnitOfWork.AlertTypes.GetList(new AlertTypeListParam { Ids = obj.Data.Select(p => p.AlertType).ToList() });
-                List<StateEntity> stateList = await _iUnitOfWork.States.GetList(new StateListParam { Ids = obj.Data.Select(p => p.ContributionBranch).ToList() });
+                //List<StateEntity> stateList = await _iUnitOfWork.States.GetList(new StateListParam { Ids = obj.Data.Select(p => p.ContributionBranch).ToList() });
                 foreach (EmployeeEntity employee in obj.Data)
                 {
                     employee.CompanyName = companyList.Where(p => p.Id == employee.Company).Select(p => p.Name).FirstOrDefault();
@@ -91,9 +98,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     employee.GenderName = genderList.Where(p => p.Id == employee.Gender).Select(p => p.Name).FirstOrDefault();
                     employee.MaritalStatusName = maritalStatusList.Where(p => p.Id == employee.MaritalStatus).Select(p => p.Name).FirstOrDefault();
                     employee.BankName = bankList.Where(p => p.Code == employee.CustomerBank).Select(p => p.Name).FirstOrDefault();
-                    employee.ContributionBranchName = stateList.Where(p => p.Id == employee.ContributionBranch).Select(p => p.Name).FirstOrDefault();
+                    //employee.ContributionBranchName = stateList.Where(p => p.Id == employee.ContributionBranch).Select(p => p.Name).FirstOrDefault();
                     employee.AccountTypeName = accountTypeList.Where(p => p.Id == employee.AccountType).Select(p => p.Name).FirstOrDefault();
                     employee.AlertTypeName = alertTypeList.Where(p => p.Id == employee.AlertType).Select(p => p.Name).FirstOrDefault();
+                    employee.TitleName = employee.TitleName.IsNotNull() ? employee.TitleName : string.Empty;
+                    employee.FullName = $"{employee.TitleName} {employee.FirstName} {employee.LastName}";
                 }
             }
             obj.Total = pagination.TotalCount;
@@ -361,9 +370,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
-
-
-
         #endregion        
     }
 }

@@ -57,7 +57,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task<List<EmployeeEntity>> GetLists()
         {
-
             var list = await BaseRepository().FindList<EmployeeEntity>();
             return list.ToList();
         }

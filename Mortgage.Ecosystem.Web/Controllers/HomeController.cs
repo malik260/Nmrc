@@ -48,7 +48,7 @@ namespace Mortgage.Ecosystem.Web.Controllers
             }
 
             ViewBag.MenuList = menuList;
-            ViewBag.OperatorInfo = operatorInfo;
+            //ViewBag.OperatorInfo = operatorInfo;
             return View();
         }
 

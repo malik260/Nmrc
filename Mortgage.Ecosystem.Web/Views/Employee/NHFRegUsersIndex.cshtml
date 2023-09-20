@@ -23,9 +23,9 @@
                                                 </li>
                                                 <li class="select-time">
                                                     <label>Created: </label>
-                                                    <input id="employeeStartTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                                                    <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
                                                     <span>-</span>
-                                                    <input id="employeeEndTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                                                    <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
                                                 </li>
                                                 <li>
                                                     <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchEmployeeGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
@@ -34,17 +34,13 @@
                                         </div>
                                     </div>
                                     <div class="btn-group-sm" id="toolbar">
-                                        <a id="btnView" class="btn btn-success" onclick="showViewEmployeeForm(false)"><i class="fa fa-eye"></i> View</a>
                                         <a id="btnApprove" class="btn btn-primary disabled" onclick="approveEmployeeForm()"><i class="fa fa-check"></i> Approve</a>
                                         <a id="btnReject" class="btn btn-danger disabled" onclick="rejectEmployeeForm()"><i class="fa fa-remove"></i> Reject</a>
                                     </div>
 
                                     <div class="col-sm-12 select-table table-striped">
-                                        <table id="gridEmployeeTable" data-mobile-responsive="true"></table>
+                                        <table id="gridTable" data-mobile-responsive="true"></table>
                                     </div>
-
-                                    <!-- Display Form -->
-                                    <!-- End Display Form -->
                                 </div>
                             </div>
                         </div>
@@ -55,26 +51,23 @@
     </div>
 </div>
 
-
-
-
-
 <script type="text/javascript">
     $(function () {
         initGrid();
 
-        $("#pEmployeeStatus").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
 
-        laydate.render({ elem: '#employeeStartTime', format: 'yyyy-MM-dd', theme: 'molv' });
-        laydate.render({ elem: '#employeeEndTime', format: 'yyyy-MM-dd', theme: 'molv' });
-
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
     });
-
 
     function initGrid() {
         var queryEmployeeUrl = '@Url.Content("~/Employee/GetApprovalPageListJson")';
-        $('#gridEmployeeTable').cnTable({
+        $('#gridTable').cnTable({
             url: queryEmployeeUrl,
+            detailView: true,
+            sortName: 'BaseModifyTime',
+            sortOrder: "Desc",
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
@@ -93,167 +86,164 @@
                 { field: 'PostalAddress', title: 'Postal Address', visible: false, sortable: true },
                 { field: 'EmailAddress', title: 'Email Address', visible: false, sortable: true },
                 { field: 'MobileNumber', title: 'Mobile Number', sortable: true },
-                { field: 'AlertTypeName', title: 'Alert Type', visible: false, sortable: true },
                 {
-                    field: 'BaseModifyTime',
-                    title: 'Create Time',
-                    visible: false,
+                    field: 'EmploymentType', title: 'Employment Type', align: 'center',
                     formatter: function (value, row, index) {
-                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                        if (value == "@EmploymentTypeEnum.Employed.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@EmploymentTypeEnum.Employed.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@EmploymentTypeEnum.SelfEmployed.GetDescription()" + '</span>';
+                        }
                     }
                 },
-            ],
-
-
-            detailView: true,
-            onExpandRow: function (index, row, $detail) {
-                var date = new Date(row.BaseCreateTime);
-                var formattedDate = date.toLocaleDateString(); // Format as a localized date string
-
-                var detailHtml =
-                    '<div class="card">' +
-                    '<div class="card-header text-center" > ' +
-                    '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">NHF Registration for ' + row.FirstName + ' ' + row.LastName + '</h6>' +
-                    '</div>' +
-                    '<div class="card-body">' +
-                    '<form>' +
-                    '<div class="form-row">' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="effectiveDate">Effective Date:</label>' +
-                    '<input type="text" id="effectiveDate" name="effectiveDate" placeholder="Effective Date" class="form-control text-left" readonly value="' + formattedDate + '" /> ' +
-                    '</div>' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="emailAddress">Email Address:</label>' +
-                    '<input type="text" id="emailAddress" name="emailAddress" placeholder="Email Address" class="form-control text-left" readonly value="' + row.EmailAddress + '"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="form-row">' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="phone">Phone:</label>' +
-                    '<input type="text" id="phone" name="phone" placeholder="Phone" class="form-control text-left" readonly value="' + row.MobileNumber + '"/>' +
-                    '</div>' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="remark">Remark:</label>' +
-                    '<input type="text" id="remark" name="remark" placeholder="Remark" class="form-control text-left" />' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="form-row">' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="maritalStatus">Marital Status:</label>' +
-                    '<input type="text" id="maritalStatus" name="maritalStatus" placeholder="Marital Status" class="form-control text-left" readonly value="' + row.MaritalStatusName + '"/>' +
-                    '</div>' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="gender">Gender:</label>' +
-                    '<input type="text" id="gender" name="gender" placeholder="Gender" class="form-control text-left" readonly value="' + row.GenderName + '"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="form-row">' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="bvn">BVN:</label>' +
-                    '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.BVN + '"/>' +
-                    '</div>' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="nin">NIN:</label>' +
-                    '<input type="text" id="nin" name="nin" placeholder="NIN" class="form-control text-left" readonly value="' + row.NIN + '"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="form-row">' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="bankName">Bank Name:</label>' +
-                    '<input type="text" id="bankName" name="bankName" placeholder="Bank Name" class="form-control text-left" readonly value="' + row.CustomerBank + '"/>' +
-                    '</div>' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="bankAccountNo">Bank Account Number:</label>' +
-                    '<input type="text" id="bankAccountNo" name="bankAccountNo" placeholder="Bank Account Number" class="form-control text-left" readonly value="' + row.BankAccountNumber + '"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="form-row">' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="contributionLocation">Contribution Location:</label>' +
-                    '<input type="text" id="contributionLocation" name="contributionLocation" placeholder="Contribution Location" class="form-control text-left" readonly value="' + row.ContributionBranchName + '"/>' +
-                    '</div>' +
-                    '<div class="form-group col-sm-6">' +
-                    '<label for="registrationLocation">Registration Location:</label>' +
-                    '<input type="text" id="registrationLocation" name="registrationLocation" placeholder="Registration Location" class="form-control text-left" readonly value="' + row.PostalAddress + '"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '</form>' +
-                    '</div>';
-
-                $detail.html(detailHtml);
-                // Attach click event to the plus icon
-                $detail.find('.card-header').click(function () {
-                    var $cardBody = $(this).siblings('.card-body');
-                    if ($cardBody.is(':visible')) {
-                        $cardBody.hide();
-                    } else {
-                        $cardBody.show();
+                { field: 'DateOfEmployment', title: 'Date Of Employment', visible: false, sortable: true },
+                { field: 'StaffNumber', title: 'Staff Number', visible: false, sortable: true },
+                { field: 'BankName', title: 'Bank Name', visible: false, sortable: true },
+                { field: 'BankAccountNumber', title: 'Account Number', visible: false, sortable: true },
+                { field: 'AccountTypeName', title: 'Account Type', visible: false, sortable: true },
+                { field: 'MonthlySalary', title: 'Monthly Salary', visible: false, sortable: true },
+                { field: 'AlertTypeName', title: 'Alert Type', visible: false, sortable: true },
+                {
+                    field: 'BaseModifyTime', title: 'Create Time', visible: false, formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
                     }
-                });
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            },
+            onExpandRow: function (index, row, $detail) {
+                initChildGrid(index, row, $detail);
             }
         });
     }
 
-    // ... Other functions ...
+    function initChildGrid(index, row, $detail) {
+        $detail.html('Loading data ...');
+        var date = new Date(row.BaseCreateTime);
+        var formattedDate = date.toLocaleDateString(); // Format as a localized date string
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center" > ' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">NHF Registration for ' + row.FullName + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="effectiveDate">Effective Date:</label>' +
+            '<input type="text" id="effectiveDate" name="effectiveDate" placeholder="Effective Date" class="form-control text-left" readonly value="' + formattedDate + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="emailAddress">Email Address:</label>' +
+            '<input type="text" id="emailAddress" name="emailAddress" placeholder="Email Address" class="form-control text-left" readonly value="' + row.EmailAddress + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="phone">Phone:</label>' +
+            '<input type="text" id="phone" name="phone" placeholder="Phone" class="form-control text-left" readonly value="' + row.MobileNumber + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="remark">Remark:</label>' +
+            '<input type="text" id="remark" name="remark" placeholder="Remark" class="form-control text-left" />' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="maritalStatus">Marital Status:</label>' +
+            '<input type="text" id="maritalStatus" name="maritalStatus" placeholder="Marital Status" class="form-control text-left" readonly value="' + row.MaritalStatusName + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="gender">Gender:</label>' +
+            '<input type="text" id="gender" name="gender" placeholder="Gender" class="form-control text-left" readonly value="' + row.GenderName + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bvn">BVN:</label>' +
+            '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.BVN + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="nin">NIN:</label>' +
+            '<input type="text" id="nin" name="nin" placeholder="NIN" class="form-control text-left" readonly value="' + row.NIN + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bankName">Bank Name:</label>' +
+            '<input type="text" id="bankName" name="bankName" placeholder="Bank Name" class="form-control text-left" readonly value="' + row.BankName + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bankAccountNo">Bank Account Number:</label>' +
+            '<input type="text" id="bankAccountNo" name="bankAccountNo" placeholder="Bank Account Number" class="form-control text-left" readonly value="' + row.BankAccountNumber + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="contributionLocation">Contribution Location:</label>' +
+            '<input type="text" id="contributionLocation" name="contributionLocation" placeholder="Contribution Location" class="form-control text-left" readonly value="' + row.ContributionBranchName + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="registrationLocation">Registration Location:</label>' +
+            '<input type="text" id="registrationLocation" name="registrationLocation" placeholder="Registration Location" class="form-control text-left" readonly value="' + row.PostalAddress + '"/>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        $detail.html(htmlData);
+        // Attach click event to the plus icon
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            if ($cardBody.is(':visible')) {
+                $cardBody.hide();
+            } else {
+                $cardBody.show();
+            }
+        });
+    }
 
     function searchEmployeeGrid() {
-        $('#gridEmployeeTable').cnTable('search');
+        $('#gridTable').cnTable('search');
         resetToolbarStatus();
     }
 
-
-    function showViewEmployeeForm(bView) {
-        var id = 0;
-        if (!bView) {
-            var selectedRow = $("#gridEmployeeTable").bootstrapTable("getSelections");
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        cn.openDialog({
-            title: id > 0 ? "View Employee Record" : "",
-            content: '@Url.Content("~/Employee/NHFRegUserForm")' + '?id=' + id,
-            width: "780px",
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-            }
-        });
-    }
-
     function approveEmployeeForm() {
-        var selectedRow = $("#gridEmployeeTable").bootstrapTable("getSelections");
-        cn.confirm("Confirm to approve form?", function () {
-            var id = selectedRow[0].Id;
-            cn.ajax({
-                url: '@Url.Content("~/Employee/ApproveFormJson")' + '?id=' + id,
-                type: "post",
-                success: function (obj) {
-                    if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
-                        searchGrid();
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (cn.checkRowApprove(selectedRow)) {
+            cn.confirm("Confirm to approve this record?", function () {
+                var id = cn.getIds(selectedRow);
+                cn.ajax({
+                    url: '@Url.Content("~/Employee/ApproveFormJson")' + '?id=' + id,
+                    type: "post",
+                    error: cn.ajaxError,
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            searchEmployeeGrid();
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
                     }
-                    else {
-                        cn.msgError(obj.Message);
-                    }
-                }
+                });
             });
-        });
+        }
     }
 
     function rejectEmployeeForm() {
-        var selectedRow = $("#gridEmployeeTable").bootstrapTable("getSelections");
-        cn.confirm("Confirm to reject form?", function () {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        cn.confirm("Confirm to reject this record?", function () {
             var id = selectedRow[0].Id;
             cn.ajax({
                 url: '@Url.Content("~/Employee/RejectFormJson")' + '?id=' + id,
                 type: "post",
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
-                        searchGrid();
+                        cn.msgSuccess("Rejected");
+                        searchEmployeeGrid();
                     }
                     else {
                         cn.msgError(obj.Message);
@@ -263,6 +253,7 @@
         });
     }
 
-
-
+    function redirectToIndex() {
+        location.href = '@Url.Content("~/Employee/NHFRegUsersIndex")';
+    }
 </script>

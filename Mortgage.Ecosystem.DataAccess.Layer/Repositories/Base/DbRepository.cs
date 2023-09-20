@@ -287,6 +287,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories.Base
 
         public async Task<T> FindEntity<T>(object keyValue) where T : class
         {
+            try
+            {
+                await _context.Set<T>().FindAsync(keyValue);
+            }
+            catch (Exception w)
+            {
+                var ccc = w.Message;
+            }
             return await _context.Set<T>().FindAsync(keyValue);
         }
 

@@ -245,7 +245,8 @@
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             cn.msgSuccess(obj.Message);
-                            searchGrid();
+                            searchEmployerGrid();
+                            //redirectToIndex();
                         }
                         else {
                             cn.msgError(obj.Message);
@@ -266,7 +267,8 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         cn.msgSuccess("Rejected");
-                        searchGrid();
+                        searchEmployerGrid();
+                        //redirectToIndex();
                     }
                     else {
                         cn.msgError(obj.Message);
@@ -274,5 +276,9 @@
                 }
             });
         });
+    }
+
+    function redirectToIndex() {
+        location.href = '@Url.Content("~/Company/NHFRegCompanyIndex")';
     }
 </script>

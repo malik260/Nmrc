@@ -291,7 +291,6 @@
             url: '@Url.Content("~/Home/LoginOffJson")',
             type: "post",
             success: function (obj) {
-                //alert(obj.Tag);
                 if (obj.Tag == 1) {
                     location.href = '@Url.Content("~/Home/Index")';
                 }

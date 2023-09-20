@@ -255,39 +255,9 @@
     }
 
     function saveForm(index) {
-        //if ($("#form").validate().form()) {
-        //var postData = $("#form").getWebControls({ Id: id });
-        //postData.Company = cn.getLastValue(postData.Company);
-        //postData.MenuIds = $('#menuTree').cnTree("getCheckedNodes");
-        //if (postData.Company <= 0) {
-        //    cn.msgError("Please select employer!");
-        //    return false;
-        //}
-        //else if (postData.MenuIds == "") {
-        //    cn.msgError("Please select privileges!");
-        //    return false;
-        //}
-
-        //cn.ajax({
-        //    url: '@Url.Content("~/Employee/SaveFormJson")',
-        //    type: "post",
-        //    data: postData,
-        //    success: function (obj) {
-        //        if (obj.Tag == 1) {
-        //            cn.msgSuccess(obj.Message);
-        //            parent.searchGrid();
-        //            parent.layer.close(index);
-        //        }
-        //        else {
-        //            cn.msgError(obj.Message);
-        //        }
-        //    }
-        //});
-        //}
-
         cn.confirm("Confirm the approval process？", function () {
             cn.ajax({
-                url: '@Url.Content("~/Employee/SaveFormJson")' + '?id=' + id,
+                url: '@Url.Content("~/Employee/ApproveFormJson")' + '?id=' + id,
                 type: "post",
                 error: cn.ajaxError,
                 success: function (obj) {

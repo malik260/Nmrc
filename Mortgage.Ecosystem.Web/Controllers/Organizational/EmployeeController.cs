@@ -122,7 +122,6 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             TData obj = await _employeeService.ApproveForm(entity);
             return Json(obj);
         }
-
         #endregion Submit data
     }
 }

@@ -49,7 +49,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     {
                         var companyRecord = await new CompanyRepository().GetEntity(entity.Company);
                         var menuRecord = await new MenuRepository().GetEntity(entity.MenuId);
-                        foreach (var authority in TextHelper.SplitToArray<long>(entity.Authorities, ','))
+                        var authorities = TextHelper.SplitToArray<long>(entity.Authorities, ',');
+                        foreach (var authority in authorities)
                         {
                             var approvalSetupRecord = new ApprovalSetupEntity();
                             var employeeRecord = await new EmployeeRepository().GetEntity(authority);
@@ -62,6 +63,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                             };
                             await entity.Create();
                             entity.Authority = authority;
+                            entity.Priority = Array.IndexOf(authorities, authority) + 1;
                             approvalSetupRecord = MapHelper.Map(entity, approvalSetupRecord);
                             entities.Add(approvalSetupRecord);
                             mailParameters.Add(mailParameter);
@@ -123,6 +125,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 if (param.Authority > 0)
                 {
                     expression = expression.And(t => t.Authority == param.Authority);
+                }
+
+                if (param.Priority > 0)
+                {
+                    expression = expression.And(t => t.Priority == param.Priority);
                 }
             }
             return expression;

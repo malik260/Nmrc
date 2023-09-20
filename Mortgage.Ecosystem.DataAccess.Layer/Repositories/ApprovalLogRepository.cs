@@ -85,6 +85,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 {
                     expression = expression.And(t => t.Authority == param.Authority);
                 }
+
+                if (param.Record > 0)
+                {
+                    expression = expression.And(t => t.Record == param.Record);
+                }
             }
             return expression;
         }
