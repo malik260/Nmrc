@@ -110,15 +110,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 if (menu.ApprovalLogList?.Count < menu.ApprovalLevel)
                 {
                     approvalLog.Company = user.Company;
-                    approvalLog.Branch = entity.Branch;
                     approvalLog.MenuId = menu.Id;
                     approvalLog.MenuType = menu.MenuType;
                     approvalLog.Authority = user.Employee;
                     approvalLog.Record = entity.Id;
                     approvalLog.ApprovalCount = (int)(menu.ApprovalLogList?.Count + 1);
                     approvalLog.ApprovalLevel = menu.ApprovalLevel;
-                    approvalLog.Status = (int)ApprovalEnum.Pending;
-                    approvalLog.Remark = "Partial approval";
+                    approvalLog.Status = approvalLog.ApprovalCount == approvalLog.ApprovalLevel ? (int)ApprovalEnum.Approved : (int)ApprovalEnum.Pending;
+                    approvalLog.Remark = approvalLog.ApprovalCount == approvalLog.ApprovalLevel ? "Approved" : "Partial approval";
 
                     await approvalLog.Create();
                     await db.Insert(approvalLog);
@@ -130,28 +129,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await entity.Modify();
                     await db.Update(entity);
                 }
-
-                if (menu.ApprovalLogList?.Count < menu.ApprovalLevel)
-                {
-                    await db.CommitTrans();
-                }
-                else if (approvalLog.ApprovalCount == menu.ApprovalLevel)
-                {
-                    MailParameter mailParameter = new()
-                    {
-                        UserName = user.UserName,
-                        UserEmail = entity.EmailAddress,
-                        UserPassword = user.Password
-                    };
-
-                    if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
-                    {
-                        if (string.IsNullOrEmpty(message))
-                        {
-                            await db.CommitTrans();
-                        }
-                    }
-                }
+                await db.CommitTrans();
             }
             catch
             {
@@ -159,7 +137,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 throw;
             }
         }
-
         #endregion
 
         #region Private method

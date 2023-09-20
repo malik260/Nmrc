@@ -435,6 +435,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("MenuId");
 
+                    b.Property<int>("Priority")
+                        .HasColumnType("int")
+                        .HasColumnName("Priority");
+
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Remark");
@@ -1196,6 +1200,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Sector");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
+
                     b.Property<int>("Subsector")
                         .HasColumnType("int")
                         .HasColumnName("Subsector");
@@ -1291,14 +1299,47 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("int")
                         .HasColumnName("BaseVersion");
 
+                    b.Property<DateTime>("ContributionDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ContributionDate");
+
+                    b.Property<int>("ContributionType")
+                        .HasColumnType("int")
+                        .HasColumnName("ContributionType");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Email");
 
-                    b.Property<string>("Name")
-                        .ValueGeneratedOnUpdateSometimes()
+                    b.Property<string>("EmployeeName")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Employer Name");
+                        .HasColumnName("EmployeeName");
+
+                    b.Property<string>("NhfNo")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NHFNo");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PaymentDate");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Status");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("TotalAmount");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("TransactionDate");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TransactionId");
 
                     b.Property<string>("accountName")
                         .HasColumnType("nvarchar(max)")
@@ -1317,13 +1358,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnName("EmployeeNumber");
 
                     b.Property<string>("employerName")
-                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Employer Name");
 
                     b.Property<string>("employerNumber")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Employer Number");
+                        .HasColumnName("EmployerNumber");
 
                     b.Property<byte[]>("file")
                         .HasColumnType("varbinary(max)")
@@ -2319,8 +2359,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Company");
 
-                    b.Property<string>("ContributionBranch")
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<int>("ContributionBranch")
+                        .HasColumnType("int")
                         .HasColumnName("ContributionBranch");
 
                     b.Property<string>("CustomerBank")
@@ -2422,14 +2462,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<string>("ApprovalStatus")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ApprovalStatus");
-
-                    b.Property<int>("Approved")
-                        .HasColumnType("int")
-                        .HasColumnName("Approved");
-
                     b.Property<DateTime>("BaseCreateTime")
                         .HasColumnType("datetime2");
 
@@ -2461,13 +2493,21 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Branch");
 
+                    b.Property<long>("Company")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Company");
+
                     b.Property<DateTime?>("DateSent")
                         .HasColumnType("datetime2")
                         .HasColumnName("DateSent");
 
-                    b.Property<int>("Disapproved")
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EmailAddress");
+
+                    b.Property<int>("EmploymentType")
                         .HasColumnType("int")
-                        .HasColumnName("Disapproved");
+                        .HasColumnName("EmploymentType");
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)")
@@ -2484,6 +2524,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<string>("RequestNumber")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("RequestNumber");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("Subject")
                         .HasColumnType("nvarchar(max)")
@@ -2694,8 +2738,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("TransactionDate");
 
-                    b.Property<int>("TransactionId")
-                        .HasColumnType("int")
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("TransactionId");
 
                     b.Property<string>("TransactionType")

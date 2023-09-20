@@ -9,11 +9,9 @@
                     <li class="active">
                         <a data-toggle="tab" href="#Employer" aria-expanded="true">Pending Employer Registration(s)</a>
                     </li>
-                    @*<li class="">
-                    <a data-toggle="tab" href="#employer" aria-expanded="false">Pending Employer Registration(s)</a>
-                    </li>*@
                 </ul>
                 <div class="tab-content">
+                    <div id="Employer" class="tab-pane active">
                         <div class="panel-body">
                             <div class="container-div">
                                 <div class="row">
@@ -23,9 +21,6 @@
                                                 <li>
                                                     <label>Name: </label> <input id="name" col="Name" type="text" />
                                                 </li>
-                                                <li>
-                                                    Status: <span id="status" col="Status"></span>
-                                                </li>
                                                 <li class="select-time">
                                                     <label>Created: </label>
                                                     <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
@@ -33,11 +28,15 @@
                                                     <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
                                                 </li>
                                                 <li>
+                                                    <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchEmployerGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="btn-group-sm" id="toolbar">
+                                        <a id="btnView" class="btn btn-success disabled" onclick="showViewEmployerForm(false)"><i class="fa fa-eye"></i> View</a>
+                                        <a id="btnDelete" class="btn btn-primary disabled" onclick="approveEmployerForm()"><i class="fa fa-check"></i> Approve</a>
+                                        <a id="btnDelete" class="btn btn-danger disabled" onclick="rejectEmployerForm()"><i class="fa fa-remove"></i> Reject</a>
                                     </div>
 
                                     <div class="col-sm-12 select-table table-striped">
@@ -107,8 +106,6 @@
                                                     <textarea type="text" id="remark" name="Remark" class="form-control" style="height:60px"></textarea>
                                                 </div>
                                             </div>
-
-
                                         </form>
                                     </div>
                                 </div>
@@ -124,15 +121,16 @@
 <script type="text/javascript">
     $(function () {
         initGrid();
-        secondGrid();
 
         laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
     });
 
     function initGrid() {
+        var queryEmployerUrl = '@Url.Content("~/Company/GetApprovalPageListJson")';
         var formOpen = false; // flag to track if form is currently open
         $('#gridTable').cnTable({
+            url: queryEmployerUrl,
             columns: [
                 {
                     field: 'plus',
@@ -173,6 +171,7 @@
                 },
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
+                { field: 'Name', title: 'Employer Name', sortable: true },
                 { field: 'RCNumber', title: 'RC Number', sortable: true },
                 { field: 'ContactPerson', title: 'Contact Person', sortable: true },
                 { field: 'DateOfIncorporation', title: 'Date Of Incorporation', visible: true, sortable: true },
@@ -181,9 +180,25 @@
                 { field: 'CompanyClassName', title: 'Class', visible: false, sortable: true },
                 { field: 'CompanyTypeName', title: 'Type', visible: false, sortable: true },
                 {
+                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
                     }
                 },
                 {
+                    field: 'Status',
+                    title: 'Status',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@ApprovalEnum.Pending.ToInt()") {
+                            return '<span class="badge badge-warning">' + "@ApprovalEnum.Pending.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Approved.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@ApprovalEnum.Approved.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Rejected.ToInt()") {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Rejected.GetDescription()" + '</span>';
+                        }
+                        else {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Cancelled.GetDescription()" + '</span>';
+                        }
                     }
                 }
             ],
@@ -195,52 +210,6 @@
         });
     }
     $('#myForm').hide();
-
-    //function secondGrid() {
-    //    var queryEmployerUrl = '@Url.Content("~/Company/GetApprovalPageListJson")';
-    //    $('#gridTable').cnTable({
-    //        url: queryEmployerUrl,
-    //        columns: [
-    //            { checkbox: true, visible: true },
-    //            { field: 'Id', title: 'Id', visible: false },
-    //            { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: true },
-    //            { field: 'Name', title: 'Employee Name', sortable: true },
-    //            { field: 'RCNumber', title: 'RC Number', sortable: true },
-    //            { field: 'ContactPerson', title: 'Contact Person', sortable: true },
-    //            { field: 'DateOfIncorporation', title: 'Date Of Incorporation', visible: true, sortable: true },
-    //            { field: 'NatureOfBusiness', title: 'Nature Of Business', visible: false, sortable: true },
-    //            { field: 'NameOfRegistrar', title: 'Name Of Registrar', visible: false, sortable: true },
-    //            { field: 'CompanyClassName', title: 'Class', sortable: true },
-    //            { field: 'CompanyTypeName', title: 'Type', sortable: true },
-    //            {
-    //                field: 'Status', title: 'Status', align: 'center',
-    //                formatter: function (value, row, index) {
-    //                    value = "1";
-    //                    if (value == "@StatusEnum.Yes.ToInt()") {
-    //                        return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
-    //                    } else {
-    //                        return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
-    //                    }
-    //                }
-    //            },
-    //            {
-    //                field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
-    //                    return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
-    //                }
-    //            }
-    //        ],
-    //        queryParams: function (params) {
-    //            var pagination = $('#gridTable').cnTable('getPagination', params);
-    //            var queryString = $("#searchDiv").getWebControls(pagination);
-    //            return queryString;
-    //        }
-    //    });
-    //}
-
-    //function searchEmployeeGrid() {
-    //    $('#gridTable').cnTable('search');
-    //    resetToolbarStatus();
-    //}
 
     function searchEmployerGrid() {
         $('#gridTable').cnTable('search');
@@ -267,6 +236,8 @@
 
     function approveEmployerForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (cn.checkRowApprove(selectedRow)) {
+            cn.confirm("Confirm to approve this record?", function () {
                 var id = cn.getIds(selectedRow);
                 cn.ajax({
                     url: '@Url.Content("~/Company/ApproveFormJson")' + '?id=' + id,
@@ -274,8 +245,8 @@
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             cn.msgSuccess(obj.Message);
-                            searchGrid();
-                        return;
+                            searchEmployerGrid();
+                            //redirectToIndex();
                         }
                         else {
                             cn.msgError(obj.Message);
@@ -286,7 +257,9 @@
         }
     }
 
+    function rejectEmployerForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        cn.confirm("Confirm to reject this record?", function () {
             var id = selectedRow[0].Id;
             cn.ajax({
                 url: '@Url.Content("~/Company/RejectFormJson")' + '?id=' + id,
@@ -294,7 +267,8 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         cn.msgSuccess("Rejected");
-                        searchGrid();
+                        searchEmployerGrid();
+                        //redirectToIndex();
                     }
                     else {
                         cn.msgError(obj.Message);
@@ -304,25 +278,7 @@
         });
     }
 
-    function deleteForm() {
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
-                var ids = cn.getIds(selectedRow);
-                cn.ajax({
-                    url: '@Url.Content("~/Company/DeleteFormJson")' + '?ids=' + ids,
-                    type: "post",
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            searchGrid();
-                        }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
-            });
-    }
+    function redirectToIndex() {
+        location.href = '@Url.Content("~/Company/NHFRegCompanyIndex")';
     }
 </script>

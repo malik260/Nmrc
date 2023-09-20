@@ -3,18 +3,18 @@
 }
 
 <div class="wrapper animated fadeInRight">
-    <form id="form" class="form-horizontal m">
-        <div class="col-sm-6" style="height: auto; border-right: 1px solid #bbb9b9;">
+    <form id="form" class="form-horizontal m" autocomplete="off">
+        <div class="col-sm-7" style="height: auto; border-right: 1px solid #bbb9b9;">
             <div class="form-group">
                 <div class="col-sm-10">
                     <label class="control-label">Employer<font class="red"> *</font></label>
-                    <div id="company" col="Company" data-toggle="tooltip" data-placement="right" title="xxxxxxxxx"></div>
+                    <div id="company" col="Company" data-toggle="tooltip" data-placement="right" title="Authority's employer"></div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-10">
                     <label class="control-label">Branch</label>
-                    <div id="branch" col="Branch" data-toggle="tooltip" data-placement="right" title="xxxxxxxxx"></div>
+                    <div id="branch" col="Branch" data-toggle="tooltip" data-placement="right" title="Select branch (if available)"></div>
                 </div>
             </div>
             <div class="form-group">
@@ -29,25 +29,25 @@
                     <div class="form-group">
                         <div id="zero" class="col-sm-10">
                             <label class="control-label">1. Staff Name&nbsp;&nbsp;<font class="red">*</font></label>
-                            <div id="authority" col="Authority"></div>
+                            <div id="authority" col="Authority" data-toggle="tooltip" data-placement="right" title="Precedence of authority"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div id="one" class="col-sm-10">
                             <label class="control-label">1. Staff Name&nbsp;&nbsp;<font class="red">*</font></label>
-                            <div id="authority1" col="Authority1"></div>
+                            <div id="authority1" col="Authority1" data-toggle="tooltip" data-placement="right" title="First precedence of authority"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div id="two" class="col-sm-10">
                             <label class="control-label">2. Staff Name&nbsp;&nbsp;<font class="red">*</font></label>
-                            <div id="authority2" col="Authority2"></div>
+                            <div id="authority2" col="Authority2" data-toggle="tooltip" data-placement="right" title="Second precedence of authority"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div id="three" class="col-sm-10">
                             <label class="control-label">3. Staff Name&nbsp;&nbsp;<font class="red">*</font></label>
-                            <div id="authority3" col="Authority3"></div>
+                            <div id="authority3" col="Authority3" data-toggle="tooltip" data-placement="right" title="Third precedence of authority"></div>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-5">
             <div style="padding: 15px 0px 5px 0px;">
                 <font style="font-weight: bold; color: #e70e0e;">
                     Setting up approval authority necessitates the following steps. <font style="color: black">(All fields marked <font style="color: red">*</font> are required)</font>:
@@ -233,6 +233,9 @@
                             $("#two").parents(".form-group").hide();
                             $("#three").parents(".form-group").hide();
                             document.getElementById("authorityTitle").innerHTML = "Provide approval authority";
+                            cn.msgError("The highest degree of approval is three !"); // The maximum degree of approval.
+                            return false;
+                            break;
                     }
                 }
                 if (selectedProcessId > @GlobalConstant.ZERO) {
@@ -343,6 +346,9 @@
                         }
                         break;
                     default:
+                        cn.msgError("Decision-making authority must be chosen.!");
+                        return false;
+                        break;
                 }
             }
             postData.Authorities = authorities.join(",").toString();
@@ -364,5 +370,4 @@
             });
         }
     }
-
 </script>

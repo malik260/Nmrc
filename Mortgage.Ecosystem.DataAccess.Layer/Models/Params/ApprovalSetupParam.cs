@@ -9,5 +9,7 @@
         public long MenuId { get; set; }
 
         public long Authority { get; set; }
+
+        public int Priority { get; set; }
     }
 }

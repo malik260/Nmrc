@@ -23,6 +23,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Authority")]
         public long Authority { get; set; }
 
+        // Priority (Order of precedence)
+        [Column("Priority")]
+        public int Priority { get; set; }
+
         // Remark
         [Column("Remark")]
         public string? Remark { get; set; }
