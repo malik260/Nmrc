@@ -34,79 +34,12 @@
                                         </div>
                                     </div>
                                     <div class="btn-group-sm" id="toolbar">
-                                        <a id="btnView" class="btn btn-success disabled" onclick="showViewEmployerForm(false)"><i class="fa fa-eye"></i> View</a>
-                                        <a id="btnDelete" class="btn btn-primary disabled" onclick="approveEmployerForm()"><i class="fa fa-check"></i> Approve</a>
-                                        <a id="btnDelete" class="btn btn-danger disabled" onclick="rejectEmployerForm()"><i class="fa fa-remove"></i> Reject</a>
+                                        <a id="btnApprove" class="btn btn-primary disabled" onclick="approveEmployerForm()"><i class="fa fa-check"></i> Approve</a>
+                                        <a id="btnReject" class="btn btn-danger disabled" onclick="rejectEmployerForm()"><i class="fa fa-remove"></i> Reject</a>
                                     </div>
 
                                     <div class="col-sm-12 select-table table-striped">
                                         <table id="gridTable" data-mobile-responsive="true"></table>
-                                    </div>
-                                    <div id="myForm">
-                                        <form id="myForm">
-                                            <h4 style="text-align:center;">NHF Registration for </h4>
-                                            <div class="form-group">
-                                                <div class="col-sm-6">
-                                                    <label for="email" class="form-label">Email</label>
-                                                    <input type="email" id="emailEmployer" name="Email" class="form-control" readonly />
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label for="phone" class="form-label">Phone No</label>
-                                                    <input type="tel" id="phoneEmployer" name="Phone" class="form-control" readonly />
-                                                </div>
-                                            </div>
-                                            <div class="form-group" style="margin-top:8%">
-                                                <div class="col-sm-6">
-                                                    <label for="sector" class="form-label">Sector</label>
-                                                    <input type="number" id="sector" name="Sector" class="form-control" readonly />
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label for="subSector" class="form-label">SubSector</label>
-                                                    <input type="number" id="subSector" name="SubSector" class="form-control" readonly />
-                                                </div>
-                                            </div>
-                                            <div class="form-group" style="margin-top:16%">
-                                                <div class="col-sm-6">
-                                                    <label for="address" class="form-label">Address</label>
-                                                    <input type="email" id="address" name="Address" class="form-control" readonly />
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label for="address2" class="form-label">Address 2</label>
-                                                    <input type="email" id="address2" name="Address2" class="form-control" readonly />
-                                                </div>
-                                            </div>
-                                            <div class="form-group" style="margin-top:24%">
-                                                <div class="col-sm-6">
-                                                    <label for="contactPersonDesignation" class="form-label">Contact Person Designation</label>
-                                                    <input type="number" id="contactPersonDesignation" name="ContactPersonDesignation" class="form-control" readonly />
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label for="contributionLocation" class="form-label">Contribution Location</label>
-                                                    <input type="email" id="contributionLocation" name="ContributionLocation" class="form-control" readonly />
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group" style="margin-top:32%">
-                                                <div class="col-sm-6">
-                                                    <label for="contributionFrequency" class="form-label">Contribution Frequency</label>
-                                                    <input type="number" id="contributionFrequency" name="ContributionFrequency" class="form-control" readonly />
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label for="postalAddress" class="form-label">Postal Address</label>
-                                                    <input type="email" id="postalAddress" name="PostalAddress" class="form-control" readonly />
-                                                </div>
-                                            </div>
-                                            <div class="form-group" style="margin-top:40%">
-                                                <div class="col-sm-6">
-                                                    <label for="contributionLocation" class="form-label"></label>
-
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label for="remark" class="form-label">Remark</label>
-                                                    <textarea type="text" id="remark" name="Remark" class="form-control" style="height:60px"></textarea>
-                                                </div>
-                                            </div>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -128,62 +61,37 @@
 
     function initGrid() {
         var queryEmployerUrl = '@Url.Content("~/Company/GetApprovalPageListJson")';
-        var formOpen = false; // flag to track if form is currently open
         $('#gridTable').cnTable({
             url: queryEmployerUrl,
+            detailView: true,
+            sortName: 'BaseModifyTime',
+            sortOrder: "Desc",
             columns: [
-                {
-                    field: 'plus',
-                    title: '',
-                    formatter: function (value, row) {
-                        var iconClass = formOpen ? 'fa fa-times' : 'fa fa-plus';
-                        return '<button type="button" class="btn btn-sm btn-primary plus-button" data-row-id="' + row.Id + '"><i class="' + iconClass + '"></i></button>';
-                    },
-                    events: {
-                        'click .plus-button': function (e, value, row, index) {
-                            // toggle the form on/off
-                            if (formOpen) {
-                                $('#myForm').slideUp();
-                                $(this).removeClass('btn-danger').addClass('btn-primary'); // Change button background to btn-primary
-                            } else {
-                                var form = $('#myForm');
-                                form.find('input[name="Email"]').val(row.Email);
-                                form.find('input[name="Phone"]').val(row.Phone);
-                                form.find('input[name="Sector"]').val(row.Sector);
-                                form.find('input[name="SubSector"]').val(row.SubSector);
-                                form.find('input[name="Address"]').val(row.Address);
-                                form.find('input[name="Address2"]').val(row.Address2);
-                                form.find('input[name="ContactPersonDesignation"]').val(row.ContactPersonDesignation);
-                                form.find('input[name="ContributionFrequency"]').val(row.ContributionFrequency);
-                                form.find('input[name="ContributionLocation"]').val(row.ContributionLocation);
-                                form.find('input[name="PostalAddress"]').val(row.PostalAddress);
-                                form.slideDown();
-                                $(this).removeClass('btn-primary').addClass('btn-danger'); // Change button background to btn-danger
-                            }
-                            formOpen = !formOpen; // update flag
-
-                            // update the plus button icon
-                            var iconClass = formOpen ? 'fa fa-times' : 'fa fa-plus';
-                            $(this).html('<i class="' + iconClass + '"></i>');
-                        }
-
-                    }
-                },
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
                 { field: 'Name', title: 'Employer Name', sortable: true },
                 { field: 'RCNumber', title: 'RC Number', sortable: true },
                 { field: 'ContactPerson', title: 'Contact Person', sortable: true },
-                { field: 'DateOfIncorporation', title: 'Date Of Incorporation', visible: true, sortable: true },
-                { field: 'NatureOfBusiness', title: 'Nature Of Business', visible: false, sortable: true },
+                {
+                    field: 'DateOfIncorporation',
+                    title: 'Date Of Incorporation',
+                    visible: true,
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var date = new Date(value);
+                        return date.toLocaleDateString(); // This will display the date in the user's locale format (e.g., '08/31/2023')
+                    }
+                },
+                { field: 'NatureOfBusiness', title: 'Nature Of Business', visible: true, sortable: true },
                 { field: 'NameOfRegistrar', title: 'Name Of Registrar', visible: false, sortable: true },
                 { field: 'CompanyClassName', title: 'Class', visible: false, sortable: true },
                 { field: 'CompanyTypeName', title: 'Type', visible: false, sortable: true },
                 {
-                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
+                    field: 'BaseModifyTime', title: 'Create Time', visible: false, formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
                     }
                 },
+
                 {
                     field: 'Status',
                     title: 'Status',
@@ -206,10 +114,101 @@
                 var pagination = $('#gridTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
+            },
+            onExpandRow: function (index, row, $detail) {
+                initChildGrid(index, row, $detail);
+            }
+
+        });
+    }
+
+    function initChildGrid(index, row, $detail) {
+        $detail.html('Loading data ...');
+        var date = new Date(row.BaseModifyTime);
+        var formattedDate = date.toLocaleDateString(); // Format as a localized date string
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center" > ' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">NHF Registration for ' + row.Name + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="effectiveDate">Effective Date:</label>' +
+            '<input type="text" id="effectiveDate" name="effectiveDate" placeholder="Effective Date" class="form-control text-left" readonly value="' + formattedDate + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="emailAddress">Email Address:</label>' +
+            '<input type="text" id="emailAddress" name="emailAddress" placeholder="Email Address" class="form-control text-left" readonly value="' + row.EmailAddress + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="phone">Phone:</label>' +
+            '<input type="text" id="phone" name="phone" placeholder="Phone" class="form-control text-left" readonly value="' + row.MobileNumber + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="remark">Remark:</label>' +
+            '<input type="text" id="remark" name="remark" placeholder="Remark" class="form-control text-left" />' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="natureOfBusiness">Nature Of Business:</label>' +
+            '<input type="text" id="natureOfBusiness" name="natureOfBusiness" placeholder="Nature Of Business" class="form-control text-left" readonly value="' + row.NatureOfBusiness + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="nameOfRegistrar">Registrar:</label>' +
+            '<input type="text" id="nameOfRegistrar" name="nameOfRegistrar" placeholder="Registrar" class="form-control text-left" readonly value="' + row.NameOfRegistrar + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="contributionFrequency">Contribution Frequency:</label>' +
+            '<input type="text" id="contributionFrequency" name="contributionFrequency" placeholder="BVN" class="form-control text-left" readonly value="' + row.ContributionFrequencyName + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="companyClass">Company Class:</label>' +
+            '<input type="text" id="nin" name="companyClass" placeholder="Company Class" class="form-control text-left" readonly value="' + row.CompanyClassName + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="contributionType">Company Type:</label>' +
+            '<input type="text" id="bankName" name="companyType" placeholder="Company Type" class="form-control text-left" readonly value="' + row.CompanyTypeName + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="address">Address:</label>' +
+            '<input type="text" id="address" name="address" placeholder="Address" class="form-control text-left" readonly value="' + row.Address + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="sector">Sector:</label>' +
+            '<input type="text" id="sector" name="sector" placeholder="Sector" class="form-control text-left" readonly value="' + row.SectorName + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="subSector">Sub-Sector:</label>' +
+            '<input type="text" id="subSector" name="subSector" placeholder="Sub-Sector" class="form-control text-left" readonly value="' + row.SubSectorName + '"/>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        $detail.html(htmlData);
+        // Attach click event to the plus icon
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            if ($cardBody.is(':visible')) {
+                $cardBody.hide();
+            } else {
+                $cardBody.show();
             }
         });
     }
-    $('#myForm').hide();
+
+
+
 
     function searchEmployerGrid() {
         $('#gridTable').cnTable('search');
