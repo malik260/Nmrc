@@ -47,6 +47,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Status")]
         public string? Status { get; set; }
 
+        // NHF Number
+        [Column("NHFNumber")]
+        public string? NHFNumber { get; set; }
+
 
 
     }

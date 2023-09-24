@@ -3,6 +3,7 @@
     public class LoanInitiationListParam
     {
         public long Id { get; set; }
+
         public string? LoanProduct { get; set; }
         public string? Sector { get; set; }
         public string? Principal { get; set; }
@@ -10,5 +11,6 @@
         public byte[]? File { get; set; }
         public string? Tenor { get; set; }
         public string? ReferenceNumber { get; set; }
+        public string? NHFNumber { get; set; }
     }
 }

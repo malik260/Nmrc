@@ -36,6 +36,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<ChangePasswordEntity>? ChangePasswordEntity { get; set; }
         public DbSet<ChargeSetupEntity>? ChargeSetupEntity { get; set; }
         public DbSet<ChecklistEntity>? ChecklistEntity { get; set; }
+        public DbSet<ChecklistProcedureEntity>? ChecklistProcedureEntity { get; set; }
+
         public DbSet<ContributionEntity>? ContributionEntity { get; set; }
         public DbSet<ContributionHistoryEntity>? ContributionHistoryEntity { get; set; }
         public DbSet<ContributionRefundPostingEntity>? ContributionRefundPostingEntity { get; set; }
@@ -89,6 +91,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<RefundEntity>? RefundEntity { get; set; }
         public DbSet<RefundProfilingEntity>? RefundProfilingEntity { get; set; }
         public DbSet<RiskAssessmentSetupEntity>? RiskAssessmentSetupEntity { get; set; }
+
+        public DbSet<RiskAssessmentProcedureEntity>? RiskAssessmentProcedureEntity { get; set; }
 
         public DbSet<RoleEntity>? RoleEntity { get; set; } // Role table
         public DbSet<SectorEntity>? SectorEntity { get; set; }

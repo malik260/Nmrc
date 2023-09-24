@@ -51,6 +51,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IChangePasswordService, ChangePasswordService>();
             services.AddScoped<IChargeSetupService, ChargeSetupService>();
             services.AddScoped<IChecklistService, ChecklistService>();
+            services.AddScoped<IChecklistProcedureService, ChecklistProcedureService>();
             services.AddScoped<ICompanyClassService, CompanyClassService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<ICompanyTypeService, CompanyTypeService>();
@@ -98,6 +99,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IRemitaPaymentDetailsService, RemitaPaymentDetailsService>();
             services.AddScoped<IRelationService, RelationService>();
             services.AddScoped<IRiskAssessmentSetupService, RiskAssessmentSetupService>();
+            services.AddScoped<IRiskAssessmentProcedureService,RiskAssessmentProcedureService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ISectorService, SectorService>();
             services.AddScoped<IStateService, StateService>();

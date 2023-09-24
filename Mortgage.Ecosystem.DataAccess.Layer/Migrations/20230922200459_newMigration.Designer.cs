@@ -12,8 +12,8 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models;
 namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230919085053_initial")]
-    partial class initial
+    [Migration("20230922200459_newMigration")]
+    partial class newMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1038,6 +1038,75 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("st_Checklist", (string)null);
+                });
+
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.ChecklistProcedureEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Applicable")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Applicable");
+
+                    b.Property<DateTime>("BaseCreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("BaseCreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseCreatorId");
+
+                    b.Property<int>("BaseIsDelete")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseIsDelete");
+
+                    b.Property<long>("BaseModifierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseModifierId");
+
+                    b.Property<DateTime>("BaseModifyTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
+                    b.Property<int>("BaseVersion")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseVersion");
+
+                    b.Property<string>("BranchCode")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("BranchCode");
+
+                    b.Property<string>("Checklist")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CheckList");
+
+                    b.Property<string>("NHFNo")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NHFNumber");
+
+                    b.Property<string>("NonApplicable")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NonApplicable");
+
+                    b.Property<string>("ProductCode")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ProductCode");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_ChecklistProcedure", (string)null);
                 });
 
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.CompanyClassEntity", b =>
@@ -3092,6 +3161,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("LoanPurpose");
 
+                    b.Property<string>("NHFNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NHFNumber");
+
                     b.Property<decimal>("Principal")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("Principal");
@@ -4811,6 +4884,95 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.ToTable("Remita_TblRemitaPaymentDetails", (string)null);
                 });
 
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.RiskAssessmentProcedureEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApprovedBy")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ApprovedBy");
+
+                    b.Property<decimal>("AverageScore")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("AverageScore");
+
+                    b.Property<DateTime>("BaseCreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("BaseCreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseCreatorId");
+
+                    b.Property<int>("BaseIsDelete")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseIsDelete");
+
+                    b.Property<long>("BaseModifierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseModifierId");
+
+                    b.Property<DateTime>("BaseModifyTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
+                    b.Property<int>("BaseVersion")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseVersion");
+
+                    b.Property<string>("BranchCode")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("BranchCode");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
+
+                    b.Property<decimal>("InterestRate")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("InterestRate");
+
+                    b.Property<string>("NHFNo")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NHFNumber");
+
+                    b.Property<string>("Rating")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Rating");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
+
+                    b.Property<string>("RiskId")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RiskId");
+
+                    b.Property<string>("RiskOfficer")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RiskOfficer");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_RiskAssessmentProcedure", (string)null);
+                });
+
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.RiskAssessmentSetupEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -5254,13 +5416,18 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("varbinary(max)")
                         .HasColumnName("DocumentUpload");
 
-                    b.Property<string>("InterestRate")
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<decimal>("InterestRate")
+                        .HasColumnType("decimal(18,2)")
                         .HasColumnName("InterestRate");
 
                     b.Property<decimal>("LoanAmount")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("LoanAmount");
+
+                    b.Property<string>("NHFNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NHFNumber");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)")

@@ -405,7 +405,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #endregion
 
 
-        #region LoanApplicaiton
+                #region LoanApplicaiton
         public async Task<TData<LoanInitiationEntity>> LoanApplication(InitiateLoanDto initiateLoanDto)
         {
             TData<LoanInitiationEntity> obj1 = new TData<LoanInitiationEntity>();
@@ -415,14 +415,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             LoanInitiationEntity entity = new LoanInitiationEntity();
             var loanParam = new LoanInitiationListParam
             {
-                LoanProduct = productName,
-                Principal = initiateLoanDto.PrincipalAmount.ToString(),
+               NHFNumber = user.EmployeeInfo.NHFNumber.ToStr(),
+                //Principal = initiateLoanDto.PrincipalAmount.ToString(),
 
             };
             var noOfLoans = await _iUnitOfWork.LoanInitiations.GetList(loanParam);
             if (noOfLoans.Count() > 0)
             {
-                obj1.Message = "You currently have an ongoing loan process in progress.";
+                obj1.Message = "You currently have an ongoing loans process in progress.";
                 obj1.Tag = 0;
                 return obj1;
             }
@@ -432,141 +432,145 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             entity.LoanProduct = productName;
             entity.LoanPurpose = initiateLoanDto.Purpose;
             entity.Status = "Undergoing Approval";
+            entity.NHFNumber = employeedetails.NHFNumber.ToStr();
 
-            await _iUnitOfWork.LoanInitiations.SaveForm(entity);
-            obj1.Data = entity;
-            obj1.Tag = 1;
-            obj1.Message = "Loan Initiated Successfully, Passed to Underwriting";
-            return obj1;
+            
 
             var underwriting = new UnderwritingEntity
             {
                 LoanAmount = initiateLoanDto.PrincipalAmount,
-                InterestRate = initiateLoanDto.InterestRate.ToString(),
+                InterestRate = initiateLoanDto.InterestRate,
                 Tenor = initiateLoanDto.Tenor.ToStr(),
                 Name = employeedetails.FirstName + " " + employeedetails.LastName,
                 ProductName = productName,
+                NHFNumber = employeedetails.NHFNumber.ToStr(),
 
             };
             await _iUnitOfWork.Underwritings.SaveForm(underwriting);
-        }        //bool employeeExist = await _companyService.CustomerExist(loggedUserinfo.Employee.ToString());
-        //string Message = string.Empty;
-        //AffordabilityResponseDto result = new AffordabilityResponseDto();
-        //if (!employeeExist)
-        //{
-        //    CreateCustomerRequestDTO customercreateRequest = new CreateCustomerRequestDTO();
-        //    ContactAddress address = new ContactAddress()
-        //    {
-        //        contactAddress = EmployeeInformation.PostalAddress,
-        //        NearestLandmark = EmployeeInformation.PostalAddress,
-        //        MailingAddress = EmployeeInformation.EmailAddress,
-        //        CityId = 3017,
-        //        StateId = 1,
-        //        AddressTypeId = 3,
-        //        UtilityBillNo = "3456789"
+            await _iUnitOfWork.LoanInitiations.SaveForm(entity);
+            obj1.Data = entity;
+            obj1.Tag = 1;
+            obj1.Message = "Loan Initiated Successfully, Passed to Underwritting";
+            return obj1;
+        }
+            //bool employeeExist = await _companyService.CustomerExist(loggedUserinfo.Employee.ToString());
+            //string Message = string.Empty;
+            //AffordabilityResponseDto result = new AffordabilityResponseDto();
+            //if (!employeeExist)
+            //{
+            //    CreateCustomerRequestDTO customercreateRequest = new CreateCustomerRequestDTO();
+            //    ContactAddress address = new ContactAddress()
+            //    {
+            //        contactAddress = EmployeeInformation.PostalAddress,
+            //        NearestLandmark = EmployeeInformation.PostalAddress,
+            //        MailingAddress = EmployeeInformation.EmailAddress,
+            //        CityId = 3017,
+            //        StateId = 1,
+            //        AddressTypeId = 3,
+            //        UtilityBillNo = "3456789"
 
 
-        //    };
-        //    NextofKin NOK = new NextofKin()
-        //    {
-        //        firstName = EmployeeInformation.NOKName,
-        //        lastName = EmployeeInformation.NOKName,
-        //        contactAddress = EmployeeInformation.NOKAddress,
-        //        emailAddress = EmployeeInformation.NOKEmailAddress,
-        //        mobilePhoneNo = EmployeeInformation.NOKNumber,
-        //        nearestLandmark = "",
-        //        cityId = 3017,
-        //        relationship = EmployeeInformation.KinRelationship.ToString(),
-        //        dateOfBirth = DateTime.MinValue,
-        //        gender = EmployeeInformation.Gender.ToString(),
+            //    };
+            //    NextofKin NOK = new NextofKin()
+            //    {
+            //        firstName = EmployeeInformation.NOKName,
+            //        lastName = EmployeeInformation.NOKName,
+            //        contactAddress = EmployeeInformation.NOKAddress,
+            //        emailAddress = EmployeeInformation.NOKEmailAddress,
+            //        mobilePhoneNo = EmployeeInformation.NOKNumber,
+            //        nearestLandmark = "",
+            //        cityId = 3017,
+            //        relationship = EmployeeInformation.KinRelationship.ToString(),
+            //        dateOfBirth = DateTime.MinValue,
+            //        gender = EmployeeInformation.Gender.ToString(),
 
-        //    };
-        //    ContactPhone phone = new ContactPhone()
-        //    {
-        //        OfficeLandNo = EmployeeInformation.MobileNumber,
-        //        MobilePhoneNo = EmployeeInformation.MobileNumber
-        //    };
-        //    AccountDetails acctdetails = new AccountDetails()
-        //    {
-        //        AccountStatusName = "Active",
-        //        ProductAccountName = "NHF",
-        //        AccountNumber = EmployeeInformation.Id.ToString(),
-        //        DateOfEmployment = EmployeeInformation.DateOfEmployment,
-        //        MonthlyIncome = EmployeeInformation.MonthlySalary.ToString(),
-        //        OtherBankAccountNumber = EmployeeInformation.BankAccountNumber,
-        //        OtherBankSortCode = "214"
-        //    };
+            //    };
+            //    ContactPhone phone = new ContactPhone()
+            //    {
+            //        OfficeLandNo = EmployeeInformation.MobileNumber,
+            //        MobilePhoneNo = EmployeeInformation.MobileNumber
+            //    };
+            //    AccountDetails acctdetails = new AccountDetails()
+            //    {
+            //        AccountStatusName = "Active",
+            //        ProductAccountName = "NHF",
+            //        AccountNumber = EmployeeInformation.Id.ToString(),
+            //        DateOfEmployment = EmployeeInformation.DateOfEmployment,
+            //        MonthlyIncome = EmployeeInformation.MonthlySalary.ToString(),
+            //        OtherBankAccountNumber = EmployeeInformation.BankAccountNumber,
+            //        OtherBankSortCode = "214"
+            //    };
 
-        //    customercreateRequest.FirstName = EmployeeInformation.FirstName;
-        //    customercreateRequest.Gender = EmployeeInformation.FirstName;
-        //    customercreateRequest.LastName = EmployeeInformation.LastName;
-        //    customercreateRequest.MiddleName = EmployeeInformation.OtherName;
-        //    customercreateRequest.Nationality = string.Empty;
-        //    customercreateRequest.DateOfBirth = Convert.ToDateTime(EmployeeInformation.DateOfBirth);
-        //    customercreateRequest.EmailAddress = EmployeeInformation.EmailAddress;
-        //    customercreateRequest.CustomerBVN = EmployeeInformation.BVN;
-        //    customercreateRequest.IsBvnValidated = true;
-        //    customercreateRequest.IsEmailValidated = true;
-        //    customercreateRequest.IsPhoneValidated = true;
-        //    customercreateRequest.IsPoliticallyExposed = true;
-        //    customercreateRequest.CrmsLegalStatusId = 104;
-        //    customercreateRequest.CrmsRelationshipTypeId = 152;
-        //    customercreateRequest.TaxNumber = EmployeeInformation.NIN;
-        //    customercreateRequest.Title = EmployeeInformation.Title.ToString();
-        //    customercreateRequest.SubSectorId = int.Parse(EmployeeInformation.MobileNumber);
-        //    customercreateRequest.BranchCode = EmployeeInformation.Branch.ToString();
-        //    customercreateRequest.AccountDetails = acctdetails;
-        //    customercreateRequest.contactPhone = phone;
-        //    customercreateRequest.contactAddress = address;
-        //    bool CreateCustomer = await _companyService.IndividualExiting(customercreateRequest);
-        //    if (!CreateCustomer)
-        //    {
-        //        Message = "Error Creating Customer";
-        //    }
-
-
-        //}
-        //checkafford affordPayload = new checkafford();
-        //affordPayload.amountRequested = Convert.ToDecimal(initiateLoanDto.PrincipalAmount);
-        //affordPayload.proposedTenor = Convert.ToInt32(initiateLoanDto.Tenor);
-        //affordPayload.productId = Convert.ToInt32(initiateLoanDto.Product);
-        //affordPayload.nhfAccount = loggedUserinfo.Employee.ToString();
-        //var affordabilitydetails = UpdateLoanAffordability(affordPayload);
-        //LoanApplicationViewModel2 lad = new LoanApplicationViewModel2()
-        //{
-
-        //    proposedAmount = Convert.ToDecimal(initiateLoanDto.PrincipalAmount),
-        //    proposedProductId = Convert.ToInt32(initiateLoanDto.Product),
-        //    proposedTenor = Convert.ToInt32(initiateLoanDto.Tenor),
-        //    loanPurpose = initiateLoanDto.Purpose,
-        //    operatingAccountNo = Convert.ToString(loggedUserinfo.Employee),
-        //    subSectorId = Convert.ToInt32(EmployeeInformation.StaffNumber),
-        //    requestedAmount = initiateLoanDto.PrincipalAmount,
-        //    repaymentDate = initiateLoanDto.repaymentDate,
-        //};
-        //AffordabilityDetails loanaff = new AffordabilityDetails()
-        //{
-        //    productId = affordabilitydetails.Result.FirstOrDefault().productId,
-        //    yearsInService = affordabilitydetails.Result.FirstOrDefault().yearsInService,
-        //    affordableAmount = affordabilitydetails.Result.FirstOrDefault().affordableAmount,
-        //    age = affordabilitydetails.Result.FirstOrDefault().age,
-        //    casaAccountId = affordabilitydetails.Result.FirstOrDefault().casaAccountId,
-        //    amountRequested = affordabilitydetails.Result.FirstOrDefault().amountRequested,
-        //    monthlyRepayment = affordabilitydetails.Result.FirstOrDefault().monthlyRepayment,
-        //    presentValue = affordabilitydetails.Result.FirstOrDefault().presentValue,
-        //    profitability = affordabilitydetails.Result.FirstOrDefault().profitability,
-        //    repaymentPeriod = affordabilitydetails.Result.FirstOrDefault().repaymentPeriod,
-        //    rate = affordabilitydetails.Result.FirstOrDefault().rate,
-        //    tenorOverride = affordabilitydetails.Result.FirstOrDefault().tenorOverride
-
-        //};
-        //LoanApplicationRequestDTO loanDetails = new LoanApplicationRequestDTO();
-        //loanDetails.customerCode = Convert.ToString(EmployeeInformation.Id);
-        //loanDetails.loanApplicationDetail = lad;
-        //loanDetails.affordabilityDetails = loanaff;
-        //var message = UpdateLoanApplication(loanDetails);
+            //    customercreateRequest.FirstName = EmployeeInformation.FirstName;
+            //    customercreateRequest.Gender = EmployeeInformation.FirstName;
+            //    customercreateRequest.LastName = EmployeeInformation.LastName;
+            //    customercreateRequest.MiddleName = EmployeeInformation.OtherName;
+            //    customercreateRequest.Nationality = string.Empty;
+            //    customercreateRequest.DateOfBirth = Convert.ToDateTime(EmployeeInformation.DateOfBirth);
+            //    customercreateRequest.EmailAddress = EmployeeInformation.EmailAddress;
+            //    customercreateRequest.CustomerBVN = EmployeeInformation.BVN;
+            //    customercreateRequest.IsBvnValidated = true;
+            //    customercreateRequest.IsEmailValidated = true;
+            //    customercreateRequest.IsPhoneValidated = true;
+            //    customercreateRequest.IsPoliticallyExposed = true;
+            //    customercreateRequest.CrmsLegalStatusId = 104;
+            //    customercreateRequest.CrmsRelationshipTypeId = 152;
+            //    customercreateRequest.TaxNumber = EmployeeInformation.NIN;
+            //    customercreateRequest.Title = EmployeeInformation.Title.ToString();
+            //    customercreateRequest.SubSectorId = int.Parse(EmployeeInformation.MobileNumber);
+            //    customercreateRequest.BranchCode = EmployeeInformation.Branch.ToString();
+            //    customercreateRequest.AccountDetails = acctdetails;
+            //    customercreateRequest.contactPhone = phone;
+            //    customercreateRequest.contactAddress = address;
+            //    bool CreateCustomer = await _companyService.IndividualExiting(customercreateRequest);
+            //    if (!CreateCustomer)
+            //    {
+            //        Message = "Error Creating Customer";
+            //    }
 
 
+            //}
+            //checkafford affordPayload = new checkafford();
+            //affordPayload.amountRequested = Convert.ToDecimal(initiateLoanDto.PrincipalAmount);
+            //affordPayload.proposedTenor = Convert.ToInt32(initiateLoanDto.Tenor);
+            //affordPayload.productId = Convert.ToInt32(initiateLoanDto.Product);
+            //affordPayload.nhfAccount = loggedUserinfo.Employee.ToString();
+            //var affordabilitydetails = UpdateLoanAffordability(affordPayload);
+            //LoanApplicationViewModel2 lad = new LoanApplicationViewModel2()
+            //{
+
+            //    proposedAmount = Convert.ToDecimal(initiateLoanDto.PrincipalAmount),
+            //    proposedProductId = Convert.ToInt32(initiateLoanDto.Product),
+            //    proposedTenor = Convert.ToInt32(initiateLoanDto.Tenor),
+            //    loanPurpose = initiateLoanDto.Purpose,
+            //    operatingAccountNo = Convert.ToString(loggedUserinfo.Employee),
+            //    subSectorId = Convert.ToInt32(EmployeeInformation.StaffNumber),
+            //    requestedAmount = initiateLoanDto.PrincipalAmount,
+            //    repaymentDate = initiateLoanDto.repaymentDate,
+            //};
+            //AffordabilityDetails loanaff = new AffordabilityDetails()
+            //{
+            //    productId = affordabilitydetails.Result.FirstOrDefault().productId,
+            //    yearsInService = affordabilitydetails.Result.FirstOrDefault().yearsInService,
+            //    affordableAmount = affordabilitydetails.Result.FirstOrDefault().affordableAmount,
+            //    age = affordabilitydetails.Result.FirstOrDefault().age,
+            //    casaAccountId = affordabilitydetails.Result.FirstOrDefault().casaAccountId,
+            //    amountRequested = affordabilitydetails.Result.FirstOrDefault().amountRequested,
+            //    monthlyRepayment = affordabilitydetails.Result.FirstOrDefault().monthlyRepayment,
+            //    presentValue = affordabilitydetails.Result.FirstOrDefault().presentValue,
+            //    profitability = affordabilitydetails.Result.FirstOrDefault().profitability,
+            //    repaymentPeriod = affordabilitydetails.Result.FirstOrDefault().repaymentPeriod,
+            //    rate = affordabilitydetails.Result.FirstOrDefault().rate,
+            //    tenorOverride = affordabilitydetails.Result.FirstOrDefault().tenorOverride
+
+            //};
+            //LoanApplicationRequestDTO loanDetails = new LoanApplicationRequestDTO();
+            //loanDetails.customerCode = Convert.ToString(EmployeeInformation.Id);
+            //loanDetails.loanApplicationDetail = lad;
+            //loanDetails.affordabilityDetails = loanaff;
+            //var message = UpdateLoanApplication(loanDetails);
+
+        
 
         #endregion
     }

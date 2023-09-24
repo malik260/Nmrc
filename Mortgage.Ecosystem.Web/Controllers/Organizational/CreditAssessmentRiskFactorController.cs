@@ -36,6 +36,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #region Get data
         [HttpGet]
         [AuthorizeFilter("creditassessmentriskfactor:search,user:search")]
+        //public async Task<IActionResult> GetListJson(string productcode)
+        //{
+        //    List<CreditAssessmentRiskFactorEntity> obj = await _iCreditAssessmentRiskFactorService.GetList(productcode);
+        //    return Json(obj);
+        //}
         public async Task<IActionResult> GetListJson(string productcode)
         {
             List<CreditAssessmentRiskFactorEntity> obj = await _iCreditAssessmentRiskFactorService.GetList(productcode);

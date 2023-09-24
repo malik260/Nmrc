@@ -19,7 +19,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using LicenseContext = OfficeOpenXml.LicenseContext;
 
-
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 {
     public class ContributionService : IContributionService
@@ -364,7 +363,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                                 nhfemployee.Amount = Amount;
                                 nhfemployee.Contributionmonth = ContributionMonth;
                                 nhfemployee.Contributionyear = ContributionYear;
-
+                                nhfemployee.EmailAddress = entity.BatchEmailAddress;
                                 nhfemployee.Accountname = entity.accountName;
                                 nhfemployee.Paymentoption = entity.paymentOptionBatch;
                                 ;
@@ -457,7 +456,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                         RemitaPaymentDTO PaymentDetails = new RemitaPaymentDTO();
                         PaymentDetails.amount = Convert.ToDecimal(totalAmount);
                         PaymentDetails.description = entity.narration;
-                        PaymentDetails.payerEmail = entity.emailAddress;
+                        PaymentDetails.payerEmail = entity.BatchEmailAddress;
                         PaymentDetails.payerPhone = entity.phoneNumber;
                         PaymentDetails.payerName = entity.accountName;
 

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
 {
-    public partial class initial : Migration
+    public partial class newMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1003,6 +1003,32 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tbl_ChecklistProcedure",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CheckList = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NHFNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BranchCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Applicable = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NonApplicable = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
+                    BaseVersion = table.Column<int>(type: "int", nullable: false),
+                    BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseIsDelete = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tbl_ChecklistProcedure", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tbl_Company",
                 columns: table => new
                 {
@@ -1376,6 +1402,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     Files = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NHFNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
                     BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
@@ -1820,6 +1847,37 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tbl_RiskAssessmentProcedure",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RiskId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NHFNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BranchCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AverageScore = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Rating = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterestRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ApprovedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RiskOfficer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
+                    BaseVersion = table.Column<int>(type: "int", nullable: false),
+                    BaseModifyTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BaseModifierId = table.Column<long>(type: "bigint", nullable: false),
+                    BaseIsDelete = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tbl_RiskAssessmentProcedure", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tbl_RiskAssessmentSetup",
                 columns: table => new
                 {
@@ -1898,7 +1956,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Tenor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InterestRate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InterestRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     LoanAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DocumentTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DocumentUpload = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
@@ -1906,6 +1964,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     NextStafffLevel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CheckList = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NHFNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BaseCreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BaseCreatorId = table.Column<long>(type: "bigint", nullable: false),
                     BaseProcessMenu = table.Column<long>(type: "bigint", nullable: false),
@@ -2140,6 +2199,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_ChargeSetup");
 
             migrationBuilder.DropTable(
+                name: "tbl_ChecklistProcedure");
+
+            migrationBuilder.DropTable(
                 name: "tbl_Company");
 
             migrationBuilder.DropTable(
@@ -2219,6 +2281,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
 
             migrationBuilder.DropTable(
                 name: "tbl_Refund");
+
+            migrationBuilder.DropTable(
+                name: "tbl_RiskAssessmentProcedure");
 
             migrationBuilder.DropTable(
                 name: "tbl_RiskAssessmentSetup");

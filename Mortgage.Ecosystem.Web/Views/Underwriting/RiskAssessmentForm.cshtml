@@ -1,0 +1,207 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+    Layout = "~/Views/Shared/_Index.cshtml";
+
+}
+
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.min.css" rel="stylesheet" />
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+
+
+<div class="RiskAssessmentForm" id="RiskAssessmentForm">
+    <div id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            @*                <form class="dialogblock-header" style="height: auto;">
+            <span class="dialogblockheader">Risk Assesstment Form</span>
+
+            </form>*@
+            <div class="col-sm-12 select-table table-striped">
+                <table id="productAssessmentSetupTable" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-6">
+                <button class="btn btn-danger" onclick="PerformAssessment()" type="button" id="RiskAssessment">
+                    <i class="fa fa-arrow-left"></i> Save Computed Score
+                </button>
+            </div>
+
+            <div class="col-sm-6">
+                <button class="btn btn-success" type="reset">
+                    <i class="fa fa-save"></i> Reset
+                </button>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group">
+    <div class="col-sm-6">
+        <label class="form-label">Remark</label>
+        <input id="naration" class="form-control" />
+    </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+<script type="text/javascript">    
+
+
+
+    $(function () {
+        initGrid();
+    });
+
+    function initGrid() {
+        var productCode = localStorage.getItem('Data1');
+        var queryUrl = '@Url.Content("~/CreditAssessmentRiskFactor/GetListJson")' + '?productcode=' + productCode;
+        var selectedWeights = [];
+        $('#productAssessmentSetupTable').bootstrapTable({
+            url: queryUrl,
+            columns: [
+                { field: 'RiskFactorsDescription', title: 'Product', visible: true },
+                { field: 'Weight', title: 'Weight', visible: true },
+            ],
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                var riskFactorUrl = '@Url.Content("~/CreditAssessmentFactorIndex/GetListJson")' + '?RiskFactorId=' + row.RiskFactorId;
+
+                // Prevent collapsing other detail views
+                $detail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+                $detail.html('<br/><table class="data-table" ' +
+                    'data-url=' + riskFactorUrl + ' ' +
+                    'id="FactorTable" ' +
+                    'data-toggle="table" >' +
+                    '<thead><tr>' +
+                    '<th data-field="FactorIndexDescription"><b>Risk Factor Index</b></th>' +
+                    '<th data-field="Weight"><b>Weight</b></th>' +
+                    '</tr></thead>' +
+                    '</table></div></div>').find('table').bootstrapTable({
+                        detailView: true,
+                        onExpandRow: function (factorindex, factorrow, $factorindexdetail) {
+                            var indexTitleurl = '@Url.Content("~/CreditAssessmentIndexTitle/GetListJson")' + '?factorIndexId=' + factorrow.FactorIndexId;
+
+                            // Prevent collapsing other detail views
+                            $factorindexdetail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+                            $factorindexdetail.html('<br/><table class="data-table" ' +
+                                'data-url=' + indexTitleurl + ' ' +
+                                'id="FactorIndexTable" ' +
+                                'data-toggle="table" >' +
+                                '<thead><tr>' +
+                                '<th data-field="IndexTitleDescription"><b>Factor Index Title</b></th>' +
+                                '<th data-field="Weight"><b>Weight</b></th>' +
+                                '<th data-checkbox="true" data-single-select="true"> </th>' +
+                                '</tr></thead>' +
+                                '</table></div></div>').find('table').bootstrapTable({ singleSelect: true });
+                        }
+                    });
+
+                
+            }
+        });
+        
+        //console.log(selectedWeights);
+        //var checkedWeightsDiv = $('#checkedWeightsDiv');
+        //checkedWeightsDiv.html('Checked Weights: ' + selectedWeights.join(', '));
+
+        // Add an event listener to track checkbox changes
+
+    
+
+
+    }
+
+
+
+
+
+
+
+    function PerformAssessment() {
+        debugger;
+        var selectedRow = $("#FactorIndexTable").bootstrapTable("getSelections");
+        var NhfNumber = localStorage.getItem("Data");
+        var ProductCode = localStorage.getItem("Data1");
+        debugger;
+        var totalweight = 0;
+
+        for (var i = 0; i < selectedRow.length; i++) {
+            totalweight = selectedRow[i].Weight;
+        } // <-- Closing bracket for the for loop
+
+        debugger;
+        console.log(selectedRow.length);
+        if (selectedRow.length !== 0) {
+           
+            swal({
+                title: "Are you sure?",
+                text: "Proceed with Risk Assessment!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#ff9800",
+                confirmButtonText: "Yes, continue",
+                cancelButtonText: "No, stop!",
+                showLoaderOnConfirm: true,
+                preConfirm: function () {
+                    return new Promise(function (resolve) {
+                        setTimeout(function () {
+                            resolve();
+                        }, 4000);
+                    });
+                }
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+                    swal({
+                        title: 'Performing Risk Assessment...',
+                        html: 'Please wait...',
+                        showConfirmButton: false,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                    });
+
+                    if (selectedRow.length !== 0) {
+
+                        var jsonData = {
+                            Weight: totalweight,
+                            NhfNumber: NhfNumber,
+                            ProductName: ProductCode
+                        };
+
+                        $.ajax({
+                            url: '/RiskAssessmentProcedure/SaveFormJson',
+                            type: 'POST',
+                            data: { selectedData: jsonData },
+                            success: function (obj) {
+                                if (obj.Tag == 1) {
+                                    swal({ title: 'Risk Assessment', text: obj.Message.toString(), type: 'success' }).then(function () { window.location.reload(false); });
+                                } else {
+                                    swal({ title: 'Risk Assessment', text: obj.Message.toString(), type: 'error' }).then(function () { window.location.reload(true); });
+                                    return;
+                                }
+                            },
+                            error: function (e) {
+                                swal({ title: 'Risk Assessment', text: e, type: 'error' }).then(function () { });
+                                console.log(e);
+                            }
+                        });
+
+                    }
+                }
+            });
+
+        } else {
+            $("#RiskAssessment").removeAttr("disabled");
+            swal("You have not selected any Factor Index");
+        }
+    }
+    
+
+</script>
+
+
+
+

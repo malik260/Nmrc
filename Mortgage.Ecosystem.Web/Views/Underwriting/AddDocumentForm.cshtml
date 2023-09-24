@@ -1,0 +1,283 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<script src = "https://code.jquery.com/jquery-3.3.1.min.js" > </script>   
+@*<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+*@
+
+<script src ="https://cdn.tiny.cloud/1/97ihdj4pizrgnyrwd26euodeyfufnv6r4f4r656es9h2jdj5/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+
+<div class="Underwriting" id="underwriting">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Add Document</span>
+                <div class="form-group">
+
+                    <div class="col-sm-6">
+                        <label for="documentTitle" class="form-label">Document Title</label>
+                        <input id="documentTitle" col="DocumentTitle" class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label"></label>
+                        <button class="btn btn-success" type="button" id="upload">
+                            <i class="fa fa-upload"></i> Upload Document
+                        </button>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <h4>Microsoft text editor</h4>
+                        <textarea id="itextarea"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="comment" class="form-label">Comments</label>
+                        <textarea id="comment" style="height: 150px;" col="Comments" class="form-control"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="nextLevelStaff" class="form-label">Next Level Staff</label>
+                        <div id="nextLevelStaff" col="NextLevelStaff"></div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </form>
+    <form id="form2" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Upload</span>
+                <title>Drag and Drop Form with File Upload</title>
+                <style>
+                    .form-container {
+                        width: 300px;
+                        height: 300px;
+                        border: 1px dashed #ccc;
+                        padding: 20px;
+                    }
+
+                    .droppable-area {
+                        width: 50%;
+                        height: 30%;
+                        border: 1px solid #ccc;
+                        text-align: center;
+                        line-height: 200px;
+                        background-color: #f7f7f7;
+                    }
+
+                    .upload-icon {
+                        font-size: 50px;
+                    }
+                </style>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label>Drag and Drop Form with File Upload</label>
+                        <div class="droppable-area">
+                            <i class="upload-icon">📤</i>
+                            @*<i class='fa-upload'></i>*@
+                        </div>
+                        <div id="dropped-file">
+                            <strong>Dropped File:</strong>
+                            <span id="file-name"></span>
+                        </div>
+                        <table id="file-list" class="table table-bordered" style="margin-top: 20px;">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>File Size</th>
+                                    <th>Date Attached</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- File entries will be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="control-label">Choose File</label>
+                        <input id="logo" col="Logo" type="file" multiple>
+
+                        </br>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>File Size</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="file-list">
+                                <!-- Uploaded files will be added here -->
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <button class="btn btn-danger" type="button" id="back">
+                            <i class="fa fa-arrow-left"></i> Back
+                        </button>
+                    </div>
+
+                    <div class="col-sm-6">
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </form>
+  </div>
+
+ <script type ="text/javascript">
+
+    tinymce.init({
+        selector: '#itextarea',
+        width: 500
+    });
+
+    function handleCheckboxChange(checkbox) {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="' + checkbox.name + '"]');
+        checkboxes.forEach((cb) => {
+            if (cb !== checkbox) {
+                cb.checked = false;
+            }
+        });
+    }
+
+    $(document).ready(function () {
+
+        $("#logo").fileinput({
+            language: 'en',
+            showPreview: false,
+            allowedFileExtensions: ['jpeg', 'jpg', 'png', 'gif', 'tiff', 'xlsx', 'pdf', 'doc', 'docx'],
+            uploadAsync: true,
+            dropZoneEnabled: false, // Disable default drag-and-drop behavior
+        }).on("fileuploaded", function (event, data) {
+            var obj = data.response;
+            if (obj.Tag == 1) {
+                var filePath = obj.Data;
+                var fileName = obj.FileName;
+                var fileSize = obj.FileSize;
+                var deleteButton = $('<button class="btn btn-sm btn-danger delete-file">Delete</button>')
+                    .attr('data-filepath', filePath);
+                var newRow = $('<tr>').append(
+                    $('<td>').text(fileName),
+                    $('<td>').text(fileSize),
+                    $('<td>').append(deleteButton)
+                );
+                $('#file-list').append(newRow);
+            }
+        });
+
+        // Delete a file row
+        $(document).on('click', '.delete-file', function () {
+            var filePath = $(this).data('filepath');
+            // You need to implement the server-side file deletion here
+
+            // Remove the row from the table
+            $(this).closest('tr').remove();
+        });
+    });
+
+    $(document).ready(function () {
+
+        // Prevent default drag-and-drop behavior
+        $('.droppable-area').on('dragenter dragover dragleave drop', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        // Highlight the droppable area when a file is dragged over
+        $('.droppable-area').on('dragenter', function () {
+            $(this).addClass('highlight');
+        });
+
+        $('.droppable-area').on('dragleave drop', function () {
+            $(this).removeClass('highlight');
+        });
+
+        // Handle file drop event
+        $('.droppable-area').on('drop', function (e) {
+            var files = e.originalEvent.dataTransfer.files;
+            handleDroppedFiles(files);
+        });
+
+
+
+        // Delete a file row
+        $(document).on('click', '.delete-file', function () {
+            $(this).closest('tr').remove();
+        });
+
+        function handleDroppedFiles(files) {
+            if (files.length > 0) {
+                var file = files[0];
+                $('#file-name').text(file.name);
+                $('#dropped-file').show();
+
+                // Capture file details in a table row
+                var fileSize = (file.size / 1024).toFixed(2) + ' KB';
+                var currentDate = new Date().toLocaleDateString();
+                var newRow = $('<tr>').append(
+                    $('<td>').text(file.name),
+                    $('<td>').text(fileSize),
+                    $('<td>').text(currentDate),
+                    $('<td>').html('<button<button class="btn btn-sm btn-danger delete-file"><i class="fa fa-remove"></i></button>')
+                );
+                $('#file-list tbody').append(newRow);
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        // hide the form initially
+        $('#form1').show();
+        $('#form2').hide();
+        
+
+
+        // add click event listener to the button
+        $('#upload').click(function () {
+            // unhide the form
+            $('#form1').hide();
+            $('#form2').show();
+            
+
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+        $('#back').click(function () {
+
+            // unhide the form
+            $('#form1').show();
+            $('#form2').hide();
+            
+
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+    });
+ 
+
+ </script>
+
+
+

@@ -120,11 +120,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #endregion
         #region
         [HttpPost]
-        public async Task<IActionResult> LoanInitiation(InitiateLoanDto initiateLoanDto)
+        public async Task<IActionResult> LoanInitiation( InitiateLoanDto initiateLoanDto)
         {
             TData obj = await _iLoanInitiationService.LoanApplication(initiateLoanDto);
             return Json(obj);
         }
         #endregion
-    }
+    }
 }

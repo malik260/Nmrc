@@ -22,6 +22,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IChangePasswordRepository ChangePasswords { get; }
         IChargeSetupRepository ChargeSetups { get; }
         IChecklistRepository Checklists { get; }
+        IChecklistProcedureRepository ChecklistsProcedure { get; }
+
         ICompanyRepository Companies { get; }
         ICompanyClassRepository CompanyClasses { get; }
         ICompanyTypeRepository CompanyTypes { get; }
@@ -63,6 +65,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IRefundConditionRepository RefundConditions { get; }
         IRefundProfilingRepository RefundProfilings { get; }
         IRiskAssessmentSetupRepository RiskAssessmentSetups { get; }
+        IRiskAssessmentProcedureRepository RiskAssessmentProcedure { get; }
 
         IPaymentHistoryRepository PaymentHistories { get; }
         IPropertySubscriptionRepository PropertySubscriptions { get; }

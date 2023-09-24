@@ -57,27 +57,43 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             }
             return BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
         }
+
+        public async Task<CreditScoreEntity> GetScorebyWeight(int Weight)
+        {
+            return await BaseRepository().FindEntity<CreditScoreEntity>(i => i.RangeMin <= Weight && i.RangeMax >= Weight);
+        }
         #endregion
 
         #region Submit data
         public async Task SaveForm(CreditScoreEntity entity)
         {
-            if (entity.Id.IsNullOrZero())
+            var db = await BaseRepository().BeginTrans();
+            try
             {
-                await entity.Create();
-                await BaseRepository().Insert<CreditScoreEntity>(entity);
+                if (entity.Id.IsNullOrZero())
+                {
+
+                    await entity.Create();
+                    await db.Insert(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await db.Update(entity);
+                }
+                await db.CommitTrans();
             }
-            else
+            catch
             {
-                await entity.Modify();
-                await BaseRepository().Update<CreditScoreEntity>(entity);
+                await db.RollbackTrans();
+                throw;
             }
         }
 
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await BaseRepository().Delete<RiskAssessmentSetupEntity>(idArr);
+            await BaseRepository().Delete<CreditScoreEntity>(idArr);
         }
         #endregion
 

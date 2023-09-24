@@ -9,6 +9,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 using NPOI.Util;
+using System.Collections.Generic;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 {
@@ -26,8 +27,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<List<CreditAssessmentRiskFactorEntity>> GetList(string productcode)
         {
             List<CreditAssessmentRiskFactorEntity> obj = new List<CreditAssessmentRiskFactorEntity>();
-            obj = await _iUnitOfWork.CreditAssessmentRiskFactors.GetList(productcode);
-            
+            var pdCode = _iUnitOfWork.CreditTypes.GetEntity(productcode).Result.Code;
+            obj = await _iUnitOfWork.CreditAssessmentRiskFactors.GetList(pdCode);
+
             return obj;
         }
 

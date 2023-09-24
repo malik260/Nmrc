@@ -98,13 +98,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var expression = ExtensionLinq.True<LoanInitiationEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.LoanProduct))
+                if (!string.IsNullOrEmpty(param.NHFNumber))
                 {
-                    expression = expression.And(t => t.LoanProduct.Contains(param.LoanProduct));
+                    expression = expression.And(t => t.NHFNumber.Contains(param.NHFNumber));
                 }
             }
             return expression;
         }
         #endregion
-    }
+    }
 }

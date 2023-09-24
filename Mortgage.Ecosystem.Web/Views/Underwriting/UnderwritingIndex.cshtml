@@ -27,10 +27,9 @@
             </div>
         </div>
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-upload"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
-
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-upload"></i> Add Document</a>
+            <a id="btnAddChecklist" class="btn btn-success" onclick="showSaveChecklistForm(true)"><i class="fa fa-list"></i> Checklist</a>
+            <a id="btnAddRiskAssesstment" class="btn btn-danger" onclick="showSaveRiskAssessmentForm(true)"><i class="fa fa-exclamation-triangle"></i> Risk Assessment</a>
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -51,24 +50,26 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/LoanInitiation/GetLoanInitiationPageListJson")';
+        debugger
+        var queryUrl = '@Url.Content("~/Underwriting/GetUnderwritingPageListJson")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'LoanProduct', title: 'Product Name', sortable: true },
+                { field: 'NHFNumber', title: 'NHF Number', sortable: true },
+                { field: 'ProductName', title: 'Product Name', sortable: true },
                 {
                     field: 'Tenor', title: 'Tenor', sortable: true, formatter: function (value) {
                         return value + " years";
                     }
                 },
                 {
-                    field: 'Rate', title: 'Interest Rate', sortable: true, formatter: function (value) {
+                    field: 'InterestRate', title: 'Interest Rate', sortable: true, formatter: function (value) {
                         return value + "%";
                     }
                 },
-                { field: 'Principal', title: 'Loan Amount', sortable: true },                               
+                { field: 'LoanAmount', title: 'Loan Amount', sortable: true },
                 {
                   field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
@@ -101,15 +102,74 @@
             }
         }
         cn.openDialog({
-            title: id > 0 ? "Edit Undewriting" : "Add Underwriting",
-            content: '@Url.Content("~/Underwriting/UnderwritingForm")' + '?id=' + id,
+            title: id > 0 ? "Edit Document" : "Add Document",
+            content: '@Url.Content("~/Underwriting/AddDocumentForm")' + '?id=' + id,
             width: "780px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
             }
         });
-    }   
+    }
+
+    function showSaveChecklistForm(bAdd) {
+        var id = 0;
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        console.log(selectedRow);
+        var NhfNumber = selectedRow[0].NHFNumber;
+        var ProductName = selectedRow[0].ProductName;
+        console.log(ProductName);
+        localStorage.setItem('Data', NhfNumber);       
+        localStorage.setItem('Data1', ProductName);
+        if (!bAdd) {          
+
+
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        cn.openDialog({
+            title: id > 0 ? "Edit Checklist" : "Checklist Form",
+            content: '@Url.Content("~/Underwriting/ChecklistForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showSaveRiskAssessmentForm(bAdd) {
+        var id = 0;
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        console.log(selectedRow);
+        var NhfNumber = selectedRow[0].NHFNumber;
+        var ProductName = selectedRow[0].ProductName;
+        console.log(ProductName);
+        localStorage.setItem('Data', NhfNumber);
+        localStorage.setItem('Data1', ProductName);
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        cn.openDialog({
+            title: id > 0 ? "Edit Risk Assessment Form" : "Risk Assessment Form",
+            content: '@Url.Content("~/Underwriting/RiskAssessmentForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
 
 
 

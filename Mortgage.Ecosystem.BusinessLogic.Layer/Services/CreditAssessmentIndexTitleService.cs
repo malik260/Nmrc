@@ -22,16 +22,22 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
         #region Retrieve data
-        public async Task<TData<List<CreditAssessmentIndexTitleEntity>>> GetList(int factorIndexId)
+        //public async Task<TData<List<CreditAssessmentIndexTitleEntity>>> GetList(int factorIndexId)
+        //{
+        //    TData<List<CreditAssessmentIndexTitleEntity>> obj = new TData<List<CreditAssessmentIndexTitleEntity>>();
+        //    obj.Data = await _iUnitOfWork.CreditAssessmentIndexTitles.GetList(factorIndexId);
+        //    obj.Total = obj.Data.Count;
+        //    obj.Tag = 1;
+        //    return obj;
+        //}
+
+        public async Task<List<CreditAssessmentIndexTitleEntity>> GetList(int factorIndexId)
         {
-            TData<List<CreditAssessmentIndexTitleEntity>> obj = new TData<List<CreditAssessmentIndexTitleEntity>>();
-            obj.Data = await _iUnitOfWork.CreditAssessmentIndexTitles.GetList(factorIndexId);
-            obj.Total = obj.Data.Count;
-            obj.Tag = 1;
+            List<CreditAssessmentIndexTitleEntity> obj = new List<CreditAssessmentIndexTitleEntity>();
+            obj = await _iUnitOfWork.CreditAssessmentIndexTitles.GetList(factorIndexId);
+
             return obj;
         }
-
-
 
         public async Task<TData<CreditAssessmentIndexTitleEntity>> GetEntity(long id)
         {

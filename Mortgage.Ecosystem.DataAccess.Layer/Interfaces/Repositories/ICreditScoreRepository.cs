@@ -12,5 +12,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<int> GetMaxSort();
         Task SaveForm(CreditScoreEntity entity);
         Task DeleteForm(string ids);
+        Task<CreditScoreEntity> GetScorebyWeight(int Weight);
     }
 }

@@ -23,6 +23,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IChangePasswordRepository? _changePasswords;
         private IChargeSetupRepository? _chargeSetups;
         private IChecklistRepository? _checklists;
+        private IChecklistProcedureRepository? _checklistsProcedure;
+
         private ICompanyRepository? _companies;
         private ICompanyClassRepository? _companyClasses;
         private ICompanyTypeRepository? _companyTypes;
@@ -70,6 +72,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IRefundConditionRepository? _refundConditions;
         private IRefundProfilingRepository? _refundProfilings;
         private IRiskAssessmentSetupRepository? _riskAssessmentSetups;
+        private IRiskAssessmentProcedureRepository? _riskAssessmentProcedure;
+
         private IRoleRepository? _roles;
         private IStateRepository? _states;
         private IStatementOfAccountRepository? _statementOfAccounts;
@@ -133,6 +137,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
          _chargeSetups ??= new ChargeSetupRepository();
         public IChecklistRepository Checklists =>
         _checklists ??= new ChecklistRepository();
+
+        public IChecklistProcedureRepository ChecklistsProcedure =>
+        _checklistsProcedure ??= new ChecklistProcedureRepository();
 
         public ICompanyRepository Companies =>
             _companies ??= new CompanyRepository();
@@ -262,6 +269,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
             _relations ??= new RelationRepository();
         public IRiskAssessmentSetupRepository RiskAssessmentSetups =>
      _riskAssessmentSetups ??= new RiskAssessmentSetupRepository();
+        public IRiskAssessmentProcedureRepository RiskAssessmentProcedure =>
+         _riskAssessmentProcedure ??= new RiskAssessmentProcedureRepository();
+
         public IRoleRepository Roles =>
             _roles ??= new RoleRepository();
 

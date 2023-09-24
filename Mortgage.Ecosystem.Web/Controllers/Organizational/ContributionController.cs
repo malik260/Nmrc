@@ -4,12 +4,11 @@ using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
-using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 using Mortgage.Ecosystem.Web.Filter;
-//using OfficeOpenXml;
+using OfficeOpenXml;
 using System.Data;
 using System.Net.Mime;
 
@@ -36,15 +35,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         public IActionResult ContributionForm()
         {
-
             return View();
         }
 
 
         #endregion
-
-
-
 
         #region Get data
         [HttpGet]
@@ -54,6 +49,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             TData<List<ContributionEntity>> obj = await _iContributionService.GetList(param);
             return Json(obj);
         }
+
 
         [HttpGet]
         [AuthorizeFilter("contribution:search,user:search")]
@@ -85,15 +81,6 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             TData<int> obj = await _iContributionService.GetMaxSort();
             return Json(obj);
         }
-
-        [HttpGet]
-        [AuthorizeFilter("contribution:search,user:search")]
-        public async Task<IActionResult> GetContributionPageListJson(ContributionListParam param, Pagination pagination)
-        {
-            TData<List<ContributionEntity>> obj = await _iContributionService.GetPageList(param, pagination);
-            return Json(obj);
-        }
-
 
         public async Task<IActionResult> GetEmployeeDetails()
         {
@@ -222,17 +209,22 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         [HttpPost]
+        public async Task<IActionResult> BacklogSingleContribution(BacklogUploadVM entity)
+        {
+            TData obj = await _iContributionService.BacklogSingleContribution(entity);
+            return Json(obj);
+
+        }
+
+        [HttpPost]
         public async Task<IActionResult> BatchContribution(BatchUploadVM entity)
         {
-            throw new NotImplementedException();
+            TData obj = await _iContributionService.BatchContribution(entity);
+            return Json(obj);
+            
         }
         #endregion
 
-        //public async Task<IActionResult> GetEmployeeDetails()
-        //{
-        //    TData obj = await _iContributionService.GetCustomerDetails();
-        //    return Json(obj);
-        //}
 
         #region Check RRR status 
         public async Task<IActionResult> CheckPaymentStatus(string RRR)
@@ -241,5 +233,5 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
         #endregion
-    }
+    }
 }

@@ -11,7 +11,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("CustomerName")]
         public string? Name { get; set; }
 
-        // Product Name
+        //  Name
         [Column("ProductName")]
         public string? ProductName { get; set; }
 
@@ -21,7 +21,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         // Interest Rate
         [Column("InterestRate")]
-        public string? InterestRate { get; set; }
+        public decimal InterestRate { get; set; }
 
         // Loan Amount
         [Column("LoanAmount")]
@@ -50,5 +50,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // Check List
         [Column("Remark")]
         public string? Remark { get; set; }
+
+        // NHF Number
+        [Column("NHFNumber")]
+        public string NHFNumber { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
@@ -25,10 +26,12 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<List<CreditAssessmentFactorIndexEntity>> GetList(int riskFactorId)
         {
             List<CreditAssessmentFactorIndexEntity> obj = new List<CreditAssessmentFactorIndexEntity>();
-            obj= await _iUnitOfWork.CreditAssessmentFactorIndexes.GetList(riskFactorId);
+            obj = await _iUnitOfWork.CreditAssessmentFactorIndexes.GetList(riskFactorId);
 
             return obj;
         }
+
+
 
 
 

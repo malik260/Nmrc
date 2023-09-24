@@ -1,0 +1,241 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
+}
+
+
+    <script src="https://cdn.tiny.cloud/1/97ihdj4pizrgnyrwd26euodeyfufnv6r4f4r656es9h2jdj5/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+
+
+
+    <div class="Underwriting" id="underwriting">
+<div class="ChecklistForm" id="checklistForm">
+
+    <style>
+        /* Basic styling */
+        .container {
+            vertical-align: middle;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Optional styling for the table */
+        #data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            /*                            #data-table th, #data-table td {
+                                        border: 1px solid #ccc;
+                                        padding: 8px;
+                                        /text-align: center;
+                                        vertical-align: middle;
+                                    }*/
+
+            #data-table th {
+                background-color: #f2f2f2;
+                text-align: left;
+            }
+
+        /* Styling for checkboxes */
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    </style>
+
+
+
+    <div id="form3" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="col-sm-9 select-table table-striped">
+                <table id="checklistTable" data-mobile-responsive="true"></table>
+            </div>
+
+
+        </div>
+
+                <div Class="form-group" style="display: flex; margin-top:10%; justify-content: center; align-items: center">
+                    <button class="btn btn-warning" type="submit" id="backChecklist" style="margin-right: 10px;">
+                        <i class="fa fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <button class="btn btn-info" type="submit" id="btnChecklist" onclick="approveBulkTransactions()" style="margin-right: 10px;">
+                        <i class="fa fa-save"></i>
+                        Submit
+                    </button>
+                    <button class="btn btn-danger" type="reset">
+                        <i class="fa fa-recycle"></i>
+                        Clear
+                    </button>
+                </div>
+    </div>
+    </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+
+ <script type ="text/javascript">
+
+
+        $(function () {
+            checkListGrid();
+        });
+
+
+
+        function checkListGrid() {
+            var queryUrl = '@Url.Content("~/Checklist/GetListJson")';
+            $('#checklistTable').cnTable({
+                url: queryUrl,
+                columns: [
+                    { checkbox: true, visible: true },
+                    { field: 'Checklist', title: 'Checklist', visible: true },
+                    //{ checkbox: true, title: 'AppCheckbox', visible: true },
+                    //{ checkbox: true, title: 'NotAppCheckbox', visible: true },
+                    {
+                        field: 'Remark',
+                        title: 'Remark',
+                        visible: true,
+                        formatter: function (value, row, index) {
+                            return '<textarea class="form-control remark-textarea"></textarea>';
+                        }
+                    }
+                ],
+            });
+
+            // Update the checkbox column headers after the table is initialized
+            var headerCells = $('#checklistTable thead th');
+            $(headerCells[0]).text('App');
+            
+        }
+
+        function approveBulkTransactions() {
+            debugger
+            SingleData = $('#checklistTable').bootstrapTable('getAllSelections');
+            var selectedItems = $('#checklistTable').bootstrapTable('getSelections');
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            var NhfNumber = localStorage.getItem("Data");
+            var ProductCode = localStorage.getItem("Data1");
+            console.log(NhfNumber);
+            console.log(selectedRow);
+            debugger
+            var selectedItemsCombined = [];
+
+
+            for (var i = 0; i < selectedItems.length; i++) {
+                    selectedItemsCombined.push({
+                        Checklist: selectedItems[i].Checklist,
+                        AppCheckbox: selectedItems[i].AppCheckbox,
+                        //NotAppCheckbox: selectedItems[i].NotAppCheckbox,
+                        Remark: selectedItems[i].Remark,
+                        ProductCode: ProductCode,
+                        NhfNumber,
+                    });
+                
+            }
+            debugger
+            //var selectedAppItems = [];
+            //var selectedNotAppItems = [];
+            //for (var i = 0; i < selectedItems.length; i++) {
+            //    if (selectedItems[i].AppCheckbox) {
+            //        selectedAppItems.push({
+            //            Checklist: selectedItems[i].Checklist,
+
+            //        });
+            //    } else if (selectedItems[i].NotAppCheckbox) {
+            //        selectedNotAppItems.push({
+            //            Checklist: selectedItems[i].Checklist,
+
+            //        });
+            //    }
+            //}
+            debugger
+            console.log(SingleData["length"]);
+            if (SingleData["length"] !== 0) {
+
+                swal({
+                    title: "Are you sure?",
+                    text: "Transaction(s) will be approved!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#ff9800",
+                    confirmButtonText: "Yes, continue",
+                    cancelButtonText: "No, stop!",
+                    showLoaderOnConfirm: true,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            setTimeout(function () {
+                                resolve();
+                            }, 4000);
+                        });
+                    }
+                }).then(function (isConfirm) {
+                    if (isConfirm) {
+                        swal({
+                            title: 'Approving Transaction(s)...',
+                            html: 'Please wait...',
+                            showConfirmButton: false,
+
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+
+                        });
+
+                        if (SingleData["length"] !== 0) {
+
+                            $.ajax({
+                                url: '/ChecklistProcedure/SaveFormJson',
+                                type: 'POST',
+                                data: { selectedData: selectedItemsCombined },
+                                //dataType: 'json',
+                                success: function (obj) {
+
+
+                                    if (obj.Tag == 1) {
+                                        swal({ title: 'CheckList Process', text: obj.Message.toString(), type: 'success' }).then(function () { window.location.reload(false); });
+
+
+                                    }
+
+                                    else {
+                                        swal({ title: 'Checklist Process', text: obj.Message.toString(), type: 'error' }).then(function () { window.location.reload(true); });
+
+                                        return;
+                                    }
+                                },
+                                error: function (e) {
+                                    swal({ title: 'Checklist Process', text: e, type: 'error' }).then(function () { });
+                            console.log(e);
+                                }
+                            });
+
+                        }
+
+                    }
+
+                })
+
+
+            } else {
+                $("#btnApproveBatch").removeAttr("disabled", true);
+
+                swal("You have not selected any transaction(s)");
+            }
+        }
+
+ 
+ </script>
+
+
+

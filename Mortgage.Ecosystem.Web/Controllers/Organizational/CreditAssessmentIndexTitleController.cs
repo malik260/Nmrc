@@ -34,11 +34,19 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #endregion
 
         #region Get data
+        //[HttpGet]
+        //[AuthorizeFilter("creditassessmentindextitle:search,user:search")]
+        //public async Task<IActionResult> GetListJson(int factorIndexId)
+        //{
+        //    TData<List<CreditAssessmentIndexTitleEntity>> obj = await _iCreditAssessmentIndexTitleService.GetList(factorIndexId);
+        //    return Json(obj);
+        //}
+
         [HttpGet]
-        [AuthorizeFilter("creditassessmentindextitle:search,user:search")]
+        [AuthorizeFilter("creditassessmentfactorindex:search,user:search")]
         public async Task<IActionResult> GetListJson(int factorIndexId)
         {
-            TData<List<CreditAssessmentIndexTitleEntity>> obj = await _iCreditAssessmentIndexTitleService.GetList(factorIndexId);
+            List<CreditAssessmentIndexTitleEntity> obj = await _iCreditAssessmentIndexTitleService.GetList(factorIndexId);
             return Json(obj);
         }
 

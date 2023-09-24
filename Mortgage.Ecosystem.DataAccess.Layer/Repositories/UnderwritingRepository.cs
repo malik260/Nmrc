@@ -63,29 +63,29 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(UnderwritingEntity entity)
         {
-            var db = await BaseRepository().BeginTrans();
-            try
-            {
-                if (entity.Id.IsNullOrZero())
+                var db = await BaseRepository().BeginTrans();
+                try
                 {
-                    await entity.Create();
-                    await db.Insert(entity);
+                    if (entity.Id.IsNullOrZero())
+                    {
+                        await entity.Create();
+                        await db.Insert(entity);
+                    }
+                    else
+                    {
+                        await entity.Modify();
+                        await db.Update(entity);
+                    }
+                    await db.CommitTrans();
                 }
-                else
-                {
-                    await entity.Modify();
-                    await db.Update(entity);
-                }
-                await db.CommitTrans();
-            }
-            catch
-            {
-                await db.RollbackTrans();
-                throw;
-            }
+                    catch
+                    {
+                    await db.RollbackTrans();
+                    throw;
+                    }
         }
 
-        public async Task DeleteForm(string ids)
+            public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
             await BaseRepository().Delete<UnderwritingEntity>(idArr);
@@ -106,5 +106,5 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return expression;
         }
         #endregion
-    }
+    }
 }

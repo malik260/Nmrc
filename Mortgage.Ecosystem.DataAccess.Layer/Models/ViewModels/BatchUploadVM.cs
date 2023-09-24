@@ -11,7 +11,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels
     {
         public string? accountName { get; set; }
         public string? phoneNumber { get; set; }
-        public string? emailAddress { get; set; }
+        public string? BatchEmailAddress { get; set; }
         public int paymentOptionBatch { get; set; }
         public IFormFile ContributionTemplate { get; set; }
         public string? narration { get; set; }
