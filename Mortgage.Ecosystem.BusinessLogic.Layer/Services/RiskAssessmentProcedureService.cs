@@ -34,7 +34,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
            // entity.AverageScore = Convert.ToDecimal(CustomerRating.RangeMin + "-" + CustomerRating.RangeMax);
             entity.AverageScore = Convert.ToDecimal($"{CustomerRating.RangeMin}-{CustomerRating.RangeMax}");
             entity.BranchCode = "";
-            entity.Comment = "";
+            entity.Comment = selectedData.Remark;
             entity.Date = DateTime.Now;
             entity.InterestRate = 0;
             entity.NHFNo = selectedData.NhfNumber;
@@ -42,7 +42,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             entity.Rating = CustomerRating.Rating;
             entity.RiskOfficer = userInfo.UserName;
             entity.Status = "0";
-            entity.Remark = "";
+            entity.Remark = selectedData.Remark;
             await _iUnitOfWork.RiskAssessmentProcedure.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;

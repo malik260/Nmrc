@@ -1,0 +1,123 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+-
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Credit Assessment Index Title Form</span>
+                <div class="form-group">
+                    @* <div class="col-sm-4">
+                    <label class="productName control-label" style="margin-left: 100px;">Product Name</label>
+                    <input type="text" col="ProductName" style="margin-left: 100px; width: 550px;" class="form-control" id="Name">
+                    </div>  *@
+                    <div class="col-sm-6">
+                        <label class="productName control-label">Product Name</label>
+                        @* <input type="text" col="CreditType" style="margin-left: 100px;" class="form-control" id="creditType">*@
+                        <div id="ProductName" col="ProductName"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="productCode control-label">Product Code</label>
+                        <input type="text" col="ProductCode" class="form-control" id="ProductCode" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="RiskFactorId control-label">Risk Factor</label>
+                        <div id="RiskFactorId" col="RiskFactorId"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="FactorIndexId control-label">Factor Index</label>
+                        <div id="FactorIndexId" col="FactorIndexId"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="indexTitleDescription" class="form-label">Index Title Description</label>
+                        <input type="text" col="IndexTitleDescription" class="form-control" id="indexTitleDescription">
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="weight" class="form-label">Weight</label>
+                        <input type="number" col="Weight" class="form-control" id="weight">
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    //debugger
+    var id = cn.request("id");
+
+    $("#ProductName").cnComboBox({
+        url: '@Url.Content("~/CreditType/GetListJson")',
+        key: "Code",
+        value: "Name"
+    });
+
+    $("#ProductName").change(function () {
+        debugger
+        var selectedCredit = $("#ProductName").cnComboBox('getValue');
+        $("#ProductCode").val(selectedCredit);
+
+        //var id = selectedCredit;
+        if (selectedCredit != 0) {
+            $("#RiskFactorId").cnComboBox({
+                url: '@Url.Content("~/CreditAssessmentRiskFactor/GetRisks")' + '?productcode=' + selectedCredit,
+                key: "RiskFactorId",
+                value: "RiskFactorsDescription"
+            });
+
+            
+        }
+    });
+
+    $("#RiskFactorId").change(function () {
+        debugger
+        var selectedrisk = $("#RiskFactorId").cnComboBox('getValue');
+        if(selectedrisk != 0){
+        $("#FactorIndexId").cnComboBox({
+            url: '@Url.Content("~/CreditAssessmentFactorIndex/GetFactorIndex")' + '?RiskFactorId=' + selectedrisk,
+            key: "FactorIndexId",
+            value: "FactorIndexDescription"
+        });
+        }
+    });
+
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            cn.ajax({
+                url: '@Url.Content("~/CreditAssessmentIndexTitle/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+</script>

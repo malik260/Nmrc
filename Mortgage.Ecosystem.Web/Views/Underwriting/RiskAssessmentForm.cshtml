@@ -61,7 +61,7 @@
         $('#productAssessmentSetupTable').bootstrapTable({
             url: queryUrl,
             columns: [
-                { field: 'RiskFactorsDescription', title: 'Product', visible: true },
+                { field: 'RiskFactorsDescription', title: 'Risk Factor', visible: true },
                 { field: 'Weight', title: 'Weight', visible: true },
             ],
             detailView: true,
@@ -168,7 +168,9 @@
                         var jsonData = {
                             Weight: totalweight,
                             NhfNumber: NhfNumber,
-                            ProductName: ProductCode
+                            ProductName: ProductCode, 
+                            Remark: $('#naration').val()
+
                         };
 
                         $.ajax({

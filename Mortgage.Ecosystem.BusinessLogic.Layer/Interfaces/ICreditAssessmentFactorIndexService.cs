@@ -14,6 +14,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<string>> UpdateForm(CreditAssessmentFactorIndexEntity entity);
 
         Task<TData> DeleteForm(string ids);
-       
+        Task<TData<List<CreditAssessmentFactorIndexEntity>>> GetFactorIndex(int riskFactorId);
+
+
     }
 }

@@ -45,6 +45,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         {
             List<CreditAssessmentRiskFactorEntity> obj = await _iCreditAssessmentRiskFactorService.GetList(productcode);
             return Json(obj);
+        } 
+        public async Task<IActionResult> GetRisks(string productcode)
+        {
+            TData<List<CreditAssessmentRiskFactorEntity>> obj = await _iCreditAssessmentRiskFactorService.Getrisks(productcode);
+            return Json(obj);
         }
 
         [HttpGet]

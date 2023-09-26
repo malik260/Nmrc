@@ -31,6 +31,16 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj = await _iUnitOfWork.CreditAssessmentRiskFactors.GetList(pdCode);
 
             return obj;
+        }  
+        
+        public async Task <TData<List<CreditAssessmentRiskFactorEntity>>> Getrisks(string productcode)
+        {
+           TData<List<CreditAssessmentRiskFactorEntity>> obj = new TData<List<CreditAssessmentRiskFactorEntity>>();
+            var pdCode = _iUnitOfWork.CreditTypes.GetEntity(productcode).Result.Code;
+            obj.Data = await _iUnitOfWork.CreditAssessmentRiskFactors.GetList(pdCode);
+            obj.Total = obj.Data.Count;
+            obj.Tag = 1;
+            return obj;
         }
 
 
@@ -158,18 +168,15 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 obj.Message = "Risk Factor added successfully";
                 return obj;
             }
-            
+
+           
+
             catch (Exception ex)
             {
-                // Log the exception here, you can use a logger of your choice.
-                // Example: logger.LogError(ex, "An error occurred while saving the form");
-                // This will log the error, and the debugger will not break here during debugging.
+                throw;
             }
 
-            // In case of an exception, return the error response
-            obj.Tag = -1;
-            obj.Message = "An error occurred while saving the form";
-            return obj;
+            
         }
 
         public async Task<TData> DeleteForm(string ids)

@@ -42,6 +42,15 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
+
+        public async Task<IActionResult> GetFactorIndex(int RiskFactorId)
+        {
+           TData<List<CreditAssessmentFactorIndexEntity>> obj = await _iCreditAssessmentFactorIndexService.GetFactorIndex(RiskFactorId);
+            return Json(obj);
+        }
+
+
+
         [HttpGet]
         [AuthorizeFilter("creditassessmentfactorindex:view")]
         public async Task<IActionResult> GetFormJson(int id)

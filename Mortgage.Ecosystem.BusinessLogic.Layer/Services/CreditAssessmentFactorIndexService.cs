@@ -31,6 +31,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+        public async Task<TData<List<CreditAssessmentFactorIndexEntity>>> GetFactorIndex(int riskFactorId)
+        {
+            TData<List<CreditAssessmentFactorIndexEntity>> obj = new TData<List<CreditAssessmentFactorIndexEntity>>();
+            obj.Data = await _iUnitOfWork.CreditAssessmentFactorIndexes.GetList(riskFactorId);
+            obj.Tag = 1;
+            return obj;
+        }
+
 
 
 
@@ -74,9 +82,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             catch (Exception ex)
             {
-                // Log the exception here, you can use a logger of your choice.
-                // Example: logger.LogError(ex, "An error occurred while saving the form");
-                // This will log the error, and the debugger will not break here during debugging.
+
             }
 
             // In case of an exception, return the error response

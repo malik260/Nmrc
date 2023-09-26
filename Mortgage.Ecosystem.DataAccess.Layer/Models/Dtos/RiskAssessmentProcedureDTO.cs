@@ -11,5 +11,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
         public string? NhfNumber { get; set; }
         public int Weight { get; set; }
         public string? ProductName { get; set; }
+        public string? Remark { get; set; }
     }
 }

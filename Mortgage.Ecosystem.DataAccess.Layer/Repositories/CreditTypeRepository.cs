@@ -29,8 +29,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task<CreditTypeEntity> GetEntity(string code)
         {
-            return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Code == code);
+            return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Code == code || x.Name == code);
         }
+
+       
         #endregion
 
         #region Submit data
