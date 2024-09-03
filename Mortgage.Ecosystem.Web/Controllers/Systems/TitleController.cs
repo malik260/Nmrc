@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class TitleController : BaseController
     {
         private readonly ITitleService _iTitleService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public TitleController(IUnitOfWork iUnitOfWork, ITitleService iTitleService) : base(iUnitOfWork)
+        public TitleController(IUnitOfWork iUnitOfWork, ITitleService iTitleService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iTitleService = iTitleService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +37,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("title:search,user:search")]
+        //[AuthorizeFilter("title:search,user:search")]
         public async Task<IActionResult> GetListJson(TitleListParam param)
         {
             TData<List<TitleEntity>> obj = await _iTitleService.GetList(param);
@@ -51,7 +54,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         [HttpGet]
         [AuthorizeFilter("title:view")]
-        public async Task<IActionResult> GetFormJson(long id)
+        public async Task<IActionResult> GetFormJson(int id)
         {
             TData<TitleEntity> obj = await _iTitleService.GetEntity(id);
             return Json(obj);
@@ -68,6 +71,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetTitleName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Title.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
         #endregion

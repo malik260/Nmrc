@@ -9,7 +9,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
     {
         Task<TData<List<GenderEntity>>> GetList(GenderListParam param);
         Task<TData<List<GenderEntity>>> GetPageList(GenderListParam param, Pagination pagination);
-        Task<TData<GenderEntity>> GetEntity(long id);
+        Task<TData<GenderEntity>> GetEntity(int id);
         Task<TData<string>> SaveForm(GenderEntity entity);
         Task<TData> DeleteForm(string ids);
     }

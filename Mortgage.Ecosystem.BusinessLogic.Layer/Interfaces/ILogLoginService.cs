@@ -2,6 +2,7 @@
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
+using System.Threading.Tasks;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
@@ -13,5 +14,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<string>> SaveForm(LogLoginEntity entity);
         Task<TData> DeleteForm(string ids);
         Task<TData> RemoveAllForm();
+        Task<TData<List<LogLoginEntity>>> GetAdminPageList(LogLoginListParam param, Pagination pagination);
     }
 }

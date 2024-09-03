@@ -1,10 +1,15 @@
 ﻿using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
+using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
+using System.Net.NetworkInformation;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 {
@@ -30,6 +35,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<TData<List<ApprovalSetupEntity>>> GetPageList(ApprovalSetupListParam param, Pagination pagination)
         {
             TData<List<ApprovalSetupEntity>> obj = new TData<List<ApprovalSetupEntity>>();
+            var user = await Operator.Instance.Current();
+            param.Company = user.Company;
+
             obj.Data = await _iUnitOfWork.ApprovalSetups.GetPageList(param, pagination);
             if (obj.Data != null)
             {
@@ -62,13 +70,99 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #region Submit data
         public async Task<TData<string>> SaveForm(ApprovalSetupEntity entity)
         {
+            var context = new ApplicationDbContext();
+            var user = await Operator.Instance.Current();
             TData<string> obj = new TData<string>();
+            var approvalsetuplist = new ApprovalSetupListParam();
+            approvalsetuplist.Authority = entity.Authority1;
+            approvalsetuplist.MenuId = entity.MenuId;
+            var GetUserAssignedRole = await _iUnitOfWork.ApprovalSetups.GetList(approvalsetuplist);
+            if (GetUserAssignedRole.Count > 0)
+            {
+                obj.Data = entity.Id.ParseToString();
+                obj.Tag = 0;
+                obj.Message = "Task already assigned to user";
+                return obj;
+
+            }
             await _iUnitOfWork.ApprovalSetups.SaveForm(entity);
+            var menuid = entity.MenuId;
+            var menuinfo = await _iUnitOfWork.Menus.GetEntity(menuid);
+            var audit = new AuditTrailEntity();
+            audit.Action = SystemOperationCode.AssignPrivilege.ToString();
+            audit.ActionRoute = SystemOperationCode.ApprovalSetup.ToStr();
+            audit.BaseCreateTime = DateTime.Now;
+            audit.Browser = NetHelper.Browser;
+            //audit.Company = user.Company;
+            audit.UserName = user.Employee.ToStr();
+            audit.MacAddress = GetMAC();
+            audit.IpAddress = NetHelper.GetPublicIPAddress();
+            audit.TargetUserId = entity.Authority1.ToStr();
+            var username = await _iUnitOfWork.Employees.GetById(entity.Authority1);
+            audit.TargetUserName = username.EmailAddress;
+            context.AuditTrails.Add(audit);
+            context.SaveChanges();
+
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             return obj;
         }
 
+        public async Task<TData<string>> SaveForm2(ApprovalSetupEntity entity)
+        {
+            var context = new ApplicationDbContext();
+            var user = await Operator.Instance.Current();
+            TData<string> obj = new TData<string>();
+            var approvalsetuplist = new ApprovalSetupListParam();
+            approvalsetuplist.Authority = entity.Authority1;
+            var GetUserAssignedRole = await _iUnitOfWork.ApprovalSetups.GetList(approvalsetuplist);
+            var checkDuplicate = GetUserAssignedRole.Where(i => i.MenuId == 563327185478225920 || i.MenuId == 660881219264712704 || i.MenuId == 664553002530508800).ToList();
+            foreach (var item in checkDuplicate)
+            {
+                obj.Data = entity.Id.ParseToString();
+                obj.Tag = 0;
+                obj.Message = "Permission Already Assigned to user";
+                return obj;
+
+            }
+            await _iUnitOfWork.ApprovalSetups.SaveForm(entity);
+            var menuid = entity.MenuId;
+            var menuinfo = await _iUnitOfWork.Menus.GetEntity(menuid);
+            var audit = new AuditTrailEntity();
+            audit.Action = SystemOperationCode.AssignPrivilege.ToString();
+            audit.ActionRoute = SystemOperationCode.ApprovalSetup.ToStr();
+            audit.BaseCreateTime = DateTime.Now;
+            audit.Browser = NetHelper.Browser;
+            //audit.Company = user.Company;
+            audit.UserName = user.Employee.ToStr();
+            audit.MacAddress = GetMAC();
+            audit.IpAddress = NetHelper.GetPublicIPAddress();
+            audit.TargetUserId = entity.Authority1.ToStr();
+            var username = await _iUnitOfWork.Employees.GetById(entity.Authority1);
+            audit.TargetUserName = username.EmailAddress;
+            context.AuditTrails.Add(audit);
+            context.SaveChanges();
+
+            obj.Data = entity.Id.ParseToString();
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+        private string GetMAC()
+        {
+            string macAddresses = "";
+
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (nic.OperationalStatus == OperationalStatus.Up)
+                {
+                    macAddresses += nic.GetPhysicalAddress().ToString();
+                    break;
+                }
+            }
+            return macAddresses;
+        }
         public async Task<TData> DeleteForm(string ids)
         {
             TData<long> obj = new TData<long>();

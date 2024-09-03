@@ -5,42 +5,36 @@
 <div class="wrapper animated fadeInRight">
     <form id="form" class="form-horizontal m">
         <div class="form-group">
-            <label class="col-sm-2 control-label ">Login name<font class="red"> *</font></label>
+            <label class="col-sm-2 control-label ">Login name</label>
             <div class="col-sm-4">
-                <input id="userName" col="UserName" type="text" class="form-control" readonly="readonly" />
+                <input id="userName" col="EmailAddress" type="text" class="form-control" readonly="readonly" />
             </div>
             <label class="col-sm-2 control-label ">Name</label>
             <div class="col-sm-4">
-                <input id="realName" col="RealName" type="text" class="form-control" />
+                <input id="realName" readonly col="FirstName" type="text" class="form-control" />
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-2 control-label ">BVN</label>
+            <div class="col-sm-4">
+                <input id="bvn" col="BVN" type="text" class="form-control" readonly="readonly" />
+            </div>
 
-            <label class="col-sm-2 control-label ">Gender</label>
-            <div class="col-sm-4" id="gender" col="Gender"></div>
-            <label class="col-sm-2 control-label ">Birthday</label>
+            <label class="col-sm-2 control-label ">NHF Number</label>
             <div class="col-sm-4">
-                <input id="birthday" col="Birthday" type="text" class="form-control" />
+                <input id="nhfnumber" col="NHFNumber" type="text" readonly class="form-control" />
             </div>
+
         </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label ">Department</label>
-            <div class="col-sm-4">
-                <input id="departmentName" col="DepartmentName" type="text" class="form-control" readonly="readonly" />
-            </div>
-            <label class="col-sm-2 control-label ">Job</label>
-            <div class="col-sm-4">
-                <div id="positionId" col="PositionIds"></div>
-            </div>
-        </div>
+       
         <div class="form-group">
             <label class="col-sm-2 control-label ">Mobile</label>
             <div class="col-sm-4">
-                <input id="mobile" col="Mobile" type="text" class="form-control" />
+                <input id="mobile" col="MobileNumber" readonly type="text" class="form-control" />
             </div>
             <label class="col-sm-2 control-label ">Mailbox</label>
             <div class="col-sm-4">
-                <input id="email" col="Email" type="text" class="form-control" />
+                <input id="email" col="EmailAddress" readonly type="text" class="form-control" />
             </div>
         </div>
     </form>

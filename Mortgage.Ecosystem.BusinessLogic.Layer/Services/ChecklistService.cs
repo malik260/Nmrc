@@ -9,6 +9,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
+using System.Collections.Generic;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 {
@@ -36,6 +37,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<List<ChecklistEntity>> obj = new TData<List<ChecklistEntity>>();
             obj.Data = await _iUnitOfWork.Checklists.GetPageList(param, pagination);
+
+            foreach (ChecklistEntity entity in obj.Data)
+            {
+                entity.ProductName = _iUnitOfWork.CreditTypes.GetEntityByProductCode(entity.ProductCode).Result?.Name;
+            }
             obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;
@@ -81,13 +87,69 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             }
             obj.Tag = 1;
             return obj;
-        }       
+        }
 
-        public async Task<TData<ChecklistEntity>> GetEntity(long id)
+        //public async Task<TData<ChecklistEntity>> GetEntity(int id)
+        //{
+        //    TData<ChecklistEntity> obj = new TData<ChecklistEntity>();
+
+        //    // Initialize obj.Data to null
+
+
+
+        //        // Get entity by ID
+        //        var entity = await _iUnitOfWork.Checklists.GetEntity(id);
+
+
+        //            obj.Data = entity; // Assign the retrieved entity to obj.Data
+        //            obj.Tag = 1; // Set tag to indicate success
+
+
+
+
+
+        //    return obj;
+        //}
+
+        public async Task<TData<ChecklistEntity>> GetEntity(int id)
         {
             TData<ChecklistEntity> obj = new TData<ChecklistEntity>();
-            obj.Data = await _iUnitOfWork.Checklists.GetEntity(id);
-            obj.Tag = 1;
+
+            try
+            {
+                ChecklistEntity entity;
+
+                if (id == 0)
+                {
+                    entity = new ChecklistEntity();
+                }
+                else
+                {
+                    entity = await _iUnitOfWork.Checklists.GetEntity(id);
+
+                    if (entity == null)
+                    {
+                        obj.Message = "Entity not found.";
+                        obj.Tag = -1;
+                        return obj;
+                    }
+
+                    var productEntity = await _iUnitOfWork.CreditTypes.GetEntityByProductCode(entity.ProductCode);
+                    if (productEntity == null)
+                    {
+                        entity.ProductName = productEntity.Name;
+                    }
+                }
+
+                obj.Data = entity; 
+                obj.Tag = 1; 
+            }
+            catch (Exception ex)
+            {
+                obj.Message = ex.Message; 
+                obj.Tag = -1; 
+            }
+
             return obj;
         }
 
@@ -100,16 +162,22 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         //}
         #endregion
 
+
         #region Submit data
         public async Task<TData<string>> SaveForm(ChecklistEntity entity)
         {
             TData<string> obj = new TData<string>();
-            var PdName = await _iUnitOfWork.CreditTypes.GetEntity(entity.ProductName);
-            entity.ProductName = PdName.Name;
+            if (string.IsNullOrEmpty(entity.ProductCode))
+            {
+                obj.Tag = 0;
+                obj.Message = "Please Select a product";
+                return obj;
+            }
+            bool isUpdate = entity.Id > 0;
             await _iUnitOfWork.Checklists.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
-            obj.Message = "Checklist added successfully";
+            obj.Message = isUpdate ? "Checklist updated successfully" : "Checklist added successfully";
             return obj;
         }
 
@@ -151,5 +219,5 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
 
         #endregion
-    }
+    }
 }

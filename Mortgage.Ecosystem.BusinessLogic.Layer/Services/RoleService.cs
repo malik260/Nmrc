@@ -25,6 +25,16 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<List<RoleEntity>> obj = new TData<List<RoleEntity>>();
             obj.Data = await _iUnitOfWork.Roles.GetList(param);
+            foreach (var item in obj.Data)
+            {
+                var companyInfo = await  _iUnitOfWork.Companies.GetById(item.Company);
+                if (companyInfo != null)
+                {
+                    item.CompanyName = companyInfo.Name;
+
+                }
+                
+            }
             obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
@@ -39,7 +49,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 List<CompanyEntity> companyList = await _iUnitOfWork.Companies.GetList(new CompanyListParam { Ids = obj.Data.Select(p => p.Company).ToList() });
                 foreach (RoleEntity role in obj.Data)
                 {
-                    role.CompanyName = companyList.Where(p => p.Id == role.Company).Select(p => p.Name).FirstOrDefault();
+                    //role.CompanyName = companyList.Where(p => p.Id == role.Company).Select(p => p.Name).FirstOrDefault();
+                    role.CompanyName =  _iUnitOfWork.Companies.GetEntity(role.Company).Result.Name;
                 }
             }
             obj.Total = pagination.TotalCount;

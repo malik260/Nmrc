@@ -7,30 +7,10 @@
 </div>
 <div class="container-div">
     <div class="row">
-        <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
-                <ul>
-                    <li>
-                        Name: <input id="name" col="Name" type="text" />
-                    </li>
-                    <li>
-                        Status: <span id="status" col="Status"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Register</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm()"><i class="fa fa-plus"></i> Register</a>
+            <a id="btnEdit" class="btn btn-primary disabled" onclick="showEditForm()"><i class="fa fa-edit"></i> Edit</a>
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
         </div>
 
@@ -40,18 +20,7 @@
     </div>
 </div>
 
-       @* </div>*@
-       @* <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
-        </div>*@
-
-       @* <div class="col-sm-12">
-            <table id="gridTable" data-mobile-responsive="true"></table>
-        </div>
-    </div>
-</div>*@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script type="text/javascript">
     $(function () {
@@ -70,30 +39,22 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'PhoneNumber', title: 'Phone Number', sortable: true },
-                { field: 'Email', title: 'Email Address', sortable: true },
-                { field: 'PropertyType', title: 'Property Type', sortable: true },
-                { field: 'PropertyLocation', title: 'Property Location', sortable: true },
-                { field: 'Actions', title: 'Actions', visible: false, sortable: true },
-                //{ field: 'NatureOfBusiness', title: 'Nature Of Business', visible: false, sortable: true },
-                //{ field: 'NameOfRegistrar', title: 'Name Of Registrar', visible: false, sortable: true },
-                //{ field: 'CompanyClass', title: 'Class', sortable: true },
-                //{ field: 'CompanyType', title: 'Type', sortable: true },
-                //{
-                //    field: 'Status', title: 'Status', align: 'center',
-                //    formatter: function (value, row, index) {
-                //        if (value == "@StatusEnum.Yes.ToInt()") {
-                //            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
-                //        } else {
-                //            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
-                //        }
-                //    }
-                //},
-                //{
-                //    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
-                //        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
-                //    }
-                //}
+                { field: 'PhoneNumber', title: 'Phone Number', sortable: false },
+                { field: 'Email', title: 'Email Address', sortable: false },
+                { field: 'PropertyType', title: 'Property Type', sortable: false },
+                { field: 'PropertyLocation', title: 'Property Location', sortable: false },
+                { field: 'Latitude', title: 'Latitude', sortable: false },
+                { field: 'Longitude', title: 'Longitude', sortable: false },
+                {
+                    title: 'Operate',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="showPropertyForm(\'' + row.Id + '\')"><i class="fa fa-eye"></i>View Property</a>');
+                        return actions.join('');
+                    }
+                },
+
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);
@@ -108,21 +69,15 @@
         resetToolbarStatus();
     }
 
-    function showSaveForm(bAdd) {
+    function showSaveForm() {
         var id = 0;
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
+        var confirmButtonText = "Add";
         cn.openDialog({
-            title: id > 0 ? "Edit Agent" : "Add Property",
+            title: "Property Registration",
             content: '@Url.Content("~/PropertyRegistration/PropertyRegistrationForm")' + '?id=' + id,
             width: "780px",
+            btn: [confirmButtonText, 'Cancel'],
+
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -130,25 +85,120 @@
         });
     }
 
+    function showEditForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (!cn.checkRowEdit(selectedRow)) {
+            return;
+        }
+        var id = selectedRow[0].Id;
+
+        cn.openDialog({
+            title: "Edit Property Registration Form",
+            content: '@Url.Content("~/PropertyRegistration/PropertyRegistrationEditForm")' + '?id=' + id,
+            width: "780px",
+            btn: ['Update', 'Cancel'],
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+    // function deleteForm() {
+    //     var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+    //     if (cn.checkRowDelete(selectedRow)) {
+    //         cn.confirm("Confirm to delete the selected"  + " row data?", function () {
+    //             var ids = cn.getIds(selectedRow);
+    //             cn.ajax({
+    //                 url: '@Url.Content("~/PropertyRegistration/DeleteFormJson")' + '?ids=' + ids,
+    //                 type: "post",
+    //                 success: function (obj) {
+    //                     if (obj.Tag == 1) {
+    //                         cn.msgSuccess(obj.Message);
+    //                         searchGrid();
+    //                     }
+    //                     else {
+    //                         cn.msgError(obj.Message);
+    //                     }
+    //                 }
+    //             });
+    //         });
+    //     }
+    // }
+
     function deleteForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
-                var ids = cn.getIds(selectedRow);
-                cn.ajax({
-                    url: '@Url.Content("~/PropertyRegistration/DeleteFormJson")' + '?ids=' + ids,
-                    type: "post",
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            searchGrid();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Confirm to delete the selected row data?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var ids = cn.getIds(selectedRow);
+                    $.ajax({
+                        url: '@Url.Content("~/PropertyRegistration/DeleteFormJson")' + '?ids=' + ids,
+                        type: "post",
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted!',
+                                    text: obj.Message
+                                }).then(() => {
+                                    searchGrid();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: obj.Message
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while deleting the data.'
+                            });
                         }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
+                    });
+                }
             });
         }
+    }
+
+
+    function openCustomDialog(options) {
+        layer.open({
+            type: 2,
+            title: options.title,
+            content: options.content,
+            area: [options.width, '90%'],
+            btn: ['Close'], // Include a close button
+            yes: function (index, layero) {
+                // This function will be called when the close button is clicked
+                layer.close(index);
+            },
+            success: function (layero, index) {
+                options.callback(index, layero);
+            }
+        });
+    }
+
+    function showPropertyForm(id) {
+        openCustomDialog({
+            title: "Property Gallery",
+            content: '@Url.Content("~/PropertyRegistration/PropertyImages")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
     }
 </script>

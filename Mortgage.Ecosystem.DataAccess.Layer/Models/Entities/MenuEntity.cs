@@ -15,6 +15,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("MenuName")]
         public string? MenuName { get; set; }
 
+        // Category
+        [Column("Category")]
+        public int Category { get; set; }
+
         // Menu icon
         [Column("MenuIcon")]
         public string? MenuIcon { get; set; }
@@ -54,6 +58,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // Parent name
         [NotMapped]
         public string? ParentName { get; set; }
+
+        [NotMapped]
+        public string? CompanyName { get; set; }
 
         // Approval Log List
         [NotMapped]

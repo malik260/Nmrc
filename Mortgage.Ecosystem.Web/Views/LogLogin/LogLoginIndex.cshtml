@@ -3,35 +3,7 @@
 }
 <div class="container-div">
     <div class="row">
-        <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
-                <ul>
-                    <li>
-                        Login name: <input id="userName" col="UserName" type="text" />
-                    </li>
-                    <li>
-                        &nbsp;&nbsp;&nbsp;&nbsp;Ip address: <input id="ipAddress" col="IpAddress" type="text" />
-                    </li>
-                    <li>
-                        Login Status: <span id="logStatus" col="LogStatus"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Login time: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="btn-group-sm" id="toolbar">
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
-            <a id="btnDelete" class="btn btn-danger" onclick="removeAllForm()"><i class="fa fa-trash"></i> Clear</a>
-        </div>
-
+        
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
@@ -53,22 +25,26 @@
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
-                { checkbox: true, visible: true },
+                { checkbox: true, visible: false },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'UserName', title: 'login name', sortable: true },
+                { field: 'EmailAddress', title: 'Login Name', sortable: false },
+                { field: 'CompanyName', title: 'Company' },
+                { field: 'UserName', title: 'Name' },
                 { field: 'IpAddress', title: 'IpAddress' },
-                { field: 'IpLocation', title: 'Ip Location' },
+                // { field: 'IpLocation', title: 'Ip Location' },
                 { field: 'Browser', title: 'Browser' },
+                { field: 'FailureReason', title: 'Failure Reason' },
+
                 { field: 'OS', title: 'OS' },
                 {
-                    field: 'LogStatus', title: 'LogStatus', align: 'center',
-                    formatter: function (value, row, index) {
-                        if (value == "@OperateStatusEnum.Success.ToInt()") {
-                            return '<span class="badge badge-primary">' + "@OperateStatusEnum.Success.GetDescription()" + '</span>';
-                        } else {
-                            return '<span class="badge badge-warning">' + "@OperateStatusEnum.Fail.GetDescription()" + '</span>';
-                        }
-                    }
+                   field: 'LogStatus', title: 'LogStatus', align: 'center',
+                   formatter: function (value, row, index) {
+                       if (value == "@OperateStatusEnum.Success.ToInt()") {
+                           return '<span class="badge badge-primary">' + "@OperateStatusEnum.Success.GetDescription()" + '</span>';
+                       } else {
+                           return '<span class="badge badge-warning">' + "@OperateStatusEnum.Fail.GetDescription()" + '</span>';
+                       }
+                   }
                 },
                 { field: 'Remark', title: 'Operation information' },
                 {
@@ -83,6 +59,14 @@
                 return queryString;
             }
         });
+    }
+
+    function searchTreeGrid(callBackId) {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').cnTreeTable('search', param);
+        if (callBackId) {
+            id = callBackId;
+        }
     }
 
     function searchGrid() {

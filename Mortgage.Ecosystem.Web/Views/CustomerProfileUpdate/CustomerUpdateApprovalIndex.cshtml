@@ -1,0 +1,334 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+    <div class="row">
+        <div class="ibox">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#employee" aria-expanded="true">Employee Record Update Approval</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="employee" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="container-div">
+                                <div class="row">
+                                    <div id="searchDiv" class="col-sm-12 search-collapse">
+                                        <div class="select-list">
+                                            <ul>
+                                                <li>
+                                                    <label>Name: </label> <input id="name" col="Name" type="text" />
+                                                </li>
+                                                <li class="select-time">
+                                                    <label>Created: </label>
+                                                    <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                                                    <span>-</span>
+                                                    <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                                                </li>
+                                                <li>
+                                                    <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchEmployeeGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group-sm" id="toolbar">
+                                        <a id="btnApprove" class="btn btn-primary disabled" onclick="approveEmployeeForm()"><i class="fa fa-check"></i> Approve</a>
+                                        <a id="btnReject" class="btn btn-danger disabled" onclick="rejectEmployeeForm()"><i class="fa fa-remove"></i> Reject</a>
+                                    </div>
+
+                                    <div class="col-sm-12 select-table table-striped">
+                                        <table id="gridTable" data-mobile-responsive="true"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
+    });
+
+    function initGrid() {
+        var queryEmployeeUpdateUrl = '@Url.Content("~/CustomerProfileUpdate/GetApprovalPageListJson")';
+        $('#gridTable').cnTable({
+            url: queryEmployeeUpdateUrl,
+            detailView: true,
+            sortName: 'BaseModifyTime',
+            sortOrder: "Desc",
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'CompanyName', title: 'Company', sortable: false },
+                { field: 'BranchName', title: 'Branch', visible: false, sortable: false },
+                { field: 'DepartmentName', title: 'Department', visible: false, sortable: false },
+                { field: 'TitleName', title: 'Title', visible: false, sortable: false },
+                { field: 'FirstName', title: 'FirstName', sortable: false },
+                { field: 'OtherName', title: 'Other Name(s)', sortable: false },
+                { field: 'LastName', title: 'Last Name', sortable: false },
+                { field: 'BVN', title: 'BVN', sortable: false },
+                { field: 'NIN', title: 'NIN', visible: false, sortable: false },
+                { field: 'GenderName', title: 'Gender', sortable: false },
+                { field: 'DateOfBirth', title: 'Date Of Birth', visible: false, sortable: false },
+                { field: 'MaritalStatusName', title: 'Marital Status', visible: false, sortable: false },
+                { field: 'PostalAddress', title: 'Postal Address', visible: false, sortable: false },
+                { field: 'EmailAddress', title: 'Email Address', visible: false, sortable: false },
+                { field: 'MobileNumber', title: 'Mobile Number', sortable: false },
+                {
+                    field: 'EmploymentType', title: 'Employment Type', align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@EmploymentTypeEnum.Employed.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@EmploymentTypeEnum.Employed.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@EmploymentTypeEnum.SelfEmployed.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                { field: 'DateOfEmployment', title: 'Date Of Employment', visible: false, sortable: false },
+                { field: 'StaffNumber', title: 'Staff Number', visible: false, sortable: false },
+                { field: 'CustomerBank', title: 'Bank Name', visible: false, sortable: false },
+                { field: 'BankAccountNumber', title: 'Account Number', visible: false, sortable: false },
+                { field: 'AccountTypeName', title: 'Account Type', visible: false, sortable: false },
+                { field: 'MonthlySalary', title: 'Monthly Salary', visible: false, sortable: false },
+                { field: 'AlertTypeName', title: 'Alert Type', visible: false, sortable: false },
+                {
+                    field: 'BaseModifyTime', title: 'Create Time', visible: false, formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            },
+            onExpandRow: function (index, row, $detail) {
+                initChildGrid(index, row, $detail);
+            }
+        });
+    }
+
+
+    function initChildGrid(index, row, $detail) {
+        $detail.html('Loading data ...');
+        var date = new Date(row.BaseCreateTime);
+        var formattedDate = date.toLocaleDateString(); // Format as a localized date string
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center" > ' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">NHF Registration for ' + row.FullName + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="effectiveDate">Effective Date:</label>' +
+            '<input type="text" id="effectiveDate" name="effectiveDate" placeholder="Effective Date" class="form-control text-left" readonly value="' + formattedDate + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="emailAddress">Email Address:</label>' +
+            '<input type="text" id="emailAddress" name="emailAddress" placeholder="Email Address" class="form-control text-left" readonly value="' + row.EmailAddress + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="phone">Phone:</label>' +
+            '<input type="text" id="phone" name="phone" placeholder="Phone" class="form-control text-left" readonly value="' + row.MobileNumber + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="remark">Remark:</label>' +
+            '<input type="text" id="remark" name="remark" placeholder="Remark" class="form-control text-left" />' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="maritalStatus">Marital Status:</label>' +
+            '<input type="text" id="maritalStatus" name="maritalStatus" placeholder="Marital Status" class="form-control text-left" readonly value="' + row.MaritalStatusName + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="gender">Gender:</label>' +
+            '<input type="text" id="gender" name="gender" placeholder="Gender" class="form-control text-left" readonly value="' + row.GenderName + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bvn">BVN:</label>' +
+            '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.BVN + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="nin">NIN:</label>' +
+            '<input type="text" id="nin" name="nin" placeholder="NIN" class="form-control text-left" readonly value="' + row.NIN + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bankName">Bank Name:</label>' +
+            '<input type="text" id="bankName" name="bankName" placeholder="Bank Name" class="form-control text-left" readonly value="' + row.CustomerBank + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bankAccountNo">Bank Account Number:</label>' +
+            '<input type="text" id="bankAccountNo" name="bankAccountNo" placeholder="Bank Account Number" class="form-control text-left" readonly value="' + row.BankAccountNumber + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="contributionLocation">Contribution Location:</label>' +
+            '<input type="text" id="contributionLocation" name="contributionLocation" placeholder="Contribution Location" class="form-control text-left" readonly value="' + row.ContributionBranchName + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="registrationLocation">Registration Location:</label>' +
+            '<input type="text" id="registrationLocation" name="registrationLocation" placeholder="Registration Location" class="form-control text-left" readonly value="' + row.PostalAddress + '"/>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        $detail.html(htmlData);
+        // Attach click event to the plus icon
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            if ($cardBody.is(':visible')) {
+                $cardBody.hide();
+            } else {
+                $cardBody.show();
+            }
+        });
+    }
+
+    function searchEmployeeGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+    function approveEmployeeForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (cn.checkRowApprove(selectedRow)) {
+            Swal.fire({
+                title: 'Customer Profile Update',
+                text: "Are you sure you want to approve the customer update?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, approve it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = cn.getIds(selectedRow);
+                    cn.ajax({
+                        url: '@Url.Content("~/CustomerProfileUpdate/ApproveFormJson")' + '?id=' + id,
+                        type: "post",
+                        error: cn.ajaxError,
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire(
+                                    'Approved!',
+                                    obj.Message,
+                                    'success'
+                                );
+                                searchEmployeeGrid();
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    obj.Message,
+                                    'error'
+                                );
+                            }
+                        }
+                    });
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Swal.fire(
+                        'Cancelled',
+                        'The customer update is not approved',
+                        'error'
+                    );
+                }
+            });
+        }
+    }
+
+    function rejectEmployeeForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (selectedRow.length > 0) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to reject the customer update?",
+                icon: 'warning',
+                input: 'textarea',
+                inputPlaceholder: 'Enter your remark here...',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to write a remark!'
+                    }
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Yes, reject it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = selectedRow[0].Id;
+                    var Remark = result.value;
+                    cn.ajax({
+                        url: '@Url.Content("~/CustomerProfileUpdate/RejectFormJson")' + '?id=' + id + '&Remark=' + encodeURIComponent(Remark),
+                        type: "post",
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire(
+                                    'Rejected!',
+                                    obj.Message,
+                                    'success'
+                                );
+                                searchEmployeeGrid();
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    obj.Message,
+                                    'error'
+                                );
+                            }
+                        }
+                    });
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Swal.fire(
+                        'Cancelled',
+                        'The customer update is not rejected',
+                        'error'
+                    );
+                }
+            });
+        } else {
+            Swal.fire(
+                'No selection!',
+                'Please select a record to reject.',
+                'warning'
+            );
+        }
+    }
+
+    function redirectToIndex() {
+        location.href = '@Url.Content("~/CustomerProfileUpdate/CustomerUpdateApprovalIndex")';
+    }
+</script>

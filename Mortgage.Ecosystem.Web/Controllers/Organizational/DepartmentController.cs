@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class DepartmentController : BaseController
     {
         private readonly IDepartmentService _iDepartmentService;
-
-        public DepartmentController(IUnitOfWork iUnitOfWork, IDepartmentService iDepartmentService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public DepartmentController(IUnitOfWork iUnitOfWork, IDepartmentService iDepartmentService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iDepartmentService = iDepartmentService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -44,6 +46,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetDepartmentTreeListJson(DepartmentListParam param)
         {
             TData<List<ZtreeInfo>> obj = await _iDepartmentService.GetZtreeDepartmentList(param);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetDepartmentTreeListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Department.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

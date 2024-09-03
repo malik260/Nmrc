@@ -11,6 +11,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         public string? IndexTitleDescription { get; set; }
         public int Weight { get; set; }
         public int FactorIndexId { get; set; }
+        [NotMapped]
+        public string? FactorIndex { get; set; }
+        [NotMapped]
+        public string? RiskFactor { get; set; }
         public string? ProductCode { get; set; }
+        [NotMapped]
+        public string? ProductName { get; set; }
     }
 }

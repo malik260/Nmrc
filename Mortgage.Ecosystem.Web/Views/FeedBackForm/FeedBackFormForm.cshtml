@@ -2,62 +2,286 @@
     Layout = "~/Views/Shared/_FormWhite.cshtml";
 }
 
--
 <div class="wrapper animated fadeInRight">
     <form id="form" class="form-horizontal m">
         <div class="dialogblockborder dialogblockborderheadline">
             <div class="dialogblock-header" style="height: auto;">
-                <span class="dialogblockheader">FeedBack Form</span>
+                <span class="dialogblockheader">Feedback Form</span>
+                <br />
+                <p><em>We value your feedback. Please take a moment to provide us with your comments and</em></p>
+                <p><em>suggestions to help us improve our application.</em></p>
+
                 <div class="form-group">
                     <div class="col-sm-6">
                         <label class="control-label">Name</label>
-                        <input id="name" col="Name" type="text" class="form-control" />
+                        <input id="name" name="name" col="Name" type="text" class="form-control" readonly />
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Email Address</label>
-                        <input id="email" col="EmailAddress" type="email" class="form-control" />
+                        <input id="emailAddress" name="EmailAddress" col="EmailAddress" type="email" class="form-control" readonly />
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-sm-12">
-                        <label class="control-label">Subject</label>
-                        <input id="subject" col="Subject" type="text" class="form-control" />
-                    </div>
+                <hr />
+                @* <br />*@
+                <h5 style="font-family: Arial, sans-serif; font-weight: bold; color: #2c3e50; font-size: 1.5em;">Application Usage</h5>
 
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="control-label">1. Which application feature did you use the most?<font class="red"> *</font></label>
+                        <textarea id="usedApplicationFeature" name="usedApplicationFeature" class="form-control" required style="height:70px" col="UsedApplicationFeature"></textarea>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="control-label">2. How would you rate the overall experience with the application? <font class="red"> *</font></label>
+                        @* <input id="overallRating" name="overallRating" class="form-control" type="text" required col="OverallRating"></input>*@
+                        <select id="overallRating" name="overallRating" class="form-control" col="OverallRating" required>
+                            <option value="" selected disabled>Please select an overall rating</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                            <option value="Poor">Poor</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <label class="control-label">Messages</label>
-                        <textarea id="messages" class="form-control" style="height:70px" col="Messages"></textarea>
+                        <label class="control-label">3. How easy was it to navigate the application? <font class="red"> *</font></label>
+                        @*<input id="navigationRating" name="navigationRating" class="form-control" required col="NavigationRating"></input>*@
+                        <select id="navigationRating" name="navigationRating" class="form-control" col="NavigationRating" required>
+                            <option value="" selected disabled>Please select navigation rating</option>
+                            <option value="Very Easy">Very Easy</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Neutral">Neutral</option>
+                            <option value="Difficult">Difficult</option>
+                        </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="control-label">4. How would you rate the design and layout of the application? <font class="red"> *</font></label>
+                        @*  <input id="designRating" name="designRating" class="form-control" required col="DesignRating"></input>*@
+                        <select id="designRating" name="designRating" class="form-control" col="DesignRating" required>
+                            <option value="" selected disabled>Please select design and layout rating</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                            <option value="Poor">Poor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="control-label">5. How satisfied are you with the application's performance (speed, responsiveness, etc)?<font class="red"> *</font></label>
+                        @* <input id="performanceRating" name="performanceRating" class="form-control" required col="PerformanceRating"></input>*@
+                        <select id="performanceRating" name="performanceRating" class="form-control" col="PerformanceRating" required>
+                            <option value="" selected disabled>Please select performance rating</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                            <option value="Poor">Poor</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                @* <br />*@
+                <h5 style="font-family: Arial, sans-serif; font-weight: bold; color: #2c3e50; font-size: 1.5em;">Open-Ended Feedback</h5>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="control-label">6. What did you like most about the application?<font class="red"> *</font></label>
+                        <textarea id="applicationMostLiked" name="applicationMostLiked" class="form-control" required style="height:70px" col="ApplicationMostLiked"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="control-label">7. What did you like least about the application?<font class="red"> *</font></label>
+                        <textarea id="applicationLeastLiked" name="applicationLeastLiked" class="form-control" required style="height:70px" col="ApplicationLeastLiked"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="control-label">8. Do you have any suggestions for improving our application?<font class="red"> *</font></label>
+                        <textarea id="suggestedImprovements" name="suggestedImprovements" class="form-control" required style="height:70px" col="SuggestedImprovements"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="control-label">9. Please provide any additional comments or concerns you may have?</label>
+                        <textarea id="additionalComments" name="additionalComments" class="form-control" style="height:70px" col="AdditionalComments"></textarea>
+                    </div>
+                </div>
+                <br />
+                <p><em>Thank you for your feedback!</em></p>
+                <p><em>Your feedback is confidential and will be used solely to improve our application.</em></p>
             </div>
         </div>
     </form>
 </div>
 
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 <script>
     var id = cn.request("id");
 
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Content("~/FeedBackForm/GetEmployeeDetails")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var data = obj.Data;
+                    $('#name').val(data.Name);
+                    $('#emailAddress').val(data.EmailAddress);
+                } else {
+                    cn.msgError(obj.Message);
+
+                    cn.closeDialog();
+                    setTimeout(function () {
+                        cn.closeDialog();
+                    }, 3000); // 5000 milliseconds = 5 seconds
+                }
+
+            },
+            error: function () {
+                // Handle error, if any
+            }
+        });
+
+    });
+
     function saveForm(index) {
         if ($("#form").validate().form()) {
-            var postData = $("#form").getWebControls({ Id: id });
-            cn.ajax({
+            var postData = $("#form").serializeArray();
+
+            // Add the Id to the postData
+            postData.push({ name: "Id", value: id });
+
+            // Show SweetAlert2 spinner
+            Swal.fire({
+                title: 'Processing...',
+                html: 'Please wait while your request is being processed.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
                 url: '@Url.Content("~/FeedBackForm/SaveFormJson")',
                 type: "post",
-                data: postData,
+                data: $.param(postData), // Convert array to serialized string
                 success: function (obj) {
+                    Swal.close(); // Close the SweetAlert2 spinner
+
                     if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
-                        parent.searchGrid();
-                        parent.layer.close(index);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: obj.Message
+                        }).then(() => {
+                            window.location.reload();
+                            parent.searchGrid();
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: obj.Message
+                        });
                     }
-                    else {
-                        cn.msgError(obj.Message);
-                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.close(); // Close the SweetAlert2 spinner
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.'
+                    });
                 }
             });
         }
     }
 
+
+    //function saveForm(index) {
+    //    if ($("#form").validate().form()) {
+    //        var postData = $("#form").serializeArray();
+
+    //        // Add the Id to the postData
+    //        postData.push({ name: "Id", value: id });
+    //        Swal.fire({
+    //        title: 'Processing...',
+    //        html: 'Please wait while your request is being processed.',
+    //        allowOutsideClick: false,
+    //        didOpen: () => {
+    //            Swal.showLoading();
+    //        }
+    //    });
+    //        $.ajax({
+    //            url: '@Url.Content("~/FeedBackForm/SaveFormJson")',
+    //            type: "post",
+    //            data: $.param(postData), // Convert array to serialized string
+    //            success: function (obj) {
+    //                if (obj.Tag == 1) {
+    //                    cn.msgSuccess(obj.Message);
+    //                    window.location.reload();
+    //                    parent.searchGrid();
+    //                    parent.layer.close(index);
+    //                }
+    //                else {
+    //                    cn.msgError(obj.Message);
+    //                }
+    //            }
+    //        });
+    //    }
+    //}
+
+
+    //function saveForm(index) {
+    //    debugger;
+    //    if ($("#form").validate().form()) {
+    //         var postData = $("#form").serializeArray(); // Collects form data
+    //        postData.push({ name: "Id", value: id }); // Add the ID if necessary
+    //        var postData = $("#form").getWebControls({ Id: id });
+
+
+    //        $.ajax({
+    //            url: '@Url.Content("~/FeedBackForm/SaveFormJson")',
+    //            type: "post",
+    //            data: postData,
+    //            success: function (obj) {
+    //                if (obj.Tag == 1) {
+    //                    cn.msgSuccess(obj.Message);
+    //                    window.location.reload();
+    //                    parent.searchGrid();
+    //                    parent.layer.close(index);
+    //                }
+    //                else {
+    //                    cn.msgError(obj.Message);
+    //                }
+    //            }
+
+    //        });
+    //    }
+    //}
+
+
 </script>
+
+
+
+
+
+
+

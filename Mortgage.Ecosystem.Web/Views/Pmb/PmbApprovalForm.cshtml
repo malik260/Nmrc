@@ -1,0 +1,275 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header{
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Corporate Info</span>
+                <div class="form-group" style="margin-top: 10px;">
+                    <div class="col-sm-6">
+                        <label class="control-label">Employer</label>
+                        <div id="company" col="Company"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">User Type</label>
+                        <div id="userType" col="UserType"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Branch</label>
+                        <div id="branch" col="Branch"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Department</label>
+                        <div id="department" col="Department"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">BVN</label>
+                        <input id="bvn" col="BVN" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">NIN</label>
+                        <input id="nin" col="NIN" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Employment Type</label>
+                        <div id="employmentType" col="EmploymentType"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Date of Employment</label>
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" id="dateOfEmployment" col="DateOfEmployment" placeholder="yyyy-MM-dd">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dialogblockborder dialogblockborderheadline" style="margin-top: 10px;">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Personal Info</span>
+                <div class="form-group" style="margin-top: 10px;">
+                    <div class="col-sm-6">
+                        <label class="control-label">Title</label>
+                        <div id="title" col="Title"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">First Name</label>
+                        <input id="firstName" col="FirstName" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Other Name(s)</label>
+                        <input id="otherName" col="OtherName" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Last Name</label>
+                        <input id="lastName" col="LastName" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="col-sm-2 control-label" style="padding-left: 0px;">Gender</label>
+                        <div id="gender" col="Gender"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Date of Birth</label>
+                        <input id="dateOfBirth" col="DateOfBirth" type="text" class="form-control" placeholder="yyyy-MM-dd" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Postal Address</label>
+                        <textarea id="postalAddress" col="PostalAddress" class="form-control" style="height:60px"></textarea>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Marital Status</label>
+                        <div id="maritalStatus" col="MaritalStatus"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Email</label>
+                        <input id="emailAddress" col="EmailAddress" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Mobile/Telephone</label>
+                        <input id="mobileNumber" col="MobileNumber" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dialogblockborder dialogblockborderheadline" style="margin-top: 10px;">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Other Info</span>
+                <div class="form-group" style="margin-top: 10px;">
+                    <div class="col-sm-6">
+                        <label class="control-label">Bank Name</label>
+                        <div id="customerBank" col="CustomerBank"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Account Type</label>
+                        <div id="accountType" col="AccountType"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Account Number</label>
+                        <input id="bankAccountNumber" col="BankAccountNumber" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Monthly Salary (Net Pay)</label>
+                        <input id="monthlySalary" col="MonthlySalary" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Alert Type</label>
+                        <div id="alertType" col="AlertType"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var id = cn.request("id");
+    $(function () {
+        $('#company').cnComboBoxTree({ url: '@Url.Content("~/Company/GetCompanyTreeListJson")' });
+        $("#userType").cnComboBox({
+            data: cn.getJson(@Html.Raw(typeof(UserTypeEnum).EnumToDictionaryString()))
+        });
+        $("#branch").cnComboBox({
+            url: '@Url.Content("~/Branch/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#department").cnComboBox({
+            url: '@Url.Content("~/Department/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#employmentType").cnComboBox({
+            data: cn.getJson(@Html.Raw(typeof(EmploymentTypeEnum).EnumToDictionaryString()))
+        });
+        laydate.render({ elem: '#dateOfEmployment', type: 'date', theme: 'molv' });
+        $("#title").cnComboBox({
+            url: '@Url.Content("~/Title/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#gender").cnComboBox({
+            url: '@Url.Content("~/Gender/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        laydate.render({ elem: '#dateOfBirth', type: 'date', theme: 'molv' });
+        $("#maritalStatus").cnComboBox({
+            url: '@Url.Content("~/MaritalStatus/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#customerBank").cnComboBox({
+            url: '@Url.Content("~/Bank/GetListJson")',
+            key: "Code",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#accountType").cnComboBox({
+            url: '@Url.Content("~/AccountType/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+        $("#alertType").cnComboBox({
+            url: '@Url.Content("~/AlertType/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+
+        $("#company_input").attr("disabled", "disabled");
+        $("#userType_select").attr("disabled", "disabled");
+        $("#branch_select").attr("disabled", "disabled");
+        $("#department_select").attr("disabled", "disabled");
+        $("#bvn").attr("disabled", "disabled");
+        $("#nin").attr("disabled", "disabled");
+        $("#employmentType_select").attr("disabled", "disabled");
+        $("#dateOfEmployment").attr("disabled", "disabled");
+        $("#title_select").attr("disabled", "disabled");
+        $("#firstName").attr("disabled", "disabled");
+        $("#otherName").attr("disabled", "disabled");
+        $("#lastName").attr("disabled", "disabled");
+        $("#gender_select").attr("disabled", "disabled");
+        $("#dateOfBirth").attr("disabled", "disabled");
+        $("#postalAddress").attr("disabled", "disabled");
+        $("#maritalStatus_select").attr("disabled", "disabled");
+        $("#emailAddress").attr("disabled", "disabled");
+        $("#mobileNumber").attr("disabled", "disabled");
+        $("#customerBank_select").attr("disabled", "disabled");
+        $("#accountType_select").attr("disabled", "disabled");
+        $("#bankAccountNumber").attr("disabled", "disabled");
+        $("#monthlySalary").attr("disabled", "disabled");
+        $("#alertType_select").attr("disabled", "disabled");
+
+        getForm(id);
+    });
+
+    function getForm() {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/Employee/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Data;
+                        $("#form").setWebControls(result);
+                    }
+                }
+            });
+        }
+        else {
+            var defaultData = {};
+            $("#form").setWebControls(defaultData);
+        }
+    }
+
+    function saveForm(index) {
+        cn.confirm("Confirm the approval process？", function () {
+            cn.ajax({
+                url: '@Url.Content("~/Employee/ApproveFormJson")' + '?id=' + id,
+                type: "post",
+                error: cn.ajaxError,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+</script>

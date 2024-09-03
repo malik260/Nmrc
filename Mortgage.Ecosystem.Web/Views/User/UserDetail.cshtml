@@ -11,31 +11,28 @@
                     <div class="ibox-tools">
 
                         <a class="dropdown-toggle" data-toggle="dropdown" href="profile.html#">
-                            <i class="fa fa-edit"></i>
+                            <i class="fa fa-info"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a href="javascript:showChangeUserForm()">Modify information</a></li>
-                            <li><a href="javascript:showChangePasswordForm()">Change Password</a></li>
-                            <li><a href="javascript:showUserAvatarForm()">Modify Avatar</a></li>
+                            <li><a href="javascript:showChangeUserForm()">Basic information</a></li>
                         </ul>
-
+                        
                     </div>
                 </div>
                 <div class="contact-box">
                     <div class="col-sm-4">
                         <div>
-                            <img id="portrait" alt="User Avatar" style="margin:0 auto;" class="img-circle m-t-xs img-responsive">
+                            <img src="~/image/blank-photo.png" style="margin:0 auto;" class="img-circle m-t-xs img-responsive"/>
                             <div class="m-t-xs font-bold text-center"><span>@ViewBag.Ip</span></div>
                         </div>
                     </div>
                     <div id="userInfo" class="col-sm-8">
                         <h3><strong><span col="UserName"></span></strong></h3>
-                        <p><i class="fa fa-user"></i> <span col="RealName"></span> / <span id="roleName"></span>
-                        <p><i class="fa fa-phone"></i> <span col="Mobile"></span></p>
-                        <p><i class="fa fa-group"></i> <span id="departmentName"></span> / <span id="positionName"></span></p>
-                        <p><i class="fa fa-transgender"></i> Gender: <span col="Gender"></span></p>
-                        <p><i class="fa fa-envelope-o"></i> <span col="Email"></span></p>
-                        <p><i class="fa fa-calendar"></i> <span col="Birthday"></span></p>
+                        <p><i class="fa fa-user"></i> <span col="FullName"></span> / <span id="roleName"></span>
+                        <p><i class="fa fa-phone"></i> <span col="MobileNumber"></span></p>
+                        <p><i class="fa fa-transgender"></i> Gender: <span col="GenderName"></span></p>
+                        <p><i class="fa fa-envelope-o"></i> <span col="EmailAddress"></span></p>
+                        <p><i class="fa fa-calendar"></i> <span col="DateOfBirth"></span></p>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -58,7 +55,6 @@
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         var result = obj.Data;
-                        result.Gender = cn.getValueByKey(@Html.Raw(typeof(GenderTypeEnum).EnumToDictionaryString()), result.Gender);
                         $("#userInfo").setWebControls(result);
 
                         if (cn.isNullOrEmpty(result.Portrait)) {
@@ -69,9 +65,7 @@
                         }
                         $("#portrait").attr("src", result.Portrait);
 
-                        getDepartmentName(result.DepartmentId);
-                        getRoleName(result.RoleIds);
-                        getPositionName(result.PositionIds);
+                        
                     }
                 }
             });
@@ -154,8 +148,9 @@
 
     function showChangeUserForm() {
         cn.openDialog({
-            title: "Modify information",
+            title: "Basic information",
             content: '@Url.Content("~/User/ChangeUser")' + '?id=' + id,
+            btn:[],
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);

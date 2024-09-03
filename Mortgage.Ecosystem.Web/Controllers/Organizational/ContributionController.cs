@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -15,19 +16,21 @@ using System.Net.Mime;
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
 
-
+    [ExceptionFilter]
     public class ContributionController : BaseController
     {
         private readonly IContributionService _iContributionService;
         private readonly IPaymentIntegrationService _ipaymentIntegrationService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public ContributionController(IUnitOfWork iUnitOfWork, IContributionService iContributionService, IPaymentIntegrationService paymentIntegrationService) : base(iUnitOfWork)
+        public ContributionController(IUnitOfWork iUnitOfWork, IContributionService iContributionService, IPaymentIntegrationService paymentIntegrationService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iContributionService = iContributionService;
             _ipaymentIntegrationService = paymentIntegrationService;
+            _iAuditTrailService = iAuditTrailService;
         }
         #region View function
-        [AuthorizeFilter("contribution:view")]
+        //[AuthorizeFilter("contribution:view")]
         public IActionResult ContributionIndex()
         {
             return View();
@@ -38,15 +41,40 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
+       
+
+        public IActionResult BatchContributionForm()
+        {
+            return View();
+        }
+
 
         #endregion
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("contribution:search,user:search")]
-        public async Task<IActionResult> GetListJson(ContributionListParam param)
+        //[AuthorizeFilter("contribution:search,user:search")]
+        public async Task<IActionResult> GetListJson(ContributionListParam param, Pagination pagination)
         {
-            TData<List<ContributionEntity>> obj = await _iContributionService.GetList(param);
+            TData<List<ContributionEntity>> obj = await _iContributionService.GetList(param, pagination);
+            return Json(obj);
+        }
+
+
+
+        [HttpGet]
+        //[AuthorizeFilter("contribution:search,user:search")]
+        public async Task<IActionResult> GetEmployerListJson(ContributionListParam param, Pagination pagination)
+        {
+            TData<List<ContributionEntity>> obj = await _iContributionService.GetEmployerList(param, pagination);
+            return Json(obj);
+        }
+
+        [HttpGet]
+        //[AuthorizeFilter("contribution:search,user:search")]
+        public async Task<IActionResult> GetListJson2(ContributionListParam param, Pagination pagination)
+        {
+            TData<List<ContributionEntity>> obj = await _iContributionService.GetList2(param, pagination);
             return Json(obj);
         }
 
@@ -84,9 +112,46 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         public async Task<IActionResult> GetEmployeeDetails()
         {
-            TData obj = await _iContributionService.GetCustomerDetails();
+            try
+            {
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.GetEmployeeDetails.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Contribution.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                TData obj = await _iContributionService.GetCustomerDetails();
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<IActionResult> GetEmployerDetails()
+        {
+            try
+            {
+                
+                TData obj = await _iContributionService.GetEmployerDetails();
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        public async Task<IActionResult> GetEmployeeList(long company)
+        {
+            
+            TData<List<EmployeeEntity>> obj = await _iContributionService.GetEmployees(company);
             return Json(obj);
         }
+
 
         public async Task<FileResult> BacklogDownload()
         {
@@ -107,6 +172,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
                 await stream.CopyToAsync(memory);
             }
             memory.Position = 0;
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.TemplateDownload2.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Contribution.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
 
 
             //transaction.Commit();
@@ -133,6 +203,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             }
             memory.Position = 0;
 
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.TemplateDownload.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Contribution.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
 
             //transaction.Commit();
             return File(memory, MediaTypeNames.Application.Octet, Path.GetFileName(path));
@@ -192,6 +267,10 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
+
+
+
+
         [HttpPost]
         [AuthorizeFilter("singlecontribution:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
@@ -204,24 +283,97 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #region single contribution
         public async Task<IActionResult> SingleContribution(ContributionEntity entity)
         {
-            TData obj = await _iContributionService.SingleContribution(entity);
-            return Json(obj);
+
+            try
+            {
+                TData obj = await _iContributionService.SingleContribution(entity);
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.SingleContribution.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Contribution.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        public async Task<IActionResult> EmployerSingleContribution(ContributionEntity entity)
+        {
+
+            try
+            {
+                TData obj = await _iContributionService.EmployerSingleContribution(entity);
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.SingleContribution.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Contribution.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> BacklogSingleContribution(BacklogUploadVM entity)
+        public async Task<JsonResult> BacklogSingleContribution(BacklogUploadVM entity)
         {
-            TData obj = await _iContributionService.BacklogSingleContribution(entity);
-            return Json(obj);
+            var result = new List<BacklogSingleContributionResultVM>();
+            var obj = await _iContributionService.BacklogSingleContribution(entity);
+            if (obj.Tag == 0)
+            {
+                result.Add(obj.Data);
+                return Json(new { success = false, message = obj.Data.ErrorLists });
+
+            }
+            else
+            {
+                return Json(new { success = true, message = "Backlog Contribution Successfull" });
+
+            }
+            //result.Add(obj);
 
         }
 
         [HttpPost]
         public async Task<IActionResult> BatchContribution(BatchUploadVM entity)
         {
-            TData obj = await _iContributionService.BatchContribution(entity);
-            return Json(obj);
-            
+            try
+            {
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.BatchContribution.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Contribution.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                //var obj = await _iContributionService.BatchContribution(entity);
+                //return Json(obj);
+                var result = new List<BatchContributionResultVM>();
+                var obj = await _iContributionService.BatchContribution(entity);
+                if (obj.Tag == 0)
+                {
+                    result.Add(obj.Data);
+                    return Json(new { success = false, message = obj.Data.ErrorLists });
+
+                }
+                else
+                {
+                    return Json(new { success = true, message = "Backlog Contribution Successfull" });
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
         #endregion
 
@@ -229,9 +381,22 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #region Check RRR status 
         public async Task<IActionResult> CheckPaymentStatus(string RRR)
         {
-            TData obj = await _ipaymentIntegrationService.CheckRRRStatus(RRR);
-            return Json(obj);
-        }
+            try
+            {
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.CheckPaymentStatus.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Contribution.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                TData obj = await _ipaymentIntegrationService.CheckRRRStatus(RRR);
+                return Json(obj);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }        }
         #endregion
     }
 }

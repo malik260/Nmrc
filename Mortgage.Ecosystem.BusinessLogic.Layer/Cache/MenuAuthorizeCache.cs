@@ -1,5 +1,6 @@
 ﻿using Mortgage.Ecosystem.DataAccess.Layer.Caching;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Cache
@@ -26,7 +27,21 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Cache
             }
             else
             {
-                return cacheList;
+                var authMenuList = new ApplicationDbContext();
+                var lists = authMenuList.MenuAuthorizeEntity.Where(i=> i.AuthorizeId != 0).ToList();
+
+                //var lists = await _iUnitOfWork.MenuAuthorizes.GetList(null);
+
+                if (cacheList != null && (lists.Count > cacheList.Count))
+                {
+                    CacheFactory.Cache.SetCache(CacheKey, lists);
+                    return lists;
+
+                }
+                else
+                {
+                    return cacheList;
+                }
             }
         }
     }

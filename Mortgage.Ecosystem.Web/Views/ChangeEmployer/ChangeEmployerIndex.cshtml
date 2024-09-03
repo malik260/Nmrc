@@ -10,35 +10,24 @@
             <div class="select-list">
                 <ul>
                     <li>
-                        Name: <input id="name" col="Name" type="text" />
+                        Old Employer Name: <input id="oldEmployer" col="OldEmployer" type="text" />
                     </li>
+                   
                     <li>
-                        Status: <span id="status" col="Status"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Switch Employer</a>
+            
         </div>
-
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
     </div>
 </div>
-
 
 <script type="text/javascript">
     $(function () {
@@ -55,13 +44,13 @@
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
-                { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'OldEmployerName', title: 'Old Employer Name', sortable: true },
-                { field: 'NewEmployerName', title: 'New Employer Name', sortable: true },
-                { field: 'NhfNumber', title: 'NHF Number', sortable: true },
-                { field: 'DateCreated', title: 'Date Created', visible: true, sortable: true },
-
+                { field: 'NhfNumber', title: 'NHF Number', sortable: false, visible: true },
+                { field: 'OldEmployer', title: 'Old Employer Name', visible: true, sortable: false },
+                { field: 'OldEmployerNo', title: 'Old Employer Number', visible: true, sortable: false },
+                { field: 'CompanyName', title: 'New Employer Name', visible: true, sortable: false },
+                { field: 'Company', title: 'New Employer Number', visible: true, sortable: false },
+                { field: 'DateCreated', title: 'Date Created', visible: false, sortable: false },
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);
@@ -71,6 +60,14 @@
         });
     }
 
+    function searchGrid(callBackId) {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').cnTreeTable('search', param);
+        if (callBackId) {
+            id = callBackId;
+        }
+    }
+
     function searchGrid() {
         $('#gridTable').cnTable('search');
         resetToolbarStatus();
@@ -78,15 +75,23 @@
 
     function showSaveForm(bAdd) {
         var id = 0;
+        var parentName = '';
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
             if (!cn.checkRowEdit(selectedRow)) {
                 return;
-            }
-            else {
+            } else {
                 id = selectedRow[0].Id;
             }
         }
+        if (selectedRow.length > 0) {
+            parent = selectedRow[0].Parent;
+            var row = $('#gridTable').cnTreeTable('getRowById', parent);
+            if (row) {
+                parentName = row.OldEmployerName;
+            }
+        }
+
         cn.openDialog({
             title: id > 0 ? "Edit Agent" : "Change Employer",
             content: '@Url.Content("~/ChangeEmployer/ChangeEmployerForm")' + '?id=' + id,
@@ -101,7 +106,7 @@
     function deleteForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
+            cn.confirm("Confirm to delete the selected " + selectedRow.length + " Row data?", function () {
                 var ids = cn.getIds(selectedRow);
                 cn.ajax({
                     url: '@Url.Content("~/ChangeEmployer/DeleteFormJson")' + '?ids=' + ids,
@@ -110,8 +115,7 @@
                         if (obj.Tag == 1) {
                             cn.msgSuccess(obj.Message);
                             searchGrid();
-                        }
-                        else {
+                        } else {
                             cn.msgError(obj.Message);
                         }
                     }
@@ -119,7 +123,4 @@
             });
         }
     }
-
-
-
 </script>

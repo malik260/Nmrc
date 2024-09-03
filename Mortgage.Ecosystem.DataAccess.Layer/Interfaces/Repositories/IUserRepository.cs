@@ -12,6 +12,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<List<UserEntity>> GetPageList(UserListParam param, Pagination pagination);
 
         Task<UserEntity> GetEntity(int id);
+        Task<UserEntity> GetEntityByCompany(long company);
 
         Task<UserEntity> GetEntity(string userName);
 
@@ -32,5 +33,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task ResetPassword(UserEntity entity);
 
         Task ChangeUser(UserEntity entity);
+        Task<UserEntity> GetEntityByPmb(long pmb);
+
+        Task<UserEntity> GetEntityByUsername(string username);
     }
 }

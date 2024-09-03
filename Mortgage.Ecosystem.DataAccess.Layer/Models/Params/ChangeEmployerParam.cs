@@ -1,14 +1,15 @@
-﻿namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
+
+namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
 {
     public class ChangeEmployerListParam
     {
-        public long Id { get; set; }
-        public string? Name { get; set; }
-        public string? Address { get; set; }
-        public string? Telephone { get; set; }
-        public string? Email { get; set; }
-        public byte[]? Logo { get; set; }
-        public string? LogoType { get; set; }
-        public string? RCNumber { get; set; }
+        public string? NhfNumber { get; set; }
+        public string? OldEmployer { get; set; }
+        public string? OldEmployerNo { get; set; }
+        public string? NewEmployer { get; set; }
+        public long Company { get; set; }
+        public DateTime? DateCreated { get; set; }
     }
 }

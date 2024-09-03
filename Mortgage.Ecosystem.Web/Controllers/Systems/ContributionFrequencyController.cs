@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class ContributionFrequencyController : BaseController
     {
         private readonly IContributionFrequencyService _iContributionFrequencyService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public ContributionFrequencyController(IUnitOfWork iUnitOfWork, IContributionFrequencyService iContributionFrequencyService) : base(iUnitOfWork)
+        public ContributionFrequencyController(IUnitOfWork iUnitOfWork, IContributionFrequencyService iContributionFrequencyService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iContributionFrequencyService = iContributionFrequencyService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +37,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("contributionfrequency:search,user:search")]
+        //[AuthorizeFilter("contributionfrequency:search,user:search")]
         public async Task<IActionResult> GetListJson(ContributionFrequencyListParam param)
         {
             TData<List<ContributionFrequencyEntity>> obj = await _iContributionFrequencyService.GetList(param);
@@ -68,6 +71,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetContributionFrequencyName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.ContributionFrequency.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
+
             return Json(obj);
         }
         #endregion

@@ -27,7 +27,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<List<CreditAssessmentRiskFactorEntity>> GetList(string productcode)
         {
             List<CreditAssessmentRiskFactorEntity> obj = new List<CreditAssessmentRiskFactorEntity>();
-            var pdCode = _iUnitOfWork.CreditTypes.GetEntity(productcode).Result.Code;
+            var pdCode = _iUnitOfWork.CreditTypes.GetEntitybyName(productcode).Result.Code;
             obj = await _iUnitOfWork.CreditAssessmentRiskFactors.GetList(pdCode);
 
             return obj;
@@ -45,57 +45,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
 
 
-        //public async Task<TData<List<CreditAssessmentRiskFactor>>> GetPageList(CreditAssessmentRiskFactorListParam param, Pagination pagination)
-        //{
-        //    TData<List<CreditAssessmentRiskFactor>> obj = new TData<List<CreditAssessmentRiskFactor>>();
-        //    obj.Data = await _iUnitOfWork.CreditAssessmentRiskFactors.GetPageList(param, pagination);
-        //    obj.Total = pagination.TotalCount;
-        //    obj.Tag = 1;
-        //    return obj;
-        //}
-
-        //public async Task<TData<List<ZtreeInfo>>> GetZtreeCreditAssesstmentRiskFactorList(CreditAssessmentRiskFactorListParam param)
-        //{
-        //    var obj = new TData<List<ZtreeInfo>>();
-        //    obj.Data = new List<ZtreeInfo>();
-        //    List<CreditAssessmentRiskFactor> creditAssesstmentRiskFactorList = await _iUnitOfWork.CreditAssessmentRiskFactors.GetList(param);
-        //    foreach (CreditAssessmentRiskFactor creditAssesstmentRiskFactor in creditAssesstmentRiskFactorList)
-        //    {
-        //        obj.Data.Add(new ZtreeInfo
-        //        {
-        //            id = creditAssesstmentRiskFactor.Id,
-        //        });
-        //    }
-        //    obj.Tag = 1;
-        //    return obj;
-        //}
-
-        //public async Task<TData<List<ZtreeInfo>>> GetZtreeUserList(CreditAssessmentRiskFactorListParam param)
-        //{
-        //    var obj = new TData<List<ZtreeInfo>>();
-        //    obj.Data = new List<ZtreeInfo>();
-        //    List<CreditAssessmentRiskFactor> creditAssesstmentRiskFactorList = await _iUnitOfWork.CreditAssessmentRiskFactors.GetList(param);
-        //    List<UserEntity> userList = await _iUnitOfWork.Users.GetList(null);
-        //    foreach (CreditAssessmentRiskFactor creditAssesstmentRiskFactor in creditAssesstmentRiskFactorList)
-        //    {
-        //        obj.Data.Add(new ZtreeInfo
-        //        {
-        //            id = creditAssesstmentRiskFactor.Id,
-        //        });
-        //        List<long> userIdList = userList.Where(t => t.Company == creditAssesstmentRiskFactor.Id).Select(t => t.Employee).ToList();
-        //        foreach (UserEntity user in userList.Where(t => userIdList.Contains(t.Employee)))
-        //        {
-        //            obj.Data.Add(new ZtreeInfo
-        //            {
-        //                id = user.Id,
-        //                name = user.RealName
-        //            });
-        //        }
-        //    }
-        //    obj.Tag = 1;
-        //    return obj;
-        //}
-
+        
         public async Task<TData<CreditAssessmentRiskFactorEntity>> GetEntity(long id)
         {
             TData<CreditAssessmentRiskFactorEntity> obj = new TData<CreditAssessmentRiskFactorEntity>();
@@ -105,79 +55,151 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
-        //public async Task<TData<int>> GetMaxSort()
-        //{
-        //    TData<int> obj = new TData<int>();
-        //    obj.Data = await _iUnitOfWork.CreditTypes.GetMaxSort();
-        //    obj.Tag = 1;
-        //    return obj;
-        //}
+
+        public async Task<TData<CreditAssessmentRiskFactorEntity>> GetEntities(int id)
+        {
+            TData<CreditAssessmentRiskFactorEntity> obj = new TData<CreditAssessmentRiskFactorEntity>();
+
+            try
+            {
+                CreditAssessmentRiskFactorEntity entity;
+
+                if (id == 0)
+                {
+                    // Initialize a new entity for adding
+                    entity = new CreditAssessmentRiskFactorEntity();
+                }
+                else
+                {
+                    // Get entity by ID for editing
+                    entity = await _iUnitOfWork.CreditAssessmentRiskFactors.GetEntities(id);
+
+                    if (entity == null)
+                    {
+                        obj.Message = "Entity not found.";
+                        obj.Tag = -1;
+                        return obj;
+                    }
+
+                    // Retrieve and assign the ProductName based on ProductCode
+                    var productEntity = await _iUnitOfWork.CreditTypes.GetEntityByProductCode(entity.ProductCode);
+                    //if (productEntity == null)
+                    //{
+                    //    entity.ProductName = productEntity.Name;
+                    //}
+                    if (productEntity != null)
+                    {
+                        entity.ProductName = productEntity.Name;
+                    }
+                    else
+                    {
+                        entity.ProductName = "Unknown Product"; // Default value if product entity is not found
+                    }
+                }
+
+                obj.Data = entity; // Assign the retrieved or new entity to obj.Data
+                obj.Tag = 1; // Set tag to indicate success
+            }
+            catch (Exception ex)
+            {
+                obj.Message = ex.Message; // Set error message
+                obj.Tag = -1; // Set tag to indicate failure
+            }
+
+            return obj;
+        }
+
+
         #endregion
 
         #region Submit data
-        //public async Task<TData<string>> SaveForm(CreditAssessmentRiskFactor entity)
-        //{
-        //    try
-        //    {
-        //        TData<string> obj = new TData<string>();
-        //        var autoIncreament = _iUnitOfWork.CreditAssessmentRiskFactors.GetList(entity.Productcode).Result.ToList();
-        //        if (autoIncreament != null)
-        //        {
-        //            var maxRiskId = autoIncreament.Max(x => x.Riskfactorid);
-        //            entity.Riskfactorid = ++maxRiskId;
-        //        }
 
-        //        await _iUnitOfWork.CreditAssessmentRiskFactors.SaveForm(entity);
-        //        obj.Data = entity.Riskfactorid.ParseToString();
-        //        //obj.Data = Id.ParseToString();
-        //        obj.Tag = 1;
-        //        obj.Message = "Product added successfully";
-        //        return obj;
-        //    }
-        //    catch (Exception ex)
-        //    {
+        public async Task<TData<List<CreditAssessmentRiskFactorEntity>>> GetPageList(CreditAssessmentRiskFactorListParam param, Pagination pagination)
+        {
+            TData<List<CreditAssessmentRiskFactorEntity>> obj = new TData<List<CreditAssessmentRiskFactorEntity>>();
+            obj.Data = await _iUnitOfWork.CreditAssessmentRiskFactors.GetPageList(param, pagination);
+            obj.Total = pagination.TotalCount;
+            obj.Tag = 1;
+            return obj;
+        }
 
-        //        throw;
-        //    }
-
-        //}
 
         public async Task<TData<string>> SaveForm(CreditAssessmentRiskFactorEntity entity)
         {
             TData<string> obj = new TData<string>();
             try
             {
-               
-                var autoIncreament = _iUnitOfWork.CreditAssessmentRiskFactors.GetList(entity.ProductCode).Result.ToList();
-                
-                if (autoIncreament.Count ==0)
+                CreditScoreListParam param = new CreditScoreListParam();
+                param.CreditType = entity.ProductCode;
+                var productscoreInfo = _iUnitOfWork.CreditScores.GetList(param).Result.Select(i => i.RangeMax).Max();
+                if (Convert.ToDecimal(entity.Weight) > productscoreInfo)
+                {
+                    obj.Data = entity.Id.ToString();
+                    obj.Tag = 0;
+                    obj.Message = "Risk Weight cannot be greater than the Product Max weight: " + productscoreInfo;
+                    return obj;
+                }
+                if (entity.Id == 0)
+                {
+                    var ExistRisk = _iUnitOfWork.CreditAssessmentRiskFactors.GetList(entity.ProductCode).Result.ToList().Select(i => i.Weight).Sum();
+                    var NewWeight = entity.Weight + ExistRisk;
+                    if (Convert.ToDecimal(NewWeight) > productscoreInfo)
+                    {
+                        obj.Data = entity.Id.ToString();
+                        obj.Tag = 0;
+                        obj.Message = "Total Risk Weight cannot be greater than the Product Max weight: " + productscoreInfo;
+                        return obj;
+
+                    }
+                }
+                if (entity.Id > 0)
+                {
+                    var getrisk = await _iUnitOfWork.CreditAssessmentRiskFactors.GetEntities(entity.Id);
+                    getrisk.Weight = entity.Weight;
+                    var ExistRisk = _iUnitOfWork.CreditAssessmentRiskFactors.GetList(entity.ProductCode).Result.Where(i => i.Id != getrisk.Id).ToList().Select(i => i.Weight).Sum();
+                    var NewWeight = entity.Weight + ExistRisk;
+                    if (Convert.ToDecimal(NewWeight) > productscoreInfo)
+                    {
+                        obj.Data = entity.Id.ToString();
+                        obj.Tag = 0;
+                        obj.Message = "Total Risk Weight cannot be greater than the Product Max weight : " + productscoreInfo;
+                        return obj;
+
+                    }
+
+                }
+                var autoIncreament = _iUnitOfWork.CreditAssessmentRiskFactors.GetList(null).Result.ToList();
+                if (autoIncreament.Count == 0)
                 {
                     entity.RiskFactorId = 1;
-                    
+
                 }
                 else
                 {
                     var maxRiskId = autoIncreament.Max(x => x.RiskFactorId);
                     entity.RiskFactorId = ++maxRiskId;
-                    
+
                 }
+                bool isUpdate = entity.Id > 0;
 
                 await _iUnitOfWork.CreditAssessmentRiskFactors.SaveForm(entity);
                 obj.Data = entity.Id.ToString();
                 obj.Tag = 1;
-                obj.Message = "Risk Factor added successfully";
+                obj.Message = isUpdate ? "Risk Factor Updated successfully" : "Risk Factor added successfully";
+
                 return obj;
             }
 
-           
+
 
             catch (Exception ex)
             {
                 throw;
             }
 
-            
+
         }
+
 
         public async Task<TData> DeleteForm(string ids)
         {

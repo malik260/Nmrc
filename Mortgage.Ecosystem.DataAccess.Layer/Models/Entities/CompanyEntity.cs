@@ -12,6 +12,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Name")]
         public string? Name { get; set; }
 
+        // Nhf Number 
+        [Column("EmployerNhfNumber")]
+        public string? EmployerNhfNumber { get; set; }
+
         // Company address
         [Column("Address")]
         public string? Address { get; set; }
@@ -50,7 +54,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         // Contact Person Designation
         [Column("ContactPersonDesignation")]
-        public int ContactPersonDesignation { get; set; }
+        public string? ContactPersonDesignation { get; set; }
+
+        [Column("EmployerCode")]
+        public string? EmployerCode { get; set; }
 
         // Nature Of Business
         [Column("NatureOfBusiness")]
@@ -105,12 +112,20 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [NotMapped]
         public string? SectorName { get; set; }
+        [NotMapped]
+        public string? SubSectorName { get; set; }
+
+        [NotMapped]
+        public string? CompanyName { get; set; }
 
         [NotMapped]
         public string? CompanyClassName { get; set; }
 
         [NotMapped]
         public string? CompanyTypeName { get; set; }
+
+        [NotMapped]
+        public string? ContributionFrequencyName { get; set; }
 
         // Individual NHF Number
         [NotMapped]
@@ -154,5 +169,23 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [NotMapped]
         public int User { get; set; }
+
+        // Kin's First Name
+        [NotMapped]
+        public string? KinFirstName { get; set; }
+
+        // Kin's Last Name
+        [NotMapped]
+        public string? KinLastName { get; set; }
+
+        // Kin's Mobile number
+        [NotMapped]
+        public string? KinMobileNumber { get; set; }
+
+        [NotMapped]
+        public int KinRelationship { get; set; }
+
+        [NotMapped]
+        public string? KinAddress { get; set; }
     }
 }

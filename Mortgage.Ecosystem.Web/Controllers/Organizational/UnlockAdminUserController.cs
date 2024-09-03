@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -14,7 +15,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class UnlockAdminUserController : BaseController
     {
         private readonly IUnlockAdminUserService _iUnlockAdminUserService;
-
+        private readonly IAuditTrailService _iAuditTrailService;
         public UnlockAdminUserController(IUnitOfWork iUnitOfWork, IUnlockAdminUserService iUnlockAdminUserService) : base(iUnitOfWork)
         {
             _iUnlockAdminUserService = iUnlockAdminUserService;
@@ -47,6 +48,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetUnlockAdminUserPageListJson(UnlockAdminUserListParam param, Pagination pagination)
         {
             TData<List<UnlockAdminUserEntity>> obj = await _iUnlockAdminUserService.GetPageList(param, pagination);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetUnlockAdminUserPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.UnlockAdminUser.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

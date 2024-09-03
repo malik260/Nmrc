@@ -29,6 +29,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<ContributionEntity>> GetEmployerPageList(ContributionListParam param, Pagination pagination)
+        {
+            var expression = ListEmployerFilter(param);
+            var list = await BaseRepository().FindList(expression, pagination);
+            return list.ToList();
+        }
+
         public async Task<ContributionEntity> GetEntity(long id)
         {
             return await BaseRepository().FindEntity<ContributionEntity>(id);
@@ -117,11 +124,38 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         private Expression<Func<ContributionEntity, bool>> ListFilter(ContributionListParam param)
         {
             var expression = ExtensionLinq.True<ContributionEntity>();
+
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.Name))
+                if (!string.IsNullOrEmpty(param.NHFNumber) && param.StartTime != DateTime.MinValue && param.EndTime != DateTime.MinValue)
                 {
-                    expression = expression.And(t => t.employeeNumber.Contains(param.EmployerNumber));
+                    expression = expression.And(t => t.NhfNo == param.NHFNumber && t.TransactionDate >= param.StartTime && t.TransactionDate <= param.EndTime && t.Status == "1");
+                }
+
+                if (!string.IsNullOrEmpty(param.NHFNumber))
+                {
+                    expression = expression.And(t => t.NhfNo == param.NHFNumber);
+                }
+            }
+            return expression;
+        }
+
+
+
+        private Expression<Func<ContributionEntity, bool>> ListEmployerFilter(ContributionListParam param)
+        {
+            var expression = ExtensionLinq.True<ContributionEntity>();
+
+            if (param != null)
+            {
+                if (!string.IsNullOrEmpty(param.NHFNumber) && param.StartTime != DateTime.MinValue && param.EndTime != DateTime.MinValue)
+                {
+                    expression = expression.And(t => t.employerNumber == param.NHFNumber && t.TransactionDate >= param.StartTime && t.TransactionDate <= param.EndTime && t.Status == "1" && t.ContributionType == 2);
+                }
+
+                if (!string.IsNullOrEmpty(param.NHFNumber))
+                {
+                    expression = expression.And(t => t.employerNumber == param.NHFNumber && t.ContributionType == 2);
                 }
             }
             return expression;

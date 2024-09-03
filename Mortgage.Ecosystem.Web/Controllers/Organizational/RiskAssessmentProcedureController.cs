@@ -11,6 +11,7 @@ using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
+    [ExceptionFilter]
     public class RiskAssessmentProcedureController : BaseController
     {
         private readonly IRiskAssessmentProcedureService _iRiskAssementProcedureService;
@@ -27,8 +28,16 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         public async Task<IActionResult> SaveFormJson(RiskAssessmentProcedureDTO selectedData)
         {
-            TData obj = await _iRiskAssementProcedureService.SaveForm(selectedData);
-            return Json(obj);
+            try
+            {
+                TData obj = await _iRiskAssementProcedureService.SaveForm(selectedData);
+                return Json(obj);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
 
 

@@ -26,6 +26,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
         public int Gender { get; set; }
         public byte[]? Portrait { get; set; }
         public string? PortraitType { get; set; }
+        public string? MobileNumber { get; set; }
+        public int? EmployerType { get; set; }
 
         [NotMapped]
         public List<long>? Ids { get; set; }

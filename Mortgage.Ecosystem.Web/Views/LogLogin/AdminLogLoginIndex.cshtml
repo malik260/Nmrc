@@ -1,0 +1,116 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+    <div class="row">
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#logStatus").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(OperateStatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/LogLogin/GetAdminPageListJson")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: false },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'EmailAddress', title: 'Login Name', sortable: false },
+                { field: 'CompanyName', title: 'Company' },
+                { field: 'UserName', title: 'Name' },
+                { field: 'IpAddress', title: 'IpAddress' },
+                // { field: 'IpLocation', title: 'Ip Location' },
+                { field: 'Browser', title: 'Browser' },
+                { field: 'FailureReason', title: 'Failure Reason' },
+
+                { field: 'OS', title: 'OS' },
+                {
+                    field: 'LogStatus', title: 'LogStatus', align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@OperateStatusEnum.Success.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@OperateStatusEnum.Success.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@OperateStatusEnum.Fail.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                { field: 'Remark', title: 'Operation information' },
+                {
+                    field: 'BaseCreateTime', title: 'Login Time', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchTreeGrid(callBackId) {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').cnTreeTable('search', param);
+        if (callBackId) {
+            id = callBackId;
+        }
+    }
+
+    function searchGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (cn.checkRowDelete(selectedRow)) {
+            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
+                var ids = cn.getIds(selectedRow);
+                cn.ajax({
+                    url: '@Url.Content("~/LogLogin/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            searchGrid();
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    function removeAllForm() {
+        cn.confirm("Are you sure you want to clear the table?", function () {
+            cn.ajax({
+                url: '@Url.Content("~/LogLogin/RemoveAllFormJson")',
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+</script>

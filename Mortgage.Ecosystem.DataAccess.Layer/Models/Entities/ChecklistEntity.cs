@@ -20,6 +20,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         // Code
         [Column("Remark")]
-        public string? Remark { get; set; }
+        public string? Remark { get; set; } 
+        
+        [Column("LoanId")]
+        public string? LoanId { get; set; }
     }
 }

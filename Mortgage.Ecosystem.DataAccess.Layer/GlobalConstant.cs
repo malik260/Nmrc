@@ -15,8 +15,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public const int SEVEN = 7;
         public const int EIGHT = 8;
         public const int NINE = 9;
-        public const long NHF_NUMBER_START_RANGE = 1000000000;
-        public const long NHF_NUMBER_END_RANGE = 9999999999;
+        public const long NHF_NUMBER_START_RANGE = 4000000000;
+        public const long NHF_NUMBER_END_RANGE = 4999999999;
+        public const long ETicket_MENU_ID = 563329854213197824;
+        public const long FEEDBACKFORM_MENU_ID = 563330122149531648;
+        public const long CUSTOMER_PROFILE_UPDATE_MENU_ID = 563329556086263808;
+
 
         public const string USER_ROLE = "user";
         public const string ADMIN_ROLE = "admin";
@@ -25,10 +29,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public const string APP_NAME = "Mortgage Ecosystem";
         public const string COMPANY_NAME = "Fintrak Software Co. Limited";
         public const string RESERVED = "All rights reserved.";
-        public const string CREDENTIAL_USERNAME = "bankonline@fmbn.gov.ng";
-        public const string CREDENTIAL_PASSWORD = "puf72190";
-        public const string MAIL_FROM = "bankonline@fmbn.gov.ng";
-        public const string SMTP_HOST = "outlook.office365.com";
+        public const string CREDENTIAL_USERNAME = "sheriffmalik360@gmail.com";
+        public const string CREDENTIAL_PASSWORD = "igikcvwmlzavakyq";   
+        public const string MAIL_FROM = "sheriffmalik360@gmail.com";    
+        public const string SMTP_HOST = "smtp.gmail.com";
+        //public const string CREDENTIAL_USERNAME = "bankonline@fmbn.gov.ng";
+        //public const string CREDENTIAL_PASSWORD = "puf72190";
+        //public const string MAIL_FROM = "bankonline@fmbn.gov.ng";
+        //public const string SMTP_HOST = "outlook.office365.com";
 
         //public const string MAIL_FROM = "development-team@mortgageecosystem.com";
         //public const string CREDENTIAL_USERNAME = "mortgage.ecosystem@gmail.com";
@@ -41,6 +49,20 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public const string USER_MENU_URL = "User/UserIndex";
         public const string EMPLOYEE_MENU_URL = "Employee/EmployeeIndex";
         public const string COMPANY_MENU_URL = "Company/CompanyIndex";
+        public const string PMB_MENU_URL = "Pmb/PmbIndex";
+        public const string DEVELOPER_MENU_URL = "Developer/DeveloperIndex";
+        public const string BROKER_MENU_URL = "Broker/BrokerIndex";
+
+        public const int EMPLOYER_MENU_CATEGORY = 200;
+        public const int EMPLOYEE_MENU_CATEGORY = 201;
+        public const int PMB_MENU_CATEGORY = 202;
+        public const int GLOBAL_MENU_CATEGORY = 203;
+        public const int ISAGENT_MENU_CATEGORY = 204;
+        public const int PMBANDEMPLOYEE_MENU_CATEGORY = 205;
+        public const int EMPLOYERANDEMPLOYEE_MENU_CATEGORY = 206;
+        public const int EMPLOYERANDPMB_MENU_CATEGORY = 207;
+
+
 
         // System Type
         public static PlatformID SystemType

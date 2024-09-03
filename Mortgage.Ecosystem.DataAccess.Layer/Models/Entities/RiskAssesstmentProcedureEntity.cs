@@ -19,7 +19,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         public string? BranchCode { get; set; }
 
         [Column("AverageScore")]
-        public decimal AverageScore { get; set; }
+        public string? AverageScore { get; set; }
 
         [Column("Rating")]
         public string? Rating { get; set; }
@@ -44,5 +44,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [Column("Date")]
         public DateTime Date { get; set; }
+
+        [Column("LoanId")]
+        public string? LoanId { get; set; }
+
+        [NotMapped]
+      public string? RiskMessage { get; set; }
     }
 }

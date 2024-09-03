@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_Index.cshtml";
 }
 <div class="ibox-title">
-    <h5>CUSTOMER UPDATE PROFILE</h5>
+    <h5>EMPLOYEE UPDATE PROFILE</h5>
 </div>
 <div class="container-div">
     <div class="row">
@@ -10,17 +10,17 @@
             <div class="select-list">
                 <ul>
                     <li>
-                        Name: <input id="name" col="Name" type="text" />
+                        First Name: <input id="firstName" col="FirstName" type="text" />
                     </li>
-                    <li>
-                        Status: <span id="status" col="Status"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
+                    @* <li>
+                    Status: <span id="status" col="Status"></span>
+                    </li> *@
+                    @* <li class="select-time">
+                    <label>Created: </label>
+                    <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                    <span>-</span>
+                    <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                    </li>*@
                     <li>
                         <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
                     </li>
@@ -28,9 +28,9 @@
             </div>
         </div>
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> edit</a>
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-edit"></i> Update Record</a>
+            @*            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> edit</a>
+            *@           @* <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>*@
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -54,26 +54,63 @@
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
-                { checkbox: true, visible: true },
+
+                //{ checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'PhoneNumber', title: 'Phone Number', sortable: true },
-                { field: 'EmailAddress', title: 'Email Address', sortable: true },
-                { field: 'AccountName', title: 'Account Name', sortable: true },
-                { field: 'NHFNumber', title: 'NHF Number', sortable: true },
-
-
-                //{
-                //    field: 'ApprovalStatus', title: 'Approval Status', align: 'center',
-                //    formatter: function (value, row, index) {
-                //        if (value == "@StatusEnum.Yes.ToInt()") {
-                //            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
-                //        } else {
-                //            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
-                //        }
-                //    }
-                //},
+                { field: 'NHFNumber', title: 'NHF Number', sortable: false, visible: true },
+                { field: 'CompanyName', title: 'Company', sortable: false },
+                { field: 'ContributionBranchName', title: 'Branch', visible: false, sortable: false },
+                { field: 'DepartmentName', title: 'Department', visible: false, sortable: false },
+                { field: 'TitleName', title: 'Title', visible: false, sortable: false },
+                { field: 'FirstName', title: 'First Name', sortable: false },
+                { field: 'OtherName', title: 'Other Name(s)', sortable: false },
+                { field: 'LastName', title: 'Last Name', sortable: false },
+                { field: 'BVN', title: 'BVN', sortable: false },
+                { field: 'NIN', title: 'NIN', visible: false, sortable: false },
+                { field: 'GenderName', title: 'Gender', sortable: false },
+                { field: 'DateOfBirth', title: 'Date Of Birth', visible: false, sortable: false },
+                { field: 'MaritalStatusName', title: 'Marital Status', visible: false, sortable: false },
+                { field: 'PostalAddress', title: 'Postal Address', visible: false, sortable: false },
+                { field: 'EmailAddress', title: 'Email Address', visible: false, sortable: false },
+                { field: 'MobileNumber', title: 'Mobile Number', sortable: false },
                 {
-                    field: 'BaseModifyTime', title: 'Date Created', formatter: function (value, row, index) {
+                    field: 'EmploymentType', title: 'Employment Type', align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@EmploymentTypeEnum.Employed.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@EmploymentTypeEnum.Employed.GetDescription()" + '</span>';
+                        }
+                        else {
+                            return '<span class="badge badge-warning">' + "@EmploymentTypeEnum.SelfEmployed.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                { field: 'DateOfEmployment', title: 'Date Of Employment', visible: false, sortable: false },
+                { field: 'StaffNumber', title: 'Staff Number', visible: false, sortable: false },
+                { field: 'CustomerBank', title: 'Bank Name', visible: false, sortable: false },
+                { field: 'BankAccountNumber', title: 'Account Number', visible: false, sortable: false },
+                { field: 'AccountTypeName', title: 'Account Type', visible: false, sortable: false },
+                { field: 'MonthlySalary', title: 'Monthly Salary', visible: false, sortable: false },
+                { field: 'AlertTypeName', title: 'Alert Type', visible: false, sortable: false },
+                { field: 'RelationName', title: 'Kin Relationship', visible: false, sortable: false },
+                {
+                    field: 'Status',
+                    title: 'Status',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@ApprovalEnum.Pending.ToInt()") {
+                            return '<span class="badge badge-warning">' + "@ApprovalEnum.Pending.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Approved.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@ApprovalEnum.Approved.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Rejected.ToInt()") {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Rejected.GetDescription()" + '</span>';
+                        }
+                        else {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Cancelled.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'BaseModifyTime', title: 'Create Time', visible: false, formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
                     }
                 }
@@ -111,7 +148,7 @@
             }
         }
         cn.openDialog({
-            title: id > 0 ? "Edit  Customer Profile Update" : "Customer Profile Update",
+            title: id = 0 ? "Edit  Customer Profile" : "Employee Profile Update",
             content: '@Url.Content("~/CustomerProfileUpdate/CustomerProfileUpdateForm")' + '?id=' + id,
             width: "780px",
             callback: function (index, layero) {
@@ -120,12 +157,6 @@
             }
         });
     }
-
-
-
-
-
-
 
     function deleteForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
@@ -148,4 +179,5 @@
             });
         }
     }
+
 </script>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,7 +13,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class ApprovalLogController : BaseController
     {
         private readonly IApprovalLogService _iApprovalLogService;
-
+        private readonly IAuditTrailService _iAuditTrailService;
         public ApprovalLogController(IUnitOfWork iUnitOfWork, IApprovalLogService iApprovalLogService) : base(iUnitOfWork)
         {
             _iApprovalLogService = iApprovalLogService;
@@ -68,6 +69,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.MenuId));
                 obj.Tag = 1;
             }
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetApprovalLogName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.AppprovalLog.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
         #endregion

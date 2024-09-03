@@ -11,6 +11,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<FinanceCounterpartyTransactionEntity> GetEntity(long id);
         Task<int> GetMaxSort();
         Task SaveForm(FinanceCounterpartyTransactionEntity entity);
+        Task<List<FinanceCounterpartyTransactionEntity>> GetLists(String NhfNumber);
 
         Task SaveForms(List<FinanceCounterpartyTransactionEntity> entity);
         Task DeleteForm(string ids);

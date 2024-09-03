@@ -18,5 +18,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // Code
         [Column("Code")]
         public string? Code { get; set; }
+        
+        [Column("ProductId")]
+        public int ProductId { get; set; }
     }
 }

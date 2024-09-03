@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label class="remark control-label">Remark</label>
-                        <input type="text" col="Remark" class="form-control" id="remark">
+                        <input type="text" required col="Remark" class="form-control" id="remark">
                     </div>
                 </div>
                 <div class="form-group">
@@ -26,35 +26,35 @@
                     </div>
                     <div class="col-sm-6">
                         <label for="interestRate" class="form-label">Interest&nbsp;Rate</label>
-                        <input type="text" col="InterestRate" class="form-control" id="interestRate">
+                        <input type="text" readonly col="InterestRate" class="form-control" id="interestRate">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
                         <label for="rangeMax" class="form-label">Range Max.</label>
-                        <input id="rangeMax" type="text" col="RangeMax" class="form-control">
+                        <input id="rangeMax" required type="text" col="RangeMax" class="form-control">
 
                     </div>
                     <div class="col-sm-6">
                         <label for="creditGrades" class="form-label">Credit&nbsp;Grades</label>
-                        <input id="creditGrades" type="text" col="CreditGrade" class="form-control">
+                        <input id="creditGrades" required type="text" col="CreditGrade" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
                         <label for="rangeMin" class="form-label">Range Min.</label>
-                        <input id="rangeMin" type="text" col="RangeMin" class="form-control">
+                        <input id="rangeMin" required type="text" col="RangeMin" class="form-control">
                     </div>
                     <div class="col-sm-6">
                         <label for="creditGradeDefinitions" class="form-label">Credit&nbsp;Grade&nbsp;Definitions</label>
-                        <textarea id="creditGradeDefinitions" type="text" style="height: 60px;" col="CreditGradeDefinition" class="form-control"></textarea>
+                        <textarea id="creditGradeDefinitions" type="text" style="height: 60px;" col="CreditGradeDefinition" required class="form-control"></textarea>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-6">
                         <label for="rating" class="form-label">Rating</label>
-                        <input id="rating" type="text" col="Rating" class="form-control">
+                        <input id="rating" required type="text" col="Rating" class="form-control">
                     </div>
                 </div>
 
@@ -64,6 +64,7 @@
 
     </form>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
 <script>
     var id = cn.request("id");
@@ -79,9 +80,44 @@
         var selectedCredit = $("#creditType").cnComboBox('getValue');
         //var id = selectedCredit;
         $("#productCode").val(selectedCredit);
+        $("#interestRate").val('6');
     });
+
+    $('#rangeMin').on('blur', function (event) {
+        $('span.error-keyup-1').hide();
+        var regex = /^(0|[1-9][0-9]*)$/; // Regular expression to match 0 and positive integers
+        var Nex = $("#rangeMin").val();
+        if (!regex.test(Nex)) { // Check if it's not a non-negative integer
+            event.preventDefault();
+            $('#rangeMin').val('');
+            $(this).after('<span class="text-danger error-keyup-1">The Range Min should be a non-negative integer</span>');
+            return false;
+        }
+    });
+
+    function validateForm() {
+        var rangeMin = parseFloat($("#rangeMin").val());
+        var rangeMax = parseFloat($("#rangeMax").val());
+
+        if (isNaN(rangeMin) || isNaN(rangeMax) || rangeMax <= rangeMin || rangeMin < 0 || rangeMax > 100) {
+            return false;
+        }
+        return true;
+    }
+
+
     function saveForm(index) {
         if ($("#form1").validate().form()) {
+            if (!validateForm()) {
+                swal({
+                    title: "Error!",
+                    text: "Range Max must be greater than Range Min.",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+                return false; 
+            }
+
             var postData = $("#form1").getWebControls({ Id: id });
 
             cn.ajax({
@@ -93,8 +129,7 @@
                         cn.msgSuccess(obj.Message);
                         parent.searchGrid();
                         parent.layer.close(index);
-                    }
-                    else {
+                    } else {
                         cn.msgError(obj.Message);
                     }
                 }

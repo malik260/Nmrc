@@ -29,9 +29,23 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task<CreditTypeEntity> GetEntity(string code)
         {
-            return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Code == code || x.Name == code);
+            return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Code == code || x.Name == code || x.ProductId == Convert.ToInt32(code));
         }
 
+        public async Task<CreditTypeEntity> GetEntityByProductCode(string code)
+        {
+            return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Code == code);
+        }
+
+        public async Task<CreditTypeEntity> GetEntitybyName(string name)
+        {
+            return await BaseRepository().FindEntity<CreditTypeEntity>(x =>  x.Name.Contains(name));
+        }
+        public async Task<CreditTypeEntity> GetEntitybiId(int id)
+        {
+            return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Id == id);
+        }
+        
        
         #endregion
 
@@ -47,6 +61,21 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             {
                 await BaseRepository().Update<CreditTypeEntity>(entity);
             }
+        }
+
+        public bool ExistCode(CreditTypeEntity entity)
+        {
+            var expression = ExtensionLinq.True<CreditTypeEntity>();
+            expression = expression.And(t => t.BaseIsDelete == 0);
+            if (entity.Id.IsNullOrZero())
+            {
+                expression = expression.And(t => t.Code == entity.Code);
+            }
+            else
+            {
+                expression = expression.And(t => t.Code == entity.Code && t.Id != entity.Id);
+            }
+            return BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
         }
 
         public async Task DeleteForm(string ids)

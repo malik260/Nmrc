@@ -12,5 +12,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         //Task<int> GetMaxSort();
         Task SaveForm(CreditTypeEntity entity);
         Task DeleteForm(string ids);
+        Task<CreditTypeEntity> GetEntitybiId(int id);
+        bool ExistCode(CreditTypeEntity entity);
+        Task<CreditTypeEntity> GetEntitybyName(string name);
+        Task<CreditTypeEntity> GetEntityByProductCode(string code);
     }
 }

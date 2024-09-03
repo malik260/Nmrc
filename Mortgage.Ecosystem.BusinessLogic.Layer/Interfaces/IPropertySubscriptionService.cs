@@ -16,5 +16,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<int>> GetMaxSort();
         Task<TData<string>> SaveForm(PropertySubscriptionEntity entity);
         Task<TData> DeleteForm(string ids);
+        Task<TData<string>> Subscribe(long id);
     }
 }

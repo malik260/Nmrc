@@ -24,6 +24,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
         {
             return View();
         }
+
+        [AuthorizeFilter("loglogin:view")]
+        public IActionResult AdminLogLoginIndex()
+        {
+            return View();
+        }
         #endregion
 
         #region Get data
@@ -40,6 +46,14 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
         public async Task<IActionResult> GetPageListJson(LogLoginListParam param, Pagination pagination)
         {
             TData<List<LogLoginEntity>> obj = await _iLogLoginService.GetPageList(param, pagination);
+            return Json(obj);
+        }
+
+        [HttpGet]
+        [AuthorizeFilter("loglogin:search")]
+        public async Task<IActionResult> GetAdminPageListJson(LogLoginListParam param, Pagination pagination)
+        {
+            TData<List<LogLoginEntity>> obj = await _iLogLoginService.GetAdminPageList(param, pagination);
             return Json(obj);
         }
 

@@ -13,5 +13,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<int>> GetMaxSort(long parent);
         Task<TData<string>> SaveForm(MenuEntity entity);
         Task<TData> DeleteForm(string ids);
+        Task<TData<List<ZtreeInfo>>> GetZtreeList2(MenuListParam param);
+        Task<TData<List<ZtreeInfo>>> GetZtreeList1(MenuListParam param);
     }
 }

@@ -1,0 +1,334 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+    <div class="row">
+        <div class="ibox">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#employee" aria-expanded="true">Pending Employee Registration(s)</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="employee" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="container-div">
+                                <div class="row">
+                                    <div id="searchDiv" class="col-sm-12 search-collapse">
+                                        <div class="select-list">
+                                            <ul>
+                                                <li>
+                                                    <label>Name: </label> <input id="name" col="Name" type="text" />
+                                                </li>
+                                              
+                                                <li>
+                                                    <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchEmployeeGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group-sm" id="toolbar">
+                                        <a id="btnApprove" class="btn btn-primary disabled" onclick="approveEmployeeForm()"><i class="fa fa-check"></i> Approve</a>
+                                        <a id="btnReject" class="btn btn-danger disabled" onclick="rejectEmployeeForm()"><i class="fa fa-remove"></i> Reject</a>
+                                    </div>
+
+                                    <div class="col-sm-12 select-table table-striped">
+                                        <table id="gridTable" data-mobile-responsive="true"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
+    });
+
+    function initGrid() {
+        var queryEmployeeUrl = '@Url.Content("~/Pmb/GetApprovalPageListJson")';
+        $('#gridTable').cnTable({
+            url: queryEmployeeUrl,
+            detailView: true,
+            sortName: 'BaseModifyTime',
+            sortOrder: "Desc",
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'Name', title: 'Company', sortable: false },
+                { field: 'BranchName', title: 'Branch', visible: false, sortable: false },
+                { field: 'DepartmentName', title: 'Department', visible: false, sortable: false },
+                { field: 'Address', title: 'Postal Address', visible: false, sortable: false },
+                { field: 'EmailAddress', title: 'Email Address', sortable: false },
+                { field: 'MobileNumber', title: 'Mobile Number', sortable: false },
+                {
+                    field: 'EmploymentType', title: 'Employment Type', visble: false, align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@EmploymentTypeEnum.Employed.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@EmploymentTypeEnum.Employed.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@EmploymentTypeEnum.SelfEmployed.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                { field: 'NhfNumber', title: 'PMB NHF Number', visible: false, sortable: false },
+                { field: 'SectorName', title: 'Sector', visible: false, sortable: false },
+                { field: 'SubSectorName', title: 'Sub Sector', visible: false, sortable: false },
+                { field: 'ContributionFrequencyName', title: 'Contribution Frequency', visible: false, sortable: false },
+                //{ field: 'AccountTypeName', title: 'Account Type', visible: false, sortable: false },
+                //{ field: 'MonthlySalary', title: 'Monthly Salary', visible: false, sortable: false },
+                //{ field: 'AlertTypeName', title: 'Alert Type', visible: false, sortable: false },
+                {
+                    field: 'BaseModifyTime', title: 'Create Time', visible: false, formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            },
+            onExpandRow: function (index, row, $detail) {
+                initChildGrid(index, row, $detail);
+            }
+        });
+    }
+
+    function initChildGrid(index, row, $detail) {
+        $detail.html('Loading data ...');
+        var date = new Date(row.BaseCreateTime);
+        var formattedDate = date.toLocaleDateString(); // Format as a localized date string
+        var dateOfIncorporation = new Date(row.DateOfIncorporation);
+        var formattedDateOfIncorporation = dateOfIncorporation.toLocaleDateString(); // Format as a localized date string
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center" > ' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">NHF Registration for ' + row.Name + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="effectiveDate">Effective Date:</label>' +
+            '<input type="text" id="effectiveDate" name="effectiveDate" placeholder="Effective Date" class="form-control text-left" readonly value="' + formattedDate + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="emailAddress">Email Address:</label>' +
+            '<input type="text" id="emailAddress" name="emailAddress" placeholder="Email Address" class="form-control text-left" readonly value="' + row.EmailAddress + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="phone">Phone:</label>' +
+            '<input type="text" id="phone" name="phone" placeholder="Phone" class="form-control text-left" readonly value="' + row.MobileNumber + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="remark">Remark:</label>' +
+            '<input type="text" id="remark" name="remark" placeholder="Remark" class="form-control text-left" />' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="sector">Sector:</label>' +
+            '<input type="text" id="sector" name="sector" placeholder="Sector" class="form-control text-left" readonly value="' + row.SectorName + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="subSector">SubSector:</label>' +
+            '<input type="text" id="subSector" name="subSector" placeholder="SubSector" class="form-control text-left" readonly value="' + row.SubSectorName + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bvn">RC Number:</label>' +
+            '<input type="text" id="rcNumber" name="rcNumber" placeholder="RC Number" class="form-control text-left" readonly value="' + row.RCNumber + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="pmbNhfNumber">PMB NHF Number:</label>' +
+            '<input type="text" id="pmbNhfNumber" name="pmbNhfNumber" placeholder="Pmb Nhf Number" class="form-control text-left" readonly value="' + row.PmbNhfNumber + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="website">Website:</label>' +
+            '<input type="text" id="website" name="website" placeholder="WebSite" class="form-control text-left" readonly value="' + row.Website + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="contributionFrequency">Contribution Frequency:</label>' +
+            '<input type="text" id="contributionFrequency" name="contributionFrequency" placeholder="Contribution Frequency" class="form-control text-left" readonly value="' + row.ContributionFrequencyName + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="contributionLocation">Date Of Incorporation:</label>' +
+            '<input type="text" id="dateOfIncorporation" name="dateOfIncorporation" placeholder="Date Of Incorporation" class="form-control text-left" readonly value="' + formattedDateOfIncorporation + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="registrationLocation">Registration Location:</label>' +
+            '<input type="text" id="registrationLocation" name="registrationLocation" placeholder="Registration Location" class="form-control text-left" readonly value="' + row.Address + '"/>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        $detail.html(htmlData);
+        // Attach click event to the plus icon
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            if ($cardBody.is(':visible')) {
+                $cardBody.hide();
+            } else {
+                $cardBody.show();
+            }
+        });
+    }
+
+    function searchEmployeeGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+    function approveEmployeeForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+
+        if (cn.checkRowApprove(selectedRow)) {
+            Swal.fire({
+                title: 'PMB Registration',
+                text: "Confirm to approve this record?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, approve it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = cn.getIds(selectedRow);
+                    cn.ajax({
+                        url: '@Url.Content("~/Pmb/ApproveFormJson")' + '?id=' + id,
+                        type: "post",
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: obj.Message,
+                                    timer: 2000, // optional: auto-close after 2 seconds
+                                    timerProgressBar: true
+                                }).then(() => {
+                                    parent.searchGrid();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: obj.Message,
+                                    timer: 2000, // optional: auto-close after 2 seconds
+                                    timerProgressBar: true
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'An unexpected error occurred. Please try again later.',
+                                timer: 2000, // optional: auto-close after 2 seconds
+                                timerProgressBar: true
+                            });
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire(
+                        'Cancelled',
+                        'The record has not been approved',
+                        'error'
+                    );
+                }
+            });
+        } else {
+            Swal.fire(
+                'No selection!',
+                'Please select a record to approve.',
+                'warning'
+            );
+        }
+    }
+
+
+    function rejectEmployeeForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (selectedRow.length > 0) {
+            Swal.fire({
+                title: 'PMB Registration',
+                text: "Confirm to reject this record?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, reject it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true,
+                input: 'textarea',
+                inputPlaceholder: 'Enter your remark here...',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to write something!'
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = selectedRow[0].Id;
+                    var Remark = result.value; // Get the remark from the input
+
+                    cn.ajax({
+                        url: '@Url.Content("~/Pmb/DisApproveFormJson")' + '?id=' + id + '&remark=' + encodeURIComponent(Remark),
+                        type: "post",
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire(
+                                    'Rejected!',
+                                    'The record has been rejected.',
+                                    'success'
+                                );
+                                searchEmployeeGrid();
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    obj.Message,
+                                    'error'
+                                );
+                            }
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire(
+                        'Cancelled',
+                        'The record has not been rejected',
+                        'error'
+                    );
+                }
+            });
+        } else {
+            Swal.fire(
+                'No selection!',
+                'Please select a record to reject.',
+                'warning'
+            );
+        }
+    }
+
+    function redirectToIndex() {
+        location.href = '@Url.Content("~/Employee/NHFRegUsersIndex")';
+    }
+</script>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
@@ -50,6 +51,17 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // NHF Number
         [Column("NHFNumber")]
         public string? NHFNumber { get; set; }
+
+        // NHF Number
+        [Column("PMB")]
+        public string? PMB { get; set; }
+
+        [Column("ApplicationReferenceNo")]
+        public string? ApplicationReferenceNo { get; set; }
+
+        [NotMapped]
+        [Column("file")]
+        public List<IFormFile>? file { get; set; }
 
 
 

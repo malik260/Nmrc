@@ -3,10 +3,13 @@
 }
 
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
-@section header{
+@section header {
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
 }
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <div class="wrapper animated fadeInRight">
     <form id="form" class="form-horizontal m">
@@ -15,18 +18,26 @@
                 <span class="dialogblockheader">New Employee Record</span>
                 <div class="form-group" style="margin-top: 10px;">
                     <div class="col-sm-6">
-                        <label class="control-label">Employer<font class="red"> *</font></label>
-                        <div id="company" col="Company"></div>
+                        @* <label class="control-label">Employer <font class="red"> *</font></label>
+                        <div id="company" col="Company"></div>*@
+                        <label class="control-label">Employer Number</label>
+                        <input id="company" readonly col="Company" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Employer Name</label>
+                        <input id="companyName" col="companyName" readonly type="text" class="form-control" />
                     </div>
                 </div>
+
                 <div class="form-group" style="margin-top: 10px;">
                     <div class="col-sm-6">
                         <label class="control-label">Email<font class="red"> *</font></label>
-                        <input id="emailAddress" col="EmailAddress" type="text" class="form-control" />
+                        <input id="emailAddress" col="EmailAddress" type="email" required class="form-control" />
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Mobile/Telephone<font class="red"> *</font></label>
-                        <input id="mobileNumber" col="MobileNumber" type="text" class="form-control" />
+                        <input id="mobileNumber" required col="MobileNumber" type="text" class="form-control" />
+                        <span id="error-message" class="text-danger" style="display:none;"></span>
                     </div>
                 </div>
             </div>
@@ -36,22 +47,23 @@
                 <span class="dialogblockheader"></span>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">BVN (optional)</label>
-                        <input id="bvn" col="BVN" type="text" class="form-control" />
+                        <label class="control-label">BVN<font class="red"> *</font></label>
+                        <input id="bvn" required col="BVN" type="text" class="form-control" />
                     </div>
                     <div class="col-sm-6">
-                        <label class="control-label">NIN</label>
-                        <input id="nin" col="NIN" type="text" class="form-control" />
+
+                        <label class="control-label">NIN <font class="red"> *</font> </label>
+                        <input id="nin" required col="NIN" type="text" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">Title</label>
+                        <label class="control-label">Title<font class="red"> *</font></label>
                         <div id="title" col="Title"></div>
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">First Name<font class="red"> *</font></label>
-                        <input id="firstName" col="FirstName" type="text" class="form-control" />
+                        <input id="firstName" required col="FirstName" type="text" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -61,60 +73,74 @@
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Last Name<font class="red"> *</font></label>
-                        <input id="lastName" col="LastName" type="text" class="form-control" />
+                        <input id="lastName" required col="LastName" type="text" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="col-sm-2 control-label" style="padding-left: 0px;">Gender</label>
+                        <label class="control-label">Gender<font class="red"> *</font></label>
                         <div id="gender" col="Gender"></div>
                     </div>
                     <div class="col-sm-6">
                         <label class="control-label">Date of Birth<font class="red"> *</font></label>
-                        <input id="dateOfBirth" col="DateOfBirth" type="date" class="form-control" placeholder="yyyy-MM-dd" />
+                        @* <input id="dateOfBirth" col="DateOfBirth" required type="date" class="form-control" placeholder="yyyy-MM-dd" /> *@
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="date" class="form-control" required id="dateOfBirth" col="DateOfBirth" placeholder="yyyy-MM-dd">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">Postal Address</label>
-                        <textarea id="postalAddress" col="PostalAddress" class="form-control" style="height:60px"></textarea>
+                        <label class="control-label">Postal Address<font class="red"> *</font></label>
+                        <textarea id="postalAddress" col="PostalAddress" class="form-control" style="height:60px" required></textarea>
                     </div>
                     <div class="col-sm-6">
-                        <label class="control-label">Marital Status</label>
+                        <label class="control-label">Marital Status<font class="red"> *</font></label>
                         <div id="marital" col="MaritalStatus"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">Kin's Last Name</label>
-                        <input id="kinLastName" col="KinLastName" type="text" class="form-control" />
+                        <label class="control-label">Kin's Last Name<font class="red"> *</font></label>
+                        <input id="kinLastName" col="KinLastName" required type="text" class="form-control" />
                     </div>
                     <div class="col-sm-6">
-                        <label class="control-label">Kin's FIrst Name</label>
-                        <input id="kinFirstNumber" col="KinFirstName" type="text" class="form-control" />
+                        <label class="control-label">Kin's First Name<font class="red"> *</font></label>
+                        <input id="kinFirstName" col="KinFirstName" required type="text" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">Kin's Mobile/Telephone</label>
-                        <input id="kinMobileNumber" col="KinMobileNumber" type="text" class="form-control" />
+                        <label class="control-label">Kin's Mobile/Telephone<font class="red"> *</font></label>
+                        <input id="kinMobileNumber" col="KinMobileNumber" required type="text" class="form-control" />
                     </div>
                     <div class="col-sm-6">
-                        <label class="control-label">Kin's Relationship</label>
+                        <label class="control-label">Kin's Relationship<font class="red"> *</font></label>
                         <div id="kinRelationship" col="KinRelationship"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Kin's Address<font class="red"> *</font></label>
+                        <textarea id="kinAddress" col="KinAddress" type="text" class="form-control" style="height:60px" required></textarea>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Kin's Email Address<font class="red"> *</font></label>
+                        <input id="kinEmailAddress" col="KinEmailAddress" required type="text" class="form-control" />
                     </div>
                 </div>
                 <hr />
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">Contribution Branch</label>
+                        <label class="control-label">Contribution Branch<font class="red"> *</font></label>
                         <div id="branch" col="ContributionBranch"></div>
                     </div>
                     <div class="col-sm-6">
-                        <label class="control-label">Date of Employment</label>
+                        <label class="control-label">Date of Employment<font class="red"> *</font></label>
                         <div class="input-group date">
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                            <input type="text" class="form-control" id="employmentDate" col="EmploymentDate" placeholder="yyyy-MM-dd">
+                            <input type="text" class="form-control" required id="employmentDate" col="DateOfEmployment" placeholder="yyyy-MM-dd">
                         </div>
                     </div>
                     @*<div class="col-sm-6">
@@ -125,27 +151,27 @@
                 <hr />
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">Account Type</label>
+                        <label class="control-label">Account Type<font class="red"> *</font></label>
                         <div id="accountType" col="AccountType"></div>
                     </div>
                     <div class="col-sm-6">
-                        <label class="control-label">Bank Name</label>
-                            <div id="bankName" col="CustomerBank"></div>
+                        <label class="control-label">Bank Name<font class="red"> *</font></label>
+                        <div id="bankName" col="CustomerBank"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">Account Number</label>
-                        <input id="accountNumber" col="BankAccountNumber" type="text" class="form-control" />
+                        <label class="control-label">Account Number<font class="red"> *</font></label>
+                        <input id="accountNumber" required col="BankAccountNumber" type="text" class="form-control" />
                     </div>
                     <div class="col-sm-6">
-                        <label class="control-label">Monthly Salary (Net Pay)</label>
-                        <input id="monthlySalary" col="MonthlySalary" type="text" class="form-control" />
+                        <label class="control-label">Monthly Salary (Net Pay)<font class="red"> *</font></label>
+                        <input id="monthlySalary" required col="MonthlySalary" type="text" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="control-label">Alert Type</label>
+                        <label class="control-label">Alert Type<font class="red"> *</font></label>
                         <div id="alertType" col="AlertType"></div>
                     </div>
                     <div class="col-sm-6">
@@ -154,16 +180,23 @@
                     </div>
                 </div>
                 <hr />
-                <div class="form-group">
-                    <div class="col-sm-12">
-                        <label class="control-label">Privileges</label>
-                        <div id="menuTree" class="ztree"></div>
-                    </div>
+                @* <div class="form-group">
+                <div class="col-sm-12">
+                <label class="control-label">Privileges</label>
+                <div id="menuTree" class="ztree"></div>
                 </div>
+                </div>*@
             </div>
         </div>
     </form>
 </div>
+
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 
 <script type="text/javascript">
     var id = cn.request("id");
@@ -181,7 +214,23 @@
             value: "Name",
             class: "form-control"
         });
-        laydate.render({ elem: '#dateOfBirth', type: 'date', theme: 'molv' });
+
+        flatpickr("#dateOfBirth", {
+            //defaultDate: "today",
+            maxDate: "2005-01-01",
+            inline: false,
+            allowInput: true
+        });
+
+        flatpickr("#employmentDate", {
+            //defaultDate: "today",
+            maxDate: "today",
+            inline: false,
+            allowInput: true
+
+        });
+
+        //laydate.render({ elem: '#dateOfBirth', type: 'date', theme: 'molv' });
         $("#marital").cnComboBox({
             url: '@Url.Content("~/MaritalStatus/GetListJson")',
             key: "Id",
@@ -205,7 +254,7 @@
             value: "Name",
             class: "form-control"
         });
-        laydate.render({ elem: '#employmentDate', type: 'date', theme: 'molv' });
+        // laydate.render({ elem: '#employmentDate', type: 'date', theme: 'molv' });
         $("#accountType").cnComboBox({
             url: '@Url.Content("~/AccountType/GetListJson")',
             key: "Id",
@@ -228,19 +277,236 @@
                     required: true,
                     email: true,
                 },
+                kinEmailAddress: {
+                    required: true,
+                    email: true,
+                },
                 mobileNumber: {
                     required: true,
                     //isPhone: true,
                 }
             },
             messages: {
-                emailAddress: { required: "Email is required" },
-                mobileNumber: { required: "Mobile number is required" }
+                emailAddress: { required: "Email Address is required" },
+                kinEmailAddress: { required: "Kin Email Address is required" },
+                mobileNumber: { required: "Mobile number is required" },
             }
         });
     });
 
-       
+    $('#mobileNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
+        }
+    })
+
+    $('#bvn').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
+        }
+    })
+
+    $('#nin').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
+        }
+    })
+
+    $('#monthlySalary').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
+        }
+    })
+
+    $(document).ready(function () {
+        $('#mobileNumber').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#nin').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+        $('#bvn').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+    $('#kinMobileNumber').on('blur', function (event) {
+
+        $('span.error-keyup-1').hide();
+        var plength = $("#kinMobileNumber").val().length;
+        if (plength > 11) {
+            event.preventDefault();
+            //$('#uBankaccountno').val('');
+            $(this).after('<span class="text-danger error-keyup-1">Mobile Number should not be more than 11 digits</span>');
+            return false;
+        }
+        else if (plength < 11) {
+            event.preventDefault();
+            //$('#uBankaccountno').val('');
+            $(this).after('<span class="text-danger error-keyup-1">Mobile Number should not be less than 11 digits</span>');
+            return false;
+        }
+
+    });
+
+    $(document).ready(function () {
+        $('#mobileNumber').on('input keyup', function () {
+            var mobileNumber = $(this).val();
+            var errorMessage = $('#error-message');
+
+            // Remove existing error message
+            errorMessage.hide();
+
+            // Check if the input is numeric
+            var numericReg = /^\d*$/;
+            if (!numericReg.test(mobileNumber)) {
+                errorMessage.text('Numeric characters only.').show();
+                return;
+            }
+
+            // Check if the input starts with '0'
+            if (mobileNumber.length > 0 && mobileNumber[0] !== '0') {
+                errorMessage.text('Mobile Number must start with 0').show();
+            } else {
+                errorMessage.hide();
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('#kinMobileNumber').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+    $('#kinMobileNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+        }
+    })
+
+    $(document).ready(function () {
+        $('#accountNumber').on('input', function () {
+            var maxLength = 10;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+    $('#accountNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
+        }
+    })
+
+    $('#bvn').on("keyup", function () {
+        $('span.error-keyup-1').hide();
+        var inputVal = $(this).val();
+        var numericReg = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/;
+        if (!numericReg.test(inputVal)) {
+            //$("#Monthlysalary, #uMonthlysalary, #uuMonthlysalary").val("");
+            $(this).after('<span class="text-danger error-keyup-1">Numeric characters only.</span>');
+        }
+    });
+
+    //  $('#mobileNumber').on("keyup", function () {
+    //    $('span.error-keyup-1').hide();
+    //    var inputVal = $(this).val();
+    //    var numericReg = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/;
+    //    if (!numericReg.test(inputVal)) {
+    //        //$("#Monthlysalary, #uMonthlysalary, #uuMonthlysalary").val("");
+    //        $(this).after('<span class="text-danger error-keyup-1">Numeric characters only.</span>');
+    //    }
+    //});
+
+    $('#accountNumber').on("keyup", function () {
+        $('span.error-keyup-1').hide();
+        var inputVal = $(this).val();
+        var numericReg = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/;
+        if (!numericReg.test(inputVal)) {
+            //$("#Monthlysalary, #uMonthlysalary, #uuMonthlysalary").val("");
+            $(this).after('<span class="text-danger error-keyup-1">Numeric characters only.</span>');
+        }
+    });
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Content("~/Company/GetCompanyInfo")', // The URL of your controller method
+            type: 'GET',
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var data = obj.Data;
+                    $('#company').val(data.companyNumber);
+                    $('#companyName').val(data.companyName);
+
+                } else {
+                    cn.msgError(obj.Message);
+                    $('#form').hide();
+                }
+
+            },
+            error: function () {
+                // Handle error, if any
+            }
+        });
+    });
 
     function loadMenuTree() {
         $('#menuTree').cnTree({
@@ -277,32 +543,94 @@
     function saveForm(index) {
         if ($("#form").validate().form()) {
             var postData = $("#form").getWebControls({ Id: id });
-            postData.Company = cn.getLastValue(postData.Company);
-            postData.MenuIds = $('#menuTree').cnTree("getCheckedNodes");
-            if (postData.Company <= 0) {
-                cn.msgError("Please select employer!");
+
+            postData.MaritalStatus = cn.getLastValue(postData.MaritalStatus);
+            postData.Gender = cn.getLastValue(postData.Gender);
+            postData.KinRelationship = cn.getLastValue(postData.KinRelationship);
+            postData.ContributionBranch = cn.getLastValue(postData.ContributionBranch);
+            postData.AlertType = cn.getLastValue(postData.AlertType);
+            postData.CustomerBank = cn.getLastValue(postData.CustomerBank);
+            postData.AccountType = cn.getLastValue(postData.AccountType);
+            postData.BankAccountNumber = cn.getLastValue(postData.BankAccountNumber);
+            postData.Title = cn.getLastValue(postData.Title);
+
+            if (postData.MaritalStatus <= 0) {
+                cn.msgError("Please select Marital Status!");
                 return false;
-            }
-            else if (postData.MenuIds == "") {
-                cn.msgError("Please select privileges!");
+            } else if (postData.KinRelationship <= 0) {
+                cn.msgError("Please select Kin's Relationship!");
+                return false;
+            } else if (postData.Gender <= 0) {
+                cn.msgError("Please select Gender!");
+                return false;
+            } else if (postData.ContributionBranch <= 0) {
+                cn.msgError("Please select Contribution Branch!");
+                return false;
+            } else if (postData.AlertType <= 0) {
+                cn.msgError("Please select Alert Type!");
+                return false;
+            } else if (postData.CustomerBank <= 0) {
+                cn.msgError("Please select Bank Name!");
+                return false;
+            } else if (postData.AccountType <= 0) {
+                cn.msgError("Please select Account Type!");
+                return false;
+            } else if (isNaN(postData.BankAccountNumber)) {
+                cn.msgError("Bank account number must be a digit!");
+                return false;
+            } else if (postData.BankAccountNumber.length !== 10) {
+                cn.msgError("Bank account number must be 10 digits in length!");
+                return false;
+            } else if (postData.Title <= 0) {
+                cn.msgError("Please select Title!");
                 return false;
             }
 
-            cn.ajax({
-                url: '@Url.Content("~/Employee/SaveFormJson")',
-                type: "post",
-                data: postData,
-                success: function (obj) {
-                    if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
-                        parent.searchGrid();
-                        parent.layer.close(index);
-                    }
-                    else {
-                        cn.msgError(obj.Message);
-                    }
+            Swal.fire({
+                title: 'Employee Registration',
+                text: "Do you want to proceed with the registration?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, proceed!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    cn.ajax({
+                        url: '@Url.Content("~/Employee/SaveFormJson")',
+                        type: "post",
+                        data: postData,
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: obj.Message,
+                                }).then(() => {
+                                    parent.searchGrid();
+                                    parent.layer.close(index);
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: obj.Message,
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while processing the request.',
+                            });
+                        }
+                    });
                 }
             });
         }
     }
+
+
 </script>
+

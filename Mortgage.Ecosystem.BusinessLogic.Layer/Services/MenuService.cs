@@ -25,6 +25,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             var obj = new TData<List<MenuEntity>>();
 
             List<MenuEntity> list = await new MenuCache(_iUnitOfWork).GetList();
+           
             list = ListFilter(param, list);
 
             obj.Data = list;
@@ -32,12 +33,20 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
-        public async Task<TData<List<ZtreeInfo>>> GetZtreeList(MenuListParam param)
+
+        public async Task<TData<List<ZtreeInfo>>> GetZtreeList1(MenuListParam param)
         {
             var obj = new TData<List<ZtreeInfo>>();
             obj.Data = new List<ZtreeInfo>();
 
-            List<MenuEntity> list = await new MenuCache(_iUnitOfWork).GetList();
+            List<MenuEntity> list = new MenuCache(_iUnitOfWork).GetList().Result.Where(x => x.Category != 0 && x.MenuStatus == 1).ToList();
+            var LoanApproval = list.Where(i => i.Id == 660261644680564736).FirstOrDefault();
+            var LoanReview = list.Where(i => i.Id == 660881219264712704).FirstOrDefault();
+            var LoanBatching = list.Where(i => i.Id == 664553002530508800).FirstOrDefault();
+            var LoanUnderwriting = list.Where(i => i.Id == 563327185478225920).FirstOrDefault();
+            list.Remove(LoanBatching);
+            list.Remove(LoanReview);
+            list.Remove(LoanApproval);
             list = ListFilter(param, list);
 
             foreach (MenuEntity menu in list)
@@ -53,6 +62,68 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
+
+
+
+
+        public async Task<TData<List<ZtreeInfo>>> GetZtreeList(MenuListParam param)
+        {
+            var obj = new TData<List<ZtreeInfo>>();
+            obj.Data = new List<ZtreeInfo>();
+
+            List<MenuEntity> list = new MenuCache(_iUnitOfWork).GetList().Result.Where(i=> i.ApprovalLevel > 0).ToList();
+            var LoanApproval = list.Where(i => i.Id == 660261644680564736).FirstOrDefault();
+            var LoanReview = list.Where(i => i.Id == 660881219264712704).FirstOrDefault();
+            var LoanBatching = list.Where(i => i.Id == 664553002530508800).FirstOrDefault();
+            var LoanUnderwriting = list.Where(i => i.Id == 563327185478225920).FirstOrDefault();
+            list.Remove(LoanBatching);
+            list.Remove(LoanReview);
+            list.Remove(LoanApproval);
+            list = ListFilter(param, list);
+
+            foreach (MenuEntity menu in list)
+            {
+                obj.Data.Add(new ZtreeInfo
+                {
+                    id = menu.Id,
+                    pId = menu.Parent,
+                    name = menu.MenuName
+                });
+            }
+
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+        public async Task<TData<List<ZtreeInfo>>> GetZtreeList2(MenuListParam param)
+        {
+            var obj = new TData<List<ZtreeInfo>>();
+            obj.Data = new List<ZtreeInfo>();
+
+            List<MenuEntity> list = await new MenuCache(_iUnitOfWork).GetList();
+            list = ListFilter(param, list);
+
+            foreach (MenuEntity menu in list)
+            {
+                if (menu.MenuUrl != null && menu.MenuUrl.Contains("Underwriting"))
+                {
+                    obj.Data.Add(new ZtreeInfo
+                    {
+                        id = menu.Id,
+                        pId = menu.Parent,
+                        name = menu.MenuName
+                    });
+
+                }
+                
+            }
+
+            obj.Tag = 1;
+            return obj;
+        }
+
+
 
         public async Task<TData<MenuEntity>> GetEntity(long id)
         {

@@ -8,7 +8,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
     {
         Task<List<GenderEntity>> GetList(GenderListParam param);
         Task<List<GenderEntity>> GetPageList(GenderListParam param, Pagination pagination);
-        Task<GenderEntity> GetEntity(long id);
+        Task<GenderEntity> GetEntity(int id);
         Task SaveForm(GenderEntity entity);
         Task DeleteForm(string ids);
     }

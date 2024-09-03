@@ -3,6 +3,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Extensions;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
@@ -10,6 +11,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 using Mortgage.Ecosystem.DataAccess.Layer.Request;
 using NPOI.HSSF.Record;
 using NPOI.POIFS.Crypt;
+using NPOI.SS.Formula.Functions;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing.Drawing2D;
 using System.Linq.Expressions;
@@ -27,6 +29,20 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<EmployeeEntity>> GetListByCompany(EmployeeListParam param)
+        {
+            var expression = ListFilters(param);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
+
+        public async Task<List<EmployeeEntity>> GetListByCompanyType(EmployeeListParam param)
+        {
+            var expression = ListFilters(param);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
+
         public async Task<List<EmployeeEntity>> GetPageList(EmployeeListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
@@ -36,9 +52,37 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task<List<EmployeeEntity>> GetApprovalPageList(EmployeeListParam param, Pagination pagination)
         {
-            var list = await new DataRepository().GetEmployeeApprovalItems();
-            return list.ToList();
+            // Build the initial filter expression
+            var expression = ListFilter(param);
+            expression = expression.And(i => i.Status == GlobalConstant.ZERO && i.UserType == GlobalConstant.ZERO);
+
+            // Get the base list without pagination
+            var baseList = await BaseRepository().FindList(expression);
+
+            // Get approval items
+            var approvalItems = await new DataRepository().GetEmployeeApprovalItems();
+
+            // Perform the join operation
+            var joinedList = (from baseItem in baseList
+                              join approvalItem in approvalItems
+                              on baseItem.Id equals approvalItem.Id
+                              select baseItem).ToList();
+
+            // Set the total count for pagination before applying Skip and Take
+            pagination.TotalCount = joinedList.Count;
+
+            // Apply pagination to the joined list
+            var paginatedList = joinedList
+                .Skip((pagination.PageIndex - 1) * pagination.PageSize)
+                .Take(pagination.PageSize)
+                .ToList();
+
+            return paginatedList;
         }
+
+
+
+
 
         public async Task<EmployeeEntity> GetEntity(long id)
         {
@@ -54,6 +98,28 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         {
             return await BaseRepository().FindEntity<EmployeeEntity>(id);
         }
+
+        public async Task<EmployeeEntity> GetEmployeeByMobile(string MobileNumber)
+        {
+            return await BaseRepository().FindEntity<EmployeeEntity>(x=> x.MobileNumber == MobileNumber);
+        }
+
+        public async Task<EmployeeEntity> GetEmployeeByEmail(string emailAddress)
+        {
+            return await BaseRepository().FindEntity<EmployeeEntity>(x => x.EmailAddress == emailAddress);
+        }
+
+        public async Task<EmployeeEntity> GetEmployeeByNIN(string NIN)
+        {
+            return await BaseRepository().FindEntity<EmployeeEntity>(x => x.NIN == NIN);
+        }
+
+        public async Task<EmployeeEntity> GetEmployeeByBVN(string BVN)
+        {
+            return await BaseRepository().FindEntity<EmployeeEntity>(x => x.BVN == BVN);
+        }
+
+
 
         public async Task<List<EmployeeEntity>> GetLists()
         {
@@ -164,32 +230,36 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 }
 
                 // Menu, page and button permissions corresponding to roles
-                if (!string.IsNullOrEmpty(entity.MenuIds))
-                {
-                    foreach (long menuId in TextHelper.SplitToArray<long>(entity.MenuIds, ','))
-                    {
-                        MenuAuthorizeEntity menuAuthorizeEntity = new()
-                        {
-                            AuthorizeId = entity.Id,
-                            MenuId = menuId,
-                            AuthorizeType = AuthorizeTypeEnum.User.ToInt()
-                        };
-                        await menuAuthorizeEntity.Create();
-                        await db.Insert(menuAuthorizeEntity);
-                    }
-                }
+                //if (string.IsNullOrEmpty(entity.MenuIds))
+                //{
+                //    var xx = new LoginDto();
+                //    var MenuIds = xx.GetEmployeeMenus();                    //foreach (long menuId in TextHelper.SplitToArray<long>(entity.MenuIds, ','))
+                //    foreach (var menuId in MenuIds)
+                //    {
+                //        MenuAuthorizeEntity menuAuthorizeEntity = new()
+                //        {
+                //            AuthorizeId = entity.Id,
+                //            MenuId = menuId,
+                //            AuthorizeType = AuthorizeTypeEnum.User.ToInt()
+                //        };
+                //        await menuAuthorizeEntity.Create();
+                //        await db.Insert(menuAuthorizeEntity);
+                //    }
+                //}
 
                 // Next of kin record
-                if (!string.IsNullOrEmpty(entity.KinFirstNumber) && !string.IsNullOrEmpty(entity.KinLastName) && !string.IsNullOrEmpty(entity.KinMobileNumber) && !entity.KinRelationship.IsNullOrZero())
+                if (!string.IsNullOrEmpty(entity.KinFirstName) || !string.IsNullOrEmpty(entity.KinLastName))
                 {
                     NextOfKinEntity nextOfKinEntity = new()
                     {
                         Company = entity.Company,
                         Employee = entity.Id,
-                        FirstName = entity.KinFirstNumber,
+                        FirstName = entity.KinFirstName,
                         LastName = entity.KinLastName,
                         MobileNumber = entity.KinMobileNumber,
-                        Relationship = entity.KinRelationship
+                        Relationship = entity.KinRelationship,
+                        EmailAddress = entity.KinEmailAddress,
+                        Address = entity.KinAddress
                     };
                     await nextOfKinEntity.Create();
                     await db.Insert(nextOfKinEntity);
@@ -219,14 +289,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await db.Insert(userEntity);
                 }
 
-                MailParameter mailParameter = new()
-                {
-                    RealName = entity.FirstName,
-                    UserName = entity.EmailAddress,
-                    UserEmail = entity.EmailAddress,
-                    UserPassword = entity.DecryptedPassword,
-                    UserCompany = entity.CompanyName
-                };
+                //MailParameter mailParameter = new()
+                //{
+                //    RealName = entity.FirstName,
+                //    UserName = entity.EmailAddress,
+                //    UserEmail = entity.EmailAddress,
+                //    UserPassword = entity.DecryptedPassword,
+                //    UserCompany = entity.CompanyName
+                //};
 
                 //if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
                 //{
@@ -281,16 +351,18 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 }
 
                 // Next of kin record
-                if (!string.IsNullOrEmpty(entity.KinFirstNumber) && !string.IsNullOrEmpty(entity.KinLastName) && !string.IsNullOrEmpty(entity.KinMobileNumber) && !entity.KinRelationship.IsNullOrZero())
+                if (!string.IsNullOrEmpty(entity.KinFirstName) && !string.IsNullOrEmpty(entity.KinLastName))
                 {
                     NextOfKinEntity nextOfKinEntity = new()
                     {
                         Company = entity.Company,
                         Employee = entity.Id,
-                        FirstName = entity.KinFirstNumber,
+                        FirstName = entity.KinFirstName,
                         LastName = entity.KinLastName,
                         MobileNumber = entity.KinMobileNumber,
-                        Relationship = entity.KinRelationship
+                        Relationship = entity.KinRelationship,
+                        Address = entity.KinAddress,
+                        EmailAddress = entity.KinEmailAddress
                     };
                     await nextOfKinEntity.Create();
                     await db.Insert(nextOfKinEntity);
@@ -359,6 +431,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         //{
         //    return await BaseRepository().FindEntity<EmployeeEntity>(x => x.NHFNumber == nhfNo);
         //}
+        //public async Task<EmployeeEntity> GetEntityByNhfNumber(long nhfNo)
+        //{
+        //    return await BaseRepository().FindEntity<EmployeeEntity>(x => x.NHFNumber == nhfNo);
+        //}
 
 
         public async Task DeleteForm(string ids)
@@ -367,7 +443,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             await BaseRepository().Delete<EmployeeEntity>(idArr);
         }
 
-        public async Task ApproveForm(EmployeeEntity entity, MenuEntity menu, OperatorInfo user)
+        public async Task<bool> ApproveForm(EmployeeEntity entity, MenuEntity menu, OperatorInfo user, UserEntity loginProfile)
         {
             var message = string.Empty;
             var approvalLog = new ApprovalLogEntity();
@@ -404,21 +480,55 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 }
                 else if (approvalLog.ApprovalCount == approvalLog.ApprovalLevel)
                 {
-                    MailParameter mailParameter = new()
-                    {
-                        UserName = user.UserName,
-                        UserEmail = entity.EmailAddress,
-                        UserPassword = user.DecryptedPassword
-                    };
+                    MailParameter mailParameter = new MailParameter();
+
+                    mailParameter.UserName = loginProfile.UserName;
+                    mailParameter.UserEmail = entity.EmailAddress;
+                    mailParameter.UserPassword = loginProfile.DecryptedPassword;
+                    mailParameter.RealName = entity.LastName + " " + entity.FirstName;
+                    mailParameter.UserCompany = entity.CompanyName;
+                    mailParameter.NhfNumber = Convert.ToString(entity.NHFNumber);
+
+
 
                     if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
                     {
                         if (string.IsNullOrEmpty(message))
                         {
                             await db.CommitTrans();
+                            return true;
                         }
                     }
                 }
+                await db.CommitTrans();
+                return true;
+
+            }
+            catch
+            {
+                await db.RollbackTrans();
+                throw;
+            }
+        }
+
+
+
+        public async Task RejectForm(EmployeeEntity entity)
+        {
+            var message = string.Empty;
+            var approvalLog = new ApprovalLogEntity();
+            var db = await BaseRepository().BeginTrans();
+            try
+            {
+
+                entity.Status = (int)ApprovalEnum.Rejected;
+                await entity.Modify();
+                await db.Update(entity);
+
+                await db.CommitTrans();
+
+
+
             }
             catch
             {
@@ -434,18 +544,44 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var expression = ExtensionLinq.True<EmployeeEntity>();
             if (param != null)
             {
-                if (param.NHFNumber > 0)
+                if (param.Company > 0)
                 {
-                    expression = expression.And(t => t.NHFNumber == param.NHFNumber);
+                    expression = expression.And(t => t.Company == param.Company);
                 }
 
-                if (!string.IsNullOrEmpty(param.FirstName) && !string.IsNullOrEmpty(param.LastName))
-                {
-                    expression = expression.And(t => t.FirstName.Contains(param.FirstName) && t.LastName.Contains(param.LastName));
-                }
+
             }
             return expression;
         }
+
+        //private Expression<Func<EmployeeEntity, bool>> ListFilter(EmployeeListParam param)
+        //{
+        //    var expression = ExtensionLinq.True<EmployeeEntity>();
+        //    if (param != null)
+        //    {
+        //        if (param.Company != 0)
+        //        {
+        //            expression = expression.And(t => t.Company == param.Company);
+        //        }
+        //    }
+        //    return expression;
+        //}
+
+        private Expression<Func<EmployeeEntity, bool>> ListFilters(EmployeeListParam param)
+        {
+            var expression = ExtensionLinq.True<EmployeeEntity>();
+            if (param != null)
+            {
+                if (!string.IsNullOrEmpty(param.FirstName))
+                {
+                    expression = expression.And(t => t.FirstName == param.FirstName);
+                }
+
+            }
+            return expression;
+        }
+
+
         #endregion
     }
 }

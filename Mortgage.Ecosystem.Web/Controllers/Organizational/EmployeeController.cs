@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -10,15 +11,18 @@ using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
+    [ExceptionFilter]
     public class EmployeeController : BaseController
     {
         private readonly IEmployeeService _employeeService;
         private readonly IUserService _userService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public EmployeeController(IUnitOfWork iUnitOfWork, IEmployeeService employeeService, IUserService userService) : base(iUnitOfWork)
+        public EmployeeController(IUnitOfWork iUnitOfWork, IEmployeeService employeeService, IUserService userService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _employeeService = employeeService;
             _userService = userService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -47,27 +51,41 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #endregion View function
 
         #region Get data
-        [HttpGet]
-        [AuthorizeFilter("employee:search,user:search")]
+        //[HttpGet]
+        //[AuthorizeFilter("employee:search,user:search")]
+        //public async Task<IActionResult> GetListJson(EmployeeListParam param)
+        //{
+        //    TData<List<EmployeeEntity>> obj = await _employeeService.GetList(param);
+        //    return Json(obj);
+        //}
+
+        public async Task<IActionResult> GetListJson2(EmployeeListParam param)
+        {
+            TData<List<EmployeeEntity>> obj = await _employeeService.GetList2(param);
+            return Json(obj);
+        }
+
+
         public async Task<IActionResult> GetListJson(EmployeeListParam param)
         {
             TData<List<EmployeeEntity>> obj = await _employeeService.GetList(param);
             return Json(obj);
         }
-
         [HttpGet]
         [AuthorizeFilter("employee:search,user:search")]
         public async Task<IActionResult> GetPageListJson(EmployeeListParam param, Pagination pagination)
         {
             TData<List<EmployeeEntity>> obj = await _employeeService.GetPageList(param, pagination);
+
             return Json(obj);
         }
 
         [HttpGet]
-        [AuthorizeFilter("employee:search,user:search")]
+        //[AuthorizeFilter("employee:search,user:search")]
         public async Task<IActionResult> GetApprovalPageListJson(EmployeeListParam param, Pagination pagination)
         {
             TData<List<EmployeeEntity>> obj = await _employeeService.GetApprovalPageList(param, pagination);
+
             return Json(obj);
         }
 
@@ -76,6 +94,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetEmployeeTreeListJson(EmployeeListParam param)
         {
             TData<List<ZtreeInfo>> obj = await _employeeService.GetZtreeEmployeeList(param);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetEmployeeTreeListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Employee.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 
@@ -92,19 +115,45 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         #region Submit data
         [HttpPost]
-        [AuthorizeFilter("employee:add,employee:edit")]
+        //[AuthorizeFilter("employee:add,employee:edit")]
         public async Task<IActionResult> SaveFormJson(EmployeeEntity entity)
         {
-            TData<string> obj = await _employeeService.SaveForm(entity);
-            return Json(obj);
+            try
+            {
+                TData<string> obj = await _employeeService.SaveForm(entity);
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.RegisterEmployee.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Employee.ToString();
+                auditInstance.UserName = entity.Id.ToString();
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
 
         [HttpPost]
-        [AuthorizeFilter("employee:add,employee:edit")]
+        //[AuthorizeFilter("employee:add,employee:edit")]
         public async Task<IActionResult> SaveFormsJson(EmployeeEntity entity)
         {
-            TData<string> obj = await _employeeService.SaveForms(entity);
-            return Json(obj);
+            try
+            {
+                TData<string> obj = await _employeeService.SaveForms(entity);
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.RegisterEmployee.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Employee.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
 
         [HttpPost]
@@ -116,11 +165,44 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         [HttpPost]
-        [AuthorizeFilter("employee:add,employee:edit")]
         public async Task<IActionResult> ApproveFormJson(EmployeeEntity entity)
         {
-            TData obj = await _employeeService.ApproveForm(entity);
-            return Json(obj);
+            try
+            {
+                TData obj = await _employeeService.ApproveForm(entity);
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.ApproveEmployee.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Employee.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> RejectFormJson(EmployeeEntity entity, string Remark)
+        {
+            try
+            {
+                TData obj = await _employeeService.RejectForm(entity, Remark);
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.RejectEmployee.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Employee.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
         #endregion Submit data
     }

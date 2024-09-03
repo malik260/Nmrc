@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -14,10 +15,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class ChecklistController : BaseController
     {
         private readonly IChecklistService _iChecklistService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public ChecklistController(IUnitOfWork iUnitOfWork, IChecklistService iChecklistService) : base(iUnitOfWork)
+        public ChecklistController(IUnitOfWork iUnitOfWork, IChecklistService iChecklistService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iChecklistService = iChecklistService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -54,6 +57,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("checklist:search,user:search")]
         public async Task<IActionResult> GetChecklistTreeListJson(ChecklistListParam param)
         {
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetChecklistTreeListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Checklist.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             TData<List<ZtreeInfo>> obj = await _iChecklistService.GetZtreeChecklistList(param);
             return Json(obj);
         }
@@ -70,6 +78,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("checklist:view")]
         public async Task<IActionResult> GetUserTreeListJson(ChecklistListParam param)
         {
+
             TData<List<ZtreeInfo>> obj = await _iChecklistService.GetZtreeUserList(param);
             return Json(obj);
         }

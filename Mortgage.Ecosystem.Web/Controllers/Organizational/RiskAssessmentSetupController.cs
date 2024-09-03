@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -14,10 +15,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class RiskAssessmentSetupController : BaseController
     {
         private readonly IRiskAssessmentSetupService _iRiskAssessmentSetupService;
-
-        public RiskAssessmentSetupController(IUnitOfWork iUnitOfWork, IRiskAssessmentSetupService iRiskAssessmentSetupService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public RiskAssessmentSetupController(IUnitOfWork iUnitOfWork, IRiskAssessmentSetupService iRiskAssessmentSetupService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iRiskAssessmentSetupService = iRiskAssessmentSetupService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -53,8 +55,22 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("riskassessmentsetup:search,user:search")]
         public async Task<IActionResult> GetAssessmentFactorsPageListJson(RiskAssessmentSetupListParam param, Pagination pagination)
         {
-            TData<List<RiskAssessmentSetupEntity>> obj = await _iRiskAssessmentSetupService.GetPageList(param, pagination);
-            return Json(obj);
+            try
+            {
+                TData<List<RiskAssessmentSetupEntity>> obj = await _iRiskAssessmentSetupService.GetPageList(param, pagination);
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.GetAssessmentFactorsPageListJson.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.RiskAssessmentSetup.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+
+                return Json(obj);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
 
 

@@ -34,6 +34,16 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return await BaseRepository().FindEntity<UserEntity>(id);
         }
 
+        public async Task<UserEntity> GetEntityByCompany(long company)
+        {
+            return await BaseRepository().FindEntity<UserEntity>(p=> p.Company == company);
+        }
+
+        public async Task<UserEntity> GetEntityByPmb(long pmb)
+        {
+            return await BaseRepository().FindEntity<UserEntity>(p => p.Pmb == pmb);
+        }
+
         public async Task<UserEntity> GetEntity(string userName)
         {
             return await BaseRepository().FindEntity<UserEntity>(p => p.UserName == userName);
@@ -171,6 +181,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             await BaseRepository().Update(entity);
         }
 
+        public async Task<UserEntity> GetEntityByUsername(string username)
+        {
+            return await BaseRepository().FindEntity<UserEntity>(x => x.UserName == username);
+        }
         #endregion Submit data
 
         #region private method

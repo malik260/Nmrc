@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -13,10 +14,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class DiasporaUserController : BaseController
     {
         private readonly IDiasporaUserService _iDiasporaUserService;
-
-        public DiasporaUserController(IUnitOfWork iUnitOfWork, IDiasporaUserService iDiasporaUserService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public DiasporaUserController(IUnitOfWork iUnitOfWork, IDiasporaUserService iDiasporaUserService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iDiasporaUserService = iDiasporaUserService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -46,6 +48,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetDiasporaUserPageListJson(DiasporaUserListParam param, Pagination pagination)
         {
             TData<List<DiasporaUserEntity>> obj = await _iDiasporaUserService.GetPageList(param, pagination);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetDiasporaUserPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.DiasporaUser.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

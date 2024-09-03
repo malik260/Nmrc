@@ -8,12 +8,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface ICreditAssessmentIndexService
     {
-        Task<TData<List<CreditAssessmentIndexEntity>>> GetList(int indexTitleId);
-        Task<TData<CreditAssessmentIndexEntity>> GetEntity(long id);        
+        Task<List<CreditAssessmentIndexEntity>> GetList(int indexTitleId);
+        Task<TData<CreditAssessmentIndexEntity>> GetEntity(long id);
         Task<TData<string>> SaveForm(CreditAssessmentIndexEntity entity);
         Task<TData<string>> UpdateForm(CreditAssessmentIndexEntity entity);
+        Task<TData<List<CreditAssessmentIndexEntity>>> GetPageList(CreditAssessmentIndexListParam param, Pagination pagination)
+;
 
         Task<TData> DeleteForm(string ids);
-       
+
     }
 }

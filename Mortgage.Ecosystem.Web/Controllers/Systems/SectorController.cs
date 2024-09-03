@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class SectorController : BaseController
     {
         private readonly ISectorService _iSectorService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public SectorController(IUnitOfWork iUnitOfWork, ISectorService iSectorService) : base(iUnitOfWork)
+        public SectorController(IUnitOfWork iUnitOfWork, ISectorService iSectorService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iSectorService = iSectorService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +37,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("sector:search,user:search")]
+        //[AuthorizeFilter("sector:search,user:search")]
         public async Task<IActionResult> GetListJson(SectorListParam param)
         {
             TData<List<SectorEntity>> obj = await _iSectorService.GetList(param);
@@ -68,6 +71,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetSectorName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Sector.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
         #endregion

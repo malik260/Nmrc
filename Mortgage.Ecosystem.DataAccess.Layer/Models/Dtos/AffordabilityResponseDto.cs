@@ -13,5 +13,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
         public string monthlyRepayment { get; set; }
         public int? proposedTenor { get; set; }
         public decimal rate { get; set; }
+        public string message { get; set; }
     }
 }

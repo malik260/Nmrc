@@ -19,13 +19,11 @@
                                         <div class="select-list">
                                             <ul>
                                                 <li>
-                                                    <label>Name: </label> <input id="name" col="Name" type="text" />
+                                                    <label>First Name: </label> <input id="name" col="FirstName" type="text" />
                                                 </li>
-                                                <li class="select-time">
-                                                    <label>Created: </label>
-                                                    <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                                                    <span>-</span>
-                                                    <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                                                <li class="select-list">
+                                                    <label>Last Name: </label> <input id="name" col="LastName" type="text" />
+
                                                 </li>
                                                 <li>
                                                     <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchEmployeeGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
@@ -51,6 +49,12 @@
     </div>
 </div>
 
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 <script type="text/javascript">
     $(function () {
         initGrid();
@@ -71,21 +75,21 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'CompanyName', title: 'Company', sortable: true },
-                { field: 'BranchName', title: 'Branch', visible: false, sortable: true },
-                { field: 'DepartmentName', title: 'Department', visible: false, sortable: true },
-                { field: 'TitleName', title: 'Title', visible: false, sortable: true },
-                { field: 'FirstName', title: 'FirstName', sortable: true },
-                { field: 'OtherName', title: 'Other Name(s)', sortable: true },
-                { field: 'LastName', title: 'Last Name', sortable: true },
-                { field: 'BVN', title: 'BVN', sortable: true },
-                { field: 'NIN', title: 'NIN', visible: false, sortable: true },
-                { field: 'GenderName', title: 'Gender', sortable: true },
-                { field: 'DateOfBirth', title: 'Date Of Birth', visible: false, sortable: true },
-                { field: 'MaritalStatusName', title: 'Marital Status', visible: false, sortable: true },
-                { field: 'PostalAddress', title: 'Postal Address', visible: false, sortable: true },
-                { field: 'EmailAddress', title: 'Email Address', visible: false, sortable: true },
-                { field: 'MobileNumber', title: 'Mobile Number', sortable: true },
+                { field: 'CompanyName', title: 'Company', sortable: false },
+                { field: 'BranchName', title: 'Branch', visible: false, sortable: false },
+                { field: 'DepartmentName', title: 'Department', visible: false, sortable: false },
+                { field: 'TitleName', title: 'Title', visible: false, sortable: false },
+                { field: 'FirstName', title: 'FirstName', sortable: false },
+                { field: 'OtherName', title: 'Other Name(s)', sortable: false },
+                { field: 'LastName', title: 'Last Name', sortable: false },
+                { field: 'BVN', title: 'BVN', sortable: false },
+                { field: 'NIN', title: 'NIN', visible: false, sortable: false },
+                { field: 'GenderName', title: 'Gender', sortable: false },
+                { field: 'DateOfBirth', title: 'Date Of Birth', visible: false, sortable: false },
+                { field: 'MaritalStatusName', title: 'Marital Status', visible: false, sortable: false },
+                { field: 'PostalAddress', title: 'Postal Address', visible: false, sortable: false },
+                { field: 'EmailAddress', title: 'Email Address', visible: false, sortable: false },
+                { field: 'MobileNumber', title: 'Mobile Number', sortable: false },
                 {
                     field: 'EmploymentType', title: 'Employment Type', align: 'center',
                     formatter: function (value, row, index) {
@@ -96,13 +100,13 @@
                         }
                     }
                 },
-                { field: 'DateOfEmployment', title: 'Date Of Employment', visible: false, sortable: true },
-                { field: 'StaffNumber', title: 'Staff Number', visible: false, sortable: true },
-                { field: 'BankName', title: 'Bank Name', visible: false, sortable: true },
-                { field: 'BankAccountNumber', title: 'Account Number', visible: false, sortable: true },
-                { field: 'AccountTypeName', title: 'Account Type', visible: false, sortable: true },
-                { field: 'MonthlySalary', title: 'Monthly Salary', visible: false, sortable: true },
-                { field: 'AlertTypeName', title: 'Alert Type', visible: false, sortable: true },
+                { field: 'DateOfEmployment', title: 'Date Of Employment', visible: false, sortable: false },
+                { field: 'StaffNumber', title: 'Staff Number', visible: false, sortable: false },
+                { field: 'CustomerBank', title: 'Bank Name', visible: false, sortable: false },
+                { field: 'BankAccountNumber', title: 'Account Number', visible: false, sortable: false },
+                { field: 'AccountTypeName', title: 'Account Type', visible: false, sortable: false },
+                { field: 'MonthlySalary', title: 'Monthly Salary', visible: false, sortable: false },
+                { field: 'AlertTypeName', title: 'Alert Type', visible: false, sortable: false },
                 {
                     field: 'BaseModifyTime', title: 'Create Time', visible: false, formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
@@ -174,7 +178,7 @@
             '<div class="form-row">' +
             '<div class="form-group col-sm-6">' +
             '<label for="bankName">Bank Name:</label>' +
-            '<input type="text" id="bankName" name="bankName" placeholder="Bank Name" class="form-control text-left" readonly value="' + row.BankName + '"/>' +
+            '<input type="text" id="bankName" name="bankName" placeholder="Bank Name" class="form-control text-left" readonly value="' + row.CustomerBank + '"/>' +
             '</div>' +
             '<div class="form-group col-sm-6">' +
             '<label for="bankAccountNo">Bank Account Number:</label>' +
@@ -213,44 +217,118 @@
     function approveEmployeeForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowApprove(selectedRow)) {
-            cn.confirm("Confirm to approve this record?", function () {
-                var id = cn.getIds(selectedRow);
-                cn.ajax({
-                    url: '@Url.Content("~/Employee/ApproveFormJson")' + '?id=' + id,
-                    type: "post",
-                    error: cn.ajaxError,
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            searchEmployeeGrid();
+            Swal.fire({
+                title: 'Employee Registration',
+                text: "Are you sure you want to approve the employee registration?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, approve it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = cn.getIds(selectedRow);
+                    cn.ajax({
+                        url: '@Url.Content("~/Employee/ApproveFormJson")' + '?id=' + id,
+                        type: "post",
+                        error: cn.ajaxError,
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire(
+                                    'Approved!',
+                                    obj.Message,
+                                    'success'
+                                );
+                                searchEmployeeGrid();
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    obj.Message,
+                                    'error'
+                                );
+                            }
                         }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
+                    });
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Swal.fire(
+                        'Cancelled',
+                        'The employee registration is not approved',
+                        'error'
+                    );
+                }
             });
+        } else {
+            Swal.fire(
+                'No selection!',
+                'Please select a record to approve.',
+                'warning'
+            );
         }
     }
 
     function rejectEmployeeForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        cn.confirm("Confirm to reject this record?", function () {
-            var id = selectedRow[0].Id;
-            cn.ajax({
-                url: '@Url.Content("~/Employee/RejectFormJson")' + '?id=' + id,
-                type: "post",
-                success: function (obj) {
-                    if (obj.Tag == 1) {
-                        cn.msgSuccess("Rejected");
-                        searchEmployeeGrid();
-                    }
-                    else {
-                        cn.msgError(obj.Message);
+        if (selectedRow.length > 0) {
+            Swal.fire({
+                title: 'Employee Registration',
+                text: "Are you sure you want to reject this record?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, reject it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true,
+                input: 'textarea',
+                inputPlaceholder: 'Enter your remark here...',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to write a remark!';
                     }
                 }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = selectedRow[0].Id;
+                    var Remark = result.value;
+                    cn.ajax({
+                        url: '@Url.Content("~/Employee/RejectFormJson")' + '?id=' + id + '&Remark=' + encodeURIComponent(Remark),
+                        type: "post",
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire(
+                                    'Rejected!',
+                                    obj.Message,
+                                    'success'
+                                );
+                                searchEmployeeGrid();
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    obj.Message,
+                                    'error'
+                                );
+                            }
+                        }
+                    });
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Swal.fire(
+                        'Cancelled',
+                        'The record has not been rejected',
+                        'error'
+                    );
+                }
             });
-        });
+        } else {
+            Swal.fire(
+                'No selection!',
+                'Please select a record to reject.',
+                'warning'
+            );
+        }
     }
 
     function redirectToIndex() {

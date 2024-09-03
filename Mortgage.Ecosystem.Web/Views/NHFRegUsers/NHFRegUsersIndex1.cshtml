@@ -199,11 +199,11 @@
 
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'EffectiveDate', title: 'Effective Date', sortable: true },
-                { field: 'Phone', title: 'Phone', sortable: true },
-                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: true },
-                { field: 'Name', title: 'Employee Name', sortable: true },
-                { field: 'Email', title: 'Email Address', sortable: true },
+                { field: 'EffectiveDate', title: 'Effective Date', sortable: false },
+                { field: 'Phone', title: 'Phone', sortable: false },
+                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: false },
+                { field: 'Name', title: 'Employee Name', sortable: false },
+                { field: 'Email', title: 'Email Address', sortable: false },
                 {
                     field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
@@ -263,10 +263,10 @@
 
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: true },
-                { field: 'Name', title: 'Employee Name', sortable: true },
-                { field: 'ContactPerson', title: 'Contact Person', sortable: true },
-                { field: 'RCNumber', title: 'RC Number', sortable: true },
+                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: false },
+                { field: 'Name', title: 'Employee Name', sortable: false },
+                { field: 'ContactPerson', title: 'Contact Person', sortable: false },
+                { field: 'RCNumber', title: 'RC Number', sortable: false },
                 {
                     field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");

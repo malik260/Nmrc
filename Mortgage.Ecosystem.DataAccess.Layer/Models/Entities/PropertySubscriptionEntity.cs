@@ -31,13 +31,16 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Developer")]
         public string? Developer { get; set; }
 
+        [Column("Subscriber")]
+        public string? Subscriber { get; set; }
+
         // Property Description
         [Column("PropertyDescription")]
         public string? PropertyDescription { get; set; }
 
         // Property Pictures
-        [Column("ViewPictures")]
-        public byte? ViewPictures { get; set; }
+        //[Column("ViewPictures")]
+        //public byte? ViewPictures { get; set; }
 
         // Property Actions
         [NotMapped]

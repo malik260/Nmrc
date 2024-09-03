@@ -19,7 +19,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("RiskFactorId")]
         public int RiskFactorId { get; set; }
 
+        [NotMapped]
+        public string? RiskFactorDesc { get; set; }
+
         [Column("ProductCode")]
         public string? ProductCode { get; set; }
+
+        [NotMapped]
+        public string? ProductName { get; set; }
     }
 }

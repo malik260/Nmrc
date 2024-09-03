@@ -56,13 +56,13 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'NhfNumber', title: 'NHF Number', sortable: true },
-                { field: 'Name', title: 'Customer Name', sortable: true },
-                { field: 'EmployerNumber', title: 'Employer Number', sortable: true },
-                { field: 'MobileNumber', title: 'Mobile Number', sortable: true },
-                { field: 'EmployerName', title: 'Employer Name', visible: false, sortable: true },
-                { field: 'BankAccountNumber', title: 'Bank Account Number', visible: false, sortable: true },
-                { field: 'YearOfService', title: 'Year Of Service', sortable: true },
+                { field: 'NhfNumber', title: 'NHF Number', sortable: false },
+                { field: 'Name', title: 'Customer Name', sortable: false },
+                { field: 'EmployerNumber', title: 'Employer Number', sortable: false },
+                { field: 'MobileNumber', title: 'Mobile Number', sortable: false },
+                { field: 'EmployerName', title: 'Employer Name', visible: false, sortable: false },
+                { field: 'BankAccountNumber', title: 'Bank Account Number', visible: false, sortable: false },
+                { field: 'YearOfService', title: 'Year Of Service', sortable: false },
                 {
                     field: 'Status', title: 'Status', align: 'center',
                     formatter: function (value, row, index) {

@@ -20,6 +20,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<FinanceCounterpartyTransactionEntity>> GetLists(String NhfNumber)
+        {
+            var expression = ListFilters(NhfNumber);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
+
+
         public async Task<List<FinanceCounterpartyTransactionEntity>> GetPageList(FinanceCounterpartyTransactionListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
@@ -90,6 +98,19 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 if (!string.IsNullOrEmpty(param.Ref))
                 {
                     expression = expression.And(t => t.Ref.Contains(param.Ref));
+                }
+            }
+            return expression;
+        }
+
+        private Expression<Func<FinanceCounterpartyTransactionEntity, bool>> ListFilters(string NhfNumber)
+        {
+            var expression = ExtensionLinq.True<FinanceCounterpartyTransactionEntity>();
+            if (NhfNumber != null)
+            {
+                if (!string.IsNullOrEmpty(NhfNumber))
+                {
+                    expression = expression.And(t => t.Ref == NhfNumber && t.Approved == 1);
                 }
             }
             return expression;

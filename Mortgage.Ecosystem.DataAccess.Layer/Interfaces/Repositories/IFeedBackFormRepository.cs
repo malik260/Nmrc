@@ -8,9 +8,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
     {
         Task<List<FeedBackFormEntity>> GetList(FeedBackFormListParam param);
         Task<List<FeedBackFormEntity>> GetPageList(FeedBackFormListParam param, Pagination pagination);
+        Task<List<FeedBackFormEntity>> GetEmployeePageList(FeedBackFormListParam param, Pagination pagination);
         Task<FeedBackFormEntity> GetEntity(long id);
         Task<int> GetMaxSort();
         Task SaveForm(FeedBackFormEntity entity);
+        Task UpdateForm(FeedBackFormEntity entity);
         Task DeleteForm(string ids);
     }
 }

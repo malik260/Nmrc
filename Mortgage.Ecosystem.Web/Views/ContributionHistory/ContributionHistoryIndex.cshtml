@@ -12,19 +12,19 @@
                 <ul>
 
                     <li class="select-time">
-                        <label>Created: </label>
+                        <label>Start Date: </label>
                         <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
                         <span>-</span>
+                        <label>End Date: </label>
                         <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
                     </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
-                    </li>
+                    @*                    <li>
+                    <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
+                    </li>*@
                 </ul>
             </div>
             <div class="btn-group-sm" id="toolbar">
-                <a id="btnViewStatement" class="btn btn-success">View Statement</a>
-                <a id="btnClear" class="btn btn-danger disabled">Clear</a>
+                <a id="btnViewStatement" class="btn btn-success" onclick="searchGrid()">View Statement</a>
 
             </div>
         </div>
@@ -47,27 +47,33 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/ContributionHistory/GetContributionHistoryPageListJson")';
+
+
+        debugger
+        //var queryUrl = '@Url.Content("~/ContributionHistory/GetContributionHistoryPageListJson")' + '?startdate=' + start + '?enddate=' + end;
+
+        var queryUrl = '@Url.Content("~/Contribution/GetListJson")';
         $('#contributionHistoryTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'NHFNumber', title: 'NHF Number', sortable: true },
-                { field: 'Name', title: 'Employee Name', sortable: true },
-                { field: 'EmployerName', title: 'Employer Name', sortable: true },
-                { field: 'AmountContributed', title: 'Amount Contributed', sortable: true },
-                { field: 'Remarks', title: 'Remarks', sortable: true },
-                { field: 'Month', title: 'Month', sortable: true },
-                { field: 'Year', title: 'Year', sortable: true },
+                { field: 'NhfNo', title: 'NHF Number', sortable: false },
+                { field: 'EmployeeName', title: 'Employee Name', sortable: false },
+                { field: 'employerName', title: 'Employer Name', sortable: false },
+                { field: 'contributionAmount', title: 'Amount Contributed', sortable: false },
+                { field: 'naration', title: 'Remarks', sortable: false },
+                { field: 'month', title: 'Month', sortable: false },
+                { field: 'year', title: 'Year', sortable: false },
 
                 {
                     field: 'Status', title: 'Status', align: 'center',
                     formatter: function (value, row, index) {
-                        if (value == "@StatusEnum.Yes.ToInt()") {
-                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
+                        value = "3";
+                        if (value == "@PayStatusEnum.Success.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@PayStatusEnum.Success.GetDescription()" + '</span>';
                         } else {
-                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
+                            return '<span class="badge badge-warning">' + "@PayStatusEnum.Success.GetDescription()" + '</span>';
                         }
                     }
                 },
@@ -86,6 +92,8 @@
     }
 
     function searchGrid() {
+        //var start = $('#StartTime').val();
+        //var end = $('#EndTime').val();
         $('#contributionHistoryTable').cnTable('search');
         resetToolbarStatus();
     }

@@ -8,7 +8,7 @@
         // User Id or Role Id
         public long? AuthorizeId { get; set; }
 
-        // User or role
+        // User or role 
         public int? AuthorizeType { get; set; }
 
         // Permission ID

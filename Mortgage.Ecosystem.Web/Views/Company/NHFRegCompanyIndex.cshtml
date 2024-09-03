@@ -21,12 +21,7 @@
                                                 <li>
                                                     <label>Name: </label> <input id="name" col="Name" type="text" />
                                                 </li>
-                                                <li class="select-time">
-                                                    <label>Created: </label>
-                                                    <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                                                    <span>-</span>
-                                                    <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                                                </li>
+                                               
                                                 <li>
                                                     <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchEmployerGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
                                                 </li>
@@ -51,6 +46,12 @@
     </div>
 </div>
 
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 <script type="text/javascript">
     $(function () {
         initGrid();
@@ -69,23 +70,23 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'Name', title: 'Employer Name', sortable: true },
-                { field: 'RCNumber', title: 'RC Number', sortable: true },
-                { field: 'ContactPerson', title: 'Contact Person', sortable: true },
+                { field: 'Name', title: 'Employer Name', sortable: false },
+                { field: 'RCNumber', title: 'RC Number', sortable: false },
+                { field: 'Address', title: 'Address', sortable: false },
                 {
                     field: 'DateOfIncorporation',
                     title: 'Date Of Incorporation',
                     visible: true,
-                    sortable: true,
+                    sortable: false,
                     formatter: function (value, row, index) {
                         var date = new Date(value);
                         return date.toLocaleDateString(); // This will display the date in the user's locale format (e.g., '08/31/2023')
                     }
                 },
-                { field: 'NatureOfBusiness', title: 'Nature Of Business', visible: true, sortable: true },
-                { field: 'NameOfRegistrar', title: 'Name Of Registrar', visible: false, sortable: true },
-                { field: 'CompanyClassName', title: 'Class', visible: false, sortable: true },
-                { field: 'CompanyTypeName', title: 'Type', visible: false, sortable: true },
+                { field: 'EmailAddress', title: 'Email Address', visible: true, sortable: false },
+                { field: 'NameOfRegistrar', title: 'Name Of Registrar', visible: false, sortable: false },
+                //{ field: 'CompanyClassName', title: 'Class', visible: false, sortable: false },
+                { field: 'CompanyTypeName', title: 'Type', visible: false, sortable: false },
                 {
                     field: 'BaseModifyTime', title: 'Create Time', visible: false, formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
@@ -126,6 +127,8 @@
         $detail.html('Loading data ...');
         var date = new Date(row.BaseModifyTime);
         var formattedDate = date.toLocaleDateString(); // Format as a localized date string
+        var dateOfIncorporation = new Date(row.DateOfIncorporation);
+        var formattedDateOfIncorporation = dateOfIncorporation.toLocaleDateString(); // Format as a localized date string
         var htmlData =
             '<div class="card">' +
             '<div class="card-header text-center" > ' +
@@ -169,14 +172,14 @@
             '<input type="text" id="contributionFrequency" name="contributionFrequency" placeholder="BVN" class="form-control text-left" readonly value="' + row.ContributionFrequencyName + '"/>' +
             '</div>' +
             '<div class="form-group col-sm-6">' +
-            '<label for="companyClass">Company Class:</label>' +
-            '<input type="text" id="nin" name="companyClass" placeholder="Company Class" class="form-control text-left" readonly value="' + row.CompanyClassName + '"/>' +
+            '<label for="website">Website:</label>' +
+            '<input type="text" id="website" name="website" placeholder="Website" class="form-control text-left" readonly value="' + row.Website + '"/>' +
             '</div>' +
             '</div>' +
             '<div class="form-row">' +
             '<div class="form-group col-sm-6">' +
-            '<label for="contributionType">Company Type:</label>' +
-            '<input type="text" id="bankName" name="companyType" placeholder="Company Type" class="form-control text-left" readonly value="' + row.CompanyTypeName + '"/>' +
+            '<label for="dateOfIncorporation">Date Of Incorporation:</label>' +
+            '<input type="text" id="dateOfIncorporation" name="dateOfIncorporation" placeholder="Date Of Incorporation" class="form-control text-left" readonly value="' + formattedDateOfIncorporation + '"/>' +
             '</div>' +
             '<div class="form-group col-sm-6">' +
             '<label for="address">Address:</label>' +
@@ -236,45 +239,112 @@
     function approveEmployerForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowApprove(selectedRow)) {
-            cn.confirm("Confirm to approve this record?", function () {
-                var id = cn.getIds(selectedRow);
-                cn.ajax({
-                    url: '@Url.Content("~/Company/ApproveFormJson")' + '?id=' + id,
-                    type: "post",
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            searchEmployerGrid();
-                            //redirectToIndex();
+            Swal.fire({
+                title: 'Employer Registration',
+                text: "Confirm to approve this record?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, approve it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = cn.getIds(selectedRow);
+                    cn.ajax({
+                        url: '@Url.Content("~/Company/ApproveFormJson")' + '?id=' + id,
+                        type: "post",
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire(
+                                    'Approved!',
+                                    obj.Message,
+                                    'success'
+                                );
+                                searchEmployerGrid();
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    obj.Message,
+                                    'error'
+                                );
+                            }
                         }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire(
+                        'Cancelled',
+                        'The record has not been approved',
+                        'error'
+                    );
+                }
             });
+        } else {
+            Swal.fire(
+                'No selection!',
+                'Please select a record to approve.',
+                'warning'
+            );
         }
     }
 
     function rejectEmployerForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        cn.confirm("Confirm to reject this record?", function () {
-            var id = selectedRow[0].Id;
-            cn.ajax({
-                url: '@Url.Content("~/Company/RejectFormJson")' + '?id=' + id,
-                type: "post",
-                success: function (obj) {
-                    if (obj.Tag == 1) {
-                        cn.msgSuccess("Rejected");
-                        searchEmployerGrid();
-                        //redirectToIndex();
+        if (selectedRow.length > 0) {
+            Swal.fire({
+                title: 'Employer Registration',
+                text: "Confirm to disapprove this record?",
+                icon: 'warning',
+                input: 'text',
+                inputPlaceholder: 'Enter rejection remark',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, reject it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true,
+                preConfirm: (remark) => {
+                    if (!remark) {
+                        Swal.showValidationMessage('Rejection remark is required');
                     }
-                    else {
-                        cn.msgError(obj.Message);
-                    }
+                    return remark;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = selectedRow[0].Id;
+                    var remark = result.value;
+                    cn.ajax({
+                        url: '@Url.Content("~/Company/RejectFormJson")' + '?id=' + id + '&remark=' + remark,
+                        type: "post",
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire(
+                                    'Rejected!',
+                                    'The record has been rejected.',
+                                    'success'
+                                );
+                                searchEmployerGrid();
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    obj.Message,
+                                    'error'
+                                );
+                            }
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire(
+                        'Cancelled',
+                        'The record has not been rejected',
+                        'error'
+                    );
                 }
             });
-        });
+        } else {
+            Swal.fire(
+                'No selection!',
+                'Please select a record to reject.',
+                'warning'
+            );
+        }
     }
 
     function redirectToIndex() {

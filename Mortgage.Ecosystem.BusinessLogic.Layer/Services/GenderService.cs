@@ -37,7 +37,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
-        public async Task<TData<GenderEntity>> GetEntity(long id)
+        public async Task<TData<GenderEntity>> GetEntity(int id)
         {
             TData<GenderEntity> obj = new TData<GenderEntity>();
             obj.Data = await _iUnitOfWork.Genders.GetEntity(id);

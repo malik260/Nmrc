@@ -12,5 +12,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task SaveForm(LogLoginEntity entity);
         Task DeleteForm(string ids);
         Task RemoveAllForm();
+        Task<List<LogLoginEntity>> GetUsersPageList(LogLoginListParam param, Pagination pagination);
     }
 }

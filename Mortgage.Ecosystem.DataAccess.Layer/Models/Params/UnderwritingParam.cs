@@ -7,6 +7,7 @@
         public string? Tenor { get; set; }
         public string? InterestRate { get; set; }
         public decimal LoanAmount { get; set; }
+        public string? pmb { get; set; }
 
     }
 }

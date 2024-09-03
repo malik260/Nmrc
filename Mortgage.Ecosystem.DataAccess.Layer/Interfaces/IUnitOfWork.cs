@@ -1,4 +1,5 @@
 ﻿using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories;
+using Mortgage.Ecosystem.DataAccess.Layer.Repositories;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
 {
@@ -13,10 +14,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IApprovalLogRepository ApprovalLogs { get; }
         IApprovalSetupRepository ApprovalSetups { get; }
         IApproveAgentsRepository ApproveAgents { get; }
+        IAuditTrailRepository AuditTrails { get; }
         IAutoJobLogRepository AutoJobLogs { get; }
         IAutoJobRepository AutoJobs { get; }
         IApproveEmployerAggregatorRepository ApproveEmployerAggregators { get; }
+        IAddDocumentProcedureRepository AddDocumentsProcedure { get; }
         IBankRepository Banks { get; }
+        IBrokerRepository Brokers { get; }
         IBranchRepository Branches { get; }
         IChangeEmployerRepository ChangeEmployers { get; }
         IChangePasswordRepository ChangePasswords { get; }
@@ -41,7 +45,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IDepartmentRepository Departments { get; }
         IDesignationRepository Designations { get; }
         IDiasporaUserRepository DiasporaUsers { get; }
+        IDeveloperRepository Developers { get; }
         IEmployeeRepository Employees { get; }
+        IErrorLogRepository ErrorLog { get; }
         IETicketRepository ETickets { get; }
         IFeedBackFormRepository FeedBackForms { get; }
         IFinanceCounterpartyTransactionRepository FinanceCounterpartyTransactions { get; }
@@ -49,6 +55,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IGenderRepository Genders { get; }
         IInternetBankingUsersRepository InternetBankingUsers { get; }
         ILoanInitiationRepository LoanInitiations { get; }
+        ILoanInitiationUploadRepository? LoanInitiationUploads { get; }
+
         ILoanRepaymentRepository LoanRepayments { get; }
         ILoanScheduleRepository LoanSchedules { get; }
         ILogLoginRepository LogLogins { get; }
@@ -66,13 +74,16 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IRefundProfilingRepository RefundProfilings { get; }
         IRiskAssessmentSetupRepository RiskAssessmentSetups { get; }
         IRiskAssessmentProcedureRepository RiskAssessmentProcedure { get; }
-
+        IPmbRepository Pmbs { get; }
         IPaymentHistoryRepository PaymentHistories { get; }
         IPropertySubscriptionRepository PropertySubscriptions { get; }
         IPropertyRegistrationRepository PropertyRegistrations { get; }
         IPropertyGalleryRepository PropertyGalleries { get; }
+        IPropertyUploadRepository PropertyUploads { get; }
         IRemitaPaymentDetailsRepository RemitaPaymentDetails { get; }
         IRelationRepository Relations { get; }
+        IResetPasswordTokenRepository ResetPasswordTokens { get; }
+
         IRoleRepository Roles { get; }
         IStateRepository States { get; }
         IStatementOfAccountRepository StatementOfAccounts { get; }

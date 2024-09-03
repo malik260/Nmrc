@@ -3,27 +3,9 @@
 }
 <div class="container-div">
     <div class="row">
-        <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
-                <ul>
-                    <li>
-                        Employer: <input id="company" col="Company" type="text" />
-                    </li>
-                    <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
         <div class="btn-group-sm" id="toolbar">
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
         </div>
 
@@ -52,11 +34,11 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'CompanyName', title: 'Employer', sortable: true },
-                { field: 'BranchName', title: 'Branch', sortable: true, visible: false },
-                { field: 'AuthorityName', title: 'Authority', sortable: true },
-                { field: 'MenuName', title: 'Menu', sortable: true },
-                { field: 'Remark', title: 'Remark', sortable: true },
+                { field: 'CompanyName', title: 'Employer', sortable: false },
+                { field: 'BranchName', title: 'Branch', sortable: false, visible: false },
+                { field: 'AuthorityName', title: 'Authority', sortable: false },
+                { field: 'MenuName', title: 'Menu', sortable: false },
+                { field: 'Remark', title: 'Remark', sortable: false },
                 {
                     field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -13,10 +14,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class ChargeSetupController : BaseController
     {
         private readonly IChargeSetupService _iChargeSetupService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public ChargeSetupController(IUnitOfWork iUnitOfWork, IChargeSetupService iChargeSetupService) : base(iUnitOfWork)
+        public ChargeSetupController(IUnitOfWork iUnitOfWork, IChargeSetupService iChargeSetupService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iChargeSetupService = iChargeSetupService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -45,6 +48,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("ChargeSetup:search,user:search")]
         public async Task<IActionResult> GetChargeSetupPageListJson(ChargeSetupListParam param, Pagination pagination)
         {
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetChargeSetupPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.ChargeSetup.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             TData<List<ChargeSetupEntity>> obj = await _iChargeSetupService.GetPageList(param, pagination);
             return Json(obj);
         }

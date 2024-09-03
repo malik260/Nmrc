@@ -3,7 +3,7 @@
 }
 
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
-@section header{
+@section header {
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.treetable/1.0/bootstrap-treetable.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/bootstrap.treetable/1.0/bootstrap-treetable.min.js"))
 }
@@ -17,9 +17,9 @@
                         <li>
                             Menu name: <input id="menuName" col="MenuName" type="text" />
                         </li>
-                        <li>
-                            Menu Status: <span id="menuStatus" col="MenuStatus"></span>
-                        </li>
+                        @*<li>
+                        Menu Status: <span id="menuStatus" col="MenuStatus"></span>
+                        </li>*@
                         <li><a class="btn btn-primary btn-sm" onclick="searchTreeGrid()"><i class="fa fa-search"></i>&nbsp;Search</a></li>
                     </ul>
                 </div>

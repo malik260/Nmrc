@@ -6,31 +6,10 @@
 </div>
 <div class="container-div">
     <div class="row">
-        <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
-                <ul>
-                    <li>
-                        Name: <input id="name" col="Name" type="text" />
-                    </li>
-                    <li>
-                        Status: <span id="status" col="Status"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> edit</a>
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm()"><i class="fa fa-plus"></i> Add</a>
+            <a id="btnEdit" class="btn btn-primary disabled" onclick="showEditForm()"><i class="fa fa-edit"></i> Edit</a>
+            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -38,6 +17,7 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script type="text/javascript">
     $(function () {
@@ -50,16 +30,17 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/CreditAssessmentFactorIndex/GetListJson")';
+        var queryUrl = '@Url.Content("~/CreditAssessmentFactorIndex/GetCreditTypePageListJson")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
 
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'FactorIndexDescription', title: 'Factor Index Description', sortable: true },
-                { field: 'Weight', title: 'Weight', sortable: true },
-                { field: 'ProductCode', title: 'Product Code', sortable: true },
+                { field: 'FactorIndexDescription', title: 'Factor Index Description', sortable: false },
+                { field: 'RiskFactorDesc', title: 'Risk Factor Description', sortable: false },
+                { field: 'Weight', title: 'Weight', sortable: false },
+                { field: 'ProductCode', title: 'Product Code', sortable: false },
 
 
             ],
@@ -84,21 +65,15 @@
         resetToolbarStatus();
     }
 
-    function showSaveForm(bAdd) {
+    function showSaveForm() {
         var id = 0;
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
+        var confirmButtonText = "Add";
         cn.openDialog({
-            title: id > 0 ? "Edit  Credit Assessment Factor Index " : "Credit Assessment Factor Index Form",
+            title: "Credit Assessment Factor Index Form",
             content: '@Url.Content("~/CreditAssessmentFactorIndex/CreditAssessmentFactorIndexForm")' + '?id=' + id,
             width: "780px",
+            btn: [confirmButtonText, 'Cancel'],
+
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);
@@ -106,25 +81,75 @@
         });
     }
 
-    function deleteForm() {
+    function showEditForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (!cn.checkRowEdit(selectedRow)) {
+            return;
+        }
+        var id = selectedRow[0].Id;
+
+        cn.openDialog({
+            title: "Edit Credit Assessment Factor Index Form",
+            content: '@Url.Content("~/CreditAssessmentFactorIndex/CreditAssessmentFactorIndexEditForm")' + '?id=' + id,
+            width: "780px",
+            btn: ['Update', 'Cancel'],
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+
+
+    function deleteForm(index) {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
-                var ids = cn.getIds(selectedRow);
-                cn.ajax({
-                    url: '@Url.Content("~/CreditAssessmentFactorIndex/DeleteFormJson")' + '?ids=' + ids,
-                    type: "post",
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            searchGrid();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Confirm to delete the selected " + selectedRow.length + " row(s) data?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var ids = cn.getIds(selectedRow);
+
+                    cn.ajax({
+                        url: '@Url.Content("~/CreditAssessmentFactorIndex/DeleteFormJson")' + '?ids=' + ids,
+                        type: "post",
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                cn.msgSuccess(obj.Message);
+                                Swal.fire(
+                                    'Deleted!',
+                                    'The selected row(s) has been deleted.',
+                                    'success'
+                                ).then(() => {
+                                    // Refresh the grid after confirmation
+                                    searchGrid();
+                                    location.reload(true);
+
+                                });
+                            } else {
+                                cn.msgError(obj.Message);
+                                Swal.fire(
+                                    'Error!',
+                                    'There was an error deleting the row(s).',
+                                    'error'
+                                );
+                            }
+                        },
+                        complete: function () {
+                            // Ensure the processing overlay is closed after the AJAX request completes
+                            Swal.close();
                         }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
+                    });
+                }
             });
         }
     }
+
 </script>

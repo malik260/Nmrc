@@ -1,0 +1,250 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="ibox-title">
+    <h5>LOAN REVIEW</h5>
+</div>
+
+<div class="container-div">
+    <div class="row">
+        
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        debugger
+        var queryUrl = '@Url.Content("~/Underwriting/GetLoanForReview")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            detailView: true,
+            sortName: 'BaseModifyTime',
+            sortOrder: "Desc",
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'NHFNumber', title: 'NHF Number', sortable: false },
+                { field: 'ProductName', title: 'Product Name', sortable: false },
+                { field: 'LoanRefNo', title: 'Loan Ref No', sortable: false },
+                {
+                    field: 'Tenor', title: 'Tenor', sortable: false, formatter: function (value) {
+                        return value + " years";
+                    }
+                },
+                {
+                    field: 'InterestRate', title: 'Interest Rate', sortable: false, formatter: function (value) {
+                        return value + "%";
+                    }
+                },
+                { field: 'LoanAmount', title: 'Loan Amount', sortable: false },
+                {
+                    field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                },
+
+                {
+                    title: 'Actions',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        debugger;
+                        var actions = [];
+
+                        var remark = row.Remark;
+                        var buttonName = (remark == 1) ? 'Approved' : 'Approve';
+
+                        var disabledAttribute = (remark == 1) ? 'disabled' : '';
+
+                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="Approve(\'' + row.Id + '\')" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
+
+                        //actions.push('&nbsp;');
+
+                        //actions.push('<a class="btn btn-info btn-xs" href="#" onclick="Affordability(\'' + row.NHFNumber + '\')"><i class="fa-solid fa-house"></i>Affordability</a>');
+
+                        actions.push('&nbsp;');
+
+
+                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="Reject(\'' + row.Id + '\')"><i class="fa fa-key"></i>Reject</a>');
+                        
+                        //actions.push('&nbsp;');
+
+
+                        //actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="Reject(\'' + row.Id + '\')"><i class="fa-solid fa-eye"></i>View</a>');
+
+                        return actions.join('');
+                    }
+                },
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            },
+            onExpandRow: function(index, row, $detail){
+                initChildGrid(index, row, $detail);
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+   
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (cn.checkRowDelete(selectedRow)) {
+            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
+                var ids = cn.getIds(selectedRow);
+                cn.ajax({
+                    url: '@Url.Content("~/Underwriting/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            searchGrid();
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+
+    function Approve(id) {
+        if (id < 1) {
+            cn.msgError("Please selet an item");
+        }
+        cn.confirm("Confirm the approval process？", function () {
+            debugger;
+            cn.ajax({
+                url: '@Url.Content("~/Underwriting/ApproveReview")' + '?id=' + id,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+    function Reject(id) {
+        if (id < 1) {
+            cn.msgError("Please selet an item");
+        }
+        var remark = $("#remark").val();
+
+        cn.confirm("Confirm Disapproval？", function () {
+            debugger;
+            cn.ajax({
+                url: '@Url.Content("~/Underwriting/DisApproveReview")' + '?id=' + id + '&remark=' + remark,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+
+    function initChildGrid(index, row, $detail) {
+        debugger
+        $detail.html('Loading data ...');
+        var date = new Date(row.BaseCreateTime);
+        var dateOfEmployment = new Date(row.DateofEmployment);
+        var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString();
+
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center" > ' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Loan Review for' + " " + row.Name + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="nhfNumber">NHF Number:</label>' +
+            '<input type="text" id="nhfNumber" name="NHFNumber" placeholder="NHF Number" class="form-control text-left" readonly value="' + row.NHFNumber + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="monthlyIncome">Monthly Income:</label>' +
+            '<input type="text" id="monthlyIncome" name="MonthlyIncome" placeholder="Monthly Income" class="form-control text-left" readonly value="' + row.MonthlyIncome + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="RiskScore">Risk Score:</label>' +
+            '<input type="text" id="RiskScore" name="RiskScore" placeholder="Risk Score" class="form-control text-left" readonly value="' + row.RiskScore + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="Rating">Risk Rating:</label>' +
+            '<input type="text" id="Rating" name="Rating" placeholder="Risk Rating" class="form-control text-left" readonly value="' + row.Rating + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="phone">Date Of Employment:</label>' +
+            '<input type="text" id="dateOfEmployment" name="DateOfEmployment" placeholder="Date Of Employment" class="form-control text-left" readonly value="' + formattedDateOfEmployment + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="dateOfBirth">Date Of Birth:</label>' +
+            '<input type="text" id="dateOfBirth" name="DateOfBirth" placeholder="Date Of Birth" class="form-control text-left" readonly value="' + row.DOB + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bvn">BVN:</label>' +
+            '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.Bvn + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="remark">Remark:</label>' +
+            '<textarea id="remark" name="Remark" placeholder="Remark" class="form-control text-left" style="height:60px" value="' + row.Remark + '" />' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        $detail.html(htmlData);
+        // Attach click event to the plus icon
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            if ($cardBody.is(':visible')) {
+                $cardBody.hide();
+            } else {
+                $cardBody.show();
+            }
+        });
+    }
+
+
+</script>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -13,10 +14,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class NHFCustomerRequestController : BaseController
     {
         private readonly INHFCustomerRequestService _iNHFCustomerRequestService;
-
-        public NHFCustomerRequestController(IUnitOfWork iUnitOfWork, INHFCustomerRequestService iNHFCustomerRequestService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public NHFCustomerRequestController(IUnitOfWork iUnitOfWork, INHFCustomerRequestService iNHFCustomerRequestService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iNHFCustomerRequestService = iNHFCustomerRequestService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -60,6 +62,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetNHFCustomerRequestTreeListJson(NHFCustomerRequestListParam param)
         {
             TData<List<ZtreeInfo>> obj = await _iNHFCustomerRequestService.GetZtreeNHFCustomerRequestList(param);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetNHFCustomerRequestTreeListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.NHFCustomerRequest.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

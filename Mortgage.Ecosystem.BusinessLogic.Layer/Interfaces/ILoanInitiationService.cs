@@ -12,11 +12,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<List<LoanInitiationEntity>>> GetPageList(LoanInitiationListParam param, Pagination pagination);
         Task<TData<List<ZtreeInfo>>> GetZtreeLoanInitiationList(LoanInitiationListParam param);
         Task<TData<List<ZtreeInfo>>> GetZtreeUserList(LoanInitiationListParam param);
-        Task<TData<LoanInitiationEntity>> GetEntity(string code);
+        Task<TData<LoanInitiationEntity>> GetEntity();
         Task<TData<int>> GetMaxSort();
         Task<TData<string>> SaveForm(LoanInitiationEntity entity);
         Task<TData> DeleteForm(string ids);
-        Task<TData<AffordabilityResponseDto>> Performaffordability(InitiateLoanDto initiateLoanDto);
-        Task<TData<LoanInitiationEntity>> LoanApplication(InitiateLoanDto initiateLoanDto); Task<TData<List<LoanApplications>>> GetLoans(string nhfNo);
+        Task<AffordabilityResponseDto> Performaffordability(InitiateLoanDto initiateLoanDto);        Task<TData<LoanInitiationEntity>> LoanApplication(InitiateLoanDto initiateLoanDto); Task<TData<List<LoanApplications>>> GetLoans(string nhfNo);
+        Task<TData<CustomerDetailsViewModel>> GetCustomerDetails();
     }
 }

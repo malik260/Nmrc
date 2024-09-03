@@ -16,7 +16,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         public int? Branch { get; set; }
 
         [Column("NHFNumber")]
-        public string? NHFNumber { get; set; }
+        public long NHFNumber { get; set; }
 
         [Column("MessageType")]
         public string? MessageType { get; set; }
@@ -51,6 +51,19 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // Employee Type
         [Column("EmploymentType"), Description("EmploymentType")]
         public int EmploymentType { get; set; }
+
+        // Response Message
+        [Column("ResponseMessage"), Description("Response Message")]
+        public string? ResponseMessage { get; set; }
+
+        [NotMapped]
+        public string? MessageTypeName { get; set; }
+
+        [NotMapped]
+        public string? MessageTypeDescription { get; set; }
+
+
+
 
     }
 }

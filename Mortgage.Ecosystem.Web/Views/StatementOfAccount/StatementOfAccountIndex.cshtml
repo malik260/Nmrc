@@ -12,14 +12,15 @@
                 <ul>
 
                     <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start date" />
+                        <label>Start Date: </label>
+                        <input id="startTime" col="StartDate" type="text" class="time-input" placeholder="start date" />
                         <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end date" />
+                        <label>End Date: </label>
+                        <input id="endTime" col="EndDate" type="text" class="time-input" placeholder="end date" />
                     </li>
                     <li>
-                        <a id="btnAdd" class="btn btn-success" onclick="showTable()"><i class="fa fa-edit"></i> VIEW STATEMENT</a>
-                        <a id="btnEdit" class="btn btn-danger" onclick="hideTable()"><i class="fa fa-close"></i> CLEAR</a>
+                        <a id="btnAdd" class="btn btn-success" onclick="searchGrid()"> VIEW STATEMENT</a>
+                        
                     </li>
                 </ul>
             </div>
@@ -61,11 +62,11 @@
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
 
         // Disable the "View Statement" button on page load
-        $("#btnAdd").prop('disabled', true);
-        $("#btnEdit").prop('disabled', true);
+        // $("#btnAdd").prop('disabled', true);
+        // $("#btnEdit").prop('disabled', true);
 
         // Hide the grid table after the page loads
-        $(".select-table").hide();
+        // $(".select-table").hide();
     });
 
     function initGrid() {
@@ -73,13 +74,15 @@
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
-                { checkbox: true, visible: true },
+                { checkbox: true, visible: false },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'FirstName', title: 'FIRST NAME', sortable: true },
-                { field: 'LastName', title: 'LAST NAME', sortable: true },
-                { field: 'ContributionDate', title: 'CONTRIBUTION DATE', sortable: true },
-                { field: 'PaymentDate', title: 'PAYMENT DATE', sortable: true },
-                { field: 'Amount', title: 'AMOUNT(&#8358;)', visible: true, sortable: true },
+                { field: 'CustomerName', title: 'Name', sortable: false },
+                { field: 'Description', title: 'Narration', visible: false, sortable: false },
+                { field: 'TransactionDate', title: 'Transaction Date', sortable: false },
+                { field: 'PaymentDate', title: 'Payment Date', visible: false, sortable: false },
+                { field: 'CreditAmount', title: 'Credit Amount', sortable: false },
+                { field: 'DebitAmount', title: 'Debit Amount', sortable: false },
+                { field: 'Balance', title: 'Balance', sortable: false },
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);
@@ -94,44 +97,41 @@
         resetToolbarStatus();
     }
 
-    function showTable() {
-        debugger
-        // Check if both start time and end time have been selected
-        var json_data = {};
-        json_data.StartDate = $('#startTime').val();
-        json_data.EndDate = $('#endTime').val();
-        $.ajax({
-            url: '@Url.Content("~/StatementOfAccount/GetListJson")',
-            method: "GET",
-            data: json_data,
-            dataType: "json",
-            success: function (Obj) {
-              
-                initGrid(Obj);
-            }
-        })
+    function searchGrid() {
+        //var start = $('#StartTime').val();
+        //var end = $('#EndTime').val();
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
 
-        //if (startTime && endTime) {
-        //    // Enable both "View Statement" and "Clear" buttons and show the grid table
-        //    $("#btnAdd").prop('disabled', false);
-        //    $("#btnEdit").prop('disabled', false);
-        //    $(".select-table").show();
-        //} else {
-        //    // Display a message asking the user to select both start time and end time
-        //   // alert("Please select both start time and end time.");
-        //    $('#alertModal').modal('show');
+
+        //function showTable() {
+        //    debugger
+        //    // Check if both start time and end time have been selected
+        //    var json_data = {};
+        //    json_data.StartDate = $('#startTime').val();
+        //    json_data.EndDate = $('#endTime').val();
+        //    $.ajax({
+        //        url: '@Url.Content("~/StatementOfAccount/GetListJson")',
+        //        method: "GET",
+        //        data: json_data,
+        //        dataType: "json",
+        //        success: function (Obj) {
+
+        //            initGrid(Obj);
+        //        }
+        //    })
         //}
-    }
 
-    function hideTable() {
-        // Hide the grid table and disable both "View Statement" and "Clear" buttons when "Clear" button is clicked
-        $("#btnAdd").prop('disabled', true);
-        $("#btnEdit").prop('disabled', true);
-        $(".select-table").hide();
-        // Clear the start time and end time fields
-        $("#startTime").val('');
-        $("#endTime").val('');
-    }
+        //function hideTable() {
+        //    // Hide the grid table and disable both "View Statement" and "Clear" buttons when "Clear" button is clicked
+        //    $("#btnAdd").prop('disabled', true);
+        //    $("#btnEdit").prop('disabled', true);
+        //    $(".select-table").hide();
+        //    // Clear the start time and end time fields
+        //    $("#startTime").val('');
+        //    $("#endTime").val('');
+        //}
 </script>
 
 

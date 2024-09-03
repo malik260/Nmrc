@@ -120,12 +120,12 @@
                                                 columns: [
                                                     { checkbox: true, visible: true },
                                                     { field: 'Id', title: 'Id', visible: false },
-                                                    { field: 'NHFNumber', title: 'NHF Number', sortable: true },
-                                                    { field: 'Date', title: 'Transaction Date', sortable: true },
-                                                    { field: 'Amount', title: 'Amount', sortable: true },
-                                                    { field: 'RRR', title: 'RRR', sortable: true },
-                                                    { field: 'TransactionId', title: 'Transaction ID', sortable: true },
-                                                    { field: 'Status', title: 'Type', visible: true, sortable: true }
+                                                    { field: 'NHFNumber', title: 'NHF Number', sortable: false },
+                                                    { field: 'Date', title: 'Transaction Date', sortable: false },
+                                                    { field: 'Amount', title: 'Amount', sortable: false },
+                                                    { field: 'RRR', title: 'RRR', sortable: false },
+                                                    { field: 'TransactionId', title: 'Transaction ID', sortable: false },
+                                                    { field: 'Status', title: 'Type', visible: true, sortable: false }
                                                 ],
                                                 queryParams: function (params) {
                                                     var pagination = $('#gridRemitaTable').cnTable('getPagination', params);
@@ -139,12 +139,12 @@
                                                 columns: [
                                                     { checkbox: true, visible: true },
                                                     { field: 'Id', title: 'Id', visible: false },
-                                                    { field: 'NHFNumber', title: 'NHF Number', sortable: true },
-                                                    { field: 'Date', title: 'Transaction Date', sortable: true },
-                                                    { field: 'Amount', title: 'Amount', sortable: true },
-                                                    //{ field: 'RRR', title: 'RRR', sortable: true },
-                                                    { field: 'TransactionId', title: 'Transaction ID', sortable: true },
-                                                    { field: 'Status', title: 'Type', visible: true, sortable: true }
+                                                    { field: 'NHFNumber', title: 'NHF Number', sortable: false },
+                                                    { field: 'Date', title: 'Transaction Date', sortable: false },
+                                                    { field: 'Amount', title: 'Amount', sortable: false },
+                                                    //{ field: 'RRR', title: 'RRR', sortable: false },
+                                                    { field: 'TransactionId', title: 'Transaction ID', sortable: false },
+                                                    { field: 'Status', title: 'Type', visible: true, sortable: false }
                                                 ],
                                                 queryParams: function (params) {
                                                     var pagination = $('#gridEtransactTable').cnTable('getPagination', params);

@@ -12,5 +12,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<int> GetMaxSort();
         Task SaveForm(UnderwritingEntity entity);
         Task DeleteForm(string ids);
+        Task<UnderwritingEntity> GetEntitybyNHF(string NHF);
+        Task<UnderwritingEntity> GetEntitybyLoanId(string id);
+        Task<List<UnderwritingEntity>> GetApprovalPageList();
+        Task<List<UnderwritingEntity>> GetLoanForReview();
+        Task<List<UnderwritingEntity>> GetLoanForUnderwriting();
+        Task<List<UnderwritingEntity>> GetLoanForBatching();
+        Task<List<UnderwritingEntity>> GetBatchedLoan();
+        Task<List<UnderwritingEntity>> GetLoanBatches(string id, Pagination pagination);
     }
 }

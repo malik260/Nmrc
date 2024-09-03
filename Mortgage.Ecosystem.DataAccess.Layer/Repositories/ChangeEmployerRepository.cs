@@ -2,6 +2,7 @@
 using Mortgage.Ecosystem.DataAccess.Layer.Extensions;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
@@ -22,10 +23,17 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task<List<ChangeEmployerEntity>> GetPageList(ChangeEmployerListParam param, Pagination pagination)
         {
+            var DB = new ApplicationDbContext();
+            var user = await Operator.Instance.Current();
+            var employeeDetails = DB.EmployeeEntity.Where(i => i.Id == user.Employee).FirstOrDefault();
             var expression = ListFilter(param);
+
+            expression = expression.And(changeEmployer => changeEmployer.NhfNumber == employeeDetails.NHFNumber.ToString());
+
             var list = await BaseRepository().FindList(expression, pagination);
             return list.ToList();
         }
+
 
         public async Task<ChangeEmployerEntity> GetEntity(long id)
         {
@@ -87,9 +95,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var expression = ExtensionLinq.True<ChangeEmployerEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.Name))
+                if (!string.IsNullOrEmpty(param.OldEmployer))
                 {
-                    expression = expression.And(t => t.NhfNumber.Contains(param.Name));
+                    expression = expression.And(t => t.OldEmployer.Contains(param.OldEmployer));
                 }
             }
             return expression;

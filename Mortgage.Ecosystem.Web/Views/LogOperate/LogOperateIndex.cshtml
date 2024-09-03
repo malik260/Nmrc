@@ -3,30 +3,22 @@
 }
 <div class="container-div">
     <div class="row">
-        <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
-                <ul>
-                    <li>
-                        Login name: <input id="userName" col="UserName" type="text" />
-                    </li>
-                    <li>
-                        Operation method: <input id="executeUrl" col="ExecuteUrl" type="text" />
-                    </li>
-                    <li>
-                        Operational Status: <span id="logStatus" col="LogStatus"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Operation time: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
-                    </li>
-                </ul>
-            </div>
+        @*  <div id="searchDiv" class="col-sm-12 search-collapse">
+        <div class="select-list">
+        <ul>
+        <li>
+        Company name: <input id="userName" col="UserName" type="text" />
+        </li>
+        <li>
+        Operation method: <input id="executeUrl" col="ExecuteUrl" type="text" />
+        </li>
+
+        <li>
+        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
+        </li>
+        </ul>
         </div>
+        </div>*@
         <div class="btn-group-sm" id="toolbar">
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
             <a id="btnDelete" class="btn btn-danger" onclick="removeAllForm()"><i class="fa fa-trash"></i> Clear</a>
@@ -55,21 +47,21 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'UserName', title: 'login name' },
-                { field: 'DepartmentName', title: 'Department Name' },
+                { field: 'UserName', title: 'Company Name' },
+                // { field: 'DepartmentName', title: 'Department Name' },
                 { field: 'IpAddress', title: 'IpAddress' },
                 { field: 'ExecuteUrl', title: 'Operation method' },
                 { field: 'ExecuteTime', title: 'Time-consuming (ms)' },
-                {
-                    field: 'LogStatus', title: 'Operation Status', align: 'center',
-                    formatter: function (value, row, index) {
-                        if (value == "@OperateStatusEnum.Success.ToInt()") {
-                            return '<span class="badge badge-primary">' + "@OperateStatusEnum.Success.GetDescription()" + '</span>';
-                        } else {
-                            return '<span class="badge badge-warning">' + "@OperateStatusEnum.Fail.GetDescription()" + '</span>';
-                        }
-                    }
-                },
+                //{
+                //    field: 'LogStatus', title: 'Operation Status', align: 'center',
+                //    formatter: function (value, row, index) {
+                //        if (value == "@OperateStatusEnum.Success.ToInt()") {
+                //            return '<span class="badge badge-primary">' + "@OperateStatusEnum.Success.GetDescription()" + '</span>';
+                //        } else {
+                //            return '<span class="badge badge-warning">' + "@OperateStatusEnum.Fail.GetDescription()" + '</span>';
+                //        }
+                //    }
+                //},
                 {
                     field: 'BaseCreateTime', title: 'Operation time', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
@@ -93,10 +85,18 @@
         });
     }
 
-    function searchGrid() {
-        $('#gridTable').cnTable('search');
-        resetToolbarStatus();
-    }
+    //function searchGrid(callBackId) {
+    //    var param = $("#searchDiv").getWebControls();
+    //    $('#gridTable').cnTreeTable('search', param);
+    //    if (callBackId) {
+    //        id = callBackId;
+    //    }
+    //}
+
+    //function searchGrid() {
+    //    $('#gridTable').cnTable('search');
+    //    resetToolbarStatus();
+    //}
 
     function deleteForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");

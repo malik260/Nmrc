@@ -27,11 +27,16 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<ApprovalLogEntity>? ApprovalLogEntity { get; set; }
         public DbSet<ApprovalSetupEntity>? ApprovalSetupEntity { get; set; }
         public DbSet<ApproveAgentsEntity>? ApproveAgentsEntity { get; set; }
+        public DbSet<AddDocumentProcedureEntity>? AddDocumentProcedureEntity { get; set; }
+
         public DbSet<ApproveEmployerAggregatorEntity>? ApproveEmployerAggregatorEntity { get; set; }
+        public DbSet<AuditTrailEntity>? AuditTrails { get; set; } // Audit Trailtable
+
         public DbSet<AutoJobEntity>? AutoJobEntity { get; set; } // Scheduled task table        
         public DbSet<AutoJobLogEntity>? AutoJobLogEntity { get; set; } // Scheduled task group table
         public DbSet<BankEntity>? BankEntity { get; set; }
         public DbSet<BranchEntity>? BranchEntity { get; set; }
+        public DbSet<BrokerEntity>? BrokerEntity { get; set; }
         public DbSet<ChangeEmployerEntity>? ChangeEmployerEntity { get; set; }
         public DbSet<ChangePasswordEntity>? ChangePasswordEntity { get; set; }
         public DbSet<ChargeSetupEntity>? ChargeSetupEntity { get; set; }
@@ -60,8 +65,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<DepartmentEntity>? DepartmentEntity { get; set; } // Department table
         public DbSet<DesignationEntity>? DesignationEntity { get; set; }
         public DbSet<DiasporaUserEntity>? DiasporaUserEntity { get; set; }
+        public DbSet<DeveloperEntity>? DeveloperEntity { get; set; }
+
         public DbSet<EmployeeEntity>? EmployeeEntity { get; set; }
         public DbSet<ETicketEntity>? ETicketEntity { get; set; }
+        public DbSet<ErrorLogEntity>? ErrorLogEntity { get; set; }
+
         public DbSet<FinanceCounterpartyTransactionEntity>? FinanceCounterpartyTransactionEntity { get; set; }
         public DbSet<FeedBackFormEntity>? FeedBackFormEntity { get; set; }
         public DbSet<FinanceTransactionEntity>? FinanceTransactionEntity { get; set; }
@@ -71,6 +80,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<LogOperateEntity>? LogOperateEntity { get; set; } // Operation log table
         public DbSet<LoanRepaymentEntity>? LoanRepaymentEntity { get; set; }
         public DbSet<LoanInitiationEntity>? LoanInitiationEntity { get; set; }
+        public DbSet<LoanInitiationUploadEntity>? loanInitiationUploadEntity { get; set; }
         public DbSet<LoanScheduleEntity>? LoanScheduleEntity { get; set; }
         public DbSet<NHFCustomerRequestEntity>? NHFCustomerRequestEntity { get; set; }
         public DbSet<NHFRegCompanyEntity>? NHFRegCompanyEntity { get; set; }
@@ -82,9 +92,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<NationalityEntity>? NationalityEntity { get; set; }
         public DbSet<NextOfKinEntity>? NextOfKinEntity { get; set; }
         public DbSet<PaymentHistoryEntity>? PaymentHistoryEntity { get; set; }
+        public DbSet<PmbEntity>? PmbEntity { get; set; }
         public DbSet<PropertyRegistrationEntity>? PropertyRegistrationEntity { get; set; } // Property Registration table       
         public DbSet<PropertySubscriptionEntity>? PropertySubscriptionEntity { get; set; } // Property Subscription table     
         public DbSet<PropertyGalleryEntity>? PropertyGalleryEntity { get; set; } // Property Gallery table
+        public DbSet<PropertyUploadEntity>? PropertyUploadEntity { get; set; } // Property Gallery table
         public DbSet<RelationEntity>? RelationEntity { get; set; }
         public DbSet<RemitaPaymentDetailsEntity>? RemitaPaymentDetailsEntity { get; set; }
         public DbSet<RefundConditionEntity>? RefundConditionEntity { get; set; }
@@ -106,5 +118,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<UnlockNhfPortalEntity>? UnlockNhfPortalEntity { get; set; }
         public DbSet<UserBelongEntity>? UserBelongEntity { get; set; } // User role table        
         public DbSet<UserEntity>? UserEntity { get; set; } // User table
+        public DbSet<ResetPasswordTokenEntity>? ResetPasswordTokenEntity { get; set; }
+
+
     }
 }

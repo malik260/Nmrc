@@ -6,6 +6,7 @@
         public string? UserName { get; set; }
         public int? LogStatus { get; set; }
         public string? IpAddress { get; set; }
+        public long? employee { get; set; }
     }
 
     public class LogOperateListParam : DateTimeParam

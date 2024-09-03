@@ -8,6 +8,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
 {
     public class LoanRepaymentDto
     {
+        public long EmployeeNhfNumber { get; set; }
+        public string? EmployeeName { get; set; }
         public decimal Totalamount { get; set; }
         public decimal Amount { get; set; }
 
@@ -18,6 +20,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
         public string Month { get; set; }
 
         public string Paymentoption { get; set; }
+        public string PhoneNumber { get; set; }
+        public string EmailAddress { get; set; }
 
     }
 }

@@ -1,0 +1,160 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+-
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Credit Assessment Index Title Form</span>
+                <div class="form-group">
+                    @* <div class="col-sm-4">
+                    <label class="productName control-label" style="margin-left: 100px;">Product Name</label>
+                    <input type="text" col="ProductName" style="margin-left: 100px; width: 550px;" class="form-control" id="Name">
+                    </div>  *@
+                    <div class="col-sm-12">
+                        <label class="productName control-label">Product Name</label>
+
+                        <input type="text" col="ProductName" class="form-control" id="productName" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="productCode control-label">Product Code</label>
+                        <input type="text" col="ProductCode" class="form-control" id="productCode" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="RiskFactorId control-label">Risk Factor</label>
+
+                        <input type="text" col="RiskFactorId" class="form-control" id="riskFactorId" readonly>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label class="FactorIndexId control-label">Factor Index</label>
+                        <input type="text" col="FactorIndexId" class="form-control" id="factorIndexId" readonly>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="indexTitleDescription" class="form-label">Index Title Description</label>
+                        <input type="text" col="IndexTitleDescription" class="form-control" id="indexTitleDescription">
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="weight" class="form-label">Weight</label>
+                        <input type="number" col="Weight" class="form-control" id="weight">
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    //debugger
+    var id = cn.request("id");
+
+
+    if (id) {
+        getForm(id);
+    }
+
+
+    $('#weight').on('blur', function (event) {
+        $('span.error-keyup-1').hide();
+        var regex = /^[1-9][0-9]*$/; // Regular expression to match positive integers excluding zero
+        var Nex = $("#weight").val();
+        if (!regex.test(Nex) || Nex === '0') { // Check if it's not a positive integer or it's zero
+            event.preventDefault();
+            $('#weight').val('');
+            $(this).after('<span class="text-danger error-keyup-1">The Weight should be a non-zero positive intege</span>');
+            return false;
+        }
+    });
+
+    function getForm(id) {
+        debugger
+        cn.ajax({
+            url: '@Url.Content("~/CreditAssessmentIndexTitle/GetFormJsonn")',
+            type: "get",
+            data: { id: id },
+            success: function (response) {
+                if (response.Tag === 1) {
+                    debugger
+
+                    $("#productName").val(response.Data.ProductName);
+                    $("#productCode").val(response.Data.ProductCode);
+                    $("#riskFactorId").val(response.Data.RiskFactor);
+                    $("#factorIndexId").val(response.Data.FactorIndexId);
+                    $("#indexTitleDescription").val(response.Data.IndexTitleDescription);
+                    $("#weight").val(response.Data.Weight);
+                    // $("#remark").val(response.Data.Remark);
+                    // $("#checkList").val(response.Data.Checklist);
+
+
+                    //alert(response.Message);
+                }
+            }
+        });
+    }
+
+    function saveForm(index) {
+        debugger
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+
+            cn.ajax({
+                url: '@Url.Content("~/CreditAssessmentIndexTitle/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        // Show success message with SweetAlert
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: obj.Message,
+
+                            timerProgressBar: true,
+                            onClose: () => {
+                                parent.layer.close(index);
+                                parent.searchGrid();
+
+                            }
+                        });
+                    } else {
+                        // Show error message with SweetAlert
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: obj.Message,
+
+                            timerProgressBar: true,
+
+                            onClose: () => {
+                                parent.layer.close(index);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+
+
+</script>

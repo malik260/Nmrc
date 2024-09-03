@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -11,13 +12,15 @@ using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
+    [ExceptionFilter]
     public class CreditAssessmentFactorIndexController : BaseController
     {
         private readonly ICreditAssessmentFactorIndexService _iCreditAssessmentFactorIndexService;
-
-        public CreditAssessmentFactorIndexController(IUnitOfWork iUnitOfWork, ICreditAssessmentFactorIndexService iCreditAssessmentFactorIndexService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public CreditAssessmentFactorIndexController(IUnitOfWork iUnitOfWork, ICreditAssessmentFactorIndexService iCreditAssessmentFactorIndexService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iCreditAssessmentFactorIndexService = iCreditAssessmentFactorIndexService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -28,6 +31,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         public IActionResult CreditAssessmentFactorIndexForm()
+        {
+            return View();
+        }
+
+        public IActionResult CreditAssessmentFactorIndexEditForm()
         {
             return View();
         }
@@ -43,13 +51,24 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
 
+
+
         public async Task<IActionResult> GetFactorIndex(int RiskFactorId)
         {
-           TData<List<CreditAssessmentFactorIndexEntity>> obj = await _iCreditAssessmentFactorIndexService.GetFactorIndex(RiskFactorId);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetFactorIndex.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.CreditAssessmentFactorIndex.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
+            TData<List<CreditAssessmentFactorIndexEntity>> obj = await _iCreditAssessmentFactorIndexService.GetFactorIndex(RiskFactorId);
             return Json(obj);
         }
 
-
+        public async Task<IActionResult> GetCreditTypePageListJson(CreditAssessmentFactorIndexListParam param, Pagination pagination)
+        {
+            TData<List<CreditAssessmentFactorIndexEntity>> obj = await _iCreditAssessmentFactorIndexService.GetPageList(param, pagination);
+            return Json(obj);
+        }
 
         [HttpGet]
         [AuthorizeFilter("creditassessmentfactorindex:view")]
@@ -59,11 +78,18 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 ;
             return Json(obj);
         }
+
+        public async Task<IActionResult> GetFormJsonn(int id)
+        {
+            TData<CreditAssessmentFactorIndexEntity> obj = await _iCreditAssessmentFactorIndexService.GetEntities(id)
+;
+            return Json(obj);
+        }
         #endregion
 
         #region Submit data
         [HttpPost]
-        [AuthorizeFilter("creditassessmentfactorindex:add,company:edit")]
+        //[AuthorizeFilter("creditassessmentfactorindex:add,company:edit")]
         public async Task<IActionResult> SaveFormJson(CreditAssessmentFactorIndexEntity entity)
         {
             TData<string> obj = await _iCreditAssessmentFactorIndexService.SaveForm(entity);
@@ -71,7 +97,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         [HttpPost]
-        [AuthorizeFilter("creditassessmentfactorindex:add,employee:edit")]
+        // [AuthorizeFilter("creditassessmentfactorindex:add,employee:edit")]
         public async Task<IActionResult> UpdateFormJson(CreditAssessmentFactorIndexEntity entity)
         {
             TData<string> obj = await _iCreditAssessmentFactorIndexService.SaveForm(entity);

@@ -28,6 +28,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("BVN"), Description("BVN")]
         public string? BVN { get; set; }
 
+        // BVN
+        [Column("EmployeeCode"), Description("EmployeeCode")]
+        public string? EmployeeCode { get; set; }
+
         // NIN
         [Column("NIN"), Description("NIN")]
         public string? NIN { get; set; }
@@ -88,6 +92,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("CustomerBank"), Description("Customer Bank")]
         public string? CustomerBank { get; set; }
 
+
+        [Column("EmployerNhfNumber"), Description("EmployerNhfNumber")]
+        public string? EmployerNhfNumber { get; set; }
+
+
+
         // Bank Account Number
         [Column("BankAccountNumber"), Description("Account Number")]
         public string? BankAccountNumber { get; set; }
@@ -123,6 +133,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // Status
         [Column("Status"), Description("Status")]
         public int Status { get; set; }
+
+        [Column("EmployerType")]
+        public int? EmployerType { get; set; }
 
         // Designation
         [NotMapped]
@@ -162,7 +175,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         // Kin's First Name
         [NotMapped]
-        public string? KinFirstNumber { get; set; }
+        public string? KinFirstName { get; set; }
 
         // Kin's Last Name
         [NotMapped]
@@ -174,6 +187,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [NotMapped]
         public int KinRelationship { get; set; }
+
+        [NotMapped]
+        public string? KinAddress { get; set; }
+
+        [NotMapped]
+        public string? KinEmailAddress { get; set; }
 
         [NotMapped]
         public int User { get; set; }
@@ -255,5 +274,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [NotMapped]
         [Column("EmployerNumber")]
         public string? EmployerNo { get; set; }
+
+        
     }
 }

@@ -13,6 +13,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<List<ZtreeInfo>>> GetZtreeChangeEmployerList(ChangeEmployerListParam param);
         Task<TData<List<ZtreeInfo>>> GetZtreeUserList(ChangeEmployerListParam param);
         Task<TData<ChangeEmployerEntity>> GetEntity(long id);
+        Task<TData<CustomerDetailsViewModel>> GetCompanyName();
         Task<TData<int>> GetMaxSort();
         Task<TData<string>> SaveForm(ChangeEmployerEntity entity);
 

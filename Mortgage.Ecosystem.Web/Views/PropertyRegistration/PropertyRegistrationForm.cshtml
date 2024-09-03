@@ -2,41 +2,46 @@
     Layout = "~/Views/Shared/_FormWhite.cshtml";
 }
 
+
 <div class="propertyRegistration" id="propertyRegistration">
-    <form id="form1" class="form-horizontal m">
+    <form id="form" class="form-horizontal m">
         <div class="dialogblockborder dialogblockborderheadline">
             <div class="dialogblock-header" style="height: auto;">
                 <span class="dialogblockheader">Property Registration</span>
                 <div class="form-group">
                     <div class="col-sm-6">
                         <label class="companyNumber control-label">Company&nbsp;Number<font class="red">&nbsp;*</font></label>
-                        <input id="companyName" type="text" col="companyNumber" class="form-control">
+                        <input id="companyNumber" type="text" col="ComapnyNumber" class="form-control" readonly>
                     </div>
                     <div class="col-sm-6">
                         <label class="companyName control-label">Company&nbsp;Name<font class="red">&nbsp;*</font></label>
-                        <input id="companyName" type="text" col="CompanyName" class="form-control">
+                        <input id="companyName" type="text" col="ComapnyName" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label for="propertyType" class="form-label">Property&nbsp;Type</label>
-                        <input id="propertyType" type="text" col="PropertyType" class="form-control">
+                        <label class="propertyType control-label">Property&nbsp;Type <font class="red">&nbsp;*</font></label>
+                        <div id="propertyType" col="PropertyType"></div>
 
                     </div>
                     <div class="col-sm-6">
-                        <label for="propertyDescription" class="form-label">Property&nbsp;Description</label>
-                        <textarea id="propertyDescription" type="text" style="height: 60px;" class="form-control"></textarea>
+                        <label class="propertyDescription control-label">Property&nbsp;Description <font class="red">&nbsp;*</font></label>
+                        <textarea id="propertyDescription" required type="text" col="PropertyDescription" style="height: 60px;" class="form-control"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label for="propertyLocation" class="form-label">Property&nbsp;Location</label>
-                        <input id="propertyLocation" type="text" col="PropertyLocation" class="form-control">
+                        <label class="propertyLocation control-label">Property&nbsp;Location <font class="red">&nbsp;*</font></label>
+                        <div id="propertyLocation" required col="PropertyLocation"></div>
 
                     </div>
+                    @*<div class="col-sm-6">
+                    <label for="propertySize" class="form-label">Property&nbsp;Size</label>
+                    <input id="propertySize" type="text" col="PropertySize" class="form-control">
+                    </div>*@
                     <div class="col-sm-6">
-                        <label for="propertySize" class="form-label">Property&nbsp;Size</label>
-                        <input id="propertySize" type="text" col="PropertySize" class="form-control">
+                        <label for="phoneNumber" class="form-label">Phone&nbsp;Number</label>
+                        <input id="phoneNumber" type="text" class="form-control" readonly col="PhoneNumber">
                     </div>
                 </div>
                 <div class="form-group">
@@ -46,8 +51,8 @@
                             <i class="fa fa-map-marker" aria-hidden="true" style="font-size: 24px; margin-left: 5px; vertical-align: middle; color: #000;"></i>
                         </label>
                         <div class="input-group">
-                            <input id="longitude" type="text" class="form-control mr-2" style="width: 30%; margin-right: 5px;" placeholder="Longitude">
-                            <input id="latitude" type="text" class="form-control ml-2" style="width: 30%; margin-left: 5px;" placeholder="Latitude">
+                            <input id="longitude" type="text" col="Longitude" class="form-control mr-2" style="width: 30%; margin-right: 5px;" placeholder="Longitude">
+                            <input id="latitude" type="text" col="Latitude" class="form-control ml-2" style="width: 30%; margin-left: 5px;" placeholder="Latitude">
                             <button id="findLocation" type="button" class="btn btn-danger ml-2" data-toggle="modal" data-target="#mapModal" style="width: 35%; margin-left: 5px;">
                                 <i class="fa fa-search" aria-hidden="true"></i> Find Location
                             </button>
@@ -69,9 +74,6 @@
                                                 </div>
                                             </div>
                                             <div id="map" class="embed-responsive embed-responsive-16by9" style="margin-top: 6px;">
-                                                @*<iframe class="embed-responsive-item" frameborder="0" style="border:0"
-                                                src="https://www.google.com/maps/embed/v1/view?key=AIzaSyDBC6Wttc9nyJLMrXXKyP3I8DR2A-WQqEM&center=0,0&zoom=2"
-                                                allowfullscreen></iframe>*@
                                             </div>
                                         </div>
                                     </div>
@@ -82,7 +84,7 @@
                     </div>
                     <div class="col-sm-6">
                         <label for="neighbourhood" class="form-label">Neighbourhood</label>
-                        <textarea id="neighbourhood" type="text" style="height: 60px;" col="Neighbourhood" class="form-control"></textarea>
+                        <textarea id="neighbourhood" required type="text" style="height: 60px;" col="Address" class="form-control"></textarea>
                     </div>
                 </div>
 
@@ -90,39 +92,65 @@
 
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label for="email" class="form-label">Email</label>
-                        <input id="email" type="text" col="Email" class="form-control">
+                        <label class="availableUnits control-label">Available Units</label>
+                        <input id="availableUnits" required type="number" min="1" class="form-control" col="AvailableUnits">
                     </div>
                     <div class="col-sm-6">
-                        <label for="phoneNumber" class="form-label">Phone&nbsp;Number</label>
-                        <input id="phoneNumber" type="text" class="form-control" col="PhoneNumber">
+                        <label for="email" class="form-label">Email&nbsp;Address</label>
+                        <input id="email" type="email" class="form-control" readonly col="Email">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label for="documentTitle" class="form-label">Document Title</label>
-                        <input id="documentTitle" type="text" col="DocumentTitle" class="form-control">
+                        <label class="documentTitle control-label">Document Title <font class="red">&nbsp;*</font></label>
+                        <input id="documentTitle" required type="text" col="PropertyTitle" class="form-control">
                     </div>
-                    <div class="col-sm-6">
-                        <label class="uploadProperty control-label">Upload&nbsp;Property</label>
-                        <input id="uploadDocument" type="text" col="UploadProperty" placeholder="Search" class="form-control">
-                    </div>
+
                 </div>
+
                 <div class="form-group">
                     <div class="col-sm-6">
-
-                        <input type="file" id="logo">
-                    </div>
-                </div>
-                <div class="form-group">
-
-                    <div class="col-sm-6">
-                        <input type="file" style="display: none;" id="addDocument" accept=".doc,.docx,.pdf,.xlsx,.txt,.rtf,.jpg,.png,.gif,.mp3,.wav,.aac,.mp4,.avi,.mov,.zip,.rar,.tar,.exe,.dmg,.apk,.db,.mdb,.sql,.ttf,.otf,.fon,.dll,.sys,.ini" multiple />
-                        <label for="addDocument" style=" width:140px; border: 0; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
+                        <span class="message" style="display: inline-block;font-style: italic;border: none; background: none;">Only Upload JPEG and PNG files</span>
+                        <input type="file" id="documentUpload" multiple style="display: none;" col="Files" accept=".jpg,.jpeg,.png,.pdf" />
+                        <label for="documentUpload" class="custom-file-label" style="width: 140px; border: 0; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
                             &nbsp; Add Document
                         </label>
+                        <br />
+                        <div id="previewsContainer">
+                            <div>
+                                <ul id="file-list"></ul>
+                            </div>
+                            <style>
+                                #previewsContainer img {
+                                    max-width: 50%;
+                                    max-height: 100%;
+                                }
 
+                                .file-item {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    border: 1px solid #dcdcdc;
+                                    padding: 8px;
+                                    margin-bottom: 5px;
+                                }
+
+                                .file-name {
+                                    font-weight: bold;
+                                }
+
+                                .file-size {
+                                    color: #555;
+                                    font-weight: bold;
+                                }
+
+                                .remove-file {
+                                    cursor: pointer;
+                                    color: red;
+                                    margin-left: 20px;
+                                }
+                            </style>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -132,42 +160,117 @@
 </div>
 
 
-<iframe width="550" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?q=record+stores+in+Seattle&key=AIzaSyDBC6Wttc9nyJLMrXXKyP3I8DR2A-WQqEM" allowfullscreen></iframe>
-
+@*<iframe width="550" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?q=record+stores+in+Seattle&key=AIzaSyDBC6Wttc9nyJLMrXXKyP3I8DR2A-WQqEM" allowfullscreen></iframe>
+*@
 
 <!-- Include the Google Maps JavaScript API -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBC6Wttc9nyJLMrXXKyP3I8DR2A-WQqEM&callback=initMap" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-@*<script>
-    var map;
-
-    function initMap() {
-        var mapContainer = document.getElementById('map');
-        var latitudeInput = document.getElementById('latitude');
-        var longitudeInput = document.getElementById('longitude');
-
-        // Create a new map instance
-        map = new google.maps.Map(mapContainer, {
-            center: { lat: 0, lng: 0 },
-            zoom: 2
-        });
-
-        // Listen for click events on the map
-        map.addListener('click', function (event) {
-            var clickedLatLng = event.latLng;
-            latitudeInput.value = clickedLatLng.lat();
-            longitudeInput.value = clickedLatLng.lng();
-        });
+<style>
+    .file-item {
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #dcdcdc;
+        padding: 8px;
+        margin-bottom: 5px;
     }
 
-    $(document).ready(function () {
-        $('#findLocation').click(function () {
-            initMap();
-        });
-    });
-</script>*@
+    .file-name {
+        font-weight: bold;
+    }
+
+    .file-size {
+        color: #555;
+        font-weight: bold;
+    }
+
+    .remove-file {
+        cursor: pointer;
+        color: red;
+        margin-left: 10px;
+    }
+
+</style>
 
 <script>
+    var id = cn.request("id");
+    var selectedFiles = [];
+    var fileCounter = 0;
+    $(document).ready(function () {
+        $('#documentUpload').on('change', function () {
+            var files = $(this)[0].files;
+            var totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                let fileType = file.type;
+
+                var validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                if (!validTypes.includes(file.type)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid File Type',
+                        text: 'Only JPEG and PNG files are allowed.',
+                    });
+                    return; 
+                } 
+
+                totalSize += file.size;
+
+                if (totalSize > 3000000) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File Size Exceeded',
+                        text: 'Total size of uploaded files cannot exceed 3000KB (3MB).',
+                    });
+                    break;
+                }
+
+                file.id = fileCounter++; // Assign a unique ID to each file
+                selectedFiles.push(file);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var li = $('<li></li>').addClass('file-item').attr('data-file-id', file.id);
+                    var removeButton = $('<span></span>').addClass('remove-file').html('<i class="fa fa-trash" aria-hidden="true"></i>').on('click', function (event) {
+                        event.preventDefault();
+                        var fileId = $(this).parent().data('file-id');
+                        var fileIndex = selectedFiles.findIndex(f => f.id === fileId);
+                        if (fileIndex !== -1) {
+                            selectedFiles.splice(fileIndex, 1);
+                            $(this).parent().remove();
+                        }
+                    });
+
+                    var fileSize = (file.size / 1024).toFixed(2) + ' KB';
+
+                    li.append($('<span></span>').addClass('file-name').text(file.name));
+                    li.append($('<span></span>').addClass('file-size').text(fileSize));
+                    li.append(removeButton);
+
+                    $('#file-list').append(li);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            $(this).val('');
+        });
+    });
+
+    
+
+    $("#propertyType").cnComboBox({
+        data: cn.getJson(@Html.Raw(typeof
+            (PropertyTypeEnum).EnumToDictionaryString()))
+    });
+
+    $("#propertyLocation").cnComboBox({
+        url: '@Url.Content("~/State/GetListJson")',
+        key: "Id",
+        value: "Name",
+        class: "form-control"
+    });
+
     var map;
 
     function initMap(center) {
@@ -190,6 +293,9 @@
         longitudeInput.value = latLng.lng();
     }
 
+
+
+
     $(document).ready(function () {
         $('#findLocation').click(function () {
             initMap();
@@ -208,4 +314,124 @@
             });
         });
     });
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Content("~/PropertyRegistration/ViewPmbCompanyName")', // The URL of your controller method
+            type: 'GET',
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var data = obj.Data;
+                    $('#companyName').val(data.PmbName);
+                    $('#companyNumber').val(data.PmbNo);
+                    $('#phoneNumber').val(data.MobileNo);
+                    $('#email').val(data.Email);
+                } else {
+                    cn.msgError(obj.Message);
+                    $('#form').hide();
+                }
+
+            },
+            error: function () {
+                // Handle error, if any
+            }
+        });
+    });
+
+    $('#availableUnits').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Replace non-digits and spaces with empty strings, excluding dash (-).
+            this.value = this.value.replace(/[^0-9 ]/ig, '');
+        }
+    });
+
+
+
+    function saveForm(index) {
+        debugger
+        if ($("#form").validate().form()) {
+            debugger
+            var PropertyType = $("#propertyType").cnComboBox('getValue');
+
+
+            if (PropertyType == "0") {
+                cn.msgError("Please select a Property Type!");
+                return false;
+            }
+
+           
+            //var postData = $("#form").getWebControls({ Id: id });
+            var formData = new FormData();
+            var files = selectedFiles;
+            if (files.length <= 0) {
+                cn.msgError("Please upload Property document(s)!");
+                return false;
+            }
+            //var file = $("input[name='files']")[0].files;
+            for (var i = 0; i < files.length; i++) {
+                formData.append("file", files[i]);
+            }
+
+            // Append titles to FormData
+            //var titles = $("#documentTitle");
+            //for (var i = 0; i < titles.length; i++) {
+            //    formData.append("titles[]", titles[i].value);
+            //}
+
+
+            var PropertyType = $("#propertyType").cnComboBox('getValue');
+            var PropertyLocation = $("#propertyLocation").cnComboBox('getValue');
+            if (PropertyLocation == '') {
+                cn.msgError("Please select Property Location!");
+                return false;
+            }
+
+            //var PropertyType = $("#propertyType").val();
+            var PropertyDescription = $("#propertyDescription").val();
+            //var PropertyLocation = $("#propertyLocation").val();
+            var PhoneNumber = $("#phoneNumber").val();
+            var Longitude = $("#longitude").val();
+            var Latitude = $("#latitude").val();
+            var Address = $("#neighbourhood").val();
+            var Email = $("#email").val();
+            var ComapnyNumber = $("#companyNumber").val();
+            var ComapnyName = $("#companyName").val();
+            var availableUnits = $("#availableUnits").val();
+            formData.append("PropertyType", PropertyType);
+            formData.append("PropertyLocation", PropertyLocation);
+            formData.append("Latitude", Latitude);
+            formData.append("Longitude", Longitude);
+            formData.append("PhoneNumber", PhoneNumber);
+            formData.append("Email", Email);
+            formData.append("PropertyDescription", PropertyDescription);
+            formData.append("Address", Address);
+            formData.append("ComapnyName", ComapnyName);
+            formData.append("ComapnyNumber", ComapnyNumber);
+            formData.append("AvailableUnits", availableUnits);
+            //formData.append("file", $("#file")[0].files[0]);
+
+            $.ajax({
+                url: '@Url.Content("~/PropertyRegistration/SaveFormJson")',
+                type: "post",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                        parent.searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                        parent.layer.close(index);
+                    }
+                }
+            });
+        }
+
+    }
+
 </script>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -11,13 +12,15 @@ using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
+    [ExceptionFilter]
     public class CreditAssessmentRiskFactorController : BaseController
     {
         private readonly ICreditAssessmentRiskFactorService _iCreditAssessmentRiskFactorService;
-
-        public CreditAssessmentRiskFactorController(IUnitOfWork iUnitOfWork, ICreditAssessmentRiskFactorService iCreditAssessmentRiskFactorService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public CreditAssessmentRiskFactorController(IUnitOfWork iUnitOfWork, ICreditAssessmentRiskFactorService iCreditAssessmentRiskFactorService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iCreditAssessmentRiskFactorService = iCreditAssessmentRiskFactorService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -28,6 +31,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         public IActionResult CreditAssessmentRiskFactorForm()
+        {
+            return View();
+        }
+
+        public IActionResult CreditAssessmentRiskFactorEditForm()
         {
             return View();
         }
@@ -45,28 +53,41 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         {
             List<CreditAssessmentRiskFactorEntity> obj = await _iCreditAssessmentRiskFactorService.GetList(productcode);
             return Json(obj);
-        } 
+        }
         public async Task<IActionResult> GetRisks(string productcode)
         {
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetRisks.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.CreditAssessmentFactor.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             TData<List<CreditAssessmentRiskFactorEntity>> obj = await _iCreditAssessmentRiskFactorService.Getrisks(productcode);
             return Json(obj);
         }
 
         [HttpGet]
         [AuthorizeFilter("creditassessmentriskfactor:view")]
-        public async Task<IActionResult> GetFormJson(int id)
+        public async Task<IActionResult> GetFormJson(long id)
         {
             TData<CreditAssessmentRiskFactorEntity> obj = await _iCreditAssessmentRiskFactorService.GetEntity(id)
 ;
             return Json(obj);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetMaxSortJson()
-        //{
-        //    TData<int> obj = await _iCreditAssessmentRiskFactorService.GetMaxSort();
-        //    return Json(obj);
-        //}
+        [HttpGet]
+        [AuthorizeFilter("creditassessmentriskfactor:view")]
+        public async Task<IActionResult> GetFormJsonn(int id)
+        {
+            TData<CreditAssessmentRiskFactorEntity> obj = await _iCreditAssessmentRiskFactorService.GetEntities(id)
+;
+            return Json(obj);
+        }
+
+        public async Task<IActionResult> GetCreditTypePageListJson(CreditAssessmentRiskFactorListParam param, Pagination pagination)
+        {
+            TData<List<CreditAssessmentRiskFactorEntity>> obj = await _iCreditAssessmentRiskFactorService.GetPageList(param, pagination);
+            return Json(obj);
+        }
         #endregion
 
         #region Submit data

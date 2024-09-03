@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -14,10 +16,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class LoanInitiationController : BaseController
     {
         private readonly ILoanInitiationService _iLoanInitiationService;
-
-        public LoanInitiationController(IUnitOfWork iUnitOfWork, ILoanInitiationService iLoanInitiationService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public LoanInitiationController(IUnitOfWork iUnitOfWork, ILoanInitiationService iLoanInitiationService, IAuditTrailService AuditTrailService) : base(iUnitOfWork)
         {
             _iLoanInitiationService = iLoanInitiationService;
+            _iAuditTrailService = AuditTrailService;
         }
 
         #region View function
@@ -41,6 +44,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetListJson(LoanInitiationListParam param)
         {
             TData<List<LoanInitiationEntity>> obj = await _iLoanInitiationService.GetList(param);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetLoanInitiationPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.LoanInitiationController.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 
@@ -56,8 +64,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [HttpGet]
         [AuthorizeFilter("loaninitiation:search,user:search")]
         public async Task<IActionResult> GetLoanInitiationPageListJson(LoanInitiationListParam param, Pagination pagination)
-        {
+        { 
             TData<List<LoanInitiationEntity>> obj = await _iLoanInitiationService.GetPageList(param, pagination);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetLoanInitiationPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.LoanInitiationController.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 
@@ -79,10 +92,10 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         [HttpGet]
-        [AuthorizeFilter("loanInitiation:view")]
-        public async Task<IActionResult> GetFormJson(string code)
+        //[AuthorizeFilter("loanInitiation:view")]
+        public async Task<IActionResult> GetFormJson()
         {
-            TData<LoanInitiationEntity> obj = await _iLoanInitiationService.GetEntity(code);
+            TData<LoanInitiationEntity> obj = await _iLoanInitiationService.GetEntity();
             return Json(obj);
         }
 
@@ -100,11 +113,16 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> SaveFormJson(LoanInitiationEntity entity)
         {
             TData<string> obj = await _iLoanInitiationService.SaveForm(entity);
+            //var auditInstance = new AuditTrailEntity();
+            //auditInstance.Action = SystemOperationCode.LoanInitiation.ToString();
+            //auditInstance.ActionRoute = SystemOperationCode.LoanInitiationController.ToString();
+
+            //var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 
         [HttpPost]
-        [AuthorizeFilter("refund:delete")]
+        [AuthorizeFilter("loaninitiation:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {
             TData obj = await _iLoanInitiationService.DeleteForm(ids);
@@ -112,17 +130,58 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         [HttpPost]
-        public async Task<IActionResult> PerformLoanAffordability(InitiateLoanDto initiateLoanDto)
+        public async Task<JsonResult> PerformLoanAffordability(InitiateLoanDto initiateLoanDto)
         {
-            TData obj = await _iLoanInitiationService.Performaffordability(initiateLoanDto);
-            return Json(obj);
+            List<AffordabilityResponseDto> result = new List<AffordabilityResponseDto>();
+            var obj = await _iLoanInitiationService.Performaffordability(initiateLoanDto);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.PerformLoanAffordability.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.LoanInitiationController.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
+            if (obj.message != null)
+            {
+                result.Add(obj);
+                return Json(new { success = false, message = obj.message });
+
+            }
+            result.Add(obj);
+            return Json(new { success = true, message = result });
         }
         #endregion
-        #region
+        #region Loan Initiation
         [HttpPost]
         public async Task<IActionResult> LoanInitiation( InitiateLoanDto initiateLoanDto)
         {
+            
             TData obj = await _iLoanInitiationService.LoanApplication(initiateLoanDto);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.LoanInitiation.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.LoanInitiationController.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
+
+            var auditInstance2 = new AuditTrailEntity();
+            auditInstance2.Action = SystemOperationCode.LoanDocument.ToString();
+            auditInstance2.ActionRoute = SystemOperationCode.LoanInitiationController.ToString();
+
+            var audit2 = await _iAuditTrailService.SaveForm(auditInstance2);
+            return Json(obj);
+        }
+
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> ViewInformation()
+        {
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.ViewInformation.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.LoanInitiationController.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
+            TData<CustomerDetailsViewModel> obj = await _iLoanInitiationService.GetCustomerDetails();
             return Json(obj);
         }
         #endregion

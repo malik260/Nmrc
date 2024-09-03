@@ -40,6 +40,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
             await BaseRepository().Delete<ChecklistEntity>(idArr);
         }
+
+        public async Task<RiskAssessmentProcedureEntity> GetEntity(string Nhf)
+        {
+            return await BaseRepository().FindEntity<RiskAssessmentProcedureEntity>(x=> x.NHFNo == Nhf);
+        }
         #endregion
 
     }

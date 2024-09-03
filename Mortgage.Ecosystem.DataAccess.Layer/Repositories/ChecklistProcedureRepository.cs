@@ -46,7 +46,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
 
         }
-
+        public async Task<ChecklistProcedureEntity> GetEntity(string Nhf)
+        {
+            return await BaseRepository().FindEntity<ChecklistProcedureEntity>(x => x.NHFNo == Nhf);
+        }
 
         public async Task DeleteForm(string ids)
         {

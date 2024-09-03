@@ -183,6 +183,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 Amount = Convert.ToString(amount),
 
                 BankName = customerDetails.Data.CustomerBank,
+                MonthlyIncome = customerDetails.Data.MonthlySalary
                 //BankCode = customerDetails.Data.
             };
 

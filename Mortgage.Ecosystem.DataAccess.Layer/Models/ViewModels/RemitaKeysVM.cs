@@ -26,4 +26,46 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels
         public string? payerPhone { get; set; }
         public string? description { get; set; }
     }
+    
+    public class IndividualAffordabilityDetails
+    {
+        public int productId { get; set; }
+        public int casaAccountId { get; set; }
+        public int age { get; set; }
+        public int yearsInService { get; set; }
+        public int repaymentPeriod { get; set; }
+        public decimal presentValue { get; set; }
+        public decimal affordableAmount { get; set; }
+        public double monthlyRepayment { get; set; }
+        public double profitability { get; set; }
+        public decimal rate { get; set; }
+        public decimal amountRequested { get; set; }
+        public bool tenorOverride { get; set; }
+
+
+    }
+
+    public class ContributionResponseVM
+    {
+        public int responseCode { get; set; }
+        public string responseText { get; set; }
+        public string message { get; set; }
+    }
+
+
+    public class CustomerContributionViewwModel
+    {
+        public DateTime ValueDate { get; set; }
+        public DateTime PostDate { get; set; }
+        public string Month { get; set; }
+        public string Year { get; set; }
+        public string EmployeeNhfNumber { get; set; }
+        public string EmployerNhfNumber { get; set; }
+        public decimal AmountContributed { get; set; }
+        public string EmployeeName { get; set; }
+        public string EmployerName { get; set; }
+        public string RRR { get; set; }
+        public string Narration { get; set; }
+
+    }
 }

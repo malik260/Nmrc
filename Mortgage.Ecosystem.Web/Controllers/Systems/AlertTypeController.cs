@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class AlertTypeController : BaseController
     {
         private readonly IAlertTypeService _iAlertTypeService;
-
-        public AlertTypeController(IUnitOfWork iUnitOfWork, IAlertTypeService iAlertTypeService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public AlertTypeController(IUnitOfWork iUnitOfWork, IAlertTypeService iAlertTypeService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iAlertTypeService = iAlertTypeService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +36,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("Alerttype:search,user:search")]
+        //[AuthorizeFilter("Alerttype:search,user:search")]
         public async Task<IActionResult> GetListJson(AlertTypeListParam param)
         {
             TData<List<AlertTypeEntity>> obj = await _iAlertTypeService.GetList(param);
@@ -68,6 +70,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetAlertTypeName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.AlertType.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
         #endregion

@@ -264,18 +264,18 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: true },
-                { field: 'NHFEmployeeNumber', title: 'NHF Employee Number', sortable: true },
-                { field: 'Name', title: 'Employee Name', sortable: true },
-                { field: 'Email', title: 'Email Address', sortable: true },
-                { field: 'Phone', title: 'Phone Number', sortable: true },
+                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: false },
+                { field: 'NHFEmployeeNumber', title: 'NHF Employee Number', sortable: false },
+                { field: 'Name', title: 'Employee Name', sortable: false },
+                { field: 'Email', title: 'Email Address', sortable: false },
+                { field: 'Phone', title: 'Phone Number', sortable: false },
                 {
                     field: 'BaseModifyTime', title: ' Date Created', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
                     }
                 },
                 {
-                    field: 'Status', title: 'Status', sortable: true}
+                    field: 'Status', title: 'Status', sortable: false}
 
             ],
             queryParams: function (params) {
@@ -290,11 +290,11 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: true },
-                { field: 'Name', title: 'Employee Name', sortable: true },
-                { field: 'Phone', title: 'Phone Number', sortable: true },
-                { field: 'Email', title: 'Email', sortable: true },
-                { field: 'ContactPerson', title: 'Contact Person', sortable: true },
+                { field: 'NHFEmployerNumber', title: 'NHF Employer Number', sortable: false },
+                { field: 'Name', title: 'Employee Name', sortable: false },
+                { field: 'Phone', title: 'Phone Number', sortable: false },
+                { field: 'Email', title: 'Email', sortable: false },
+                { field: 'ContactPerson', title: 'Contact Person', sortable: false },
                 {
                     field: 'BaseModifyTime', title: 'Date Created', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
@@ -302,7 +302,7 @@
                 },
 
                 {
-                    field: 'Status', title: 'Status', sortable: true
+                    field: 'Status', title: 'Status', sortable: false
                 }
 
 
@@ -319,11 +319,11 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'CompanyName', title: 'Company Name', sortable: true },
-                { field: 'CompanyNumber', title: 'Company Number', sortable: true },
-                { field: 'Email', title: 'Email Address', sortable: true },
-                { field: 'Phone', title: 'Phone Address', sortable: true },
-                { field: 'DateOfIncorporation', title: 'Date Of Incorporation', sortable: true },
+                { field: 'CompanyName', title: 'Company Name', sortable: false },
+                { field: 'CompanyNumber', title: 'Company Number', sortable: false },
+                { field: 'Email', title: 'Email Address', sortable: false },
+                { field: 'Phone', title: 'Phone Address', sortable: false },
+                { field: 'DateOfIncorporation', title: 'Date Of Incorporation', sortable: false },
 
                 {
                     field: 'BaseModifyTime', title: 'Date Created', formatter: function (value, row, index) {
@@ -331,7 +331,7 @@
                     }
                 },
                 {
-                    field: 'Status', title: 'Status', sortable: true
+                    field: 'Status', title: 'Status', sortable: false
                 }
             ],
             queryParams: function (params) {
@@ -345,11 +345,11 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'CompanyName', title: 'Company Name', sortable: true },
-                { field: 'CompanyNumber', title: 'Company Number', sortable: true },
-                { field: 'Email', title: 'Email Address', sortable: true },
-                { field: 'Phone', title: 'Phone Address', sortable: true },
-                { field: 'DateOfIncorporation', title: 'Date Of Incorporation', sortable: true },
+                { field: 'CompanyName', title: 'Company Name', sortable: false },
+                { field: 'CompanyNumber', title: 'Company Number', sortable: false },
+                { field: 'Email', title: 'Email Address', sortable: false },
+                { field: 'Phone', title: 'Phone Address', sortable: false },
+                { field: 'DateOfIncorporation', title: 'Date Of Incorporation', sortable: false },
 
                 {
                     field: 'BaseModifyTime', title: 'Date Created', formatter: function (value, row, index) {
@@ -357,7 +357,7 @@
                     }
                 },
                 {
-                    field: 'Status', title: 'Status', sortable: true
+                    field: 'Status', title: 'Status', sortable: false
                 }
             ],
             queryParams: function (params) {
@@ -374,18 +374,18 @@
         columns: [
         { checkbox: true, visible: true },
         { field: 'Id', title: 'Id', visible: false },
-        { field: 'CompanyName', title: 'Company Name', sortable: true },
-        { field: 'CompanyNumber', title: 'Company Number', sortable: true },
-        { field: 'Email', title: 'Email Address', sortable: true },
-        { field: 'Phone', title: 'Phone Address', sortable: true },
-        { field: 'DateOfIncorporation', title: 'Date Of Incorporation', sortable: true },
+        { field: 'CompanyName', title: 'Company Name', sortable: false },
+        { field: 'CompanyNumber', title: 'Company Number', sortable: false },
+        { field: 'Email', title: 'Email Address', sortable: false },
+        { field: 'Phone', title: 'Phone Address', sortable: false },
+        { field: 'DateOfIncorporation', title: 'Date Of Incorporation', sortable: false },
         {
             field: 'BaseModifyTime', title: 'Date Created', formatter: function (value, row, index) {
                 return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
             }
         },
         {
-            field: 'Status', title: 'Status', sortable: true
+            field: 'Status', title: 'Status', sortable: false
         }
     ],
     queryParams: function (params) {

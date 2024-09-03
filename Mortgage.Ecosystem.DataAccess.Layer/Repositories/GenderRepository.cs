@@ -27,9 +27,17 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
-        public async Task<GenderEntity> GetEntity(long id)
+        public async Task<GenderEntity> GetEntity(int id)
         {
-            return await BaseRepository().FindEntity<GenderEntity>(id);
+            try
+            {
+                return await BaseRepository().FindEntity<GenderEntity>(id);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
         #endregion
 

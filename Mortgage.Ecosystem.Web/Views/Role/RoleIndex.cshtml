@@ -9,15 +9,15 @@
                     <li>
                         Role name: <input id="roleName" col="RoleName" type="text" />
                     </li>
-                    <li>
-                        Role Status: <span id="roleStatus" col="RoleStatus"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
+                    @*<li>
+                    Role Status: <span id="roleStatus" col="RoleStatus"></span>
+                    </li>*@
+                    @*<li class="select-time">
+                    <label>Created: </label>
+                    <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                    <span>-</span>
+                    <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                    </li>*@
                     <li>
                         <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
                     </li>
@@ -26,7 +26,6 @@
         </div>
         <div class="btn-group-sm" id="toolbar">
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
         </div>
 
@@ -47,7 +46,7 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/Role/GetPageListJson")';
+        var queryUrl = '@Url.Content("~/Role/GetListJson")';
         $('#gridTable').cnTable({
             url: queryUrl,
             sortName: 'RoleSort',
@@ -56,8 +55,8 @@
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
                 { field: 'CompanyName', title: 'Employer', width: "25%" },
-                { field: 'RoleName', title: 'Role Name', width: "15%", sortable: true },
-                { field: 'RoleSort', title: 'Display Order', width: "15%", sortable: true },
+                { field: 'RoleName', title: 'Role Name', width: "15%", sortable: false },
+                { field: 'RoleSort', title: 'Display Order', width: "15%", sortable: false },
                 {
                     field: 'RoleStatus', title: 'Status', width: "15%",
                     formatter: function (value, row, index) {

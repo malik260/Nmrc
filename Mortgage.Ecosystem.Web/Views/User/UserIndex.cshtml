@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_Index.cshtml";
 }
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
-@section header{
+@section header {
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/zTree/v3/css/metroStyle/metroStyle.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/zTree/v3/js/ztree.min.js"))
 
@@ -39,18 +39,18 @@
                     <li>
                         <label>Username：</label><input id="userName" col="UserName" type="text" />
                     </li>
-                    <li>
-                        <label>Mobile：</label><input id="mobile" col="Mobile" type="text" />
+                    @*<li>
+                    <label>Mobile：</label><input id="mobile" col="Mobile" type="text" />
                     </li>
                     <li>
-                        <label>User Status：</label><span id="userStatus" col="UserStatus"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Creation Time： </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="Starting Time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder=" Finish Time" />
-                    </li>
+                    <label>User Status：</label><span id="userStatus" col="UserStatus"></span>
+                    </li>*@
+                    @*<li class="select-time">
+                    <label>Creation Time： </label>
+                    <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="Starting Time" />
+                    <span>-</span>
+                    <input id="endTime" col="EndTime" type="text" class="time-input" placeholder=" Finish Time" />
+                    </li>*@
                     <li>
                         <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
                     </li>
@@ -59,10 +59,6 @@
         </div>
 
         <div id="toolbar" class="btn-group-sm">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> New</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
-            <a id="btnImport" class="btn btn-info" onclick="importForm()"><i class="fa fa-upload"></i> Import</a>
             <a id="btnExport" class="btn btn-warning" onclick="exportForm()"><i class="fa fa-download"></i> Export</a>
         </div>
 
@@ -126,9 +122,8 @@
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
                 { field: 'CompanyName', title: 'Employer' },
-                { field: 'UserName', title: 'Login Name', sortable: true },
+                { field: 'UserName', title: 'Login Name', sortable: false },
                 { field: 'RealName', title: 'Name', sortable: false },
-                { field: 'Mobile', title: 'Mobile Phone', sortable: false },
                 {
                     field: 'UserStatus', title: 'Status', formatter: function (value, row, index) {
                         if (row.UserStatus == "@StatusEnum.Yes.ParseToInt()") {
@@ -139,19 +134,20 @@
                     }
                 },
                 {
-                    field: 'BaseModifyTime', title: 'Creation time', formatter: function (value, row, index) {
-                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
-                    }
-                },
-                {
-                    title: 'Operate',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="showResetPasswordForm(\'' + row.Id + '\')"><i class="fa fa-key"></i>Reset</a>');
-                        return actions.join('');
+                    field: 'BaseCreateTime', title: 'Creation Date', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd");
                     }
                 }
+                // ,
+                // {
+                //     title: 'Operate',
+                //     align: 'center',
+                //     formatter: function (value, row, index) {
+                //         var actions = [];
+                //         actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="showResetPasswordForm(\'' + row.Id + '\')"><i class="fa fa-key"></i>Reset</a>');
+                //         return actions.join('');
+                //     }
+                // }
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);

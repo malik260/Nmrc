@@ -96,7 +96,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                 return user;
             }
             token = token.Trim('"');
-            user = CacheFactory.Cache.GetCache<OperatorInfo>(token);
+            //user = CacheFactory.Cache.GetCache<OperatorInfo>(token);
             if (user == null)
             {
                 user = await new DataRepository().GetUserByToken(token);

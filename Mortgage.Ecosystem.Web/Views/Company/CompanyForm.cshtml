@@ -3,771 +3,1330 @@
 }
 
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
-@section header{
+@section header {
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
 }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">New Customer Record</span>
+                <div class="form-group" style="margin-top: 15px;">
+                    <div class="col-sm-6">
+                        <label class="control-label">Choose Customer Type<font class="red"> *</font></label>
+                        <div id="agentType" col="AgentType"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Email<font class="red"> *</font></label>
+                        <input id="emailAddress" col="EmailAddress" type="text" class="form-control" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="control-label">Mobile/Telephone<font class="red"> *</font></label>
+                        <input id="mobileNumber" col="MobileNumber" type="text" class="form-control" />
+                        <span id="error-message" class="text-danger" style="display:none; font-weight: bold;"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="wrapper animated fadeInRight">
-        <form id="form" class="form-horizontal m">
+        <div id="empPmbDevCoop" style="margin-top: 10px;">
             <div class="dialogblockborder dialogblockborderheadline">
-                <div class="dialogblock-header" style="height: auto;">
-                    <span class="dialogblockheader">New Agent Record</span>
-                    <div class="form-group" style="margin-top: 15px;">
+                <div class="dialogblock-body" style="height: auto;">
+                    <span id="empPmbDevCoopTitle" class="dialogblockheader">Employer</span>
+                    <div class="form-group">
                         <div class="col-sm-6">
-                            <label class="control-label">Choose Agent Type<font class="red"> *</font></label>
-                            <div id="agentType" col="AgentType"></div>
+                            <label class="control-label">Name<font class="red"> *</font></label>
+                            <input id="name" col="Name" type="text" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Address<font class="red"> *</font></label>
+                            <textarea id="address" col="Address" class="form-control" style="height:60px"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-6">
-                            <label class="control-label">Email<font class="red"> *</font></label>
-                            <input id="emailAddress" col="EmailAddress" type="text" class="form-control" />
+                            <label class="control-label">Sector<font class="red"> *</font></label>
+                            <div id="sector" col="Sector"></div>
                         </div>
                         <div class="col-sm-6">
-                            <label class="control-label">Mobile/Telephone<font class="red"> *</font></label>
-                            <input id="mobileNumber" col="MobileNumber" type="text" class="form-control" />
+                            <label class="control-label">Sub-Sector<font class="red"> *</font></label>
+                            <div id="subSector" col="SubSector"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">RC Number<font class="red"> *</font></label>
+                            <input id="rcNumber" col="RCNumber" type="text" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Date Of Incorporation<font class="red"> *</font></label>
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input type="date" class="form-control" id="dateOfIncorporation" col="DateOfIncorporation" placeholder="yyyy-MM-dd" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Nature Of Business<font class="red"> *</font></label>
+                            <input id="natureOfBusiness" col="NatureOfBusiness" type="text" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Name Of Registrar<font class="red"> *</font></label>
+                            <input id="nameOfRegistrar" col="NameOfRegistrar" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Contact Person<font class="red"> *</font></label>
+                            <input id="contactPerson" col="ContactPerson" type="text" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Contact Person Designation<font class="red"> *</font></label>
+                            <input id="contactPersonDesignation" col="ContactPersonDesignation" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    @*  <div class="form-group">
+                    <div class="col-sm-6">
+                    <label class="control-label">Company Class</label>
+                    <div id="companyClass" col="CompanyClass"></div>
+                    </div>
+                    <div class="col-sm-6">
+                    <label class="control-label">Company Type</label>
+                    <div id="companyType" col="CompanyType"></div>
+                    </div>
+                    </div>*@
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Contribution Frequency<font class="red"> *</font></label>
+                            <div id="contributionFrequency" col="ContributionFrequency"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Website</label>
+                            <input id="website" col="Website" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Tin <font class="red"> *</font></label>
+                            <input id="tin" col="Tin" type="text" class="form-control">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group col-md-3" style="margin-bottom: 0px;">
-                <button class="btn btn-success" type="button" id="generateOTP" style="margin-top: 10px;">
-                    <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Generate OTP</span>
-                </button>
-            </div>
-            <div id="empPmbDevCoop" style="margin-top: 10px;">
-                <div class="dialogblockborder dialogblockborderheadline">
-                    <div class="dialogblock-body" style="height: auto;">
-                        <span id="empPmbDevCoopTitle" class="dialogblockheader">Employer</span>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Name<font class="red"> *</font></label>
-                                <input id="name" col="Name" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Address<font class="red"> *</font></label>
-                                <textarea id="address" col="Address" class="form-control" style="height:60px"></textarea>
+        </div>
+        <div id="individual" style="margin-top: 10px;">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-body" style="height: auto;">
+                    <span class="dialogblockheader">Individual Contributor</span>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Employment Type<font class="red"> *</font></label>
+                            <div id="employmentType" col="EmploymentType"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">NIN <font class="red"> *</font></label>
+                            <input id="nin" required col="NIN" type="number" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Title<font class="red"> *</font></label>
+                            <div id="title" col="Title"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">First Name<font class="red"> *</font></label>
+                            <input id="firstName" col="FirstName" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Other Name(s)</label>
+                            <input id="otherName" col="OtherName" type="text" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Last Name<font class="red"> *</font></label>
+                            <input id="lastName" col="LastName" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Gender<font class="red"> *</font></label>
+                            <div id="gender" col="Gender"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Date of Birth<font class="red"> *</font></label>
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input id="dateOfBirth" col="DateOfBirth" type="date" class="form-control" placeholder="yyyy-MM-dd" />
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Sector<font class="red"> *</font></label>
-                                <div id="sector" col="Sector"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Sub-Sector</label>
-                                <div id="subSector" col="SubSector"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Postal Address<font class="red"> *</font></label>
+                            <textarea id="postalAddress" col="PostalAddress" class="form-control" style="height:60px"></textarea>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Marital Status<font class="red"> *</font></label>
+                            <div id="marital" col="MaritalStatus"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Kin's Last Name<font class="red"> *</font></label>
+                            <input id="kinLastName" col="KinLastName" required type="text" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Kin's FIrst Name<font class="red"> *</font></label>
+                            <input id="kinFirstName" col="KinFirstName" type="text" required class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Kin's Mobile/Telephone<font class="red"> *</font></label>
+                            <input id="kinMobileNumber" col="KinMobileNumber" required type="number" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Kin's Relationship<font class="red"> *</font></label>
+                            <div id="kinRelationship" col="KinRelationship"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Kin's Address<font class="red"> *</font></label>
+                            <input id="kinAddress" col="KinAddress" type="text" required class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Kin's Email Address<font class="red"> *</font></label>
+                            <input id="kinEmailAddress" col="KinEmailAddress" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">BVN<font class="red"> *</font></label>
+                            <input id="bvn" col="BVN" type="text" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Company Name<font class="red"> *</font></label>
+                            <div id="coyName" col="Company"></div>
+                            @*                             <input id="coyName" col="CoyName" type="text" class="form-control" />
+                            *@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Company Address<font class="red"> *</font></label>
+                            <textarea id="coyAddress" col="CoyAddress" class="form-control" style="height:60px"></textarea>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Company RC Number<font class="red"> *</font></label>
+                            <input id="coyRcNumber" col="CoyRCNumber" type="text" class="form-control" />
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Company Sector<font class="red"> *</font></label>
+                            <div id="coySector" col="CoySector"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Company Sub-Sector</label>
+                            <div id="coySubSector" col="CoySubSector"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Contribution Branch<font class="red"> *</font></label>
+                            <div id="branch" col="ContributionBranch"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Date of Employment<font class="red"> *</font></label>
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input type="date" class="form-control" id="employmentDate" col="DateOfEmployment" placeholder="yyyy-MM-dd">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">RC Number<font class="red"> *</font></label>
-                                <input id="rcNumber" col="RCNumber" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Date Of Incorporation</label>
-                                <div class="input-group date">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" id="dateOfIncorporation" col="DateOfIncorporation" placeholder="yyyy-MM-dd">
-                                </div>
-                            </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Account Type<font class="red"> *</font></label>
+                            <div id="accountType" col="AccountType"></div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Nature Of Business</label>
-                                <input id="natureOfBusiness" col="NatureOfBusiness" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Name Of Registrar</label>
-                                <input id="nameOfRegistrar" col="NameOfRegistrar" type="text" class="form-control" />
-                            </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Bank Name<font class="red"> *</font></label>
+                            <div id="bankName" col="CustomerBank"></div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Company Class</label>
-                                <div id="companyClass" col="CompanyClass"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Company Type</label>
-                                <div id="companyType" col="CompanyType"></div>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Account Number<font class="red"> *</font></label>
+                            <input id="accountNumber" col="BankAccountNumber" type="number" class="form-control" />
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Contribution Frequency</label>
-                                <div id="contributionFrequency" col="ContributionFrequency"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Website</label>
-                                <input id="website" col="Website" type="text" class="form-control" />
-                            </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Monthly Salary (Net Pay)<font class="red"> *</font></label>
+                            <input id="monthlySalary" col="MonthlySalary" type="text" class="form-control" />
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-7">
-                                <label class="control-label">Organization Logo</label>
-                                <input id="logo" col="Logo" type="file">
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label">Alert Type<font class="red"> *</font></label>
+                            <div id="alertType" col="AlertType"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Statement</label>
+                            <input id="statement" col="Statement" type="text" class="form-control" />
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="individual" style="margin-top: 10px;">
-                <div class="dialogblockborder dialogblockborderheadline">
-                    <div class="dialogblock-body" style="height: auto;">
-                        <span class="dialogblockheader">Individual Contributor</span>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">BVN<font class="red"> *</font></label>
-                                <input id="bvn" col="BVN" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">NIN</label>
-                                <input id="nin" col="NIN" type="text" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Title</label>
-                                <div id="title" col="Title"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">First Name<font class="red"> *</font></label>
-                                <input id="firstName" col="FirstName" type="text" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Other Name(s)</label>
-                                <input id="otherName" col="OtherName" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Last Name<font class="red"> *</font></label>
-                                <input id="lastName" col="LastName" type="text" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="col-sm-2 control-label" style="padding-left: 0px;">Gender</label>
-                                <div id="gender" col="Gender"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Date of Birth<font class="red"> *</font></label>
-                                <input id="dateOfBirth" col="DateOfBirth" type="text" class="form-control" placeholder="yyyy-MM-dd" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Postal Address</label>
-                                <textarea id="postalAddress" col="PostalAddress" class="form-control" style="height:60px"></textarea>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Marital Status</label>
-                                <div id="marital" col="Marital"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Kin's Last Name</label>
-                                <input id="kinLastName" col="KinLastName" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Kin's FIrst Number</label>
-                                <input id="kinFirstNumber" col="KinFirstNumber" type="text" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Kin's Mobile/Telephone</label>
-                                <input id="kinMobileNumber" col="KinMobileNumber" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Kin's Relationship</label>
-                                <div id="kinRelationship" col="KinRelationship"></div>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Employment Type</label>
-                                <div id="employmentType" col="EmploymentType"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Company Name<font class="red"> *</font></label>
-                                <input id="coyName" col="CoyName" type="text" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Company Address<font class="red"> *</font></label>
-                                <textarea id="coyAddress" col="CoyAddress" class="form-control" style="height:60px"></textarea>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Company RC Number<font class="red"> *</font></label>
-                                <input id="coyRcNumber" col="CoyRCNumber" type="text" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Company Sector<font class="red"> *</font></label>
-                                <div id="coySector" col="CoySector"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Company Sub-Sector</label>
-                                <div id="coySubSector" col="CoySubSector"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Contribution Branch</label>
-                                <div id="branch" col="Branch"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Date of Employment</label>
-                                <div class="input-group date">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" id="employmentDate" col="EmploymentDate" placeholder="yyyy-MM-dd">
+        </div>
+        <div id="manageLogin" style="margin-top: 10px;">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="dialogblock-body" style="height: auto;">
+                    <span id="manageLoginTitle" class="dialogblockheader">Login Info</span>
+                    <div class="row" style="display: block !important;">
+                        <div class="col-sm-6" style="height: auto; border-right: 1px solid #bbb9b9; margin-bottom: 5px;">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <label class="control-label">User Name<font class="red"> *</font></label>
+                                    <input id="userName" col="UserName" type="email" class="form-control" />
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <label class="control-label">First Name<font class="red"> *</font></label>
+                                    <input id="indFirstName" col="IndFirstName" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <label class="control-label">Last Name<font class="red"> *</font></label>
+                                    <input id="indLastName" col="IndLastName" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            @*<div class="form-group">
+                            <div class="col-sm-10">
+                            <label class="control-label">Date of Birth</label>
+                            <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" id="indDob" col="IndDOB" placeholder="yyyy-MM-dd">
+                            </div>
+                            </div>
+                            </div>*@
+                            @* <div class="form-group">
+                            <div class="col-sm-10">
+                            <label class="control-label">Default Role<font class="red"> *</font></label>
+                            <div id="role" col="Role"></div>
+                            </div>
+                            </div>*@
                         </div>
-                        <hr />
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Account Type</label>
-                                <div id="accountType" col="AccountType"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Bank Name</label>
-                                <div id="bankName" col="CustomerBank"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Account Number</label>
-                                <input id="accountNumber" col="AccountNumber" type="text" class="form-control" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Monthly Salary (Net Pay)</label>
-                                <input id="monthlySalary" col="MonthlySalary" type="text" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label class="control-label">Alert Type</label>
-                                <div id="alertType" col="AlertType"></div>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="control-label">Statement</label>
-                                <input id="statement" col="Statement" type="text" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="manageLogin" style="margin-top: 10px;">
-                <div class="dialogblockborder dialogblockborderheadline">
-                    <div class="dialogblock-body" style="height: auto;">
-                        <span id="manageLoginTitle" class="dialogblockheader">Login Info</span>
-                        <div class="row" style="display: block !important;">
-                            <div class="col-sm-6" style="height: auto; border-right: 1px solid #bbb9b9; margin-bottom: 5px;">
-                                <div class="form-group">
-                                    <div class="col-sm-10">
-                                        <label class="control-label">User Name<font class="red"> *</font></label>
-                                        <input id="userName" col="UserName" type="email" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-10">
-                                        <label class="control-label">BVN (optional)</label>
-                                        <input id="indBvn" col="IndBVN" type="text" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-10">
-                                        <label class="control-label">First Name<font class="red"> *</font></label>
-                                        <input id="indFirstName" col="IndFirstName" type="text" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-10">
-                                        <label class="control-label">Last Name<font class="red"> *</font></label>
-                                        <input id="indLastName" col="IndLastName" type="text" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-10">
-                                        <label class="control-label">Date of Birth</label>
-                                        <div class="input-group date">
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                            <input type="text" class="form-control" id="indDob" col="IndDOB" placeholder="yyyy-MM-dd">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-10">
-                                        <label class="control-label">Default Role<font class="red"> *</font></label>
-                                        <div id="role" col="Role"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div style="padding: 15px 0px 5px 0px;">
-                                    <font style="font-weight: bold; color: #e70e0e;">
-                                        The applicant is required to submit the following information in order to complete this registration <font style="color: black">(All fields marked <font style="color: red">*</font> are required)</font>:
-                                    </font>
-                                    <ul style="padding-left: 15px; padding-top: 20px; text-shadow: 1px 0px 1px #9E9E9E;">
-                                        <li id="lUserName" style="list-style-type: square; margin-bottom: 5px;">Provide the <strong>USERNAME</strong> - <font style="color: #5555b7;">the name that will be used to login to the application, which is essentially an <strong>Email Address</strong>.</font></li>
-                                        <li id="lBvn" style="list-style-type: square; margin-bottom: 5px;">Enter the <strong>BVN</strong> - <font style="color: #5555b7;">Bank Verification Number (11 digit numbers)</font></li>
-                                        <li id="lFirstName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>First Name</strong></li>
-                                        <li id="lLastName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>Last Name</strong></li>
-                                        <li id="lDateOfBirth" style="list-style-type: square; margin-bottom: 5px;">Provide <strong>Date Of Birth</strong></li>
-                                        <li id="lRole" style="list-style-type: square; margin-bottom: 5px;">Select the default <strong>Role</strong></li>
-                                    </ul>
-                                </div>
+                        <div class="col-sm-6">
+                            <div style="padding: 15px 0px 5px 0px;">
+                                <font style="font-weight: bold; color: #e70e0e;">
+                                    The applicant is required to submit the following information in order to complete this registration <font style="color: black">(All fields marked <font style="color: red">*</font> are required)</font>:
+                                </font>
+                                <ul style="padding-left: 15px; padding-top: 20px; text-shadow: 1px 0px 1px #9E9E9E;">
+                                    <li id="lUserName" style="list-style-type: square; margin-bottom: 5px;">Provide the <strong>USERNAME</strong> - <font style="color: #5555b7;">the name that will be used to login to the application, which is essentially an <strong>Email Address</strong>.</font></li>
+                                    @*                                     <li id="lBvn" style="list-style-type: square; margin-bottom: 5px;">Enter the <strong>BVN</strong> - <font style="color: #5555b7;">Bank Verification Number (11 digit numbers)</font></li>
+                                    *@
+                                    <li id="lFirstName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>First Name</strong></li>
+                                    <li id="lLastName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>Last Name</strong></li>
+
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
+</div>
 
-    <script type="text/javascript">
-        var id = cn.request("id");
-        var selectedRole = '';
-        var roleMode = @RoleEnum.General.ToInt();
-        var selectedType = @GlobalConstant.ZERO;
-        $(function () {        
-            $('#indDob').hide();
-            $('#emailAddress').attr('readonly', true);
-            $('#mobileNumber').attr('readonly', true);
-            $("#generateOTP").attr("disabled", "disabled");
-            //$('#generateOTP').hide();
-            $("#generateOTP").parents(".form-group").hide();
-            $('#empPmbDevCoop').show();
-            $('#individual').hide();
-            $('#manageLogin').hide();
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-            $("#agentType").cnComboBox({
-                url: '@Url.Content("~/AgentType/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
-            $("#sector").cnComboBox({
-                url: '@Url.Content("~/Sector/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
-            $("#bankName").cnComboBox({
-                url: '@Url.Content("~/Bank/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+<script type="text/javascript">
+    var id = cn.request("id");
+    var selectedRole = '';
+    var roleMode = @RoleEnum.General.ToInt();
+    var selectedType = @GlobalConstant.ZERO;
+    $(function () {
+        $('#indDob').hide();
+        $('#emailAddress').attr('readonly', true);
+        $('#mobileNumber').attr('readonly', true);
+        $("#generateOTP").attr("disabled", "disabled");
+        //$('#generateOTP').hide();
+        $("#generateOTP").parents(".form-group").hide();
+        $('#empPmbDevCoop').show();
+        $('#individual').hide();
+        $('#manageLogin').hide();
 
-            $("#subSector").cnComboBox({
-                url: '@Url.Content("~/SubSector/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+        $("#agentType").cnComboBox({
+            url: '@Url.Content("~/AgentType/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
 
-            $("#coySector").cnComboBox({
-                url: '@Url.Content("~/Sector/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+        $("#sector").cnComboBox({
+            url: '@Url.Content("~/Sector/GetListJson")',
+            key: "Id",
+            value: "Name"
+        });
+        $("#bankName").cnComboBox({
+            url: '@Url.Content("~/Bank/GetListJson")',
+            key: "Name",
+            value: "Name"
+        });
 
-            $("#coySubSector").cnComboBox({
-                url: '@Url.Content("~/SubSector/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+        $("#subSector").cnComboBox({
+            url: '@Url.Content("~/SubSector/GetListJson")',
+            key: "Id",
+            value: "Name"
+        });
 
-            laydate.render({ elem: '#dateOfIncorporation', type: 'date', theme: 'molv' });
+        $("#coySector").cnComboBox({
+            url: '@Url.Content("~/Sector/GetListJson")',
+            key: "Id",
+            value: "Name"
+        });
 
-            $("#companyClass").cnComboBox({
-                url: '@Url.Content("~/CompanyClass/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+        $("#coySubSector").cnComboBox({
+            url: '@Url.Content("~/SubSector/GetListJson")',
+            key: "Id",
+            value: "Name"
+        });
 
-            $("#companyType").cnComboBox({
-                url: '@Url.Content("~/CompanyType/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+        //laydate.render({ elem: '#dateOfIncorporation', type: 'date', theme: 'molv' });
 
-            $("#contributionFrequency").cnComboBox({
-                url: '@Url.Content("~/ContributionFrequency/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+        $("#companyClass").cnComboBox({
+            url: '@Url.Content("~/CompanyClass/GetListJson")',
+            key: "Id",
+            value: "Name"
+        });
 
-            laydate.render({ elem: '#indDob', type: 'date', theme: 'molv' });
+        $("#companyType").cnComboBox({
+            url: '@Url.Content("~/CompanyType/GetListJson")',
+            key: "Id",
+            value: "Name"
+        });
 
-            $("#title").cnComboBox({
-                url: '@Url.Content("~/Title/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
+        $("#contributionFrequency").cnComboBox({
+            url: '@Url.Content("~/ContributionFrequency/GetListJson")',
+            key: "Id",
+            value: "Name"
+        });
 
-            $("#gender").cnComboBox({
-                url: '@Url.Content("~/Gender/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
+        laydate.render({ elem: '#indDob', type: 'date', theme: 'molv' });
 
-            laydate.render({ elem: '#dateOfBirth', type: 'date', theme: 'molv' });
+        $("#title").cnComboBox({
+            url: '@Url.Content("~/Title/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
 
-            $("#marital").cnComboBox({
-                url: '@Url.Content("~/MaritalStatus/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
+        $("#gender").cnComboBox({
+            url: '@Url.Content("~/Gender/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
 
-            $("#kinRelationship").cnComboBox({
-                url: '@Url.Content("~/Relation/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
+        //laydate.render({ elem: '#dateOfBirth', type: 'date', theme: 'molv' });
 
-            $("#employmentType").cnComboBox({
-                data: cn.getJson(@Html.Raw(typeof(EmploymentTypeEnum).EnumToDictionaryString()))
-            });
+        $("#marital").cnComboBox({
+            url: '@Url.Content("~/MaritalStatus/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
 
-            $("#branch").cnComboBox({
-                url: '@Url.Content("~/State/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
+        $("#kinRelationship").cnComboBox({
+            url: '@Url.Content("~/Relation/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
 
-            laydate.render({ elem: '#employmentDate', type: 'date', theme: 'molv' });
+        $("#employmentType").cnComboBox({
+            data: cn.getJson(@Html.Raw(typeof(EmploymentTypeEnum).EnumToDictionaryString()))
+        });
 
-            $("#accountType").cnComboBox({
-                url: '@Url.Content("~/AccountType/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
+        $("#branch").cnComboBox({
+            url: '@Url.Content("~/State/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
 
-            $("#alertType").cnComboBox({
-                url: '@Url.Content("~/AlertType/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
 
-            $("#name").attr("disabled", "disabled");
-            $("#address").attr("disabled", "disabled");
-            $("#sector_select").attr("disabled", "disabled");
-            $("#subSector_select").attr("disabled", "disabled");
-            $("#rcNumber").attr("disabled", "disabled");
-            $("#dateOfIncorporation").attr("disabled", "disabled");
-            $("#natureOfBusiness").attr("disabled", "disabled");
-            $("#nameOfRegistrar").attr("disabled", "disabled");
-            $("#companyClass_select").attr("disabled", "disabled");
-            $("#companyType_select").attr("disabled", "disabled");
-            $("#contributionFrequency_select").attr("disabled", "disabled");
-            $("#website").attr("disabled", "disabled");
-            $("#logo").attr("disabled", "disabled");
+        // laydate.render({ elem: '#employmentDate', type: 'date', theme: 'molv' });
 
-            $('#agentType').change(function () {
-                selectedType = $("#agentType").cnComboBox('getValue');
-                if (selectedType == @GlobalConstant.ZERO) {
-                    $('#emailAddress').val('');
-                    $('#emailAddress').attr('readonly', true);
-                    $('#mobileNumber').val('');
-                    $('#mobileNumber').attr('readonly', true);
-                    $("#generateOTP").attr("disabled", "disabled");
-                    $('indDob').hide();
+        $("#accountType").cnComboBox({
+            url: '@Url.Content("~/AccountType/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+
+        $("#alertType").cnComboBox({
+            url: '@Url.Content("~/AlertType/GetListJson")',
+            key: "Id",
+            value: "Name",
+            class: "form-control"
+        });
+
+        $("#name").attr("disabled", "disabled");
+        $("#address").attr("disabled", "disabled");
+        $("#sector_select").attr("disabled", "disabled");
+        $("#subSector_select").attr("disabled", "disabled");
+        $("#rcNumber").attr("disabled", "disabled");
+        $("#dateOfIncorporation").attr("disabled", "disabled");
+        $("#natureOfBusiness").attr("disabled", "disabled");
+        $("#nameOfRegistrar").attr("disabled", "disabled");
+        $("#companyClass_select").attr("disabled", "disabled");
+        $("#contactPerson").attr("disabled", "disabled");
+        $("#contactPersonDesignation").attr("disabled", "disabled");
+        $("#companyType_select").attr("disabled", "disabled");
+        $("#contributionFrequency_select").attr("disabled", "disabled");
+        $("#website").attr("disabled", "disabled");
+        $("#logo").attr("disabled", "disabled");
+
+        $('#agentType').change(function () {
+            selectedType = $("#agentType").cnComboBox('getValue');
+            if (selectedType == @GlobalConstant.ZERO) {
+                $('#emailAddress').val('');
+                $('#emailAddress').attr('readonly', true);
+                $('#mobileNumber').val('');
+                $('#mobileNumber').attr('readonly', true);
+                $("#generateOTP").attr("disabled", "disabled");
+                $('indDob').hide();
+                //$('#generateOTP').hide();
+                $("#generateOTP").parents(".form-group").hide();
+                $("#name").attr("disabled", "disabled");
+                $("#address").attr("disabled", "disabled");
+                $("#sector_select").attr("disabled", "disabled");
+                $("#subSector_select").attr("disabled", "disabled");
+                $("#rcNumber").attr("disabled", "disabled");
+                $("#dateOfIncorporation").attr("disabled", "disabled");
+                $("#natureOfBusiness").attr("disabled", "disabled");
+                $("#nameOfRegistrar").attr("disabled", "disabled");
+                $("#companyClass_select").attr("disabled", "disabled");
+                $("#companyType_select").attr("disabled", "disabled");
+                $("#contactPerson").attr("disabled", "disabled");
+                $("#contactPersonDesignation").attr("disabled", "disabled");
+                $("#contributionFrequency_select").attr("disabled", "disabled");
+                $("#website").attr("disabled", "disabled");
+                $("#logo").attr("disabled", "disabled");
+                $('#empPmbDevCoop').show();
+                $('#individual').hide();
+                $('#manageLogin').hide();
+            }
+            if (selectedType == @GlobalConstant.ONE) {
+                selectedRole = 'admin';
+                $('#emailAddress').val('');
+                $('#emailAddress').attr('readonly', false);
+                $('#mobileNumber').val('');
+                $('#mobileNumber').attr('readonly', false);
+                //$('#generateOTP').hide();
+                $('#indDob').parents(".form-group").hide();
+                $("#generateOTP").parents(".form-group").hide();
+                $("#name").removeAttr("disabled").prop("required", true).attr("title", "Please enter company name");;
+                $("#address").removeAttr("disabled");
+                $("#sector_select").removeAttr("disabled");
+                $("#subSector_select").attr("disabled", "disabled");
+                $("#rcNumber").removeAttr("disabled");
+                $("#dateOfIncorporation").removeAttr("disabled");
+                $("#natureOfBusiness").removeAttr("disabled");
+                $("#nameOfRegistrar").removeAttr("disabled");
+                $("#companyClass_select").removeAttr("disabled");
+                $("#companyType_select").removeAttr("disabled");
+                $("#contributionFrequency_select").removeAttr("disabled");
+                $("#website").removeAttr("disabled");
+                $("#logo").removeAttr("disabled");
+                $('#empPmbDevCoop').show();
+                $('#individual').hide();
+                $('#manageLogin').show();
+                $('#contactPerson').removeAttr("disabled");
+                $('#contactPersonDesignation').removeAttr("disabled");
+                $("#sector").parents(".form-group").show();
+                $("#natureOfBusiness").parents(".form-group").show();
+                $("#companyClass").parents(".form-group").show();
+                $("#contributionFrequency").parents(".form-group").show();
+                document.getElementById("empPmbDevCoopTitle").innerHTML = "Employer";
+                document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+            }
+            if (selectedType == @GlobalConstant.TWO || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR) {
+                selectedRole = 'admin';
+                $('#emailAddress').val('');
+                $('#emailAddress').attr('readonly', false);
+                $('#mobileNumber').val('');
+                $('#mobileNumber').attr('readonly', false);
+                $("#generateOTP").parents(".form-group").hide();
+                $("#sector_select").removeAttr("disabled");
+                $("#subSector_select").attr("disabled", "disabled");
+                $("#sector").parents(".form-group").show();
+                $("#contributionFrequency_select").removeAttr("disabled");
+                $("#contributionFrequency").parents(".form-group").show();
+                $("#indBvn").parents(".form-group").hide();
+                $("#name").removeAttr("disabled");
+                $("#address").removeAttr("disabled");
+                $("#rcNumber").removeAttr("disabled");
+                $("#contactPerson").parents(".form-group").hide();
+                $("#contactPersonDesignation").parents(".form-group").hide();
+                $("#dateOfIncorporation").removeAttr("disabled");
+                $('#empPmbDevCoop').show();
+                $('#individual').hide();
+                $('#manageLogin').show();
+                $("#website").removeAttr("disabled");
+
+                //$("#sector").parents(".form-group").hide();
+                $("#natureOfBusiness").parents(".form-group").hide();
+                $("#companyClass").parents(".form-group").hide();
+                //$("#contributionFrequency").parents(".form-group").hide();
+                document.getElementById("empPmbDevCoopTitle").innerHTML = "PMB/Developer/Cooperative Society";
+                document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+            }
+            if (selectedType == @GlobalConstant.FIVE) {
+                selectedRole = 'user';
+                $('#emailAddress').val('');
+                $('#emailAddress').attr('readonly', false);
+                $('#mobileNumber').val('');
+                $('#mobileNumber').attr('readonly', false);
+                $("#generateOTP").removeAttr("disabled");
+                //$('#generateOTP').show();
+                $("#generateOTP").parents(".form-group").hide();
+                $('#empPmbDevCoop').hide();
+                $('#individual').show();
+                $('#manageLogin').hide();
+                $("#coyName").removeAttr("disabled");
+                $("#subSector_select").attr("disabled", "disabled");
+                $("#coyAddress").parents(".form-group").hide();
+                $("#coySector").parents(".form-group").hide();
+                $("#coySubSector_select").attr("disabled", "disabled");
+                $("#manageLogin").removeAttr("disabled");
+                document.getElementById("manageLoginTitle").innerHTML = "Individual";
+                document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+
+
+                $('#generateOTP').on('click', function () {
+
+                    if ($('#emailAddress').val() == "") {
+                        cn.msgError("Please enter email!");
+                        return false;
+                    }
+                    else if ($('#mobileNumber').val() == "") {
+                        cn.msgError("Please enter mobile/telephone!");
+                        return false;
+                    }
+                    else if ($('#coyName').val() == "") {
+                        cn.msgError("Please select a company!");
+                        return false;
+                    }
+
                     //$('#generateOTP').hide();
-                    $("#generateOTP").parents(".form-group").hide();
-                    $("#name").attr("disabled", "disabled");
-                    $("#address").attr("disabled", "disabled");
-                    $("#sector_select").attr("disabled", "disabled");
-                    $("#subSector_select").attr("disabled", "disabled");
-                    $("#rcNumber").attr("disabled", "disabled");
-                    $("#dateOfIncorporation").attr("disabled", "disabled");
-                    $("#natureOfBusiness").attr("disabled", "disabled");
-                    $("#nameOfRegistrar").attr("disabled", "disabled");
-                    $("#companyClass_select").attr("disabled", "disabled");
-                    $("#companyType_select").attr("disabled", "disabled");
-                    $("#contributionFrequency_select").attr("disabled", "disabled");
-                    $("#website").attr("disabled", "disabled");
-                    $("#logo").attr("disabled", "disabled");
-                    $('#empPmbDevCoop').show();
-                    $('#individual').hide();
-                    $('#manageLogin').hide();
-                }
-                if (selectedType == @GlobalConstant.ONE) {
-                    selectedRole = 'admin';
-                    $('#emailAddress').val('');
-                    $('#emailAddress').attr('readonly', false);
-                    $('#mobileNumber').val('');
-                    $('#mobileNumber').attr('readonly', false);
-                    //$('#generateOTP').hide();
-                    $('#indDob').parents(".form-group").hide();                
-                    $("#generateOTP").parents(".form-group").hide();
-                    $("#name").removeAttr("disabled");
-                    $("#address").removeAttr("disabled");
-                    $("#sector_select").removeAttr("disabled");
-                    $("#subSector_select").attr("disabled", "disabled");
-                    $("#rcNumber").removeAttr("disabled");
-                    $("#dateOfIncorporation").removeAttr("disabled");
-                    $("#natureOfBusiness").removeAttr("disabled");
-                    $("#nameOfRegistrar").removeAttr("disabled");
-                    $("#companyClass_select").removeAttr("disabled");
-                    $("#companyType_select").removeAttr("disabled");
-                    $("#contributionFrequency_select").removeAttr("disabled");
-                    $("#website").removeAttr("disabled");
-                    $("#logo").removeAttr("disabled");
-                    $('#empPmbDevCoop').show();
-                    $('#individual').hide();
-                    $('#manageLogin').show();
-                    $("#sector").parents(".form-group").show();
-                    $("#natureOfBusiness").parents(".form-group").show();
-                    $("#companyClass").parents(".form-group").show();
-                    $("#contributionFrequency").parents(".form-group").show();
-                    document.getElementById("empPmbDevCoopTitle").innerHTML = "Employer";
-                    document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
-                }
-                if (selectedType == @GlobalConstant.TWO || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR) {
-                    selectedRole = 'admin';
-                    $('#emailAddress').val('');
-                    $('#emailAddress').attr('readonly', false);
-                    $('#mobileNumber').val('');
-                    $('#mobileNumber').attr('readonly', false);
-                    $("#generateOTP").parents(".form-group").hide();
-                    $("#name").removeAttr("disabled");
-                    $("#address").removeAttr("disabled");
-                    $("#rcNumber").removeAttr("disabled");
-                    $("#dateOfIncorporation").removeAttr("disabled");
-                    $('#empPmbDevCoop').show();
-                    $('#individual').hide();
-                    $('#manageLogin').show();
-                    $("#sector").parents(".form-group").hide();
-                    $("#natureOfBusiness").parents(".form-group").hide();
-                    $("#companyClass").parents(".form-group").hide();
-                    $("#contributionFrequency").parents(".form-group").hide();
-                    document.getElementById("empPmbDevCoopTitle").innerHTML = "PMB/Developer/Cooperative Society";
-                    document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
-                }
-                if (selectedType == @GlobalConstant.FIVE) {
-                    selectedRole = 'user';
-                    $('#emailAddress').val('');
-                    $('#emailAddress').attr('readonly', false);
-                    $('#mobileNumber').val('');
-                    $('#mobileNumber').attr('readonly', false);
-                    $("#generateOTP").removeAttr("disabled");
-                    //$('#generateOTP').show();
                     $("#generateOTP").parents(".form-group").hide();
                     $('#empPmbDevCoop').hide();
                     $('#individual').show();
                     $('#manageLogin').show();
-                    document.getElementById("manageLoginTitle").innerHTML = "Individual";
-                    document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+                    document.getElementById("manageLoginTitle").innerHTML = "Login Profile";
+                    $("#indBvn").parents(".form-group").hide();
+                    $("#indFirstName").parents(".form-group").hide();
+                    $("#indLastName").parents(".form-group").hide();
+                    $("#indDob").parents(".form-group").hide();
+                    $("#lBvn").hide();
+                    $("#lFirstName").hide();
+                    $("#lLastName").hide();
+                    $("#lDateOfBirth").hide();
 
-                    $('#generateOTP').on('click', function () {
-
-                        if ($('#emailAddress').val() == "") {
-                            cn.msgError("Please enter email!");
-                            return false;
-                        }
-                        else if ($('#mobileNumber').val() == "") {
-                            cn.msgError("Please enter mobile/telephone!");
-                            return false;
-                        }
-
-                        //$('#generateOTP').hide();
-                        $("#generateOTP").parents(".form-group").hide();
-                        $('#empPmbDevCoop').hide();
-                        $('#individual').show();
-                        $('#manageLogin').show();
-                        document.getElementById("manageLoginTitle").innerHTML = "Login Profile";
-                        $("#indBvn").parents(".form-group").hide();
-                        $("#indFirstName").parents(".form-group").hide();
-                        $("#indLastName").parents(".form-group").hide();
-                        $("#indDob").parents(".form-group").hide();
-                        $("#lBvn").hide();
-                        $("#lFirstName").hide();
-                        $("#lLastName").hide();
-                        $("#lDateOfBirth").hide();
-
-                        $("#subSector_select").attr("disabled", "disabled");
-                        $("#coyName").parents(".col-sm-6").hide();
-                        $("#coyAddress").parents(".form-group").hide();
-                        $("#coySector").parents(".form-group").hide();
-                        $("#branch").parents(".form-group").hide();
-                        $("#coySubSector_select").attr("disabled", "disabled");
-                    });
-                }
-
-                $("#role").cnComboBox({
-                    url: '@Url.Content("~/Role/GetListJson")' + '?mode=' + roleMode + '&rolename=' + selectedRole,
-                    key: "Id",
-                    value: "RoleName",
-                    class: "form-control"
-                });
-            });
-
-            $("#logo").fileinput({
-                language: 'en',
-                showPreview: false,
-                allowedFileExtensions: ['jpeg', 'jpg', 'png', 'gif', 'tiff']
-            }).on("fileuploaded", function (event, data) {
-                var obj = data.response;
-                if (obj.Tag == @GlobalConstant.ONE) {
-                    filePath = obj.Data;
-                }
-                else {
-                    filePath = '';
-                }
-            });
-
-            $('#sector').change(function () {
-                sector = $("#sector").cnComboBox('getValue');
-                $("#subSector").cnComboBox({
-                    url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + sector,
-                    key: "Id",
-                    value: "Name"
-                });
-                if (sector > @GlobalConstant.ZERO) {
-                    $("#subSector_select").removeAttr("disabled");
-                }
-                else {
                     $("#subSector_select").attr("disabled", "disabled");
-                }
-            });
-
-            $('#employmentType').change(function () {
-                employmentType = $("#employmentType").cnComboBox('getValue');
-                if (employmentType == @GlobalConstant.ONE) {
-                    $("#coyName").parents(".col-sm-6").show();
-                    $("#coyAddress").parents(".form-group").show();
-                    $("#coySector").parents(".form-group").show();
-                    $("#branch").parents(".form-group").show();
-                }
-                else {
                     $("#coyName").parents(".col-sm-6").hide();
                     $("#coyAddress").parents(".form-group").hide();
                     $("#coySector").parents(".form-group").hide();
-                    $("#branch").parents(".form-group").hide();
-                }
-            });
-
-            $('#coySector').change(function () {
-                coySector = $("#coySector").cnComboBox('getValue');
-                $("#coySubSector").cnComboBox({
-                    url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + coySector,
-                    key: "Id",
-                    value: "Name"
-                });
-                if (coySector > @GlobalConstant.ZERO) {
-                    $("#coySubSector_select").removeAttr("disabled");
-                }
-                else {
+                    $("#branch").parents(".form-group").show();
                     $("#coySubSector_select").attr("disabled", "disabled");
-                }
-            });
 
-            getForm();
+                });
+            }
 
-            $("#form").validate({
-                rules: {
-                    emailAddress: {
-                        required: true,
-                        email: true,
-                    },
-                    mobileNumber: {
-                        required: true,
-                        //isPhone: true,
-                    },
-                    userName: {
-                        required: true,
-                        email: true,
-                    }
-                },
-                messages: {
-                    emailAddress: { required: "Email is required" },
-                    mobileNumber: { required: "Mobile number is required" },
-                    userName: { required: "UserName is required" }
-                }
+            $("#role").cnComboBox({
+                url: '@Url.Content("~/Role/GetListJson")' + '?mode=' + roleMode + '&rolename=' + selectedRole,
+                key: "Id",
+                value: "RoleName",
+                class: "form-control"
             });
         });
 
-        function getForm() {
-            if (id > @GlobalConstant.ZERO) {
-                cn.ajax({
-                    url: '@Url.Content("~/Company/GetFormJson")' + '?id=' + id,
-                    type: "get",
-                    success: function (obj) {
-                        if (obj.Tag == @GlobalConstant.ONE) {
-                            var result = obj.Data;
-                            $("#form").setWebControls(result);
-                        }
-                    }
-                });
+        $("#coyName").cnComboBox({
+            url: '@Url.Content("~/Company/GetCompanyTreeListJson")',
+            key: "id",
+            value: "name",
+            class: "form-control"
+        });
+
+        $("#logo").fileinput({
+            language: 'en',
+            showPreview: false,
+            allowedFileExtensions: ['jpeg', 'jpg', 'png', 'gif', 'tiff']
+        }).on("fileuploaded", function (event, data) {
+            var obj = data.response;
+            if (obj.Tag == @GlobalConstant.ONE) {
+                filePath = obj.Data;
             }
             else {
-                var defaultData = {};
-                defaultData.AgentType = "";
-                defaultData.EmailAddress = ""
-                defaultData.MobileNumber = "";
-                $("#form").setWebControls(defaultData);
+                filePath = '';
             }
-        }
-
-        $(document).ready(function () {
-            // Select the input field by its ID
-            var rcNumberInput = $('#rcNumber');
-
-            // Attach an event handler to the input field
-            rcNumberInput.on('input', function () {
-                // Get the current value of the input field
-                var currentValue = rcNumberInput.val();
-
-                // Use a regular expression to check if "RC" is already present
-                var regex = /^RC(\d*)$/i; // Case-insensitive check for "RC" followed by numbers
-
-                if (!regex.test(currentValue)) {
-                    // If the value does not match the pattern, add "RC" as a prefix
-                    rcNumberInput.val('RC' + currentValue.replace(/\D/g, ''));
-                }
-            });
         });
 
-        function saveForm(index) {
-            if ($("#form").validate().form()) {
-                var path = '';
-                if (selectedType == @GlobalConstant.ONE || selectedType == @GlobalConstant.TWO || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR) {
-                    path = '@Url.Content("~/Company/SaveFormsJson")';
+        $('#sector').change(function () {
+            sector = $("#sector").cnComboBox('getValue');
+            $("#subSector").cnComboBox({
+                url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + sector,
+                key: "Id",
+                value: "Name"
+            });
+            if (sector > @GlobalConstant.ZERO) {
+                $("#subSector_select").removeAttr("disabled");
+            }
+            else {
+                $("#subSector_select").attr("disabled", "disabled");
+            }
+        });
+
+        $('#employmentType').change(function () {
+            employmentType = $("#employmentType").cnComboBox('getValue');
+            if (employmentType == @GlobalConstant.ONE) {
+                $("#coyName").attr("required", true);
+                $("#coyName").parents(".col-sm-6").show();
+                $("#coyAddress").parents(".form-group").hide();
+                $("#coySector").parents(".form-group").hide();
+                $("#branch").parents(".form-group").show();
+            }
+            else {
+                $("#coyName").parents(".col-sm-6").hide();
+                $("#coyAddress").parents(".form-group").hide();
+                $("#coySector").parents(".form-group").hide();
+                $("#branch").parents(".form-group").show();
+            }
+        });
+
+        $('#coySector').change(function () {
+            coySector = $("#coySector").cnComboBox('getValue');
+            $("#coySubSector").cnComboBox({
+                url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + coySector,
+                key: "Id",
+                value: "Name"
+            });
+            if (coySector > @GlobalConstant.ZERO) {
+                $("#coySubSector_select").removeAttr("disabled");
+            }
+            else {
+                $("#coySubSector_select").attr("disabled", "disabled");
+            }
+        });
+
+        getForm();
+
+        $("#form").validate({
+            rules: {
+                firstName: {
+                    required: true,
+                },
+                lastName: {
+                    required: true,
+                },
+                emailAddress: {
+                    required: true,
+                },
+                kinAddress: {
+                    required: true,
+                },
+                kinMobileNumber: {
+                    required: true,
+                },
+                kinFirstName: {
+                    required: true,
+                },
+                kinLastName: {
+                    required: true,
+                },
+                kinEmailAddress: {
+                    required: true,
+                },
+                //employmentDate: {
+                //    required: true,
+                //},
+                monthlySalary: {
+                    required: true,
+                },
+                postalAddress: {
+                    required: true,
+                },
+                bvn: {
+                    required: true,
+                },
+                name: {
+                    required: true,
+                },
+                rcNumber: {
+                    required: true,
+                },
+                natureOfBusiness: {
+                    required: true,
+                },
+                tin: {
+                    required: true,
+                },
+                nameOfRegistrar: {
+                    required: true,
+                },
+                contactPerson: {
+                    required: true,
+                },
+                contactPersonDesignation: {
+                    required: true,
+                },
+                //dateOfBirth: {
+                //   required: true,
+                //}
+            },
+            messages: {
+                firstName: { required: "First Name is required" },
+                lastName: { required: "Last Name is required" },
+                kinAddress: { required: "Next of Kin Address is required" },
+                kinMobileNumber: { required: "Next of Kin Mobile Number is required" },
+                kinFirstName: { required: "Next of Kin First Name is required" },
+                kinLastName: { required: "Next of Kin Last Name is required" },
+                kinEmailAddress: { required: "Next of Kin Email Address is required" },
+                emailAddress: { required: "Email Address must be provided" },
+                //employmentDate: { required: "Employment Date is required" },
+                monthlySalary: { required: "Monthly Income is required" },
+                postalAddress: { required: "Home Address is required" },
+                bvn: { required: "Bank Verification Number is required" },
+                //dateOfBirth: { required: "Date of Birth is required" },
+                name: { required: "Name is required" },
+                rcNumber: { required: "Company RC Number is required" },
+                natureOfBusiness: { required: "Nature Of Business is required" },
+                tin: { required: "Tax Identification Number is required" },
+                nameOfRegistrar: { required: "Name Of Registrar is required" },
+                contactPerson: { required: "Contact Person is required" },
+                contactPersonDesignation: { required: "Contact Person Designation is required" },
+            },
+            showErrors: function (errorMap, errorList) {
+                if (errorList.length) {
+                    let errorMessage = errorList[0].message;
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Validation Error',
+                        text: errorMessage,
+                    });
                 }
-                else if (selectedType == @GlobalConstant.FIVE) {
-                    path = '@Url.Content("~/Employee/SaveFormsJson")';
+            }
+        });
+    });
+
+    $('#tin').on('input', function () {
+        // Get the current value of the TIN input
+        var tinValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedTIN = tinValue.replace(/\D/g, '');
+
+        // Limit the TIN to 9 digits
+        var limitedTIN = cleanedTIN.substring(0, 9);
+
+        // Update the input value
+        $(this).val(limitedTIN);
+
+        // Display an error message if the input exceeds 9 digits
+        if (cleanedTIN.length > 9) {
+            $('#tinError').text('TIN must be 9 digits.');
+        } else {
+            $('#tinError').text('');
+        }
+    });
+
+
+    function getForm() {
+        if (id > @GlobalConstant.ZERO) {
+            cn.ajax({
+                url: '@Url.Content("~/Company/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == @GlobalConstant.ONE) {
+                        var result = obj.Data;
+                        $("#form").setWebControls(result);
+                    }
                 }
-                var postData = $("#form").getWebControls({ Id: id });
-                cn.ajax({
-                    url: path,
-                    type: "post",
-                    data: postData,
-                    success: function (obj) {
-                        if (obj.Tag == @GlobalConstant.ONE) {
-                            //setTimeout(cn.msgSuccess(obj.Message), 5000);
-                            cn.msgSuccess(obj.Message);
+            });
+        }
+        else {
+            var defaultData = {};
+            defaultData.AgentType = "";
+            defaultData.EmailAddress = ""
+            defaultData.MobileNumber = "";
+            $("#form").setWebControls(defaultData);
+        }
+    }
+
+    flatpickr("#dateOfIncorporation", {
+        // defaultDate: "today",
+        maxDate: "today",
+        inline: false,
+        allowInput: true
+    });
+
+    flatpickr("#dateOfBirth", {
+        //defaultDate: "today",
+        maxDate: "2005-01-01",
+        inline: false,
+        allowInput: true
+    });
+
+    flatpickr("#employmentDate", {
+        //defaultDate: "today",
+        maxDate: "today",
+        inline: false,
+        allowInput: true
+
+    });
+
+    $('#rcNumber').on('input', function () {
+        // Get the current value of the RC Number input
+        var rcNumberValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedRCNumber = rcNumberValue.replace(/\D/g, '');
+
+        // Limit the RC Number to 14 digits
+        var limitedRCNumber = cleanedRCNumber.substring(0, 14);
+
+        // Add "RC" in front of the limited RC Number
+        var formattedRCNumber = 'RC' + limitedRCNumber;
+
+        // Update the input value
+        $(this).val(formattedRCNumber);
+    });
+
+    $('#nin').on('input', function () {
+        // Get the current value of the NIN input
+        var ninValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedNin = ninValue.replace(/\D/g, '');
+
+        // Limit the NIN to 11 digits
+        var limitedNin = cleanedNin.substring(0, 11);
+
+        // Update the input value
+        $(this).val(limitedNin);
+
+        // Display an error message if the input exceeds 11 digits
+        if (cleanedNin.length > 11) {
+            $('#nin').text('NIN must be 11 digits if provided.');
+        } else {
+            $('#nin').text('');
+        }
+    });
+
+    $('#indBvn').on('input', function () {
+        // Get the current value of the BVN input
+        var bvnValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedBVN = bvnValue.replace(/\D/g, '');
+
+        // Limit the BVN to 11 digits
+        var limitedBVN = cleanedBVN.substring(0, 11);
+
+        // Update the input value
+        $(this).val(limitedBVN);
+
+        // Display an error message if the input exceeds 11 digits
+        if (cleanedBVN.length > 11) {
+            $('#bvnError').text('BVN must be 11 digits if provided.');
+        } else {
+            $('#bvnError').text('');
+        }
+    });
+
+    $('#bvn').on('input', function () {
+        // Get the current value of the BVN input
+        var bvnValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedBVN = bvnValue.replace(/\D/g, '');
+
+        // Limit the BVN to 11 digits
+        var limitedBVN = cleanedBVN.substring(0, 11);
+
+        // Update the input value
+        $(this).val(limitedBVN);
+
+        // Display an error message if the input exceeds 11 digits
+        if (cleanedBVN.length > 11) {
+            $('#bvnError').text('BVN must be 11 digits if provided.');
+        } else {
+            $('#bvnError').text('');
+        }
+    });
+
+
+    $('#monthlySalary').on("keyup", function () {
+        $('span.error-keyup-1').hide();
+        var inputVal = $(this).val();
+        var numericReg = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/;
+        if (!numericReg.test(inputVal)) {
+            //$("#Monthlysalary, #uMonthlysalary, #uuMonthlysalary").val("");
+            $(this).after('<span class="text-danger error-keyup-1">Numeric characters only.</span>');
+        }
+    });
+
+    $('#monthlySalary').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+        }
+    })
+
+    $(document).ready(function () {
+        $('#kinMobileNumber').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+    $('#kinMobileNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
+        }
+    })
+
+    $(document).ready(function () {
+        $('#accountNumber').on('input', function () {
+            var maxLength = 10;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+    $('#accountNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
+        }
+    })
+
+
+    $('input[name="Firstname"]').keyup(function (e) {
+        if (/[^a-z A-Z & -\d ]/i.test(this.value)) {
+            //// Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^a-z A-Z & -\d ]/i, '');
+
+
+        }
+    })
+
+    $('#mobileNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
+        }
+    })
+
+    $(document).ready(function () {
+        $('#mobileNumber').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+    //$(document).ready(function() {
+    //          $('#mobileNumber').on('input', function() {
+    //              var mobileNumber = $(this).val();
+    //              var errorMessage = $('#error-message');
+    //              if (mobileNumber.length > 0 && mobileNumber[0] !== '0') {
+    //                  errorMessage.show();
+    //              } else {
+    //                  errorMessage.hide();
+    //              }
+    //          });
+    //      });
+
+
+    $(document).ready(function () {
+        $('#mobileNumber').on('input keyup', function () {
+            var mobileNumber = $(this).val();
+            var errorMessage = $('#error-message');
+
+            // Remove existing error message
+            errorMessage.hide();
+
+            // Check if the input is numeric
+            var numericReg = /^\d*$/;
+            if (!numericReg.test(mobileNumber)) {
+                errorMessage.text('Numeric characters only.').show();
+                return;
+            }
+
+            // Check if the input starts with '0'
+            if (mobileNumber.length > 0 && mobileNumber[0] !== '0') {
+                errorMessage.text('Mobile Number must start with 0').show();
+            } else {
+                errorMessage.hide();
+            }
+        });
+    });
+
+
+
+
+    //this jquery code helps to restrict some special xters
+    //$('#name').on('blur', function (event) {
+
+    //    $('span.error-keyup-1').hide();
+    //    var regex = new RegExp("^[a-z A-Z & -]+$");
+    //    var Nex = $("#name").val();
+    //    if (!regex.test(Nex)) {
+    //        event.preventDefault();
+    //        $('#name').val();
+    //        $(this).after('<span class="text-danger error-keyup-1">Alphabet characters only.</span>');
+    //        return false;
+    //    }
+    //});
+
+    //$('#name').keyup(function (e) {
+    //    if (/[^a-z A-Z & -\d ]/i.test(this.value)) {
+    //        //// Filter non-digits from input value.
+    //        // this.value = this.value.replace(/\D/g, '');
+
+    //        //Filter special character
+    //        this.value = this.value.replace(/[^a-z A-Z & -\d ]/i, '');
+
+
+    //    }
+    //})
+
+    $('#coyRcNumber').on('input', function () {
+        // Get the current value of the RC Number input
+        var coyRcNumberValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedCoyRcNumber = coyRcNumberValue.replace(/\D/g, '');
+
+        // Limit the RC Number to 14 digits
+        var limitedCoyRcNumber = cleanedCoyRcNumber.substring(0, 14);
+
+        // Add "RC" in front of the limited RC Number
+        var formattedCoyRCNumber = 'RC' + limitedCoyRcNumber;
+
+        // Update the input value
+        $(this).val(formattedCoyRCNumber);
+    });
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var path = '';
+            if (selectedType == @GlobalConstant.ONE || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR) {
+                path = '@Url.Content("~/Company/SaveFormsJson")';
+            } else if (selectedType == @GlobalConstant.TWO) {
+                path = '@Url.Content("~/Developer/SaveFormsJson")';
+            } else if (selectedType == @GlobalConstant.FIVE) {
+                path = '@Url.Content("~/Employee/SaveFormJson")';
+            }
+
+            var postData = $("#form").getWebControls({ Id: id });
+
+            if (selectedType == @GlobalConstant.FIVE) {
+                postData.MaritalStatus = cn.getLastValue(postData.MaritalStatus);
+                postData.Gender = cn.getLastValue(postData.Gender);
+                postData.KinRelationship = cn.getLastValue(postData.KinRelationship);
+                postData.ContributionBranch = cn.getLastValue(postData.ContributionBranch);
+                postData.AlertType = cn.getLastValue(postData.AlertType);
+                postData.CustomerBank = cn.getLastValue(postData.CustomerBank);
+                postData.AccountType = cn.getLastValue(postData.AccountType);
+                postData.BankAccountNumber = cn.getLastValue(postData.BankAccountNumber);
+                postData.Title = cn.getLastValue(postData.Title);
+                postData.KinAddress = cn.getLastValue(postData.KinAddress);
+                postData.Company = cn.getLastValue(postData.Company);
+                postData.EmploymentType = cn.getLastValue(postData.EmploymentType);
+
+                if (postData.MaritalStatus <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Marital Status!'
+                    });
+                    return false;
+                } else if (postData.KinRelationship <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Kin\'s Relationship!'
+                    });
+                    return false;
+                } else if (postData.EmploymentType <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Employment Type!'
+                    });
+                    return false;
+                } else if (postData.Gender <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Gender!'
+                    });
+                    return false;
+                } else if (postData.ContributionBranch <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Contribution Branch!'
+                    });
+                    return false;
+                } else if (postData.Company <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Company!'
+                    });
+                    return false;
+                } else if (postData.AlertType <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Alert Type!'
+                    });
+                    return false;
+                } else if (postData.CustomerBank <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Bank Name!'
+                    });
+                    return false;
+                } else if (postData.AccountType <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Account Type!'
+                    });
+                    return false;
+                } else if (postData.Title <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Title!'
+                    });
+                    return false;
+                } else if (isNaN(postData.BankAccountNumber)) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Bank account number must be a digit!'
+                    });
+                    return false;
+                } else if (postData.BankAccountNumber.length !== 10) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Bank account number must be 10 in length!'
+                    });
+                    return false;
+                }
+            } else if (selectedType == @GlobalConstant.ONE || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR) {
+                postData.Sector = cn.getLastValue(postData.Sector);
+                postData.SubSector = cn.getLastValue(postData.SubSector);
+                postData.ContributionFrequency = cn.getLastValue(postData.ContributionFrequency);
+
+                if (postData.Sector <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Sector!'
+                    });
+                    return false;
+                } else if (postData.SubSector <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Sub Sector!'
+                    });
+                    return false;
+                } else if (postData.ContributionFrequency <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Contribution Frequency!'
+                    });
+                    return false;
+                }
+            }
+
+            cn.ajax({
+                url: path,
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == @GlobalConstant.ONE) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: obj.Message
+                        }).then(() => {
+                            window.location.reload();
                             parent.searchGrid();
                             parent.layer.close(index);
-                        }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Warning',
+                            text: obj.Message
+                        });
                     }
-                });
-            }
+                }
+            });
         }
-    </script>
+    }
+
+</script>

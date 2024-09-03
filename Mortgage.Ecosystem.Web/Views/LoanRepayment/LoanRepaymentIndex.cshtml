@@ -3,31 +3,10 @@
 }
 <div class="container-div">
     <div class="row">
-        <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
-                <ul>
-                    <li>
-                        Name: <input id="name" col="Name" type="text" />
-                    </li>
-                    <li>
-                        Status: <span id="status" col="Status"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+       
         <div class="btn-group-sm" id="toolbar">
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> edit</a>
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
+           
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -55,10 +34,10 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'EmployeeNumber', title: 'Employee Number', sortable: true },
-                { field: 'EmployeeName', title: 'Employee Name', sortable: true },
-                { field: 'Amount', title: 'Amount', sortable: true },
-                { field: 'AccountName', title: 'Account Name', sortable: true },
+                { field: 'EmployeeNumber', title: 'Employee Number', sortable: false },
+                { field: 'EmployeeName', title: 'Employee Name', sortable: false },
+                { field: 'Amount', title: 'Amount', sortable: false },
+                { field: 'AccountName', title: 'Account Name', sortable: false },
 
 
                 {
@@ -105,6 +84,7 @@
             title: id > 0 ? "Edit LoanRepayment" : "Loan Repayment",
             content: '@Url.Content("~/LoanRepayment/LoanRepaymentForm")' + '?id=' + id,
             width: "780px",
+            btn: [],
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 iframeWin.saveForm(index);

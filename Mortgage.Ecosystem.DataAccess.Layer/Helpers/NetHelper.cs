@@ -38,6 +38,20 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Helpers
             }
         }
 
+
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+
         private static string GetWebClientIp()
         {
             try
@@ -166,6 +180,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Helpers
                 if (userAgent.Contains("NT 10"))
                 {
                     osVersion = "Windows 10";
+                }
+                else if (userAgent.Contains("NT 11"))
+                {
+                    osVersion = "Windows 11";
                 }
                 else if (userAgent.Contains("NT 6.3"))
                 {

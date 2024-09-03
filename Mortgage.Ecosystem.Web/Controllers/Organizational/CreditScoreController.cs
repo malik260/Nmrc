@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -11,13 +12,16 @@ using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
+    [ExceptionFilter]
     public class CreditScoreController : BaseController
     {
         private readonly ICreditScoreService _iCreditScoreService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public CreditScoreController(IUnitOfWork iUnitOfWork, ICreditScoreService iCreditScoreService) : base(iUnitOfWork)
+        public CreditScoreController(IUnitOfWork iUnitOfWork, ICreditScoreService iCreditScoreService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iCreditScoreService = iCreditScoreService;
+            _iAuditTrailService = iAuditTrailService;   
         }
 
         #region View function
@@ -48,6 +52,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("creditscore:search,user:search")]
         public async Task<IActionResult> GetCreditScorePageListJson(CreditScoreListParam param, Pagination pagination)
         {
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetCreditScorePageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.CreditScore.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             TData<List<CreditScoreEntity>> obj = await _iCreditScoreService.GetPageList(param, pagination);
             return Json(obj);
         }

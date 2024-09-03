@@ -1,0 +1,536 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="propertyRegistration" id="propertyRegistration">
+    <form id="form" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Property Registration</span>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="companyNumber control-label">Company&nbsp;Number<font class="red">&nbsp;*</font></label>
+                        <input id="companyNumber" type="text" col="ComapnyNumber" class="form-control" readonly>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="companyName control-label">Company&nbsp;Name<font class="red">&nbsp;*</font></label>
+                        <input id="companyName" type="text" col="ComapnyName" class="form-control" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="propertyType" class="form-label">Property&nbsp;Type</label>
+                        <div id="propertyType" col="PropertyType"></div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="propertyDescription" class="form-label">Property&nbsp;Description</label>
+                        <textarea id="propertyDescription" required type="text" col="PropertyDescription" style="height: 60px;" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="propertyLocation" class="form-label">Property&nbsp;Location</label>
+                        <div id="propertyLocation" required col="PropertyLocation"></div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="phoneNumber" class="form-label">Phone&nbsp;Number</label>
+                        <input id="phoneNumber" type="text" class="form-control" readonly col="PhoneNumber">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="geoTagging" class="form-label">
+                            Geo-Tagging
+                            <i class="fa fa-map-marker" aria-hidden="true" style="font-size: 24px; margin-left: 5px; vertical-align: middle; color: #000;"></i>
+                        </label>
+                        <div class="input-group">
+                            <input id="longitude" type="text" col="Longitude" class="form-control mr-2" style="width: 30%; margin-right: 5px;">
+                            <input id="latitude" type="text" col="Latitude" class="form-control ml-2" style="width: 30%; margin-left: 5px;">
+                            <button id="findLocation" type="button" class="btn btn-danger ml-2" data-toggle="modal" data-target="#mapModal" style="width: 35%; margin-left: 5px;">
+                                <i class="fa fa-search" aria-hidden="true"></i> Find Location
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="mapModalLabel">Location Map</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3">
+                                                <input id="searchLocation" type="text" class="form-control" placeholder="Search for a location">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-info" type="button" id="searchBtn" style="margin-top: 5px;">Search</button>
+                                                </div>
+                                            </div>
+                                            <div id="map" class="embed-responsive embed-responsive-16by9" style="margin-top: 6px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="neighbourhood" class="form-label">Neighbourhood</label>
+                        <textarea id="neighbourhood" required type="text" style="height: 60px;" col="Address" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="availableUnits" class="form-label">Available Units</label>
+                        <input id="availableUnits" required type="number" min="1" class="form-control" col="AvailableUnits">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="email" class="form-label">Email&nbsp;Address</label>
+                        <input id="email" type="email" class="form-control" readonly col="Email">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@*<iframe width="550" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?q=record+stores+in+Seattle&key=AIzaSyDBC6Wttc9nyJLMrXXKyP3I8DR2A-WQqEM" allowfullscreen></iframe>
+*@
+
+<!-- Include the Google Maps JavaScript API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBC6Wttc9nyJLMrXXKyP3I8DR2A-WQqEM&callback=initMap" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+@*<script>
+    var map;
+
+    function initMap() {
+        var mapContainer = document.getElementById('map');
+        var latitudeInput = document.getElementById('latitude');
+        var longitudeInput = document.getElementById('longitude');
+
+        // Create a new map instance
+        map = new google.maps.Map(mapContainer, {
+            center: { lat: 0, lng: 0 },
+            zoom: 2
+        });
+
+        // Listen for click events on the map
+        map.addListener('click', function (event) {
+            var clickedLatLng = event.latLng;
+            latitudeInput.value = clickedLatLng.lat();
+            longitudeInput.value = clickedLatLng.lng();
+        });
+    }
+
+    $(document).ready(function () {
+        $('#findLocation').click(function () {
+            initMap();
+        });
+    });
+</script>*@
+
+<style>
+    .file-item {
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #dcdcdc;
+        padding: 8px;
+        margin-bottom: 5px;
+    }
+
+    .file-name {
+        font-weight: bold;
+    }
+
+    .file-size {
+        color: #555;
+        font-weight: bold;
+    }
+
+    .remove-file {
+        cursor: pointer;
+        color: red;
+        margin-left: 10px;
+    }
+</style>
+
+
+<script>
+    var id = cn.request("id");
+    var selectedFiles = [];
+    var fileCounter = 0;
+
+    if (id) {
+        getForm(id);
+    }
+
+
+
+    $(document).ready(function () {
+        $('#documentUpload').on('change', function () {
+            var files = $(this)[0].files;
+            var totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                let fileType = file.type;
+
+                if (fileType !== "image/jpeg" && fileType !== "image/png") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid File Type',
+                        text: 'You can only upload JPEG and PNG files.',
+                    });
+                    continue;
+                }
+
+                totalSize += file.size;
+
+                if (totalSize > 3000000) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File Size Exceeded',
+                        text: 'Total size of uploaded files cannot exceed 3000KB (3MB).',
+                    });
+                    break;
+                }
+
+                file.id = fileCounter++; // Assign a unique ID to each file
+                selectedFiles.push(file);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var li = $('<li></li>').addClass('file-item').attr('data-file-id', file.id);
+                    var removeButton = $('<span></span>').addClass('remove-file').html('<i class="fa fa-trash" aria-hidden="true"></i>').on('click', function (event) {
+                        event.preventDefault();
+                        var fileId = $(this).parent().data('file-id');
+                        var fileIndex = selectedFiles.findIndex(f => f.id === fileId);
+                        if (fileIndex !== -1) {
+                            selectedFiles.splice(fileIndex, 1);
+                            $(this).parent().remove();
+                        }
+                    });
+
+                    var fileSize = (file.size / 1024).toFixed(2) + ' KB';
+
+                    li.append($('<span></span>').addClass('file-name').text(file.name));
+                    li.append($('<span></span>').addClass('file-size').text(fileSize));
+                    li.append(removeButton);
+
+                    $('#file-list').append(li);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            $(this).val('');
+        });
+    });
+
+    function getForm(id) {
+        debugger
+        cn.ajax({
+            url: '@Url.Content("~/PropertyRegistration/GetFormJsonn")',
+            type: "get",
+            data: { id: id },
+            success: function (response) {
+                if (response.Tag === 1) {
+                    debugger
+
+                    $("#companyNumber").val(response.Data.ComapnyNumber);
+                    $("#companyName").val(response.Data.ComapnyName);
+                    $("#propertyType").cnComboBox('setValue', response.Data.PropertyType);
+                    $("#propertyDescription").val(response.Data.PropertyDescription);
+                    $("#propertyLocation").cnComboBox('setValue', response.Data.PropertyLocation);
+                    $("#longitude").val(response.Data.Longitude);
+                    $("#latitude").val(response.Data.Latitude);
+                    $("#phoneNumber").val(response.Data.PhoneNumber);
+                    $("#neighbourhood").val(response.Data.Address);
+                    $("#availableUnits").val(response.Data.AvailableUnits);
+                    $("#email").val(response.Data.Email);
+
+
+
+                    //alert(response.Message);
+                }
+            }
+        });
+    }
+
+
+    // function saveForm(index) {
+    //     if ($("#form").validate().form()) {
+    //         var PropertyType = $("#propertyType").cnComboBox('getValue');
+
+    //         if (PropertyType == "0") {
+    //             cn.msgError("Please select a Property Type!");
+    //             return false;
+    //         }
+
+    //         // Check if selectedFiles array is empty
+    //         if (selectedFiles.length === 0) {
+    //             cn.msgError("Please select at least one file!");
+    //             return false;
+    //         }
+
+    //         // Initialize FormData
+    //         var formData = new FormData();
+
+    //         // Append files to FormData
+    //         for (var i = 0; i < selectedFiles.length; i++) {
+    //             formData.append("file", selectedFiles[i]);
+    //         }
+
+    //         // Append other form fields to FormData
+    //         var PropertyLocation = $("#propertyLocation").cnComboBox('getValue');
+    //         var PropertyDescription = $("#propertyDescription").val();
+    //         var PhoneNumber = $("#phoneNumber").val();
+    //         var Longitude = $("#longitude").val();
+    //         var Latitude = $("#latitude").val();
+    //         var Address = $("#neighbourhood").val();
+    //         var Email = $("#email").val();
+    //         var CompanyNumber = $("#companyNumber").val();
+    //         var CompanyName = $("#companyName").val();
+    //         var availableUnits = $("#availableUnits").val();
+
+    //         formData.append("PropertyType", PropertyType);
+    //         formData.append("PropertyLocation", PropertyLocation);
+    //         formData.append("Latitude", Latitude);
+    //         formData.append("Longitude", Longitude);
+    //         formData.append("PhoneNumber", PhoneNumber);
+    //         formData.append("Email", Email);
+    //         formData.append("PropertyDescription", PropertyDescription);
+    //         formData.append("Address", Address);
+    //         formData.append("ComapnyName", CompanyName);
+    //         formData.append("ComapnyNumber", CompanyNumber);
+    //         formData.append("AvailableUnits", availableUnits);
+
+    //         // Perform the AJAX request
+    //         $.ajax({
+    //             url: '@Url.Content("~/PropertyRegistration/SaveFormJson")',
+    //             type: "post",
+    //             data: formData,
+    //             contentType: false,
+    //             processData: false,
+    //             success: function (obj) {
+    //                 if (obj.Tag == 1) {
+    //                     cn.msgSuccess(obj.Message);
+    //                     parent.layer.close(index);
+    //                 } else {
+    //                     cn.msgError(obj.Message);
+    //                     parent.layer.close(index);
+    //                 }
+    //             },
+    //             error: function (xhr, status, error) {
+    //                 console.error("Error in AJAX request:", error);
+    //                 cn.msgError("An error occurred while saving the form.");
+    //             }
+    //         });
+    //     } else {
+    //         console.log('Form is invalid');
+    //     }
+    // }
+
+
+
+
+
+
+
+
+    //$("#propertyType").cnComboBox({
+    //    url: '@Url.Content("~/PropertyType/GetListJson")',
+    //    key: "Id",
+    //    value: "Name",
+    //    class: "form-control"
+    //});
+
+    $("#propertyType").cnComboBox({
+        data: cn.getJson(@Html.Raw(typeof
+            (PropertyTypeEnum).EnumToDictionaryString()))
+    });
+
+    $("#propertyLocation").cnComboBox({
+        url: '@Url.Content("~/State/GetListJson")',
+        key: "Id",
+        value: "Name",
+        class: "form-control"
+    });
+
+    var map;
+
+    function initMap(center) {
+        var mapContainer = document.getElementById('map');
+        map = new google.maps.Map(mapContainer, {
+            center: center || { lat: 0, lng: 0 },
+            zoom: 2
+        });
+
+        map.addListener('click', function (event) {
+            var clickedLatLng = event.latLng;
+            updateCoordinates(clickedLatLng);
+        });
+    }
+
+    function updateCoordinates(latLng) {
+        var latitudeInput = document.getElementById('latitude');
+        var longitudeInput = document.getElementById('longitude');
+        latitudeInput.value = latLng.lat();
+        longitudeInput.value = latLng.lng();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    $(document).ready(function () {
+        $('#findLocation').click(function () {
+            initMap();
+        });
+
+        $('#searchBtn').click(function () {
+            var searchInput = document.getElementById('searchLocation');
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: searchInput.value }, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK && results && results.length) {
+                    var location = results[0].geometry.location;
+                    map.setCenter(location);
+                    map.setZoom(15);
+                    updateCoordinates(location);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Content("~/PropertyRegistration/ViewPmbCompanyName")', // The URL of your controller method
+            type: 'GET',
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var data = obj.Data;
+                    $('#companyName').val(data.PmbName);
+                    $('#companyNumber').val(data.PmbNo);
+                    $('#phoneNumber').val(data.MobileNo);
+                    $('#email').val(data.Email);
+                } else {
+                    cn.msgError(obj.Message);
+                    $('#form').hide();
+                }
+
+            },
+            error: function () {
+                // Handle error, if any
+            }
+        });
+    });
+
+    $('#availableUnits').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Replace non-digits and spaces with empty strings, excluding dash (-).
+            this.value = this.value.replace(/[^0-9 ]/ig, '');
+        }
+    });
+
+
+    function saveForm(index) {
+        debugger
+        if ($("#form").validate().form()) {
+            var PropertyType = $("#propertyType").cnComboBox('getValue');
+
+            if (PropertyType == "0") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Please select a Property Type!'
+                });
+                return false;
+            }
+
+            // Initialize FormData
+            var formData = new FormData();
+
+            // Append files to FormData
+            for (var i = 0; i < selectedFiles.length; i++) {
+                formData.append("file", selectedFiles[i]);
+            }
+
+            // Append other form fields to FormData
+
+            var PropertyLocation = $("#propertyLocation").cnComboBox('getValue');
+            var PropertyDescription = $("#propertyDescription").val();
+            var PhoneNumber = $("#phoneNumber").val();
+            var Longitude = $("#longitude").val();
+            var Latitude = $("#latitude").val();
+            var Address = $("#neighbourhood").val();
+            var Email = $("#email").val();
+            var CompanyNumber = $("#companyNumber").val();
+            var CompanyName = $("#companyName").val();
+            var availableUnits = $("#availableUnits").val();
+            if (id && id > 0) {
+                formData.append("Id", id); // Append the id for update
+            }
+            formData.append("PropertyType", PropertyType);
+            formData.append("PropertyLocation", PropertyLocation);
+            formData.append("Latitude", Latitude);
+            formData.append("Longitude", Longitude);
+            formData.append("PhoneNumber", PhoneNumber);
+            formData.append("Email", Email);
+            formData.append("PropertyDescription", PropertyDescription);
+            formData.append("Address", Address);
+            formData.append("ComapnyName", CompanyName);
+            formData.append("ComapnyNumber", CompanyNumber);
+            formData.append("AvailableUnits", availableUnits);
+
+            // Perform the AJAX request
+            $.ajax({
+                url: '@Url.Content("~/PropertyRegistration/SaveFormJson")',
+                type: "post",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: obj.Message
+                        }).then(() => {
+                            parent.layer.close(index);
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: obj.Message
+                        }).then(() => {
+                            parent.layer.close(index);
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error in AJAX request:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while saving the form.'
+                    });
+                }
+            });
+        } else {
+            console.log('Form is invalid');
+        }
+    }
+
+
+</script>

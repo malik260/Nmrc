@@ -17,6 +17,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Employee")]
         public long Employee { get; set; }
 
+        // Pmb
+        [Column("Pmb")]
+        public long Pmb { get; set; } 
+        
+        [Column("Developer")]
+        public long Developer { get; set; }
+
         // Username
         [Column("UserName"), Description("UserName")]
         public string? UserName { get; set; }
@@ -91,5 +98,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [NotMapped]
         public string? RoleIds { get; set; }
+
+        [NotMapped]
+        public string? DecryptedPassword { get; set; }
     }
 }

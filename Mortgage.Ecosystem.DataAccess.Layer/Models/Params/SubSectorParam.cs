@@ -2,6 +2,7 @@
 {
     public class SubSectorListParam
     {
+        public List<int>? Ids { get; set; }
         public int Sector { get; set; }
         public string? Name { get; set; }
     }

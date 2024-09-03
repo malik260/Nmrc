@@ -1,160 +1,315 @@
 ﻿@{
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header{
+    <link href='@Url.Content("~/central/css/jQuery.UI.css")' rel="stylesheet" />
+}
+<script src="~/central/js/jQuery.UI.js"></script>
+
 <div class="ibox-title">
     <h5>PROPERTY GALLERY</h5>
 </div>
+
+
+
 <div class="container-div">
     <div class="row">
-        <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="propertyType">Property Type:</label>
-                                <div id="propertyType" col="PropertyType"></div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4" style=" border: 1px solid #000;">
-                            <div class="form-group" >
-                                <div class="text-center">
-                                <label for="price-range-slider" >Price Range:&#8358;</label>
-                                </div>
-                                <div id="price-range">
-                                    <label for="price-range-slider">Min</label>
-                                    <input type="range" id="price-range-slider" min="1000000" max="500000000" step="1000000" value="1000000">
-                                    <label for="price-range-slider">Max</label>
-                                    <span id="price-value">1,000,000</span>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <button id="apply-button" class="btn btn-success">Apply</button>
-                                </div>
-                           
-                        </div>
-                        <div class="col-sm-4">
-                            <button id="advanceFilterSearch" class="btn btn-gray">Advance Filter Search <i class="fa-solid fa-filter"></i></button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="searchByLocation">Search By Location</label>
-                                <div class="input-group">
-                                    <input id="searchByLocation" col="SearchByLocation" class="form-control" />
-                                    <div class="input-group-append">
-                                        <a id="btnSearch" class="btn btn-primary" onclick="searchGrid()">Search</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <!-- New Header Section -->
+        <div id="headerDiv" class="col-sm-12 search-collapse">
+            <div class="main-header" style="text-align: center;">
+                <h2 style="font-weight: bold; color: #4169E1;">Our Properties</h2>
+                <p>
+                    Equipped with state-of-the-art amenities like Recreation Centre,
+                    Supermarket, Park, Internet Service and much more.
+                </p>
+            </div>
 
-                       
-                        <div class="col-sm-4">
+            <div class="select-list" style="display: flex; justify-content: space-between;">
 
+                <div style="margin-top: 5px; display: inline-block;">
+                    <label style="display: block;">Property Type:</label>
+                    <div id="propertyType" col="propertyType"></div>
+
+                </div>
+
+
+                <div class="border-container" style="border: 1px solid #202020; padding: 8px; margin-left: 63px; width: 380px; height: 145px;">
+                    <div class="price-range-block" style="margin-top: 2px; margin-left: 50px;">
+                        <div class="text-center" style="font-size: 12px;">
+                            <!-- Adjusted font size here -->
+                            <label for="sliderText">Price Range:&#8358;</label>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="sort">Sort</label>
-                                <div id="sort" col="Sort"></div>
+                        <div class="text-center">
+                            <div id="slider-range" class="price-filter-range" name="rangeInput"></div>
+                        </div>
+                        <div class="text-center">
+                            <div>
+                                <input type="number" min="1000000" max="499999999" oninput="validity.valid||(value='70000000');" id="min_price" class="price-range-field" />
+                                <input type="number" min="20000000" max="500000000" oninput="validity.valid||(value='350000000');" id="max_price" class="price-range-field" />
                             </div>
+                        </div>
+                        <div class="text-center" style="font-size: 11px;">
+                            <!-- Adjusted font size here -->
+                            <button class="price-range-search btn btn-success" id="price-range-submit">Apply</button>
+                            <div id="searchResults" class="search-results-block"></div>
                         </div>
                     </div>
                 </div>
 
+                <div style="margin-top: 5px; margin-left: 40px;">
+                    <label style="display: block;">Search By Location:</label>
+                    <div id="searchLocation" col="searchLocation"></div>
+                    <div class="search-container" style="display: inline-block; ">
+                        <input type="text" placeholder="Enter Location" name="search" style="width: 130px; padding: 3px; font-size: 13px;">
+                        <button type="submit" style="padding: 3px 6px; font-size: 11px;"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <br />
+                <div style="margin-top: 5px; display: inline-block;">
+                    <label style="display: block;">Sort By:</label>
+                    <div id="sortBy" col="sortBy" style="float: right;"></div>
+                </div>
 
             </div>
+
+
         </div>
 
-     </div>
-        <div id="cardContainer"></div>
-   
+
+        <div id="headerDiv" class="col-sm-12 search-collapse">
+            <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                    <img class="card-img-top" id="cardImage" alt="Card image cap">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <div class="text-center mb-3">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Explore</button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">9 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
 </div>
 
-@*<script type="text/javascript">
-    $(function () {
-        initGrid();
 
-        $("#propertyType").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PropertyTypeEnum).EnumToDictionaryString())) });
-
-
-    });
-
-    function initGrid() {
-        var queryUrl = '@Url.Content("~/PropertyType/GetPropertyGalleryPageListJsonn")';
-        $('#cardContainer').cnCardList({
-            url: queryUrl,
-            cardTemplate: function (data) {
-                // Generate the HTML for each card using the provided data
-                var cardHtml = `
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">${data.any}</h5>
-              </div>
-            </div>
-          `;
-                return cardHtml;
-            }
-        });
+<style>
+    .price-range-block {
+        margin: 25px;
     }
 
+    .border-container {
+    }
 
+    .sliderText {
+        width: 40%;
+        margin-bottom: 30px;
+        border-bottom: 2px solid red;
+        padding: 10px 0 10px 0px;
+        font-weight: bold;
+    }
 
+    .ui-slider-horizontal {
+        width: 270px;
+        height: 10px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
 
+    .ui-widget-header {
+        background: #4169E1;
+    }
 
+    .ui-widget.ui-widget-content {
+        border: 2px solid #202020;
+        background: #20202
+    }
 
-</script>*@
-<script type="text/javascript">
+    .ui-slider-handle.ui-corner-all.ui-state-default {
+        width: 25px;
+        height: 25px;
+        top: -9px;
+        border-radius: 100%;
+        background: #4169E1;
+        border: 1px solid #202020;
+    }
+
+    .price-range-search {
+        background-color: #4169E1;
+        color: #fff;
+        border: 1px solid #202020;
+        display: inline-block;
+        height: 32px;
+        border-radius: 5px;
+        margin: 10px auto;
+        font-size: 16px;
+/*        font-weight:
+*/    }
+
+    .price-range-field {
+        width: 120px;
+        height: 29px;
+        background-color: #fff;
+        border: 1px solid #202020;
+        color: black;
+        font-size: 15px;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .search-results-block {
+        position: relative;
+        display: block;
+        clear: both;
+        margin-top: 20px;
+    }
+
+    .main-header {
+    }
+
+</style>
+
+<script src="~/central/js/jQuery.UI.js"></script>
+
+<script>
+
+    var id = 1;
     $(document).ready(function () {
-        // Get the elements
-        var rangeSlider = $("#price-range-slider");
-        var priceValue = $("#price-value");
-        var applyButton = $("#apply-button");
+        debugger;
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/PropertyRegistration/GetAllImages")',
+                //url: '@Url.Content("~/PropertyRegistration/GetAllImages")' + '?id=' + id,
+                type: "get",
+                contentType: "application/json; charset=utf-8",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        debugger;
+                        var cardImage = $("#cardImage");
+                        var result = obj.Data;
 
-        // Update the price value when the slider value changes
-        rangeSlider.on("input", function () {
-            var value = $(this).val();
-            priceValue.text(formatPrice(value));
-        });
+                        for (var i = 0; i < result.length; i++) {
+                            var label = result[i].Label;
+                            var prodimage = "data:image/jpg;base64," + result[i].filedata;
 
-        // Apply button click event
-        applyButton.on("click", function () {
-            var selectedPrice = rangeSlider.val();
-            alert("Selected price: " + formatPrice(selectedPrice));
-            // Perform any additional actions here
-        });
+                            if (i % 3 === 0) {
+                                cardImage.append("<div class='image-row'></div>");
+                            }
 
-        // Function to format the price with commas
-        function formatPrice(price) {
-            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            cardImage.find('.image-row:last-child').append(
+                                "<div class='image-col'>" +
+                                "   <img class='pdtimgclnt' src='" + prodimage + "' alt='" + label + "' />" +
+                                "</div>"
+                            );
+                        }
+                    }
+                }
+            });
         }
     });
 
 
-    $(function () {
-        initGrid();
+    $(document).ready(function () {
 
-        var propertyTypeData = JSON.parse('@Html.Raw(Json.Serialize(typeof(PropertyTypeEnum).EnumToDictionaryString()))');
-        $("#propertyType").cnComboBox({ data: propertyTypeData });
+        $('#price-range-submit').show();
+
+        $("#min_price,#max_price").on('change', function () {
+
+            $('#price-range-submit').show();
+
+            var min_price_range = parseInt($("#min_price").val());
+
+            var max_price_range = parseInt($("#max_price").val());
+
+            if (min_price_range > max_price_range) {
+                $('#max_price').val(min_price_range);
+            }
+
+            $("#slider-range").slider({
+                values: [min_price_range, max_price_range]
+            });
+
+        });
+
+
+        $("#min_price,#max_price").on("paste keyup", function () {
+
+            $('#price-range-submit').show();
+
+            var min_price_range = parseInt($("#min_price").val());
+
+            var max_price_range = parseInt($("#max_price").val());
+
+            if (min_price_range == max_price_range) {
+
+                max_price_range = min_price_range + 100;
+
+                $("#min_price").val(min_price_range);
+                $("#max_price").val(max_price_range);
+            }
+
+            $("#slider-range").slider({
+                values: [min_price_range, max_price_range]
+            });
+
+        });
+
+
+        $(function () {
+            $("#slider-range").slider({
+                range: true,
+                orientation: "horizontal",
+                min: 1000000,
+                max: 500000000,
+                values: [70000000, 350000000],
+                step: 1,
+
+                slide: function (event, ui) {
+                    if (ui.values[0] == ui.values[1]) {
+                        return false;
+                    }
+
+                    $("#min_price").val(ui.values[0]);
+                    $("#max_price").val(ui.values[1]);
+                }
+            });
+
+            $("#min_price").val($("#slider-range").slider("values", 0));
+            $("#max_price").val($("#slider-range").slider("values", 1));
+
+        });
+
+        $("#slider-range,#price-range-submit").click(function () {
+
+            var min_price = $('#min_price').val();
+            var max_price = $('#max_price').val();
+
+            //$("#searchResults").text("Here are the list of available houses which cost between " + min_price + " " + "and" + " " + max_price + ".");
+        });
+
     });
 
-    function initGrid() {
-        var queryUrl = '@Url.Content("~/PropertyGallery/GetPropertyGalleryPageListJsonn")';
-        $('#cardContainer').cnCardList({
-            url: queryUrl,
-            cardTemplate: function (data) {
-                // Generate the HTML for each card using the provided data
-                var cardHtml = `
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">${data.Title}</h5>
-
-            `;
-                return cardHtml;
-            }
+    $(document).ready(function () {
+        // Initialize Property Type ComboBox
+        $("#propertyType").cnComboBox({
+            data: cn.getJson(@Html.Raw(typeof(PropertyTypeEnum).EnumToDictionaryString()))
         });
-    }
+
+        // Initialize Sort By ComboBox
+        $("#sortBy").cnComboBox({
+            data: cn.getJson(@Html.Raw(typeof(SortByEnum).EnumToDictionaryString()))
+        });
+
+    });
+
 
 </script>
-

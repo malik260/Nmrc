@@ -9,6 +9,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
     public class CreateCustomerRequestDTO
     {
         public string CustomerCode { get; set; }
+        public int customerTypeId { get; set; }
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -28,11 +29,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
         public bool IsPoliticallyExposed { get; set; }
         public string Occupation { get; set; }
         public string CustomerBVN { get; set; }
+        public string employerNumber { get; set; }
+        public int profileSourceId { get; set; }
         public ContactAddress contactAddress { get; set; }
         public ContactPhone contactPhone { get; set; }
         public int? SubSectorId { get; set; }
         public AccountDetails AccountDetails { get; set; }
         public NextofKin nextOfKin { get; set; }
+        //public string employerNumber { get; set; }
     }
 
     public class AccountDetails
@@ -44,6 +48,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
         public string MonthlyIncome { get; set; }
         public string OtherBankAccountNumber { get; set; }
         public string OtherBankSortCode { get; set; }
+        public string pmbNhfAccount { get; set; }
     }
     public class NextofKin
     {

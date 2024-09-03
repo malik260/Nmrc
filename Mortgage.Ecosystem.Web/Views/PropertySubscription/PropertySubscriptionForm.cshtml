@@ -4,50 +4,131 @@
 
 
 <div class="propertyRegistration" id="propertyRegistration">
-        <form id="form1" class="form-horizontal m">
-            <div class="dialogblockborder dialogblockborderheadline">
-                <div class="dialogblock-header" style="height: auto;">
-                    <span class="dialogblockheader">#PhoneNumber-Details</span>
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">#PhoneNumber-Details</span>
                 <div class="form-group">
-                   
+
                     <div class="col-sm-4">
-                        <label for="geoTagging" class="form-label" style="margin-left: 100px;">
+                        <label for="geoTagging" class="form-label">
                             Geo-Tagging
                             <i class="fa fa-map-marker" aria-hidden="true" style="font-size: 24px; margin-left: 5px; vertical-align: middle; color: #000;"></i>
                         </label>
                         <div class="input-group">
-                            <input type="text" class="form-control mr-2" style="width: 30%; margin-left: 100px;" placeholder="Longitude" readonly>
+                            <input type="number" id="long" class="form-control mr-2" style="width: 30%; margin-left: 5px;" placeholder="Longitude" readonly>
                             <span style="width: 0%;"></span>
-                            <input type="text" class="form-control ml-2" style="width: 30%; margin-left: 100px;" placeholder="Latitude" readonly>
+                            <input type="number" id="latit" class="form-control ml-2" style="width: 30%; margin-left: 5px;" placeholder="Latitude" readonly>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <label class="developer control-label" style="margin-left: 200px;">Developer</label>
-                        <input type="text" col="developer" style="margin-left: 200px;" class="form-control" id="developer" readonly>
+                        <label class="developer control-label" style="margin-left: 5px;">Developer</label>
+                        <input type="text" col="developer" style="margin-left: 5px;" class="form-control" id="developer" readonly>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-4">
-                        <label for="propertyDescription" style="margin-left: 100px;" class="form-label">Property&nbsp;Description</label>
-                        <textarea type="text" style="margin-left: 100px; height: 150px;" class="form-control" id="propertyDescription" readonly></textarea>
+                        <label for="propertyDescription" style="margin-right: 5px;" class="form-label">Property&nbsp;Description</label>
+                        <textarea type="text" style="margin-right: 5px; height: 150px;" class="form-control" id="propertyDescription" readonly></textarea>
                     </div>
-                    <div class="col-sm-4">
-                        <label for="viewPictures" style="margin-left: 200px;" class="form-label">View&nbsp;Pictures</label>
-                        <textarea type="text" style="margin-left: 200px; height: 150px;" class="form-control" id="viewPictures" readonly></textarea>
-                    </div>
-                </div>
-              
+                    <div class="col-sm-8">
+                        <label for="viewPictures" style="margin-right: 5px;" class="form-label">View&nbsp;Pictures</label>
+                        <div id="carousel-container" style="margin-right: 5px; height: 150px;"></div>
 
-             
-             
-              
+                        @* <textarea type="text" style="margin-right: 5px; height: 150px;" class="form-control" id="viewPictures" readonly></textarea>*@
+                    </div>
                 </div>
+
+
+
+
+
             </div>
-        
-   </form>
+        </div>
+
+    </form>
 </div>
 
-  
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+<style type="text/css">
+    /*.lazyImages {
+        text-align: center;
+    }
+
+        .lazyImages img {
+            max-width: 200px;
+            margin-bottom: 50px;
+        }*/
+
+    #carousel-container {
+        width: 80%; 
+        margin: 0 auto; 
+        height: 50%
+    }
+
+    .slick-item {
+        margin: 0 10px; 
+    }
+</style>
+
+<script type="text/javascript">
+    var id = cn.request("id");
+    console.log(id);
+
+    $(document).ready(function () {
+        debugger;
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/PropertyRegistration/GetFormJson")' + '?id=' + id,
+                type: "get",
+                contentType: "application/json; charset=utf-8",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        debugger;
+                        var slickContainer = $("#carousel-container");
+                        var result = obj.Data;
+                        var prodimage = "data:image/jpg;base64," + result[i].filedata;
+                        for (var i = 0; i < result.length; i++) {
+                            $('#long').val(result[0].longitude);
+                            $('#latit').val(result[0].latitude);
+                            $('#propertyDescription').val(result[0].propertyDescription);
+                            //var Proddetails = result[i].Proddetails;
+                            var prodimage = "data:image/jpg;base64," + result[i].filedata;
+                            slickContainer.append(
+                                "<div class='slick-item'>" +
+                                "   <div class='tabledivprod'>" +
+                                "       <img class='pdtimgclnt' src='" + prodimage + "' />" +
+                                "       <div class='PdtID'>" + label + "</div>" +
+                                "   </div>" +
+                                "</div>"
+                            );
+                        }
+
+                        slickContainer.slick({
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                            infinite: true,
+                            arrows: true,
+                            dots: true,
+                            autoplay: true,
+                            autoplaySpeed: 2000
+                        });
+
+                    }
+                }
+            });
+        }
+    });
+
+</script>
+
+
+
 
 
 

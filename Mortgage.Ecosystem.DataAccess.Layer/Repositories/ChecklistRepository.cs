@@ -6,6 +6,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
@@ -25,12 +26,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var expression = ListFilter(param);
             var list = await BaseRepository().FindList(expression, pagination);
             return list.ToList();
-        }       
+        }
 
-        public async Task<ChecklistEntity> GetEntity(long id)
+        public async Task<ChecklistEntity> GetEntity(int id)
         {
             return await BaseRepository().FindEntity<ChecklistEntity>(id);
         }
+
+
         #endregion
 
         #region Submit data
@@ -60,9 +63,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var expression = ExtensionLinq.True<ChecklistEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.ProductName))
+                if (!string.IsNullOrEmpty(param.Checklist))
                 {
-                    expression = expression.And(second: t => t.ProductName.Contains(param.ProductName));
+                    expression = expression.And(second: t => t.Checklist.Contains(param.Checklist));
                 }
             }
             return expression;

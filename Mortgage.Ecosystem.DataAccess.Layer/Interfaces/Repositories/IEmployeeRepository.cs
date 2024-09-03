@@ -8,7 +8,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
 {
     public interface IEmployeeRepository
     {
+        Task<EmployeeEntity> GetEmployeeByNIN(string NIN);
+        Task<EmployeeEntity> GetEmployeeByBVN(string BVN);
+        Task<EmployeeEntity> GetEmployeeByMobile(string MobileNumber);
+        Task<EmployeeEntity> GetEmployeeByEmail(string emailAddress);
         Task<List<EmployeeEntity>> GetList(EmployeeListParam param);
+        Task<List<EmployeeEntity>> GetListByCompany(EmployeeListParam param);
         Task<List<EmployeeEntity>> GetPageList(EmployeeListParam param, Pagination pagination);
         Task<List<EmployeeEntity>> GetApprovalPageList(EmployeeListParam param, Pagination pagination);
         Task<EmployeeEntity> GetEntity(long id);
@@ -22,6 +27,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task SaveForm(EmployeeEntity entity);
         Task SaveForms(EmployeeEntity entity);
         Task DeleteForm(string ids);
-        Task ApproveForm(EmployeeEntity entity, MenuEntity menu, OperatorInfo user);
+       Task<bool> ApproveForm(EmployeeEntity entity, MenuEntity menu, OperatorInfo user, UserEntity loginProfile);
+        Task RejectForm(EmployeeEntity entity);
     }
 }

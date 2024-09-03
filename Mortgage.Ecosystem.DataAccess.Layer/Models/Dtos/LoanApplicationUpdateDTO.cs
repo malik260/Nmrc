@@ -40,4 +40,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
         public LoanApplicationResult2 result { get; set; }
 
     }
+
+    public class LoanApplicationUpdateDTOFailed
+    {
+        public bool success { get; set; }
+        public string message { get; set; }
+
+    }
 }

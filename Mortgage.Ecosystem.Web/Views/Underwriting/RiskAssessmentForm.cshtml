@@ -1,4 +1,4 @@
-﻿@{
+﻿@* @{
     Layout = "~/Views/Shared/_FormWhite.cshtml";
     Layout = "~/Views/Shared/_Index.cshtml";
 
@@ -12,18 +12,21 @@
 <div class="RiskAssessmentForm" id="RiskAssessmentForm">
     <div id="form1" class="form-horizontal m">
         <div class="dialogblockborder dialogblockborderheadline">
-            @*                <form class="dialogblock-header" style="height: auto;">
-            <span class="dialogblockheader">Risk Assesstment Form</span>
 
-            </form>*@
             <div class="col-sm-12 select-table table-striped">
                 <table id="productAssessmentSetupTable" data-mobile-responsive="true"></table>
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-sm-6">
-                <button class="btn btn-danger" onclick="PerformAssessment()" type="button" id="RiskAssessment">
+                <label class="form-label">Remark</label>
+                <input id="naration" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+
+                <button class="btn btn-danger" onclick="performanceAssessment()" type="button" id="RiskAssessment">
                     <i class="fa fa-arrow-left"></i> Save Computed Score
                 </button>
             </div>
@@ -36,20 +39,15 @@
         </div>
 
     </div>
-    <div class="form-group">
-    <div class="col-sm-6">
-        <label class="form-label">Remark</label>
-        <input id="naration" class="form-control" />
-    </div>
-    </div>
+
 </div>
 
 <script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
-<script type="text/javascript">    
+<script type="text/javascript">
 
 
-
+    var selectedRows = [];
     $(function () {
         initGrid();
     });
@@ -57,7 +55,80 @@
     function initGrid() {
         var productCode = localStorage.getItem('Data1');
         var queryUrl = '@Url.Content("~/CreditAssessmentRiskFactor/GetListJson")' + '?productcode=' + productCode;
-        var selectedWeights = [];
+
+        //$('#productAssessmentSetupTable').bootstrapTable({
+        //    url: queryUrl,
+        //    columns: [
+        //        { field: 'RiskFactorsDescription', title: 'Risk Factor', visible: true },
+        //        { field: 'Weight', title: 'Weight', visible: true },
+        //    ],
+        //    detailView: true,
+        //    onExpandRow: function (index, row, $detail) {
+        //        var riskFactorUrl = '@Url.Content("~/CreditAssessmentFactorIndex/GetListJson")' + '?RiskFactorId=' + row.RiskFactorId;
+
+        //        $detail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+        //        $detail.html('<br/><table class="data-table" ' +
+        //            'data-url=' + riskFactorUrl + ' ' +
+        //            'id="FactorTable" ' +
+        //            'data-toggle="table" >' +
+        //            '<thead><tr>' +
+        //            '<th data-field="FactorIndexDescription"><b>Risk Factor Index</b></th>' +
+        //            '<th data-field="Weight"><b>Weight</b></th>' +
+        //            '</tr></thead>' +
+        //            '</table></div></div>').find('table').bootstrapTable({
+        //                detailView: true,
+        //                onExpandRow: function (factorindex, factorrow, $factorindexdetail) {
+        //                    var indexTitleurl = '@Url.Content("~/CreditAssessmentIndexTitle/GetListJson")' + '?factorIndexId=' + factorrow.FactorIndexId;
+
+        //                    $factorindexdetail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+        //                    $factorindexdetail.html('<br/><table class="data-table" ' +
+        //                        'data-url=' + indexTitleurl + ' ' +
+        //                        'id="FactorIndexTable" ' +
+        //                        'data-toggle="table" >' +
+        //                        '<thead><tr>' +
+        //                        '<th data-field="IndexTitleDescription"><b>Factor Index Title</b></th>' +
+        //                        '<th data-field="Weight"><b>Weight</b></th>' +
+        //                       // '<th data-checkbox="true"></th>' +
+        //                        '</tr></thead>' +
+        //                        '</table></div></div>').find('table').bootstrapTable({
+        //                            detailView: true,
+        //                            onExpandRow: function (factorindex, factorrow, $factorindexdetail) {
+        //                                // Add another level of nested table if needed
+        //                                // You can use a similar structure as above
+        //                                var indexurl = '@Url.Content("~/CreditAssessmentIndexTitle/GetListJson")' + '?factorIndexId=' + factorrow.FactorIndexId;
+
+        //                                $factorindexdetail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+        //                                $factorindexdetail.html('<br/><table class="data-table" ' +
+        //                                    'data-url=' + indexurl + ' ' +
+        //                                    'id="FactorIndexTable" ' +
+        //                                    'data-toggle="table" >' +
+        //                                    '<thead><tr>' +
+        //                                    '<th data-field="IndexTitleDescription"><b>Factor Index Title</b></th>' +
+        //                                    '<th data-field="Weight"><b>Weight</b></th>' +
+        //                                    '<th data-checkbox="true"></th>' +
+        //                                    '</tr></thead>' +
+        //                                    '</table></div></div>').find('table').bootstrapTable({
+        //                            },
+        //                            checkboxHeader: true,
+        //                            singleSelect: true,
+        //                            onCheck: function (row) {
+        //                                // Handle checkbox check event
+        //                                addToSelectedRows(row);
+        //                                updateCheckboxState(row, true);
+        //                            },
+        //                            onUncheck: function (row) {
+        //                                removeFromSelectedRows(row);
+        //                                updateCheckboxState(row, false);
+        //                                updateTotalWeightOnUncheck(row);
+        //                            }
+        //                        });
+        //                }
+        //            });
+        //    }
+        //});
         $('#productAssessmentSetupTable').bootstrapTable({
             url: queryUrl,
             columns: [
@@ -68,7 +139,6 @@
             onExpandRow: function (index, row, $detail) {
                 var riskFactorUrl = '@Url.Content("~/CreditAssessmentFactorIndex/GetListJson")' + '?RiskFactorId=' + row.RiskFactorId;
 
-                // Prevent collapsing other detail views
                 $detail.parent().siblings().find('.detail-icon').addClass('collapsed');
 
                 $detail.html('<br/><table class="data-table" ' +
@@ -84,7 +154,6 @@
                         onExpandRow: function (factorindex, factorrow, $factorindexdetail) {
                             var indexTitleurl = '@Url.Content("~/CreditAssessmentIndexTitle/GetListJson")' + '?factorIndexId=' + factorrow.FactorIndexId;
 
-                            // Prevent collapsing other detail views
                             $factorindexdetail.parent().siblings().find('.detail-icon').addClass('collapsed');
 
                             $factorindexdetail.html('<br/><table class="data-table" ' +
@@ -94,49 +163,148 @@
                                 '<thead><tr>' +
                                 '<th data-field="IndexTitleDescription"><b>Factor Index Title</b></th>' +
                                 '<th data-field="Weight"><b>Weight</b></th>' +
-                                '<th data-checkbox="true" data-single-select="true"> </th>' +
                                 '</tr></thead>' +
-                                '</table></div></div>').find('table').bootstrapTable({ singleSelect: true });
+                                '</table></div></div>').find('table').bootstrapTable({
+                                    detailView: true,
+                                    onExpandRow: function (iindex, indexrow, $indexdetail) {
+                                        // Add another level of nested table if needed
+                                        // You can use a similar structure as above
+
+                                        var indexurl = '@Url.Content("~/CreditAssessmentIndex/GetListJson")' + '?indexTitleId=' + indexrow.IndexTitleId;
+
+                                        $factorindexdetail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+                                        $factorindexdetail.html('<br/><table class="data-table" ' +
+                                            'data-url=' + indexurl + ' ' +
+                                            'id="IndexTable" ' +
+                                            'data-toggle="table" >' +
+                                            '<thead><tr>' +
+                                            '<th data-field="AssessmentIndex"><b>Index</b></th>' +
+                                            '<th data-field="Weight"><b>Weight</b></th>' +
+                                            '<th data-checkbox="true"></th>' +
+                                            '</tr></thead>' +
+                                            '</table></div></div>').find('table').bootstrapTable({
+                                                checkboxHeader: true,
+                                                singleSelect: true,
+                                                onCheck: function (row) {
+                                                    // Handle checkbox check event
+                                                    addToSelectedRows(row);
+                                                    updateCheckboxState(row, true);
+                                                },
+                                                onUncheck: function (row) {
+                                                    removeFromSelectedRows(row);
+                                                    updateCheckboxState(row, false);
+                                                    updateTotalWeightOnUncheck(row);
+                                                }
+                                            });
+                                    }
+                                });
                         }
                     });
-
-                
             }
         });
-        
-        //console.log(selectedWeights);
-        //var checkedWeightsDiv = $('#checkedWeightsDiv');
-        //checkedWeightsDiv.html('Checked Weights: ' + selectedWeights.join(', '));
-
-        // Add an event listener to track checkbox changes
-
-    
-
 
     }
 
 
+    // function initGrid() {
+    //     var productCode = localStorage.getItem('Data1');
+    //     var queryUrl = '@Url.Content("~/CreditAssessmentRiskFactor/GetListJson")' + '?productcode=' + productCode;
+
+    //     $('#productAssessmentSetupTable').bootstrapTable({
+    //         url: queryUrl,
+    //         columns: [
+    //             { field: 'RiskFactorsDescription', title: 'Risk Factor', visible: true },
+    //             { field: 'Weight', title: 'Weight', visible: true },
+    //         ],
+    //         detailView: true,
+    //         onExpandRow: function (index, row, $detail) {
+    //             var riskFactorUrl = '@Url.Content("~/CreditAssessmentFactorIndex/GetListJson")' + '?RiskFactorId=' + row.RiskFactorId;
+
+    //             $detail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+    //             $detail.html('<br/><table class="data-table" ' +
+    //                 'data-url=' + riskFactorUrl + ' ' +
+    //                 'id="FactorTable" ' +
+    //                 'data-toggle="table" >' +
+    //                 '<thead><tr>' +
+    //                 '<th data-field="FactorIndexDescription"><b>Risk Factor Index</b></th>' +
+    //                 '<th data-field="Weight"><b>Weight</b></th>' +
+    //                 '</tr></thead>' +
+    //                 '</table></div></div>').find('table').bootstrapTable({
+    //                     detailView: true,
+    //                     onExpandRow: function (factorindex, factorrow, $factorindexdetail) {
+    //                         var indexTitleurl = '@Url.Content("~/CreditAssessmentIndexTitle/GetListJson")' + '?factorIndexId=' + factorrow.FactorIndexId;
+
+    //                         $factorindexdetail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+    //                         $factorindexdetail.html('<br/><table class="data-table" ' +
+    //                             'data-url=' + indexTitleurl + ' ' +
+    //                             'id="FactorIndexTable" ' +
+    //                             'data-toggle="table" >' +
+    //                             '<thead><tr>' +
+    //                             '<th data-field="IndexTitleDescription"><b>Factor Index Title</b></th>' +
+    //                             '<th data-field="Weight"><b>Weight</b></th>' +
+    //                             '<th data-checkbox="true"></th>' +
+    //                             '</tr></thead>' +
+    //                             '</table></div></div>').find('table').bootstrapTable({
+    //                                 checkboxHeader: true,
+    //                                 singleSelect: true,
+    //                                 onCheck: function (row) {
+    //                                     // Handle checkbox check event
+    //                                     addToSelectedRows(row);
+    //                                     updateCheckboxState(row, true);
+    //                                 },
+    //                                 onUncheck: function (row) {
+    //                                     removeFromSelectedRows(row);
+    //                                     updateCheckboxState(row, false);
+    //                                     updateTotalWeightOnUncheck(row);
+    //                                 }
+    //                             });
+    //                     }
+    //                 });
+    //         }
+    //     });
+    // }
 
 
+    function updateTotalWeightOnUncheck(row) {
+        var uncheckedWeight = row.Weight;
+        var newTotalWeight = calculateTotalWeight() - uncheckedWeight;
+        console.log("Updated Total Weight:", newTotalWeight);
+        // Optionally, you can use the newTotalWeight as needed.
+    }
+    function addToSelectedRows(row) {
+        selectedRows.push(row);
+        calculateTotalWeight();
+    }
 
+    function removeFromSelectedRows(row) {
+        selectedRows = selectedRows.filter(function (selectedRow) {
+            return selectedRow !== row;
+        });
+        calculateTotalWeight();
+    }
 
+    function calculateTotalWeight() {
+        var totalWeight = selectedRows.reduce(function (sum, selectedRow) {
+            return sum + selectedRow.Weight;
+        }, 0);
 
-    function PerformAssessment() {
-        debugger;
-        var selectedRow = $("#FactorIndexTable").bootstrapTable("getSelections");
+        console.log("Total Weight:", totalWeight);
+
+        return totalWeight; // Make sure to return the calculated total weight
+    }
+
+    function performanceAssessment() {
+        // Call the function to calculate total weight
+        var totalWeight = calculateTotalWeight();
+        console.log(totalWeight)
+
         var NhfNumber = localStorage.getItem("Data");
         var ProductCode = localStorage.getItem("Data1");
-        debugger;
-        var totalweight = 0;
-
-        for (var i = 0; i < selectedRow.length; i++) {
-            totalweight = selectedRow[i].Weight;
-        } // <-- Closing bracket for the for loop
-
-        debugger;
-        console.log(selectedRow.length);
-        if (selectedRow.length !== 0) {
-           
+        var loanId = localStorage.getItem("Data2");
+        if (selectedRows.length !== 0) {
             swal({
                 title: "Are you sure?",
                 text: "Proceed with Risk Assessment!",
@@ -163,14 +331,13 @@
                         allowOutsideClick: false,
                     });
 
-                    if (selectedRow.length !== 0) {
-
+                    if (selectedRows.length !== 0) {
                         var jsonData = {
-                            Weight: totalweight,
+                            Weight: totalWeight,
                             NhfNumber: NhfNumber,
-                            ProductName: ProductCode, 
+                            ProductName: ProductCode,
+                            LoanId: loanId,
                             Remark: $('#naration').val()
-
                         };
 
                         $.ajax({
@@ -178,32 +345,310 @@
                             type: 'POST',
                             data: { selectedData: jsonData },
                             success: function (obj) {
-                                if (obj.Tag == 1) {
-                                    swal({ title: 'Risk Assessment', text: obj.Message.toString(), type: 'success' }).then(function () { window.location.reload(false); });
-                                } else {
-                                    swal({ title: 'Risk Assessment', text: obj.Message.toString(), type: 'error' }).then(function () { window.location.reload(true); });
-                                    return;
-                                }
+                                var successMessage = obj.Tag == 1 ? 'success' : 'error';
+                                swal({ title: 'Risk Assessment', text: obj.Message.toString(), type: successMessage }).then(function () {
+                                    window.location.reload(obj.Tag == 1);
+                                });
                             },
                             error: function (e) {
                                 swal({ title: 'Risk Assessment', text: e, type: 'error' }).then(function () { });
                                 console.log(e);
                             }
                         });
-
                     }
                 }
             });
-
         } else {
             $("#RiskAssessment").removeAttr("disabled");
             swal("You have not selected any Factor Index");
         }
     }
-    
+
+
 
 </script>
 
 
 
 
+ *@
+
+@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.min.css" rel="stylesheet" />
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.css" rel="stylesheet" />
+@* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+ *@
+<div class="RiskAssessmentForm" id="RiskAssessmentForm">
+    <div id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="productAssessmentSetupTable" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <label class="control-label">Remark<font class="red"> *</font></label>
+                <input id="naration" class="form-control" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <button class="btn btn-success" onclick="performanceAssessment()" type="button" id="RiskAssessment">
+                    <i class="fa fa-arrow-left"></i> Save Computed Score
+                </button>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-danger" type="reset" onclick="resetForm()">
+                    <i class="fa fa-save"></i> Reset
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
+@* <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+ *@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script type="text/javascript">
+    var selectedRows = [];
+    $(function () {
+        initGrid();
+    });
+
+    function initGrid() {
+        var productCode = localStorage.getItem('Data1');
+        var queryUrl = '@Url.Content("~/CreditAssessmentRiskFactor/GetListJson")' + '?productcode=' + productCode;
+
+        $('#productAssessmentSetupTable').bootstrapTable({
+            url: queryUrl,
+            columns: [
+                { field: 'RiskFactorsDescription', title: 'Risk Factor', visible: true },
+                { field: 'Weight', title: 'Weight', visible: true },
+            ],
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                var riskFactorUrl = '@Url.Content("~/CreditAssessmentFactorIndex/GetListJson")' + '?RiskFactorId=' + row.RiskFactorId;
+
+                if (!row.factorData) {
+                    $.get(riskFactorUrl, function (data) {
+                        row.factorData = data;
+                        createFactorTable($detail, row.factorData);
+                    });
+                } else {
+                    createFactorTable($detail, row.factorData);
+                }
+            }
+        });
+
+        function createFactorTable($detail, data) {
+            $detail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+            $detail.html('<br/><table class="data-table" id="FactorTable" data-toggle="table" >' +
+                '<thead><tr>' +
+                '<th data-field="FactorIndexDescription"><b>Risk Factor Index</b></th>' +
+                '<th data-field="Weight"><b>Weight</b></th>' +
+                '</tr></thead>' +
+                '</table></div></div>').find('table').bootstrapTable({
+                    data: data,
+                    detailView: true,
+                    onExpandRow: function (factorindex, factorrow, $factorindexdetail) {
+                        var indexTitleurl = '@Url.Content("~/CreditAssessmentIndexTitle/GetListJson")' + '?factorIndexId=' + factorrow.FactorIndexId;
+
+                        if (!factorrow.indexTitleData) {
+                            $.get(indexTitleurl, function (data) {
+                                factorrow.indexTitleData = data;
+                                createIndexTitleTable($factorindexdetail, factorrow.indexTitleData);
+                            });
+                        } else {
+                            createIndexTitleTable($factorindexdetail, factorrow.indexTitleData);
+                        }
+                    }
+                });
+        }
+
+        function createIndexTitleTable($factorindexdetail, data) {
+            $factorindexdetail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+            $factorindexdetail.html('<br/><table class="data-table" id="FactorIndexTable" data-toggle="table" >' +
+                '<thead><tr>' +
+                '<th data-field="IndexTitleDescription"><b>Factor Index Title</b></th>' +
+                '<th data-field="Weight"><b>Weight</b></th>' +
+                '</tr></thead>' +
+                '</table></div></div>').find('table').bootstrapTable({
+                    data: data,
+                    detailView: true,
+                    onExpandRow: function (iindex, indexrow, $indexdetail) {
+                        var indexurl = '@Url.Content("~/CreditAssessmentIndex/GetListJson")' + '?indexTitleId=' + indexrow.IndexTitleId;
+
+                        if (!indexrow.indexData) {
+                            $.get(indexurl, function (data) {
+                                indexrow.indexData = data;
+                                createIndexTable($indexdetail, indexrow.indexData);
+                            });
+                        } else {
+                            createIndexTable($indexdetail, indexrow.indexData);
+                        }
+                    }
+                });
+        }
+
+        function createIndexTable($indexdetail, data) {
+            $indexdetail.parent().siblings().find('.detail-icon').addClass('collapsed');
+
+            $indexdetail.html('<br/><table class="data-table" id="IndexTable" data-toggle="table" >' +
+                '<thead><tr>' +
+                '<th data-field="AssessmentIndex"><b>Index</b></th>' +
+                '<th data-field="Weight"><b>Weight</b></th>' +
+                '<th data-checkbox="true"></th>' +
+                '</tr></thead>' +
+                '</table></div></div>').find('table').bootstrapTable({
+                    data: data,
+                    checkboxHeader: true,
+                    singleSelect: true,
+                    onCheck: function (row) {
+                        addToSelectedRows(row);
+                    },
+                    onUncheck: function (row) {
+                        removeFromSelectedRows(row);
+                        updateTotalWeightOnUncheck(row);
+                    }
+                });
+        }
+    }
+
+
+    function updateTotalWeightOnUncheck(row) {
+        var uncheckedWeight = row.Weight;
+        var newTotalWeight = calculateTotalWeight() - uncheckedWeight;
+        console.log("Updated Total Weight:", newTotalWeight);
+    }
+
+    function addToSelectedRows(row) {
+        selectedRows.push(row);
+        calculateTotalWeight();
+    }
+
+    function removeFromSelectedRows(row) {
+        selectedRows = selectedRows.filter(function (selectedRow) {
+            return selectedRow !== row;
+        });
+        calculateTotalWeight();
+    }
+
+    function calculateTotalWeight() {
+        var totalWeight = selectedRows.reduce(function (sum, selectedRow) {
+            return sum + selectedRow.Weight;
+        }, 0);
+
+        console.log("Total Weight:", totalWeight);
+
+        return totalWeight;
+    }
+
+    function performanceAssessment() {
+        var totalWeight = calculateTotalWeight();
+        console.log(totalWeight);
+
+        var NhfNumber = localStorage.getItem("Data");
+        var ProductCode = localStorage.getItem("Data1");
+        var loanId = localStorage.getItem("Data2");
+        var narration = $('#naration').val().trim();
+        if (!narration) {
+            swal.fire({
+                title: "Validation Error",
+                text: "Remark is required!",
+                type: "error",
+                confirmButtonText: "OK"
+            });
+            return;
+        }
+        
+        if (selectedRows.length !== 0) {
+            swal.fire({
+                title: "Are you sure?",
+                text: "Proceed with Risk Assessment!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#ff9800",
+                confirmButtonText: "Yes, continue",
+                cancelButtonText: "No, stop!",
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                preConfirm: function () {
+                    return new Promise(function (resolve) {
+                        setTimeout(function () {
+                            resolve();
+                        }, 4000);
+                    });
+                }
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    swal.fire({
+                        title: 'Performing Risk Assessment...',
+                        html: 'Please wait...',
+                        showConfirmButton: false,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            swal.showLoading();
+                        }
+                    });
+
+                    if (selectedRows.length !== 0) {
+                        var jsonData = {
+                            Weight: totalWeight,
+                            NhfNumber: NhfNumber,
+                            ProductName: ProductCode,
+                            LoanId: loanId,
+                            Remark: $('#naration').val()
+                        };
+
+                        $.ajax({
+                            url: '/RiskAssessmentProcedure/SaveFormJson',
+                            type: 'POST',
+                            data: { selectedData: jsonData },
+                            success: function (obj) {
+                                var successMessage = obj.Tag == 1 ? 'success' : 'error';
+                                swal.fire({ title: 'Risk Assessment', text: obj.Message.toString(), type: successMessage }).then(function () {
+                                    window.location.reload(obj.Tag == 1);
+                                });
+                            },
+                            error: function (e) {
+                                swal.fire({ title: 'Risk Assessment', text: e, type: 'error' }).then(function () { });
+                                console.log(e);
+                            }
+                        });
+                    }
+                } else if (result.isDismissed) {
+                    swal.fire("Operation Cancelled", "You have cancelled the risk assessment.", "info");
+                }
+            });
+        } else {
+            $("#RiskAssessment").removeAttr("disabled");
+            swal.fire("You have not selected any Factor Index");
+        }
+    }
+
+    function resetForm() {
+
+        $('#naration').val('');
+
+
+        // Uncheck all checkboxes
+        // Traverse through nested tables and uncheck all checkboxes
+        $('.data-table').each(function () {
+            $(this).bootstrapTable('uncheckAll');
+        });
+
+        // Clear the selectedRows array
+        selectedRows = [];
+
+    }
+</script>

@@ -3,6 +3,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Extensions;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
@@ -29,6 +30,20 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<ETicketEntity>> GetEmployeePageList(ETicketListParam param, Pagination pagination)
+        {
+            var DB = new ApplicationDbContext();
+            var user = await Operator.Instance.Current();
+            var employeeDetails = DB.EmployeeEntity.Where(i => i.Id == user.Employee).FirstOrDefault();
+            var expression = ListFilter(param);
+
+            expression = expression.And(eticket => eticket.NHFNumber == employeeDetails.NHFNumber);
+
+            var list = await BaseRepository().FindList(expression, pagination);
+            return list.ToList();
+        }
+
+
         public async Task<List<ETicketEntity>> GetApprovalPageList(ETicketListParam param, Pagination pagination)
         {
             var list = await new DataRepository().GetETicketApprovalItems();
@@ -47,6 +62,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             int sort = result.ToInt();
             sort++;
             return sort;
+        }
+
+        public async Task<ETicketEntity> GetEntityDetails(long id)
+        {
+            return await BaseRepository().FindEntity<ETicketEntity>(x => x.Id == id);
         }
 
         // Whether the company name exists
@@ -70,6 +90,31 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         #region Submit data
         public async Task SaveForm(ETicketEntity entity)
+        {
+            var db = await BaseRepository().BeginTrans();
+            try
+            {
+                if (entity.Id.IsNullOrZero())
+                {
+                    await entity.Create();
+                    await BaseRepository().Insert<ETicketEntity>(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await BaseRepository().Update<ETicketEntity>(entity);
+                }
+                await db.CommitTrans();
+            }
+            catch (Exception)
+            {
+                await db.RollbackTrans();
+
+                throw;
+            }
+        }
+
+        public async Task UpdateForm(ETicketEntity entity)
         {
             var db = await BaseRepository().BeginTrans();
             try
@@ -128,8 +173,47 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     entity.Status = (int)ApprovalEnum.Approved;
                     await entity.Modify();
                     await db.Update(entity);
+                    MailParameter mailParameter = new()
+                    {
+                        UserName = user.UserName,
+                        UserEmail = entity.EmailAddress,
+                        UserPassword = user.DecryptedPassword
+                    };
+
+                    //if (EmailHelper.IsETicketEmailSent(mailParameter, out message))
+                    //{
+                    //    if (string.IsNullOrEmpty(message))
+                    //    {
+                    //        await db.CommitTrans();
+                    //    }
+                    //}
+
+                    if (approvalLog.ApprovalCount < approvalLog.ApprovalLevel)
+                    {
+                        await db.CommitTrans();
+                    }
+                    else if (approvalLog.ApprovalCount == approvalLog.ApprovalLevel)
+                    {
+                        MailParameter eticketMailParameter = new()
+                        {
+                            UserName = user.UserName,
+                            UserEmail = entity.EmailAddress,
+                            MessageType = entity.MessageType,
+                            RealName = user.RealName,
+                            UserCompany = entity.CompanyName,
+                            TicketNumber = entity.RequestNumber,
+                        };
+
+                        if (EmailHelper.IsETicketEmailSent(eticketMailParameter, out message))
+                        {
+                            if (string.IsNullOrEmpty(message))
+                            {
+                                await db.CommitTrans();
+                            }
+                        }
+                    }
                 }
-                await db.CommitTrans();
+                //await db.CommitTrans();
             }
             catch
             {

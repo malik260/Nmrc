@@ -19,9 +19,37 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.OrderBy(p => p.MenuSort).ToList();
         }
 
+        public async Task<List<MenuEntity>> GetEmployerMenuList()
+        {
+            var expression = ListEmployerMenuFilter();
+            var list = await BaseRepository().FindList<MenuEntity>(expression);
+            return list.OrderBy(p => p.MenuSort).ToList();
+        }
+
+        public async Task<List<MenuEntity>> GetPmbMenuList()
+        {
+            var expression = ListPmbMenuFilter();
+            var list = await BaseRepository().FindList<MenuEntity>(expression);
+            return list.OrderBy(p => p.MenuSort).ToList();
+        }
+
+        public async Task<List<MenuEntity>> GetEmployeeMenuList()
+        {
+            var expression = ListEmployeeMenuFilter();
+            var list = await BaseRepository().FindList<MenuEntity>(expression);
+            return list.OrderBy(p => p.MenuSort).ToList();
+        }
+
+
+
         public async Task<MenuEntity> GetEntity(long id)
         {
             return await BaseRepository().FindEntity<MenuEntity>(id);
+        }
+
+        public async Task<MenuEntity> GetEntitybyUrl(string url)
+        {
+            return await BaseRepository().FindEntity<MenuEntity>(x=> x.MenuUrl == url);
         }
 
         public async Task<int> GetMaxSort(long parent)
@@ -103,6 +131,36 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             }
             return expression;
         }
+
+        private Expression<Func<MenuEntity, bool>> ListEmployerMenuFilter()
+        {
+            var menu = new GlobalConstant();
+            var expression = ExtensionLinq.True<MenuEntity>();
+            expression = expression.And(t => t.Category == GlobalConstant.EMPLOYER_MENU_CATEGORY ||  t.Category == GlobalConstant.GLOBAL_MENU_CATEGORY || t.Category == GlobalConstant.EMPLOYERANDEMPLOYEE_MENU_CATEGORY || t.Category == GlobalConstant.ISAGENT_MENU_CATEGORY || t.Category == GlobalConstant.EMPLOYERANDPMB_MENU_CATEGORY);
+
+            return expression;
+        }
+
+        private Expression<Func<MenuEntity, bool>> ListPmbMenuFilter()
+        {
+            var menu = new GlobalConstant();
+            var expression = ExtensionLinq.True<MenuEntity>();
+            expression = expression.And(t => t.Category == GlobalConstant.PMB_MENU_CATEGORY || t.Category == GlobalConstant.GLOBAL_MENU_CATEGORY || t.Category == GlobalConstant.PMBANDEMPLOYEE_MENU_CATEGORY || t.Category == GlobalConstant.ISAGENT_MENU_CATEGORY || t.Category == GlobalConstant.EMPLOYERANDPMB_MENU_CATEGORY);
+
+            return expression;
+        }
+
+        private Expression<Func<MenuEntity, bool>> ListEmployeeMenuFilter()
+        {
+            var menu = new GlobalConstant();
+            var expression = ExtensionLinq.True<MenuEntity>();
+            expression = expression.And(t => t.Category == GlobalConstant.EMPLOYEE_MENU_CATEGORY || t.Category == GlobalConstant.GLOBAL_MENU_CATEGORY || t.Category == GlobalConstant.PMBANDEMPLOYEE_MENU_CATEGORY || t.Category == GlobalConstant.EMPLOYERANDEMPLOYEE_MENU_CATEGORY);
+
+            return expression;
+        }
+
+
+
         #endregion
     }
 }

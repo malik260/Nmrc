@@ -1,0 +1,172 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        <input id="firstName" col="FirstName" placeholder="search by first name" type="text" />
+                    </li>
+                    
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="btn-group-sm" id="toolbar">
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
+           
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/Pmb/GetPmbEmployee")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'CompanyName', title: 'Company', sortable: false },
+                { field: 'ContributionBranchName', title: 'Branch', visible: false, sortable: false },
+                { field: 'DepartmentName', title: 'Department', visible: false, sortable: false },
+                { field: 'TitleName', title: 'Title', visible: false, sortable: false },
+                { field: 'FirstName', title: 'FirstName', sortable: false },
+                { field: 'OtherName', title: 'Other Name(s)', sortable: false },
+                { field: 'LastName', title: 'Last Name', sortable: false },
+                { field: 'BVN', title: 'BVN', sortable: false },
+                { field: 'NIN', title: 'NIN', visible: false, sortable: false },
+                { field: 'GenderName', title: 'Gender', visible: false, sortable: false },
+                { field: 'DateOfBirth', title: 'Date Of Birth', visible: false, sortable: false },
+                { field: 'MaritalStatusName', title: 'Marital Status', visible: false, sortable: false },
+                { field: 'PostalAddress', title: 'Postal Address', visible: false, sortable: false },
+                { field: 'EmailAddress', title: 'Email Address', visible: false, sortable: false },
+                { field: 'MobileNumber', title: 'Mobile Number', sortable: false },
+                {
+                    field: 'EmploymentType', title: 'Employment Type', align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@EmploymentTypeEnum.Employed.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@EmploymentTypeEnum.Employed.GetDescription()" + '</span>';
+                        } else {
+                            return '<span class="badge badge-warning">' + "@EmploymentTypeEnum.SelfEmployed.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                { field: 'DateOfEmployment', title: 'Date Of Employment', visible: false, sortable: false },
+                { field: 'StaffNumber', title: 'Staff Number', visible: false, sortable: false },
+                { field: 'CustomerBank', title: 'Bank Name', visible: false, sortable: false },
+                { field: 'BankAccountNumber', title: 'Account Number', visible: false, sortable: false },
+                { field: 'AccountTypeName', title: 'Account Type', visible: false, sortable: false },
+                { field: 'MonthlySalary', title: 'Monthly Salary', visible: false, sortable: false },
+                { field: 'AlertTypeName', title: 'Alert Type', visible: false, sortable: false },
+                {
+                    field: 'Status',
+                    title: 'Status',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == "@ApprovalEnum.Pending.ToInt()") {
+                            return '<span class="badge badge-warning">' + "@ApprovalEnum.Pending.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Approved.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@ApprovalEnum.Approved.GetDescription()" + '</span>';
+                        } else if (value == "@ApprovalEnum.Rejected.ToInt()") {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Rejected.GetDescription()" + '</span>';
+                        }
+                        else {
+                            return '<span class="badge badge-danger">' + "@ApprovalEnum.Cancelled.GetDescription()" + '</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'BaseModifyTime', title: 'Create Time', visible: false, formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid(callBackId) {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').cnTreeTable('search', param);
+        if (callBackId) {
+            id = callBackId;
+        }
+    }
+
+    function searchGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+    function showSaveForm(bAdd) {
+        var id = 0;
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        cn.openDialog({
+            title: id > 0 ? "Edit Employee" : "Add Pmb Employee",
+            content: '@Url.Content("~/Pmb/PmbEmployeeForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (cn.checkRowDelete(selectedRow)) {
+            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
+                var ids = cn.getIds(selectedRow);
+                cn.ajax({
+                    url: '@Url.Content("~/AgentEmployee/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            searchGrid();
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+
+</script>

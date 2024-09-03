@@ -8,5 +8,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
     { 
         Task SaveForm(RiskAssessmentProcedureEntity entity);
         Task DeleteForm(string ids);
+        Task<RiskAssessmentProcedureEntity> GetEntity(string Nhf);
     }
 }

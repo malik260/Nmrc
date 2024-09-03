@@ -13,12 +13,15 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IAllNHFSubscriberRepository? _allnhfsubscribers;
         private IApprovalLogRepository? _approvalLogs;
         private IApprovalSetupRepository? _approvalSetups;
+        private IAuditTrailRepository? _AuditTrails;
         private IAutoJobLogRepository? _autoJobLogs;
         private IAutoJobRepository? _autoJobs;
         private IApproveAgentsRepository? _approveAgents;
         private IApproveEmployerAggregatorRepository? _approveEmployerAggregators;
+        private IAddDocumentProcedureRepository _addDocumentsProcedure;
         private IBankRepository? _banks;
         private IBranchRepository? _branches;
+        private IBrokerRepository? _brokers;
         private IChangeEmployerRepository? _changeEmployers;
         private IChangePasswordRepository? _changePasswords;
         private IChargeSetupRepository? _chargeSetups;
@@ -40,9 +43,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private ICreditTypeRepository? _creditTypes;
         private ICustomerProfileUpdateRepository? _customerProfileUpdates;
         private IDepartmentRepository? _departments;
+        private IDeveloperRepository? _developers;
         private IDesignationRepository? _designations;
         private IDiasporaUserRepository? _diasporaUsers;
         private IEmployeeRepository? _employees;
+        private IErrorLogRepository? _errorLog;
         private IETicketRepository? _etickets;
         private IFeedBackFormRepository? _feedBackForms;
         private IFinanceCounterpartyTransactionRepository? _financeCounterpartyTransactions;
@@ -51,6 +56,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IInternetBankingUsersRepository? _internetBankingUsers;
         private ILoanRepaymentRepository? _loanRepayments;
         private ILoanInitiationRepository? _loanInitiations;
+        private ILoanInitiationUploadRepository? _loanInitiationUpload;
         private ILoanScheduleRepository? _loanSchedules;
         private ILogLoginRepository? _logLogins;
         private ILogOperateRepository? _logOperates;
@@ -66,6 +72,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IPropertyRegistrationRepository? _propertyRegistrations;
         private IPropertySubscriptionRepository? _propertySubscriptions;
         private IPropertyGalleryRepository? _propertyGalleries;
+        private IPropertyUploadRepository? _propertyUploads;
+        private IPmbRepository? _pmbs;
+
         private IRemitaPaymentDetailsRepository? _remitaPaymentDetails;
         private IRelationRepository? _relations;
         private IRefundRepository? _refunds;
@@ -85,6 +94,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IUnlockNhfPortalRepository? _unlockNhfPortals;
         private IUserBelongRepository? _userBelongs;
         private IUserRepository? _users;
+        private IResetPasswordTokenRepository? _resetPasswordTokens;
+
 
         public UnitOfWork()
         {
@@ -109,6 +120,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public IApprovalSetupRepository ApprovalSetups =>
             _approvalSetups ??= new ApprovalSetupRepository();
 
+        public IAuditTrailRepository AuditTrails =>
+_AuditTrails ??= new AuditTrailRepository();
         public IAutoJobLogRepository AutoJobLogs =>
             _autoJobLogs ??= new AutoJobLogRepository();
 
@@ -120,11 +133,20 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public IApproveEmployerAggregatorRepository ApproveEmployerAggregators =>
           _approveEmployerAggregators ??= new ApproveEmployerAggregatorRepository();
 
+        public IAddDocumentProcedureRepository AddDocumentsProcedure =>
+_addDocumentsProcedure ??= new AddDocumentProcedureRepository();
+
         public IBankRepository Banks =>
             _banks ??= new BankRepository();
 
         public IBranchRepository Branches =>
             _branches ??= new BranchRepository();
+
+
+        public IBrokerRepository Brokers =>
+        _brokers ??= new BrokerRepository();
+
+
 
         public IChangeEmployerRepository ChangeEmployers =>
           _changeEmployers ??= new ChangeEmployerRepository();
@@ -183,14 +205,23 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public IDepartmentRepository Departments =>
             _departments ??= new DepartmentRepository();
 
+        public IPmbRepository Pmbs =>
+          _pmbs ??= new PmbRepository();
+
         public IDesignationRepository Designations =>
             _designations ??= new DesignationRepository();
 
         public IDiasporaUserRepository DiasporaUsers =>
        _diasporaUsers ??= new DiasporaUserRepository();
 
+        public IDeveloperRepository Developers =>
+       _developers ??= new DeveloperRepository();
+
         public IEmployeeRepository Employees =>
             _employees ??= new EmployeeRepository();
+
+        public IErrorLogRepository ErrorLog =>
+                    _errorLog ??= new ErrorLogRepository();
 
         public IETicketRepository ETickets =>
         _etickets ??= new ETicketRepository();
@@ -211,6 +242,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public ILoanInitiationRepository LoanInitiations =>
         _loanInitiations ??= new LoanInitiationRepository();
+
+        public ILoanInitiationUploadRepository LoanInitiationUploads =>
+            _loanInitiationUpload ??= new LoanInitiationUploadRepository();
 
         public ILoanScheduleRepository LoanSchedules =>
           _loanSchedules ??= new LoanScheduleRepository();
@@ -254,6 +288,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
          _propertyGalleries ??= new PropertyGalleryRepository();
         public IPropertyRegistrationRepository PropertyRegistrations =>
           _propertyRegistrations ??= new PropertyRegistrationRepository();
+        public IPropertyUploadRepository PropertyUploads =>
+          _propertyUploads ??= new PropertyUploadRepository();
 
         public IRefundRepository Refunds =>
           _refunds ??= new RefundRepository();
@@ -272,6 +308,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public IRiskAssessmentProcedureRepository RiskAssessmentProcedure =>
          _riskAssessmentProcedure ??= new RiskAssessmentProcedureRepository();
 
+        public IResetPasswordTokenRepository ResetPasswordTokens =>
+          _resetPasswordTokens ??= new ResetPasswordTokenRepository();
         public IRoleRepository Roles =>
             _roles ??= new RoleRepository();
 

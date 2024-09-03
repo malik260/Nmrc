@@ -69,7 +69,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 if (param.Company > 0)
                 {
                     expression = expression.And(t => t.Company == param.Company);
-                }
+                }  
+               
 
                 if (param.Branch > 0)
                 {
@@ -90,6 +91,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 {
                     expression = expression.And(t => t.Record == param.Record);
                 }
+
+                expression = expression.And(t => t.Status != GlobalConstant.ONE);
+
+
             }
             return expression;
         }

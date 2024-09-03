@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class BankController : BaseController
     {
         private readonly IBankService _iBankService;
-
-        public BankController(IUnitOfWork iUnitOfWork, IBankService iBankService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public BankController(IUnitOfWork iUnitOfWork, IBankService iBankService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iBankService = iBankService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +36,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("Bank:search,user:search")]
+        //[AuthorizeFilter("Bank:search,user:search")]
         public async Task<IActionResult> GetListJson(BankListParam param)
         {
             TData<List<BankEntity>> obj = await _iBankService.GetList(param);
@@ -68,6 +70,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetBankName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Bank.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
         #endregion

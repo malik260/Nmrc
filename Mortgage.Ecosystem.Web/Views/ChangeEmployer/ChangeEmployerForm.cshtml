@@ -9,34 +9,30 @@
             <div class="dialogblock-header" style="height: auto;">
                 <span class="dialogblockheader">Change Employer</span>
                 <div>
-                    <div id="changeemployer" style="margin-top: 10px; margin-bottom:5%">
-                        <div class="form-group" style="margin-left: 100px;">
-                            <div class="col-sm-4">
-                                <label for="principal" class="form-label">NHF Number</label>
-                                <input id="principal" col="Principal" class="form-control" />
+                    <div id="changeemployer" class="d-flex flex-column align-items-center" style="margin-top: 10px; margin-bottom: 5%;">
+                        <div class="form-group d-flex justify-content-center w-100">
+                            <div class="col-sm-6">
+                                <label for="nhfNumber" class="form-label">NHF Number</label>
+                                <input id="nhfNumber" col="NHFNumber" class="form-control" readonly />
                             </div>
-                            <div class="col-sm-4">
-                                <label for="rate" class="form-label">Current Employer</label>
-                                <input id="rate" col="CurrentEmployer"  class="form-control" readonly />
-                            </div>
-                        </div>
-
-                        <hr />
-
-                        <div class="form-group" style="margin-left: 100px;">
-                            <div class="col-sm-4">
-                                <label for="documentUpload" class="form-label">New Employer</label>
-                                <select id="documentTitle" class="form-control">
-                                    <option value="" disabled selected hidden>--Select Employer--</option>
-                                    <option></option>
-                                </select>
-                            </div>
-                            <div class="col-sm-4">
-                                <label for="yearsOfService" class="form-label">Employer Number</label>
-                                <input id="repaymentPattern" type="text" col="RepaymentPattern" class="form-control" readonly />
+                            <div class="col-sm-6">
+                                <label for="currentEmployer" class="form-label">Current Employer</label>
+                                <input id="currentEmployer" col="OldEmployer" class="form-control" readonly />
                             </div>
                         </div>
 
+                        <hr class="w-100" />
+
+                        <div class="form-group d-flex justify-content-center w-100">
+                            <div class="col-sm-6">
+                                <label for="NewEmployer" class="form-label">New Employer</label>
+                                <div id="newEmployer" col="Company"></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="employerNumber" class="form-label">Employer Number</label>
+                                <input id="employerNumber" type="text" col="OldEmployerNo" class="form-control" readonly />
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -47,11 +43,108 @@
     </form>
 </div>
 
-<script>
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-    $("#changeemployer").cnComboBox({
-        url: '@Url.Content("~/ChangeEmployer/GetListJson")',
-        key: "Id",
-        value: "Name"
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<script>
+    // $('#newEmployer').cnComboBoxTree({ url: '@Url.Content("~/Company/GetCompanyTreeListJson")' });
+  
+    $("#newEmployer").cnComboBox({
+        url: '@Url.Content("~/Company/GetCompanyTreeListJson")',
+        key: "id",
+        value: "name",
+        class: "form-control"
     });
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Content("~/ChangeEmployer/ViewCompanyName")', // The URL of your controller method
+            type: 'GET',
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var data = obj.Data;
+                    $('#currentEmployer').val(data.EmployerName);
+                    $('#employerNumber').val(data.EmployerNo);
+                    $('#nhfNumber').val(data.Nhfno);
+                } else {
+                    cn.msgError(obj.Message);
+                    $('#form1').hide();
+                }
+
+            },
+            error: function () {
+                // Handle error, if any
+            }
+        });
+    });
+
+    var id = cn.request("id");
+    function saveForm(index) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you really want to change your employer?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, change it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if ($("#form1").validate().form()) {
+                    var postData = $("#form1").getWebControls({ Id: id });
+                    postData.Company = cn.getLastValue(postData.Company);
+
+                    if (postData.Company <= 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Warning',
+                            text: 'Please select a new employer!'
+                        });
+                        return false;
+                    }
+                    if (postData.Company == postData.OldEmployerNo) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Warning',
+                            text: 'Please select a different employer than your current company!'
+                        });
+                        return false;
+                    }
+
+                    cn.ajax({
+                        url: '@Url.Content("~/ChangeEmployer/SaveFormJson")',
+                        type: "post",
+                        data: postData,
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'Employer changed successfully!'
+                                }).then(() => {
+                                    parent.searchGrid();
+                                    parent.layer.close(index);
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: obj.Message
+                                }).then(() => {
+                                    parent.layer.close(index);
+                                });
+                            }
+                        }
+                    });
+                }
+            } else {
+                // User clicked 'No, keep it', do nothing
+                return false;
+            }
+        });
+    }
+
 </script>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class AccountTypeController : BaseController
     {
         private readonly IAccountTypeService _iAccountTypeService;
-
-        public AccountTypeController(IUnitOfWork iUnitOfWork, IAccountTypeService iAccountTypeService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public AccountTypeController(IUnitOfWork iUnitOfWork, IAccountTypeService iAccountTypeService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iAccountTypeService = iAccountTypeService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +36,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("accounttype:search,user:search")]
+        //[AuthorizeFilter("accounttype:search,user:search")]
         public async Task<IActionResult> GetListJson(AccountTypeListParam param)
         {
             TData<List<AccountTypeEntity>> obj = await _iAccountTypeService.GetList(param);
@@ -68,6 +70,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetAccountTypeName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.AccountType.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
         #endregion

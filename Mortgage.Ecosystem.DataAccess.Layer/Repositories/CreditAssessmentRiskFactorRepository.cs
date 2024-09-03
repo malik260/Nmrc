@@ -23,7 +23,25 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<CreditAssessmentRiskFactorEntity>> GetPageList(CreditAssessmentRiskFactorListParam param, Pagination pagination)
+        {
+            var expression = ListFilters(param);
+            var list = await BaseRepository().FindList(expression, pagination);
+            return list.ToList();
+        }
 
+        private Expression<Func<CreditAssessmentRiskFactorEntity, bool>> ListFilters(CreditAssessmentRiskFactorListParam param)
+        {
+            var expression = ExtensionLinq.True<CreditAssessmentRiskFactorEntity>();
+            if (param != null)
+            {
+                if (!string.IsNullOrEmpty(param.ProductCode))
+                {
+                    expression = expression.And(second: t => t.ProductCode.Contains(param.ProductCode));
+                }
+            }
+            return expression;
+        }
 
         //public async Task<List<CreditAssessmentRiskFactor>> GetPageList(CreditAssessmentRiskFactorListParam param, Pagination pagination)
         //{
@@ -32,12 +50,28 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         //    return list.ToList();
         //}
 
+        public async Task<CreditAssessmentRiskFactorEntity> GetEntities(int id)
+        {
+            return await BaseRepository().FindEntity<CreditAssessmentRiskFactorEntity>(id)
+;
+        }
+
         public async Task<CreditAssessmentRiskFactorEntity> GetEntity(long id)
         {
             return await BaseRepository().FindEntity<CreditAssessmentRiskFactorEntity>(id)
 ;
         }
+
+        public async Task<CreditAssessmentRiskFactorEntity> GetEntitiesByRiskId(int id)
+        {
+
+            return await BaseRepository().FindEntity<CreditAssessmentRiskFactorEntity>(x => x.RiskFactorId == id)
+;
+        }
         #endregion
+
+
+
 
         #region Submit data
         public async Task SaveForm(CreditAssessmentRiskFactorEntity entity)
@@ -89,7 +123,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         {
             if (!string.IsNullOrEmpty(productcode))
             {
-                expression = expression.And(second: t => productcode.Contains(productcode));
+                expression = expression.And(second: t => t.ProductCode == productcode);
             }
         }
         return expression;

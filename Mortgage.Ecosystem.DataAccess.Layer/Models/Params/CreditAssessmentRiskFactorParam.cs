@@ -3,5 +3,6 @@
     public class CreditAssessmentRiskFactorListParam
     { 
         public string? ProductCode { get; set; }
+        public string? Name { get; set; }
     }
 }

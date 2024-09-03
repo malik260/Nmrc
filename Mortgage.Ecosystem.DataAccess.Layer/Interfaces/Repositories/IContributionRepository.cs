@@ -11,7 +11,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<ContributionEntity> GetEntity(long id);
         Task<int> GetMaxSort();
         Task SaveForm(ContributionEntity entity);
-       
+        Task<List<ContributionEntity>> GetEmployerPageList(ContributionListParam param, Pagination pagination);
         Task SaveForms(List<ContributionEntity> entity);
         Task DeleteForm(string ids);
     }

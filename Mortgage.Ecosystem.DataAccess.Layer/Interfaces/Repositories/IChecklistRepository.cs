@@ -8,7 +8,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
     {
         Task<List<ChecklistEntity>> GetList(ChecklistListParam param);
         Task<List<ChecklistEntity>> GetPageList(ChecklistListParam param, Pagination pagination);
-        Task<ChecklistEntity> GetEntity(long id);
+        Task<ChecklistEntity> GetEntity(int id);
         //Task<int> GetMaxSort();
         Task SaveForm(ChecklistEntity entity);
         Task DeleteForm(string ids);

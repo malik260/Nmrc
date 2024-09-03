@@ -12,7 +12,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<List<ChecklistEntity>>> GetPageList(ChecklistListParam param, Pagination pagination);
         Task<TData<List<ZtreeInfo>>> GetZtreeChecklistList(ChecklistListParam param);
         Task<TData<List<ZtreeInfo>>> GetZtreeUserList(ChecklistListParam param);
-        Task<TData<ChecklistEntity>> GetEntity(long id);
+        Task<TData<ChecklistEntity>> GetEntity(int id);
         //Task<TData<int>> GetMaxSort();
         Task<TData<string>> SaveForm(ChecklistEntity entity);
         Task<TData<string>> UpdateForm(ChecklistEntity entity);

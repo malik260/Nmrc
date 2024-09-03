@@ -20,5 +20,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [Column("Productcode")]
         public string? ProductCode { get; set; }
+
+        [NotMapped]
+        public string ProductName { get; set; }
     }
 }

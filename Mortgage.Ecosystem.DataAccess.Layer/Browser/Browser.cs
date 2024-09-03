@@ -39,7 +39,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Browser
         Firefox,
         Edge,
         Opera,
-        Generic
+        Generic,
+        Edg
     }
 
     public class BrowserHelper
@@ -52,6 +53,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Browser
             var firefox = new Firefox(userAgent);
             if (firefox.Type == BrowserType.Firefox)
                 return string.Format("{0} {1}", firefox.Type.ToString(), firefox.Version);
+            var edg = new Edg(userAgent);
+            if (edg.Type == BrowserType.Edg)
+                return string.Format("{0} {1}", edg.Type.ToString(), edg.Version);
             var edge = new Edge(userAgent);
             if (edge.Type == BrowserType.Edge)
                 return string.Format("{0} {1}", edge.Type.ToString(), edge.Version);

@@ -1,11 +1,14 @@
 ﻿using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
+using Newtonsoft.Json;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 {
@@ -27,10 +30,24 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+
+        public class Des
+        {
+            public string userName { get; set; }
+            public string password { get; set; }
+            public string captchaCode { get; set; }
+        }
         public async Task<TData<List<LogOperateEntity>>> GetPageList(LogOperateListParam param, Pagination pagination)
         {
             TData<List<LogOperateEntity>> obj = new TData<List<LogOperateEntity>>();
+            var user = await Operator.Instance.Current();
+            param.Company = user.Company;
             obj.Data = await _iUnitOfWork.LogOperates.GetPageList(param, pagination);
+            foreach (LogOperateEntity entity in obj.Data)
+            {
+                //var userdetails = JsonConvert.DeserializeObject<Des>(entity.ExecuteParam);
+                entity.UserName = _iUnitOfWork.Companies.GetById(entity.Company).Result.Name.ToString();
+            }
             obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;

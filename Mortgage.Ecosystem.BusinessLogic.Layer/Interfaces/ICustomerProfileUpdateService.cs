@@ -10,6 +10,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
     {
         Task<TData<List<CustomerProfileUpdateEntity>>> GetList(CustomerProfileUpdateListParam param);
         Task<TData<List<CustomerProfileUpdateEntity>>> GetPageList(CustomerProfileUpdateListParam param, Pagination pagination);
+        Task<TData<List<CustomerProfileUpdateEntity>>> GetApprovalPageList(CustomerProfileUpdateListParam param, Pagination pagination);
         Task<TData<List<ZtreeInfo>>> GetZtreeCustomerProfileUpdateList(CustomerProfileUpdateListParam param);
         Task<TData<List<ZtreeInfo>>> GetZtreeUserList(CustomerProfileUpdateListParam param);
         //Task<TData<string>> UpdateCustomerProfile(CustomerProfileUpdateEntity entity);
@@ -20,5 +21,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         //Task<TData<CustomerProfileUpdateEntity>> GetEntity(int id);
         //Task<TData<EmployeeEntity>> GetEmployeeEntity(long id);
         Task<TData<CustomerProfileUpdateEntity>> GetEntity(long id);
+        Task<TData> ApproveForm(CustomerProfileUpdateEntity entity);
+        Task<TData> RejectForm(CustomerProfileUpdateEntity entity, string Remark);
     }
 }

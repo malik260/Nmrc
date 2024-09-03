@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -14,10 +15,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class StatementOfAccountController : BaseController
     {
         private readonly IStatementOfAccountService _iStatementOfAccountService;
-
-        public StatementOfAccountController(IUnitOfWork iUnitOfWork, IStatementOfAccountService iStatementOfAccountService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public StatementOfAccountController(IUnitOfWork iUnitOfWork, IStatementOfAccountService iStatementOfAccountService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iStatementOfAccountService = iStatementOfAccountService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -48,7 +50,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("statementofaccount:search,user:search")]
         public async Task<IActionResult> GetStatementOfAccountPageListJson(StatementOfAccountListParam param, Pagination pagination)
         {
-            TData<List<FinanceCounterpartyTransactionEntity>> obj = await _iStatementOfAccountService.GetPageList(param, pagination);
+            TData<List<NhfEmployeeStatementVM>> obj = await _iStatementOfAccountService.GetPageList(param, pagination);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetStatementOfAccountPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.StatementOfAccount.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

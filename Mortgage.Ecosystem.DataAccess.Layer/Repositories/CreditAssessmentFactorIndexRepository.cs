@@ -20,6 +20,44 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<CreditAssessmentFactorIndexEntity>> GetListbyProductCode(string productcode)
+        {
+            var expression = ListFilterbyProductCode(productcode);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
+
+        public async Task<List<CreditAssessmentFactorIndexEntity>> GetPageList(CreditAssessmentFactorIndexListParam param, Pagination pagination)
+        {
+            var expression = ListFilters(param);
+            var list = await BaseRepository().FindList(expression, pagination);
+            return list.ToList();
+        }
+
+        private Expression<Func<CreditAssessmentFactorIndexEntity, bool>> ListFilters(CreditAssessmentFactorIndexListParam param)
+        {
+            var expression = ExtensionLinq.True<CreditAssessmentFactorIndexEntity>();
+            if (param != null)
+            {
+                if (!string.IsNullOrEmpty(param.ProductCode))
+                {
+                    expression = expression.And(second: t => t.FactorIndexDescription.Contains(param.ProductCode));
+                }
+            }
+            return expression;
+        }
+
+        public async Task<CreditAssessmentFactorIndexEntity> GetEntities(int id)
+        {
+            return await BaseRepository().FindEntity<CreditAssessmentFactorIndexEntity>(id)
+;
+        }
+
+        public async Task<CreditAssessmentFactorIndexEntity> GetEntitiesbyfactorIndexid(int id)
+        {
+            return await BaseRepository().FindEntity<CreditAssessmentFactorIndexEntity>(x=> x.FactorIndexId == id)
+;
+        }
         public async Task<CreditAssessmentFactorIndexEntity> GetEntity(long id)
         {
             return await BaseRepository().FindEntity<CreditAssessmentFactorIndexEntity>(id)
@@ -69,6 +107,21 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 if (riskFactorId > 0)
                 {
                     expression = expression.And(t => t.RiskFactorId == riskFactorId);
+                }
+
+
+            }
+            return expression;
+        }
+
+        private Expression<Func<CreditAssessmentFactorIndexEntity, bool>> ListFilterbyProductCode(string productcode)
+        {
+            var expression = ExtensionLinq.True<CreditAssessmentFactorIndexEntity>();
+            if (productcode != null)
+            {
+                if (!string.IsNullOrEmpty(productcode))
+                {
+                    expression = expression.And(t => t.ProductCode == productcode);
                 }
 
 

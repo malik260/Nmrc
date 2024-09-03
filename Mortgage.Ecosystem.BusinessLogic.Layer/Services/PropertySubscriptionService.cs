@@ -109,6 +109,37 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+        public async Task<TData<string>> Subscribe(long id)
+        {
+
+            TData<string> obj = new TData<string>();
+            var user = await Operator.Instance.Current();
+            var userInfo = await _iUnitOfWork.Employees.GetEntity(user.Employee);
+            var propertydetails = await _iUnitOfWork.PropertyRegistrations.GetEntity(id);
+            PropertySubscriptionEntity entity = new PropertySubscriptionEntity();
+            entity.Developer = Convert.ToString(propertydetails.ComapnyNumber);
+            entity.PropertyDescription = propertydetails.PropertyDescription;
+            entity.PropertyLocation = propertydetails.PropertyLocation;
+            entity.PropertyType = propertydetails.PropertyType;
+            entity.PhoneNumber = user.EmployeeInfo.MobileNumber;
+            entity.Subscriber = Convert.ToString(userInfo.NHFNumber);
+            var employerExist = await _iUnitOfWork.Pmbs.GetEntitybyNhf(entity.Developer);
+            if(employerExist == null)
+            {
+                obj.Tag = 0;
+                obj.Message = "PMB associated to selected properties has been Deactivated";
+                return obj;
+            }
+            entity.Email = user.EmployeeInfo.EmailAddress;
+            await _iUnitOfWork.PropertySubscriptions.SaveForm(entity);
+            obj.Data = entity.Id.ParseToString();
+            obj.Tag = 1;
+            obj.Message = "Property Subscribed successfully";
+            return obj;
+        }
+
+
+
         public async Task<TData> DeleteForm(string ids)
         {
             TData<long> obj = new TData<long>();

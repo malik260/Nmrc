@@ -1,118 +1,231 @@
-﻿@{
+﻿@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@{
     ViewBag.Title = "Mortgage Ecosystem - Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    OperatorInfo operatorInfo = ViewBag.OperatorInfo;
 }
+
+
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
-@section header{
+@section header {
     <link href='@Url.Content("~/central/css/login.css")' rel="stylesheet" />
     <script>
         if (window.top !== window.self) { window.top.location = window.location };
     </script>
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/jquery.validation/1.14.0/jquery.validate.min.js"))
 }
-    <div class="login-panel">
-        <div class="row section">
-            <div class="col-sm-12">
-                <form id="form">
-                    <h4 class="no-margin">User Authentication</h4>
-                    <p id="errorMessage" hidden></p>
-                    <div id="defaultMessage">
-                        <p class="m-t-md" style="color:black;">The mortgage ecosystem encompasses all of the individuals and processes involved in the origination of a mortgage loan.</p>
-                        <p>UserName：admin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password：123456</p>
+<div class="login-panel">
+    <div class="row section">
+        <div class="col-sm-12">
+            <form id="form">
+                <h4 class="no-margin">User Authentication</h4>
+                <p id="errorMessage" hidden></p>
+                <div id="defaultMessage">
+                    <p class="m-t-md" style="color:black;">The mortgage ecosystem encompasses all of the individuals and processes involved in the origination of a mortgage loan.</p>
+
+                </div>
+                <input id="userName" name="userName" class="form-control uname" col="UserName" type="text" placeholder="UserName" />
+                <span class="field-validation-error" id="userNameError" style="display:none; color:red;">This is required</span>
+
+                <div style="position: relative;">
+                    <input id="password" name="password" class="form-control pword m-b" col="Password" type="password" placeholder="Password" />
+                    <!-- Button with eye icon for toggling password visibility -->
+                    <button type="button" id="togglePassword" style="position: absolute; top: 50%; right: 5px; transform: translateY(-50%);">
+                        <i class="fa fa-eye togglepassword" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <span class="field-validation-error" id="passwordError" style="display:none; color:red; position: absolute; top: 54%; left: -5;">This is required</span>
+                <style>
+                    .row-margin-top {
+                        margin-top: 30px; /* Adjust the value as needed */
+                    }
+                </style>
+
+                <div class="row row-margin-top">
+                    <div class="col-xs-7">
+                        <input id="captchaCode" name="captchaCode" type="text" col="CaptchaCode" class="form-control code" placeholder="Verification Code" maxlength="3">
                     </div>
-                    <input id="userName" name="userName" class="form-control uname" col="UserName" type="text" placeholder="UserName" value="@ViewBag.UserName" />
-                    <input id="password" name="password" class="form-control pword m-b" col="Password" type="password" placeholder="Password" value="@ViewBag.Password" />
-                    <div class="row">
-                        <div class="col-xs-7">
-                            <input id="captchaCode" name="captchaCode" type="text" col="CaptchaCode" class="form-control code" placeholder="Verification Code" maxlength="3">
-                        </div>
-                        <div class="col-xs-5">
-                            <a href="javascript:void(0);" title="Click to change verification code">
-                                <img id="imgCaptchaCode" src='@Url.Content("~/Home/GetCaptchaImage")' height="34" />
-                            </a>
-                        </div>
+                    <div class="col-xs-5">
+                        <a href="javascript:void(0);" title="Click to change verification code">
+                            <img id="imgCaptchaCode" src='@Url.Content("~/Home/GetCaptchaImage")' height="34" />
+                        </a>
                     </div>
-                    <div class="checkbox-custom">
-                        <input id="rememberMe" name="rememberMe" type="checkbox"> <label for="rememberMe">Remember me</label>
-                    </div>
-                  
-                    <button class="btn btn-success btn-block" onclick="loginForm(); return false;">Log in</button>
-                    <div>
+                </div>
+                <div class="checkbox-custom">
+                    <input id="rememberMe" name="rememberMe" type="checkbox"> <label for="rememberMe" style="color: black">Remember me</label>
+                </div>
+
+                <button class="btn btn-success btn-block" onclick="loginForm(); return false;">Log in</button>
+                <div>
                     <br />
-                        <a style="float:left">New User</a>
-                        <a  style="float:right">Forget Password</a>
+
+                    <div style="float:right;">
+                        <span style="color: gray; margin-right: -1px;">Forgot Password?</span>
+                        <a style="color: steelblue; text-decoration: underline; cursor: pointer;" onclick="showChangePasswordForm()">Reset</a>
                     </div>
-                </form>
-            </div>
-        </div>
-        <div class="login-footer">
-            <div style="text-align:center; color:#f30909">
-                &copy; Copyright @DateTime.Now.Year <a href="http://www.fintraksoftware.com" target="_blank">Fintrak Software Co. Limited</a> All Rights Reserved.<br>
-                <a href="" target="_blank" rel="nofollow"></a><br>
-            </div>
+                    <a id="btnAdd" style="float:left" onclick="showCompanyForm(true)"> Sign Up</a>
+                </div>
+            </form>
         </div>
     </div>
-    <script type="text/javascript">
-        $(function () {
-            if ($.cookie('RememberMe') == 1) {
-                $("#rememberMe").prop("checked", true);
-                if ("@GlobalContext.SystemConfig.LoginProvider" == "Cookie") {
-                    if (!cn.isNullOrEmpty($.cookie('UserToken'))) {
-                        redirectToIndex();
-                    }
-                }
-                else {
-                    $.removeCookie("UserToken", { path: '/' });
+    <div class="login-footer">
+        <div style="text-align:center; color:#f30909">
+            &copy; Copyright @DateTime.Now.Year <a href="http://www.fintraksoftware.com" target="_blank">Fintrak Software Co. Limited</a> All Rights Reserved.<br>
+            <a href="" target="_blank" rel="nofollow"></a><br>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        if ($.cookie('RememberMe') == 1) {
+            $("#rememberMe").prop("checked", true);
+            if ("@GlobalContext.SystemConfig.LoginProvider" == "Cookie") {
+                if (!cn.isNullOrEmpty($.cookie('UserToken'))) {
+                    redirectToIndex();
                 }
             }
-            $("#rememberMe").click(function () {
-                if ($(this).prop("checked")) {
-                    $.cookie('RememberMe', 1, { expires: 30, path: '/' });
-                }
-            });
-
-            $("#imgCaptchaCode").click(function () {
-                $(this).attr("src", '@Url.Content("~/Home/GetCaptchaImage")' + '?t=' + new Date().getTime());
-            });
-
-            $("#form").validate({
-                rules: {
-                    userName: { required: true },
-                    password: { required: true }
-                }
-            });
-
-            $.validator.setDefaults({
-                submitHandler: function () {
-                    loginForm();
-                }
-            });
+            else {
+                $.removeCookie("UserToken", { path: '/' });
+            }
+        }
+        $("#rememberMe").click(function () {
+            if ($(this).prop("checked")) {
+                $.cookie('RememberMe', 1, { expires: 30, path: '/' });
+            }
         });
 
-        function loginForm() {
-            if ($("#form").validate().form()) {
-                var postData = $("#form").getWebControls();
-                cn.ajax({
-                    url: '@Url.Content("~/Home/LoginJson")',
-                    type: "post",
-                    data: postData,
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            redirectToIndex();
-                        }
-                        else {
-                            $('#errorMessage').val(obj.Message);
-                            $("#errorMessage").show();
-                            $("#defaultMessage").hide();
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
-            }
-        }
+        $("#imgCaptchaCode").click(function () {
+            $(this).attr("src", '@Url.Content("~/Home/GetCaptchaImage")' + '?t=' + new Date().getTime());
+        });
 
-        function redirectToIndex() {
-            location.href = '@Url.Content("~/Home/Index")';
+        $("#form").validate({
+            rules: {
+                userName: { required: true },
+                password: { required: true }
+            }
+        });
+
+        $.validator.setDefaults({
+            submitHandler: function () {
+                loginForm();
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        // Function to toggle password visibility
+        $('#togglePassword').click(function () {
+            var passwordField = $('#password');
+            var passwordFieldType = passwordField.attr('type');
+
+            // Toggle password visibility
+            if (passwordFieldType === 'password') {
+                passwordField.attr('type', 'text');
+                $('#togglePassword').html('<i class="fa fa-eye-slash togglepassword" aria-hidden="true"></i>');
+                setTimeout(function () {
+                    passwordField.attr('type', 'password'); // After 2 seconds, hide the password again
+                    $('#togglePassword').html('<i class="fa fa-eye togglepassword" aria-hidden="true"></i>'); // Reset the eye icon
+                }, 500); // Change back to password type after 2 seconds
+            } else {
+                passwordField.attr('type', 'password');
+                $('#togglePassword').html('<i class="fa fa-eye togglepassword" aria-hidden="true"></i>');
+            }
+        });
+    });
+
+    $("#form").validate({
+        rules: {
+            userName: { required: true },
+            password: { required: true }
+        },
+        errorPlacement: function (error, element) {
+            if (element.attr("name") == "userName") {
+                $("#userNameError").text(error.text()).show();
+            } else if (element.attr("name") == "password") {
+                $("#passwordError").text(error.text()).show();
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        success: function (label, element) {
+            if ($(element).attr("name") == "userName") {
+                $("#userNameError").hide();
+            } else if ($(element).attr("name") == "password") {
+                $("#passwordError").hide();
+            }
+        },
+        submitHandler: function (form) {
+            loginForm();
         }
-    </script>
+    });
+
+    function loginForm() {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls();
+            cn.ajax({
+                url: '@Url.Content("~/Home/LoginJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        redirectToIndex();
+                    }
+                    else if (obj.Tag == -1) {
+                        $('#errorMessage').val(obj.Message);
+                        $("#errorMessage").show();
+                        $("#defaultMessage").show();
+                        cn.msgError(obj.Message);
+                        $("#imgCaptchaCode").attr("src", '@Url.Content("~/Home/GetCaptchaImage")' + '?t=' + new Date().getTime());
+
+                    }
+                    else {
+                        $('#errorMessage').val(obj.Message);
+                        $("#errorMessage").show();
+                        $("#defaultMessage").show();
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+    function redirectToIndex() {
+        location.href = '@Url.Content("~/Home/Index")';
+    }
+
+    function showCompanyForm(bAdd) {
+        var id = 0;
+        cn.openDialog({
+            title: id > 0 ? "Edit Customer" : "Customer Registration",
+            content: '@Url.Content("~/Company/CompanyForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showChangePasswordForm(formType) {
+        var btnOptions = (formType === "form1") ? [] : null; // Set btn option based on formType
+
+        cn.openDialog({
+            title: "Reset Password",
+            content: '@Url.Content("~/User/ForgotPasswordForm")',
+            height: "500px",
+            btn: btnOptions,
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+
+
+
+
+
+</script>

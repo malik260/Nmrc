@@ -11,7 +11,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         public int Indexid { get; set; }
 
         [Column("AssessmentIndex")]
-        public string? Assessmentindex { get; set; }
+        public string? AssessmentIndex { get; set; }
 
         [Column("Weight")]
         public int Weight { get; set; }
@@ -21,5 +21,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [Column("ProductCode")]
         public string? Productcode { get; set; }
+        [NotMapped]
+        public string? IndexTitle { get; set; }
     }
 }

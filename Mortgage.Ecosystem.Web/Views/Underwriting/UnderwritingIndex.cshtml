@@ -7,30 +7,12 @@
 
 <div class="container-div">
     <div class="row">
-        <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
-                <ul>
-                    <li>
-                        Name: <input id="name" col="Name" type="text" />
-                    </li>
-
-                    <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-upload"></i> Add Document</a>
+       
+       @* <div class="btn-group-sm" id="toolbar">
+            
             <a id="btnAddChecklist" class="btn btn-success" onclick="showSaveChecklistForm(true)"><i class="fa fa-list"></i> Checklist</a>
             <a id="btnAddRiskAssesstment" class="btn btn-danger" onclick="showSaveRiskAssessmentForm(true)"><i class="fa fa-exclamation-triangle"></i> Risk Assessment</a>
-        </div>
+        </div>*@
 
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
@@ -38,6 +20,76 @@
     </div>
 </div>
 
+
+<div id="affordtab" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="departmentLabel" aria-hidden="true" data-backdrop="false" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <div class="modal-header" data-background-color="blue" style="background-color: deepskyblue;color:#FFF;">
+                <button type="button" class="close" data-dismiss="modal" id="btnafford" name="btnafford"><i class="fas fa-times"></i>X</button>
+                <h3 class="modal-title text-center"><strong class="text-white">Affordability Details</strong></h3>
+            </div>
+
+            <div class="card-content">
+                <div class="modal-body">
+
+                    <table id="affordtable" data-toggle="table" class="data-table"
+                           data-search="true"
+                           data-show-export="true"
+                           data-export-types="['csv','txt','excel','pdf']"
+                           data-export-options='{
+                               "fileName"
+                               "Statement of Account" ,
+                               "worksheetName"
+                               "Transaction List" ,
+                               "jspdf"
+                               {"orientation":"landscape",
+                               "autotable"
+                               {"theme" "grid" ,
+                               "styles"
+                               { "rowHeight"
+                               20, "fontSize"
+                               9},
+                               "headerStyles"
+                               { "fillColor"
+                               [40, 10, 255], "textColor"
+                               255 }
+                               }  }
+       }'
+                           data-minimum-count-columns="2"
+                           data-pagination="true"
+                           data-page-list="[10, 25, 50, 100, ALL]"
+                           @*data-url="@Url.Action("listBatch","BatchUpload")"*@
+                           data-search-align="right"
+                           data-toolbar="#Batch-toolbar"
+                           data-show-pagination-switch="false"
+                           data-mobile-responsive="true"
+                           data-show-refresh="true"
+                           data-show-toggle="true"
+                           data-show-columns="true"
+                           data-detail-formatter="detailFormatter"
+                           data-detail-view="false"
+                           data-unique-id="Contributionid"
+                           data-checkon-init="true"
+                           data-buttons-class="success">
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
 <script type="text/javascript">
     $(function () {
@@ -51,36 +103,74 @@
 
     function initGrid() {
         debugger
-        var queryUrl = '@Url.Content("~/Underwriting/GetUnderwritingPageListJson")';
+        var queryUrl = '@Url.Content("~/Underwriting/GetLoanForUnderwriting")';
         $('#gridTable').cnTable({
             url: queryUrl,
+            detailView: true,
+            sortName: 'BaseModifyTime',
+            sortOrder: "Desc",
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'NHFNumber', title: 'NHF Number', sortable: true },
-                { field: 'ProductName', title: 'Product Name', sortable: true },
+                { field: 'NHFNumber', title: 'NHF Number', sortable: false },
+                { field: 'ProductName', title: 'Product Name', sortable: false },
+                { field: 'LoanRefNo', title: 'Loan Ref No', sortable: false },
                 {
-                    field: 'Tenor', title: 'Tenor', sortable: true, formatter: function (value) {
+                    field: 'Tenor', title: 'Tenor', sortable: false, formatter: function (value) {
                         return value + " years";
                     }
                 },
                 {
-                    field: 'InterestRate', title: 'Interest Rate', sortable: true, formatter: function (value) {
+                    field: 'InterestRate', title: 'Interest Rate', sortable: false, formatter: function (value) {
                         return value + "%";
                     }
                 },
-                { field: 'LoanAmount', title: 'Loan Amount', sortable: true },
+                { field: 'LoanAmount', title: 'Loan Amount', sortable: false },
                 {
-                  field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
-                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
-                  }
-                }
+                    field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd");
+                    }
+                },
 
+                {
+                    title: 'Actions',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        debugger;
+                        var actions = [];
+                        var checklist = row.CheckList;
+                        var buttonName = (checklist == '1') ? 'CheckListed' : 'CheckList';
+
+                        var disabledAttribute = (checklist == '1') ? 'disabled' : '';
+                        //onclick = "showSaveChecklistForm(true)"
+                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showSaveChecklistForm(true)" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
+
+                        actions.push('&nbsp;');
+
+                        var Rating = row.Rated;
+                        var button = (Rating == 1) ? 'Rated' : 'Risk Assesment';
+
+                        var disabled = (Rating == 1) ? 'disabled' : '';
+                        //onclick = "showSaveChecklistForm(true)"
+                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showSaveRiskAssessmentForm(true)" ' + disabled + '><i class="fa-solid fa-house"></i>' + button + '</a>');
+
+
+                        //actions.push('&nbsp;');
+
+
+                        //actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="Reject(\'' + row.Id + '\')"><i class="fa fa-key"></i>Reject</a>');
+
+                        return actions.join('');
+                    }
+                },
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
+            },
+            onExpandRow: function(index, row, $detail){
+                initChildGrid(index, row, $detail);
             }
         });
     }
@@ -90,10 +180,30 @@
         resetToolbarStatus();
     }
 
+
+
+    function openCustomDialog(options) {
+        layer.open({
+            type: 2,
+            title: options.title,
+            content: options.content,
+            area: [options.width, '90%'],
+            btn: [], // Remove the default confirm and close buttons
+            success: function (layero, index) {
+                options.callback(index, layero);
+            }
+        });
+    }
+
+
+
     function showSaveForm(bAdd) {
         var id = 0;
         if (!bAdd) {
             var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            var loanId = selectedRow[0].LoanId;
+            localStorage.setItem('Data2', loanId);
+
             if (!cn.checkRowEdit(selectedRow)) {
                 return;
             }
@@ -101,7 +211,7 @@
                 id = selectedRow[0].Id;
             }
         }
-        cn.openDialog({
+        openCustomDialog({
             title: id > 0 ? "Edit Document" : "Add Document",
             content: '@Url.Content("~/Underwriting/AddDocumentForm")' + '?id=' + id,
             width: "780px",
@@ -113,15 +223,26 @@
     }
 
     function showSaveChecklistForm(bAdd) {
+        debugger
         var id = 0;
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         console.log(selectedRow);
         var NhfNumber = selectedRow[0].NHFNumber;
         var ProductName = selectedRow[0].ProductName;
+        var loanId = selectedRow[0].LoanId;
+        id = selectedRow[0].CheckList;
+        console.log(id);
+
+        if (id == "1") {
+            $("#btnAddChecklist").prop("disabled", true);
+
+        }
+
         console.log(ProductName);
-        localStorage.setItem('Data', NhfNumber);       
+        localStorage.setItem('Data', NhfNumber);
         localStorage.setItem('Data1', ProductName);
-        if (!bAdd) {          
+        localStorage.setItem('Data2', loanId);
+        if (!bAdd) {
 
 
             if (!cn.checkRowEdit(selectedRow)) {
@@ -131,7 +252,7 @@
                 id = selectedRow[0].Id;
             }
         }
-        cn.openDialog({
+        openCustomDialog({
             title: id > 0 ? "Edit Checklist" : "Checklist Form",
             content: '@Url.Content("~/Underwriting/ChecklistForm")' + '?id=' + id,
             width: "780px",
@@ -148,9 +269,12 @@
         console.log(selectedRow);
         var NhfNumber = selectedRow[0].NHFNumber;
         var ProductName = selectedRow[0].ProductName;
+        var loanId = selectedRow[0].LoanId;
+
         console.log(ProductName);
         localStorage.setItem('Data', NhfNumber);
         localStorage.setItem('Data1', ProductName);
+        localStorage.setItem('Data2', loanId);
         if (!bAdd) {
             var selectedRow = $("#gridTable").bootstrapTable("getSelections");
             if (!cn.checkRowEdit(selectedRow)) {
@@ -160,7 +284,7 @@
                 id = selectedRow[0].Id;
             }
         }
-        cn.openDialog({
+        openCustomDialog({
             title: id > 0 ? "Edit Risk Assessment Form" : "Risk Assessment Form",
             content: '@Url.Content("~/Underwriting/RiskAssessmentForm")' + '?id=' + id,
             width: "780px",
@@ -170,7 +294,7 @@
             }
         });
     }
-
+        
 
 
     function deleteForm() {
@@ -193,6 +317,165 @@
                 });
             });
         }
+    }
+
+
+    function approveUnderwriting(id) {
+        debugger
+        cn.confirm("Confirm the approval process？", function () {
+            debugger;
+            cn.ajax({
+                url: '@Url.Content("~/Underwriting/ApproveUnderwriting")' + '?id=' + id,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+    function DisapproveUnderwriting(id) {
+        debugger
+        if (id === 0) {
+            cn.msgError("Please select an item");
+            return;
+        }
+        var remark = $("#remark").val();
+
+        cn.confirm("Confirm the Disapproval process？", function () {
+            cn.ajax({
+                url: '@Url.Content("~/Underwriting/DisapproveUnderwriting")' + '?id=' + id + '&remark=' + remark,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    } else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+
+//   function Affordability(id) {
+//    cn.confirm("Confirm the approval process?", function () {
+//        debugger;
+//        cn.ajax({
+//            url: '@Url.Content("~/Underwriting/Affordability")' + '?id=' + id,
+//            type: "post",
+//            success: function (obj) {
+//                if (obj.Tag == 1) {
+//                    debugger;
+//                    swal({
+//                        title: 'Affordability', text: "Affordability Check successful", type: 'success'
+//                    }).then(function () {
+//                        $('#affordtab').modal('show');
+//                    });
+
+//                    var $table = $('#affordtable');
+//                    $table.bootstrapTable("destroy");
+
+//                    $table.bootstrapTable({
+//                        data: obj.Data,
+//                        columns: [
+//                            {
+//                                field: 'amountRequested',
+//                                title: 'Amount Requested'
+//                            },
+//                            {
+//                                field: 'affordableAmount',
+//                                title: 'Affordable Amount',
+//                            },
+//                            {
+//                                field: 'monthlyRepayment',
+//                                title: 'Monthly Repayment',
+//                            },
+//                            {
+//                                field: 'proposedTenor',
+//                                title: 'Proposed Tenor',
+//                            },
+//                            {
+//                                field: 'rate',
+//                                title: 'Rate',
+//                            }
+//                        ]
+//                    });
+//                } else {
+//                    cn.msgError(obj.Message);
+//                }
+//            }
+//        });
+//    });
+//}
+
+    function initChildGrid(index, row, $detail) {
+        $detail.html('Loading data ...');
+        var date = new Date(row.BaseCreateTime);
+        //var formattedDate = date.toLocaleDateString(); 
+        var dateOfEmployment = new Date(row.DateofEmployment);
+        var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString(); 
+
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center" > ' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Underwritting Process for ' + row.Name + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="nhfNumber">NHF Number:</label>' +
+            '<input type="text" id="nhfNumber" name="NHFNumber" placeholder="NHF Number" class="form-control text-left" readonly value="' + row.NHFNumber + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="monthlyIncome">Monthly Income:</label>' +
+            '<input type="text" id="monthlyIncome" name="MonthlyIncome" placeholder="Monthly Income" class="form-control text-left" readonly value="' + row.MonthlyIncome + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="phone">Date Of Employment:</label>' +
+            '<input type="text" id="dateOfEmployment" name="DateOfEmployment" placeholder="Date Of Employment" class="form-control text-left" readonly value="' + formattedDateOfEmployment + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="dateOfBirth">Date Of Birth:</label>' +
+            '<input type="text" id="dateOfBirth" name="DateOfBirth" placeholder="Date Of Birth" class="form-control text-left" readonly value="' + row.DOB + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bvn">BVN:</label>' +
+            '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.Bvn + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-group col-sm-12">' +
+            '<label for="remark">Remark:</label>' +
+            '<textarea id="remark" name="Remark" placeholder="Remark" class="form-control text-left" style="height:60px">' + row.Remark + '</textarea>' +
+            '</div>' +
+            '<div class="form-group col-sm-12 text-right">' +
+            '<button type="button" id="approve" onclick="approveUnderwriting(\'' + row.Id + '\');" class="btn btn-success btn-sm">Approve</button>' +
+            '<button type="button" id="disapprove" onclick="DisapproveUnderwriting(\'' + row.Id + '\');" class="btn btn-danger btn-sm">Disapprove</button>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        $detail.html(htmlData);
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            if ($cardBody.is(':visible')) {
+                $cardBody.hide();
+            } else {
+                $cardBody.show();
+            }
+        });
     }
 
 

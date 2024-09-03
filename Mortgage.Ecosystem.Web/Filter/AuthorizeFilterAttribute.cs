@@ -63,7 +63,7 @@ namespace Mortgage.Ecosystem.Web.Filter
                 else
                 {
                     // permission judgment
-                    if (!string.IsNullOrEmpty(Authorize))
+                    if (!string.IsNullOrEmpty(Authorize) && (!(Authorize.Contains("user:search"))))
                     {
                         string[] authorizeList = Authorize.Split(',');
                         TData<List<MenuAuthorizeInfo>> objMenuAuthorize = await new MenuAuthorizeService().GetAuthorizeList(user);

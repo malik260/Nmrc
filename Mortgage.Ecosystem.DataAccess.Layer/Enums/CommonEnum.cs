@@ -182,4 +182,28 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         [Description("December")]
         December = 12
     }
+
+
+    public enum LoanRepaymentPatternEnum
+    {
+        [Description("Monthly")]
+        Monthly = 1,
+
+        [Description("Quarterly")]
+        Quarterly = 2,
+
+        [Description("Yearly")]
+        Yearly = 3
+
+    }
+
+    //public enum PropertyTypeEnum
+    //{
+    //    Residential = 1,
+    //    Bungalow,
+    //    Duplex,
+    //    Flat,
+    //    SemiDetached,
+    //    Detached
+    //}
 }

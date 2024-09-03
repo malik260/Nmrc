@@ -31,6 +31,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         {
             return await BaseRepository().FindEntity<PropertySubscriptionEntity>(id);
         }
+         public async Task<PropertySubscriptionEntity> GetSubcribedProperties(string Nhf)
+        {
+            return await BaseRepository().FindEntity<PropertySubscriptionEntity>(i=> i.Subscriber == Nhf);
+        }
 
         public async Task<int> GetMaxSort()
         {
@@ -62,15 +66,21 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(PropertySubscriptionEntity entity)
         {
-            if (entity.Id.IsNullOrZero())
+            try
             {
-                await entity.Create();
-                await BaseRepository().Insert<PropertySubscriptionEntity>(entity);
-            }
-            else
+                if (entity.Id.IsNullOrZero())
+                {
+                    await entity.Create();
+                    await BaseRepository().Insert<PropertySubscriptionEntity>(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await BaseRepository().Update<PropertySubscriptionEntity>(entity);
+                }
+            }catch(Exception ex)
             {
-                await entity.Modify();
-                await BaseRepository().Update<PropertySubscriptionEntity>(entity);
+                throw;
             }
         }
 

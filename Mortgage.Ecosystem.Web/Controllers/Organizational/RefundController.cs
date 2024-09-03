@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -14,10 +15,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class RefundController : BaseController
     {
         private readonly IRefundService _iRefundService;
-
-        public RefundController(IUnitOfWork iUnitOfWork, IRefundService iRefundService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public RefundController(IUnitOfWork iUnitOfWork, IRefundService iRefundService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iRefundService = iRefundService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -50,6 +52,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetRefundPageListJson(RefundListParam param, Pagination pagination)
         {
             TData<List<RefundEntity>> obj = await _iRefundService.GetPageList(param, pagination);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetRefundPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Refund.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 
@@ -83,6 +90,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> ViewCustomerInformation()
         {
             TData<CustomerDetailsViewModel> obj = await _iRefundService.GetCustomerDetails();
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.ViewCustomerInformation.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Refund.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

@@ -43,8 +43,8 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'DesignationName', title: 'DesignationName', width: "20%", sortable: true },
-                { field: 'DesignationSort', title: 'Display order', width: "15%", sortable: true },
+                { field: 'DesignationName', title: 'DesignationName', width: "20%", sortable: false },
+                { field: 'DesignationSort', title: 'Display order', width: "15%", sortable: false },
                 {
                     field: 'BaseModifyTime', title: 'create time', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");

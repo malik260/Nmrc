@@ -122,11 +122,11 @@
     <comment>Application Json</comment>
   </data>
   <data name="baseAddress" xml:space="preserve">
-    <value>https://testcorebanking.fmbn.gov.ng:4438/api/v1/</value>
+    <value>https://testcorebanking.fmbn.gov.ng:4448/api/v1/</value>
     <comment>base url address</comment>
   </data>
   <data name="customerExist" xml:space="preserve">
-    <value>customer/iscustomer-exist</value>
+    <value>https://testcorebanking.fmbn.gov.ng:4448/api/v1/customer/iscustomer-exist/</value>
     <comment>Customer Exist</comment>
   </data>
   <data name="generateRRR" xml:space="preserve">
@@ -138,15 +138,15 @@
     <comment>Get Loan</comment>
   </data>
   <data name="individualExisting" xml:space="preserve">
-    <value>customer/individual-existing</value>
+    <value>https://testcorebanking.fmbn.gov.ng:4448/api/v1/customer/individual-existing</value>
     <comment>Individual Existing</comment>
   </data>
   <data name="loanAffordability" xml:space="preserve">
-    <value>loan/loan-affordability-check</value>
+    <value>https://testcorebanking.fmbn.gov.ng:4448/api/v1/loan/loan-affordability-check</value>
     <comment>Loan Affordability Check</comment>
   </data>
   <data name="loanApplicationUpdate" xml:space="preserve">
-    <value>loan/loan-application</value>
+    <value>https://testcorebanking.fmbn.gov.ng:4448/api/v1/loan/loan-application-multiple</value>
     <comment>Loan Application</comment>
   </data>
   <data name="loanProduct" xml:space="preserve">
@@ -160,6 +160,14 @@
   <data name="rrrStatus" xml:space="preserve">
     <value>https://remitademo.net/remita/exapp/api/v1/send/api/echannelsvc/</value>
     <comment>RRR Status</comment>
+  </data>
+  <data name="SendEmployee" xml:space="preserve">
+    <value>https://testcorebanking.fmbn.gov.ng:5000/api/v2/Customer/AddEmployees</value>
+    <comment>AddEmployee</comment>
+  </data>
+  <data name="SendEmployer" xml:space="preserve">
+    <value>https://testcorebanking.fmbn.gov.ng:5000/api/v2/Customer/AddEmployers</value>
+    <comment>AddEmployer</comment>
   </data>
   <data name="updateCustomer" xml:space="preserve">
     <value>customer/update-customer</value>

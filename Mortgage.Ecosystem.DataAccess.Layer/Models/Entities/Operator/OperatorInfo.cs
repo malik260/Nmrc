@@ -9,6 +9,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
         public int Id { get; set; } // Id
         public long Company { get; set; } // Company
         public long Employee { get; set; } // Employee
+        public long Pmb { get; set; } // Pmb
+        public long Developer { get; set; } // Developer
         public int LoginCount { get; set; } // Login counter
         public int UserStatus { get; set; } // User Status
         public int IsOnline { get; set; } // Is Online
@@ -19,10 +21,18 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
         public int IsSystem { get; set; } // Whether the system user
         public string? Password { get; set; }
         public string? Salt { get; set; }
+        //public int? EmployerType { get; set; }
+
 
 
         [NotMapped]
         public CompanyListParam? CompanyInfo { get; set; } // Company Information
+
+        [NotMapped]
+        public DeveloperListParam? DeveloperInfo { get; set; } // Developer Information
+
+        [NotMapped]
+        public PmbListParam? PmbInfo { get; set; } // Pmb Information
 
         [NotMapped]
         public EmployeeListParam? EmployeeInfo { get; set; } // Employee Information

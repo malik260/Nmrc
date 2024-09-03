@@ -487,8 +487,17 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories.Base
 
         public async Task<T> FindObject<T>(string strSql) where T : class
         {
-            var list = await _context.SqlQuery<T>(strSql);
-            return list.FirstOrDefault();
+            try
+            {
+                var list = await _context.SqlQuery<T>(strSql);
+                return list.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+           
         }
 
         #endregion Data source query

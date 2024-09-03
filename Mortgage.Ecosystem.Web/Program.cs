@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
 using Mortgage.Ecosystem.DataAccess.Layer;
 using Mortgage.Ecosystem.DataAccess.Layer.Caching;
@@ -98,6 +99,8 @@ namespace Mortgage.Ecosystem.Web
 
             //Add Options
             services.AddOptions();
+
+            services.AddHangfire(config => config.UseSqlServerStorage(SystemConfig.Database.DBConnectionString));
 
             //add MVC
             var mvcBuilder = services.AddMvc();
@@ -208,6 +211,12 @@ namespace Mortgage.Ecosystem.Web
                 FileProvider = new PhysicalFileProvider(resource),
                 OnPrepareResponse = GlobalContext.SetCacheControl
             });
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard("/dash");
+
+            RecurringJob.AddOrUpdate<EmailJob>(emailjob => emailjob.SendEmail(), Cron.MinuteInterval(1));
+
 
             // user route
             app.UseRouting();

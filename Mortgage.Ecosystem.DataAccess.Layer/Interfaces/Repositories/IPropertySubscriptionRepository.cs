@@ -12,5 +12,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<int> GetMaxSort();
         Task SaveForm(PropertySubscriptionEntity entity);
         Task DeleteForm(string ids);
+        Task<PropertySubscriptionEntity> GetSubcribedProperties(string Nhf);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class MaritalStatusController : BaseController
     {
         private readonly IMaritalStatusService _iMaritalStatusService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public MaritalStatusController(IUnitOfWork iUnitOfWork, IMaritalStatusService iMaritalStatusService) : base(iUnitOfWork)
+        public MaritalStatusController(IUnitOfWork iUnitOfWork, IMaritalStatusService iMaritalStatusService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iMaritalStatusService = iMaritalStatusService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +37,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("maritalstatus:search,user:search")]
+        //[AuthorizeFilter("maritalstatus:search,user:search")]
         public async Task<IActionResult> GetListJson(MaritalStatusListParam param)
         {
             TData<List<MaritalStatusEntity>> obj = await _iMaritalStatusService.GetList(param);
@@ -68,6 +71,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetMaritalStatusName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.MaritalStatus.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
         #endregion

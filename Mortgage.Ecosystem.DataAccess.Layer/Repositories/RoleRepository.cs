@@ -81,9 +81,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     {
                         MenuAuthorizeEntity menuAuthorizeEntity = new()
                         {
-                            AuthorizeId = entity.Id,
+                            AuthorizeId = entity.Company,
                             MenuId = menuId,
-                            AuthorizeType = AuthorizeTypeEnum.Role.ToInt()
+                            AuthorizeType = AuthorizeTypeEnum.User.ToInt()
                         };
                         await menuAuthorizeEntity.Create();
                         await db.Insert(menuAuthorizeEntity);

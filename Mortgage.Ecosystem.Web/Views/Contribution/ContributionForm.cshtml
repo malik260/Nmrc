@@ -14,25 +14,25 @@
             <div class="dialogblock-header" style="height: 100px;">
                 <span class="dialogblockheader">Employee Contribution(Single & Bulk)</span>
 
-                    <div Class="form-group">
-                        
-                        <div class="col-sm-6">
-                            <div>
-                                <p class="ism">  FOR THE PAYMENT OF BACKLOG CLICK </p>
-                            </div>
-                <button class="btn btn-primary" type="button" id="backlog" style="margin-top: 10px;">
-                    <span class="bold">BACKLOG PAYMENT</span>
-                </button>
+                <div Class="form-group">
+
+                    <div class="col-sm-6">
+                        <div>
+                            <p class="ism">  FOR THE PAYMENT OF BACKLOG CLICK </p>
+                        </div>
+                        <button class="btn btn-primary" type="button" id="backlog" style="margin-top: 10px;">
+                            <span class="bold">BACKLOG PAYMENT</span>
+                        </button>
+                    </div>
+                    @* <div class="col-sm-6">
+                        <div>
+                            <p class="ism">  FOR MULTIPLE CONTRIBUTION CLICK </p>
+                        </div>
+                        <button class="btn btn-primary" type="button" id="bulk" style="margin-top: 10px;">
+                            <span class="bold">BULK CONTRIBUTION</span>
+                        </button>
+                    </div> *@
                 </div>
-                        <div class="col-sm-6">
-                            <div>
-                                <p class="ism">  FOR MULTIPLE CONTRIBUTION CLICK </p>
-                            </div>
-                            <button class="btn btn-primary" type="button" id="bulk" style="margin-top: 10px;">
-                                <span class="bold">BULK CONTRIBUTION</span>
-                            </button>
-                        </div>
-                        </div>
             </div>
         </div>
 
@@ -44,23 +44,23 @@
                     <div Class="form-group">
                         <div class="col-sm-6">
                             <label for="nhfNumber" class="form-label">NHF Number</label>
-                                <input id="nhfNumber" col="employeeNumber" class="form-control" readonly/>
+                            <input id="nhfNumber" col="employeeNumber" class="form-control" readonly />
                         </div>
 
                         <div class="col-sm-6">
                             <label for="employeeName" class="form-label">Employee&nbsp;Name</label>
-                            <input type="text" class="form-control" id="employeeName" readonly>
+                            <input type="text" class="form-control" id="employeeName" col="EmployeeName" readonly>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-6">
                             <label for="contributionAmount" class="form-label">Contribution&nbsp;Amount</label>
-                                <input type="number" id="contributionAmount" col="contributionAmount" class="form-control" />
+                            <input type="text" id="contributionAmount" col="contributionAmount" class="form-control" />
                         </div>
 
                         <div class="col-sm-6">
                             <label for="employerNumber" class="form-label">Employer&nbsp;Number</label>
-                            <input type="text" class="form-control" id="employerNumber" readonly>
+                            <input type="text" class="form-control" id="employerNumber" col="employerNumber" readonly>
 
                         </div>
                     </div>
@@ -68,51 +68,72 @@
                     <div class="form-group">
                         <div class="col-sm-6">
                             <label for="month" class="form-label">Month</label>
-                                <div id="month" col="Month"></div>
+                            <div id="month" col="Month"></div>
 
                         </div>
 
                         <div class="col-sm-6">
-                            <label for="year" class="form-label">Year</label>
-                            <input id="year" col="Year" class="form-control" />
+                            <label for="year">Year</label>
+
+                            <select class="form-control" col="Year" name="year" id="year" data-val="true" required>
+                                <option value="">Select Year--</option>
+                            </select>
+
 
 
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="phoneNumber" class="form-label">Mobile Number</label>
+                            <input id="phoneNumber" type="tel" max="11" col="phoneNumber" class="form-control" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="emailAddress" class="form-label">Email&nbsp;Address</label>
+                            <input id="emailAddress" type="email" col="Email" class="form-control" />
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-sm-6">
 
                             <label for="employerName" class="form-label">Employer&nbsp;Name</label>
-                            <input id="employerName" col="employerName" class="form-control" />
+                            <input id="employerName" col="employerName" class="form-control" readonly />
                         </div>
 
                         <div class="col-sm-6">
                             <label for="remark" class="form-label">Remark</label>
-                            <input id="remark" col="Remark" class="form-control" readonly/>
+                            <input id="remark" col="remarks" class="form-control" readonly />
 
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <label for="paymentOption">Payement&nbsp Option</label>
+                    @*                        <div class="form-group">
+                    <div class="col-sm-6">
+                    <label for="paymentOption">Payement&nbsp Option</label>
+                    <div id="paymentOption" col="paymentOption"></div>
+                    </div>
+                    <div class="col-sm-6">
+                    <label></label>
+                    </div>
+                    </div>
+                    *@
+                    <div Class="form-group" style="display: flex; justify-content: left; align-items: center; margin-left: 2px">
 
-                            <div id="paymentOption" col="PaymentOption"></div>
-
-                        </div>
-
-                        <div class="col-sm-6">
-                            <label></label>
-
-                        </div>
+                        <button class="btn btn-info" type="submit" id="btnSingle" onclick="saveForm()" style="margin-right: 10px;">
+                            <i class="fa fa-save"></i>
+                            Submit
+                        </button>
+                        <button class="btn btn-danger" type="button" id="btnclear" onclick="clearForm()">
+                                <i class="fa fa-recycle"></i>
+                                Clear
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        </form>
+    </form>
 
 
 
@@ -120,15 +141,15 @@
         <div class="dialogblockborder dialogblockborderheadline">
             <div class="dialogblock-header" style="height: 50px;">
                 <span class="dialogblockheader">Multiple Backlog Upload</span>
-                    <div Class="form-group">
-                        <div class="col-sm-6">
-                    <button class="btn btn-primary" type="button" id="downloadBacklogTemplate">
-                        <i class="fa fa-file-excel-o"></i>
-                        <span class="bold">Download Backlog Template </span>
-                    </button>
-                </div>
+                <div Class="form-group">
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary" type="button" id="downloadBacklogTemplate">
+                            <i class="fa fa-file-excel-o"></i>
+                            <span class="bold">Download Backlog Template </span>
+                        </button>
+                    </div>
 
-                    
+
                 </div>
             </div>
         </div>
@@ -144,7 +165,7 @@
 
                         <div class="col-sm-6">
                             <label for="narration" class="form-label">Narration</label>
-                                <input id="backlogNarration" col="Narration" class="form-control" />
+                            <input id="backlogNarration" col="Narration" class="form-control" />
 
                         </div>
                     </div>
@@ -152,13 +173,13 @@
                     <div class="form-group">
                         <div class="col-sm-6">
                             <label for="phoneNumber" class="form-label">Phone&nbsp;Number</label>
-                            <input id="backlogPhoneNumber" col="PhoneNumber" class="form-control" />
+                            <input id="backlogPhoneNumber" max="11" type="tel" col="PhoneNumber" class="form-control" />
 
                         </div>
 
                         <div class="col-sm-6">
                             <label for="emailAddress" class="form-label">Email&nbsp;Address</label>
-                            <input id="backlogEmailAddress" col="EmailAddress" class="form-control" />
+                            <input id="backlogEmailAddress" type="email" col="EmailAddress" class="form-control" />
 
 
                         </div>
@@ -166,225 +187,230 @@
                     </div>
 
                     <div Class="form-group">
+                        @*<div class="col-sm-6">
+
+                        <label for="paymentOption" class="form-label">Payment&nbsp;Option</label>
+
+                        <div id="backlogPaymentOption" col="PaymentOption"></div>
+
+                        </div>*@
+
                         <div class="col-sm-6">
-
-                            <label for="paymentOption" class="form-label">Payment&nbsp;Option</label>
-
-                            <div id="backlogPaymentOption" col="PaymentOption"></div>
-
+                            <label for="choseFile" class="form-label">Choose File</label>
+                            <input id="backlogTemplate" type="file">
                         </div>
-
-                            <div class="col-sm-6">
-                                <label for="choseFile" class="form-label">Chose File</label>
-                               <input id="backlogTemplate" type="file">
-                            </div>
                     </div>
 
-                        <div Class="form-group" style="display: flex; justify-content: center; align-items: center">
-                            <button class="btn btn-warning" type="submit" id="backBacklogContribution" style="margin-right: 10px;">
-                                <i class="fa fa-arrow-left"></i>
-                                Back
-                            </button>
-                            <button class="btn btn-info" type="submit" id="btnBacklogUpload" onclick="backlogUpload()" style="margin-right: 10px;">
-                                <i class="fa fa-save"></i>
-                                Submit
-                            </button>
-                            <button class="btn btn-danger" type="reset">
-                                <i class="fa fa-recycle"></i>
-                                Clear
-                            </button>
-                        </div>
+                    <div Class="form-group" style="display: flex; justify-content: center; align-items: center">
+                        <button class="btn btn-warning" type="submit" id="backBacklogContribution" style="margin-right: 10px;">
+                            <i class="fa fa-arrow-left"></i>
+                            Back
+                        </button>
+                        <button class="btn btn-info" type="submit" id="btnBacklogUpload" onclick="backlogUpload()" style="margin-right: 10px;">
+                            <i class="fa fa-save"></i>
+                            Submit
+                        </button>
+                        <button class="btn btn-danger" type="reset">
+                            <i class="fa fa-recycle"></i>
+                            Clear
+                        </button>
+                    </div>
 
 
                 </div>
             </div>
         </div>
-            
+
 
     </form>
-        <form id="multipleContributionUploadForm" enctype="multipart/form-data" class="form-horizontal m ">
+
+    <form id="multipleContributionUploadForm" enctype="multipart/form-data" class="form-horizontal m ">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: 50px;">
+                <span class="dialogblockheader">Batch Upload</span>
+                <div Class="form-group">
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary" type="button" id="downloadContributionTemplate">
+                            <i class="fa fa-file-excel-o"></i>
+                            <span class="bold">Download Contribution Template </span>
+                        </button>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div id="employeeContributionMultiple" style="margin-top: 10px; margin-bottom:5%">
             <div class="dialogblockborder dialogblockborderheadline">
-                <div class="dialogblock-header" style="height: 50px;">
-                    <span class="dialogblockheader">Batch Upload</span>
+                <div class="dialogblock-body" style="height: 100%;">
+                    <span class="dialogblockheader">Batch Contribution</span>
                     <div Class="form-group">
                         <div class="col-sm-6">
-                            <button class="btn btn-primary" type="button" id="downloadContributionTemplate">
-                                <i class="fa fa-file-excel-o"></i>
-                                <span class="bold">Download Contribution Template </span>
-                            </button>
+                            <label class="form-label">Account&nbsp;Name</label>
+                            <input id="accountname" class="form-control" />
                         </div>
-                      
+
+                        <div class="col-sm-6">
+                            <label class="form-label">Phone&nbsp;Number</label>
+                            <input id="phonenumber" max="11" type="tel" class="form-control" />
 
 
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+
+                            <label class="form-label">Email&nbsp;Address</label>
+                            <input id="batchEmailaddress" type="email" col="EmailAddress" class="form-control" />
+                        </div>
+
+                        <div class="col-sm-6">
+
+                            <label class="form-label">Payment&nbsp;Option</label>
+
+                            <div id="paymentOptionbatch"></div>
+
+                        </div>
+                    </div>
+
+                    <div Class="form-group">
+                        <div class="col-sm-6">
+
+                            <label for="choseFile" class="form-label">Choose File</label>
+                            <input id="contributionTemplate" type="file">
+
+                        </div>
+                        <div class="col-sm-6">
+
+                            <label class="form-label">Narration</label>
+                            <input id="naration" class="form-control" />
+                        </div>
+
+                    </div>
+
+                    <div Class="form-group" style="display: flex; justify-content: center; align-items: center">
+                        <button class="btn btn-warning" type="submit" id="backBulkContribution" style="margin-right: 10px;">
+                            <i class="fa fa-arrow-left"></i>
+                            Back
+                        </button>
+                        <button class="btn btn-info" type="submit" id="btnBatchUpload" onclick="batchUpload()" style="margin-right: 10px;">
+                            <i class="fa fa-save"></i>
+                            Submit
+                        </button>
+                        <button class="btn btn-danger" type="reset">
+                            <i class="fa fa-recycle"></i>
+                            Clear
+                        </button>
+                    </div>
+                    <div class="modal-body BatchErrorList" hidden>
+                        <table id="bulkErrorTable" data-toggle="table" class="data-table d-none">
+                            <thead>
+                                <tr>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
-            <div id="employeeContributionMultiple" style="margin-top: 10px; margin-bottom:5%">
-                <div class="dialogblockborder dialogblockborderheadline">
-                    <div class="dialogblock-body" style="height: 100%;">
-                        <span class="dialogblockheader">Batch Contribution</span>
-                        <div Class="form-group">
-                            <div class="col-sm-6">
-                                <label  class="form-label">Account&nbsp;Name</label>
-                                <input id="accountname"  class="form-control" />
-                            </div>
 
-                            <div class="col-sm-6">
-                                <label  class="form-label">Phone&nbsp;Number</label>
-                                <input id="phonenumber"  class="form-control" />
-                               
-
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-6">
-
-                                <label  class="form-label">Email&nbsp;Address</label>
-                                <input id="batchEmailaddress" col="EmailAddress" class="form-control" />
-                            </div>
-
-                            <div class="col-sm-6">
-
-                                <label  class="form-label">Payment&nbsp;Option</label>
-
-                                <div id="paymentOptionbatch" ></div>
-
-                            </div>
-                        </div>
-
-                        <div Class="form-group">
-                            <div class="col-sm-6">
-
-                                <label for="choseFile" class="form-label">Chose File</label>
-                                <input id="contributionTemplate" type="file">
-
-                            </div>
-                            <div class="col-sm-6">
-
-                                <label class="form-label">Narration</label>
-                                <input id="naration" class="form-control" />
-                            </div>
-
-                        </div>
-
-                        <div Class="form-group" style="display: flex; justify-content: center; align-items: center">
-                            <button class="btn btn-warning" type="submit" id="backBulkContribution" style="margin-right: 10px;">
-                                <i class="fa fa-arrow-left"></i>
-                                Back
-                            </button>
-                            <button class="btn btn-info" type="submit" id="btnBatchUpload" onclick="batchUpload()" style="margin-right: 10px;">
-                                <i class="fa fa-save"></i>
-                                Submit
-                            </button>
-                            <button class="btn btn-danger" type="reset" >
-                                <i class="fa fa-recycle"></i>
-                               Clear
-                            </button>
-                        </div>
-                        <div class="modal-body BatchErrorList" hidden>
-                            <table id="bulkErrorTable" data-toggle="table" class="data-table d-none">
-                                <thead>
-                                    <tr>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-    
-            </div>
+        </div>
 
 
 
-        </form>
+    </form>
 
-        
+
 </div>
 
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+@* <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+ *@
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <script type="text/javascript">
 
-        var id = cn.request("id");
+    var id = cn.request("id");
 
 
 
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            $('#downloadBacklogTemplate').click(function () {
-                // Define the URL of the download endpoint
-                var downloadUrl = '@Url.Content("~/Contribution/BacklogDownload")'; // Replace with the actual controller and action name
+        $('#downloadBacklogTemplate').click(function () {
+            // Define the URL of the download endpoint
+            var downloadUrl = '@Url.Content("~/Contribution/BacklogDownload")'; // Replace with the actual controller and action name
 
-                // Create a hidden iframe to initiate the file download
-                var iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = downloadUrl;
-                document.body.appendChild(iframe);
+            // Create a hidden iframe to initiate the file download
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = downloadUrl;
+            document.body.appendChild(iframe);
 
-                // Clean up the iframe after the download is initiated
-                $(iframe).on('load', function () {
-                    document.body.removeChild(iframe);
-                });
+            // Clean up the iframe after the download is initiated
+            $(iframe).on('load', function () {
+                document.body.removeChild(iframe);
             });
         });
+    });
 
 
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            $('#downloadContributionTemplate').click(function () {
-                // Define the URL of the download endpoint
-                var downloadUrl = '@Url.Content("~/Contribution/BatchDownload")'; // Replace with the actual controller and action name
+        $('#downloadContributionTemplate').click(function () {
+            // Define the URL of the download endpoint
+            var downloadUrl = '@Url.Content("~/Contribution/BatchDownload")'; // Replace with the actual controller and action name
 
-                // Create a hidden iframe to initiate the file download
-                var iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = downloadUrl;
-                document.body.appendChild(iframe);
+            // Create a hidden iframe to initiate the file download
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = downloadUrl;
+            document.body.appendChild(iframe);
 
-                // Clean up the iframe after the download is initiated
-                $(iframe).on('load', function () {
-                    document.body.removeChild(iframe);
-                });
+            // Clean up the iframe after the download is initiated
+            $(iframe).on('load', function () {
+                document.body.removeChild(iframe);
             });
         });
+    });
 
 
-        //$("#nhfNumber").cnComboBox({
-        //    url: '@Url.Content("~/Employee/GetListJson")',
-        //    key: "Id",
-        //    value: "NHFNumber",
-        //    class: "form-control"
-        //});
+    //$("#nhfNumber").cnComboBox({
+    //    url: '@Url.Content("~/Employee/GetListJson")',
+    //    key: "Id",
+    //    value: "NHFNumber",
+    //    class: "form-control"
+    //});
 
-        function validateAndProcessUploadedFile(filePath) {
+    function validateAndProcessUploadedFile(filePath) {
 
-            // Implement server-side validation logic here
-            // Compare the uploaded file with the template file
-            // If the uploaded file matches the template, proceed with further processing
-            // Otherwise, handle the case where the file is not valid
-            // You may need to make an AJAX request to the server for this validation
-            $.ajax({
-                url: '@Url.Content("~/Contribution/ValidateUploadedFile")', // Replace with the actual validation endpoint
-                type: 'POST',
-                data: { filePath: filePath },
-                success: function (response) {
-                    if (response.isValid) {
-                        // The uploaded file matches the template; proceed with further processing
-                        alert('File is valid. Proceed with processing.');
-                    } else {
-                        // The uploaded file does not match the template; handle this case
-                        alert('Invalid uploaded file. Please upload the correct template.');
-                    }
-                },
-                error: function () {
-                    // Handle AJAX error
-                    alert('An error occurred during validation.');
+        // Implement server-side validation logic here
+        // Compare the uploaded file with the template file
+        // If the uploaded file matches the template, proceed with further processing
+        // Otherwise, handle the case where the file is not valid
+        // You may need to make an AJAX request to the server for this validation
+        $.ajax({
+            url: '@Url.Content("~/Contribution/ValidateUploadedFile")', // Replace with the actual validation endpoint
+            type: 'POST',
+            data: { filePath: filePath },
+            success: function (response) {
+                if (response.isValid) {
+                    // The uploaded file matches the template; proceed with further processing
+                    alert('File is valid. Proceed with processing.');
+                } else {
+                    // The uploaded file does not match the template; handle this case
+                    alert('Invalid uploaded file. Please upload the correct template.');
                 }
-            });
-        }
+            },
+            error: function () {
+                // Handle AJAX error
+                alert('An error occurred during validation.');
+            }
+        });
+    }
 
 
 
@@ -393,647 +419,824 @@
 
     $(document).ready(function () {
         // hide the form initially
-            $('#form1').show();
-            $('#multipleBacklogUploadForm').hide();
-            $('#multipleContributionUploadForm').hide();
-   
+        $('#form1').show();
+        $('#multipleBacklogUploadForm').hide();
+        $('#multipleContributionUploadForm').hide();
+
 
         // add click event listener to the button
         $('#backlog').click(function () {
             // unhide the form
-                $('#form1').hide(); 
-                $('#multipleBacklogUploadForm').show();
-                $('#multipleContributionUploadForm').hide();
-                
+            $('#form1').hide();
+            $('#multipleBacklogUploadForm').show();
+            $('#multipleContributionUploadForm').hide();
+
             // prevent the default behavior of the button
             event.preventDefault();
         });
 
-                // add click event listener to the button
-            $('#bulk').click(function () {
+        // add click event listener to the button
+        $('#bulk').click(function () {
             // unhide the form
             $('#form1').hide();
-                $('#multipleBacklogUploadForm').hide();
-                $('#multipleContributionUploadForm').show();
+            $('#multipleBacklogUploadForm').hide();
+            $('#multipleContributionUploadForm').show();
             // prevent the default behavior of the button
             event.preventDefault();
         });
 
-            $('#backBulkContribution').click(function () {
+        $('#backBulkContribution').click(function () {
 
-                // unhide the form
-                $('#form1').show();
-                $('#multipleBacklogUploadForm').hide();
-                $('#multipleContributionUploadForm').hide();
-                
-
-                // prevent the default behavior of the button
-                event.preventDefault();
-            });
-            $('#backBacklogContribution').click(function () {
-
-                // unhide the form
-                $('#form1').show();
-                $('#multipleBacklogUploadForm').hide();
-                $('#multipleContributionUploadForm').hide();
+            // unhide the form
+            $('#form1').show();
+            $('#multipleBacklogUploadForm').hide();
+            $('#multipleContributionUploadForm').hide();
 
 
-                // prevent the default behavior of the button
-                event.preventDefault();
-            });
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
+        $('#backBacklogContribution').click(function () {
+
+            // unhide the form
+            $('#form1').show();
+            $('#multipleBacklogUploadForm').hide();
+            $('#multipleContributionUploadForm').hide();
+
+
+            // prevent the default behavior of the button
+            event.preventDefault();
+        });
 
         $("#paymentOption").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
-            $("#backlogPaymentOption").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
-            $("#paymentOptionbatch").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
+        $("#backlogPaymentOption").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
+        $("#paymentOptionbatch").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
         $("#month").cnComboBox({
-            data: cn.getJson(@Html.Raw(typeof
-                (ContributionMonthsEnum).EnumToDictionaryString()))
+            data: cn.getJson(@Html.Raw(typeof(ContributionMonthsEnum).EnumToDictionaryString()))
         });
-   
 
-        
+
+
 
     });
 
-        $("#backlogTemplate").fileinput({
-            
-            language: 'en',
-            showPreview: false,
-            allowedFileExtensions: ['xlsx', 'xls']
-        }).on("fileuploaded", function (event, data) {
-            var obj = data.response;
+    $("#backlogTemplate").fileinput({
 
-            if (obj && obj.Tag === @GlobalConstant.ONE) {
-                // The uploaded file is valid; you can use filePath as needed
-                var filePath = obj.Data;
-                // Here, you can proceed with processing the uploaded file
-                // Compare the uploaded file with the template, and perform any necessary actions
-                validateAndProcessUploadedFile(filePath);
-            } else {
-                // The uploaded file is not valid; you can handle this case as needed
-                var filePath = '';
-                alert('Invalid uploaded file. Please upload the correct template.');
-            }
-        });
+        language: 'en',
+        showPreview: false,
+        allowedFileExtensions: ['xlsx', 'xls']
+    }).on("fileuploaded", function (event, data) {
+        var obj = data.response;
 
-        $("#contributionTemplate").fileinput({
-
-            language: 'en',
-            showPreview: false,
-            allowedFileExtensions: ['xlsx', 'xls']
-        }).on("fileuploaded", function (event, data) {
-            var obj = data.response;
-
-            if (obj && obj.Tag === @GlobalConstant.ONE) {
-                // The uploaded file is valid; you can use filePath as needed
-                var filePath = obj.Data;
-                // Here, you can proceed with processing the uploaded file
-                // Compare the uploaded file with the template, and perform any necessary actions
-                validateAndProcessUploadedFile(filePath);
-            } else {
-                // The uploaded file is not valid; you can handle this case as needed
-                var filePath = '';
-                alert('Invalid uploaded file. Please upload the correct template.');
-            }
-        });
-
-
-
-        function saveForm(index) {
-            if ($("#form1").validate().form()) {
-                var postData = $("#form1").getWebControls({ Id: id });
-                cn.ajax({
-                    url: '@Url.Content("~/Contribution/SingleContribution")',
-                    type: "post",
-                    data: postData,
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            debugger
-                            cn.msgSuccess(obj.Message);
-                            parent.layer.close(index);
-                            //$('#initialpayment').modal('show');
-                            //var $table = $('#singlepaymenTempTab');
-                            //var datas = obj.Data;
-                            //console.log(datas);
-                            //$table.bootstrapTable("destroy");
-                            //$table.bootstrapTable({
-
-                            //    data: datas,
-
-                            //    columns: [
-
-
-                            //        {
-                            //            field: 'data.Rrr',
-                            //            title: 'RRR'
-                            //        },
-
-                            //        {
-                            //            field: 'TransactionId',
-                            //            title: 'Transaction ID'
-                            //        }
-
-                            //        ,
-                            //        {
-                            //            field: 'Amount',
-                            //            title: 'Amount',
-                            //            //formatter: 'formatnumber'
-                            //        },
-                            //        {
-                            //            align: 'right',
-                            //            events: paymentEvents,
-                            //            formatter: paymentFormatter
-                            //        }
-
-                            //    ]
-                            //});
-
-                        }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
-            }
+        if (obj && obj.Tag === @GlobalConstant.ONE) {
+            // The uploaded file is valid; you can use filePath as needed
+            var filePath = obj.Data;
+            // Here, you can proceed with processing the uploaded file
+            // Compare the uploaded file with the template, and perform any necessary actions
+            validateAndProcessUploadedFile(filePath);
+        } else {
+            // The uploaded file is not valid; you can handle this case as needed
+            var filePath = '';
+            alert('Invalid uploaded file. Please upload the correct template.');
         }
+    });
 
-        window.paymentEvents = {
+    $("#contributionTemplate").fileinput({
+
+        language: 'en',
+        showPreview: false,
+        allowedFileExtensions: ['xlsx', 'xls']
+    }).on("fileuploaded", function (event, data) {
+        var obj = data.response;
+
+        if (obj && obj.Tag === @GlobalConstant.ONE) {
+            // The uploaded file is valid; you can use filePath as needed
+            var filePath = obj.Data;
+            // Here, you can proceed with processing the uploaded file
+            // Compare the uploaded file with the template, and perform any necessary actions
+            validateAndProcessUploadedFile(filePath);
+        } else {
+            // The uploaded file is not valid; you can handle this case as needed
+            var filePath = '';
+            alert('Invalid uploaded file. Please upload the correct template.');
+        }
+    });
 
 
-            'click .paym': function (e, value, row, index) {
 
-                var orderId = row['transactionid'];
-                var rrr = row['rrr'];
 
+
+
+
+    function saveForm() {
+
+
+        $('#form1').validate({
+
+            //rules: {
+            //    nhfNumber: {
+            //        required: true
+            //    },
+            //    employeeName: {
+            //        required: true
+            //    },
+            //    contributionAmount: {
+            //        required: true
+            //    },
+            //    employerNumber: {
+            //        required: true
+            //    },
+            //    remark: {
+            //        required: true
+            //    },
+            //},
+            //messages: {
+            //    nhfNumber: { required: "NHF Number is Required" },
+            //    employeeName: { required: " is required" },
+            //    contributionTemplate: { required: "Excel Sheet is required" },
+            //    phonenumber: { required: "Phone Number Sheet is required" },
+            //    emailaddress: { required: "Email is required" },
+            //},
+            // debugger
+            submitHandler: function (form) {
                 debugger
+                $("input[type=submit]").attr("disabled", "disabled");
 
-                makePayment(orderId, rrr)
+                swal.fire({
+                    title: "Are you sure?",
+                    text: "Proceed with Payment!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#ff9800",
+                    confirmButtonText: "Yes, continue",
+                    cancelButtonText: "No, stop!",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            setTimeout(function () {
+                                resolve();
+                            }, 4000);
+                        });
+                    }
+                }).then(
+                    function (result) {
+                        if (result.isConfirmed) {
+                            swal.fire({
+                                title: 'Payment in progress...',
+                                html: 'Please wait...',
+                                showConfirmButton: false,
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    swal.showLoading();
+                                }
+                            });
 
+
+                        var signatureimgData = new FormData();
+                        var selectedMonth = $("#month").find(":selected").text();
+                        console.log(selectedMonth);
+
+                        signatureimgData.append("employeeNumber", $('#nhfNumber').val());
+                        signatureimgData.append("EmployeeName", $('#employeeName').val());
+                        signatureimgData.append("contributionAmount", $('#contributionAmount').val());
+                        signatureimgData.append("employerNumber", $('#employerNumber').val());
+                        signatureimgData.append("phoneNumber", $('#phoneNumber').val());
+                        signatureimgData.append("Email", $('#emailAddress').val());
+                        signatureimgData.append("Month", selectedMonth);
+                        signatureimgData.append("Year", $('#year').val());
+                        signatureimgData.append("remarks", $('#remark').val());
+                        signatureimgData.append("PaymentOption", $('#paymentOption').val());
+                        debugger
+
+                        console.log(signatureimgData);
+
+                        $.ajax({
+                            url: '@Url.Content("~/Contribution/SingleContribution")',
+                            type: "POST",
+                            data: signatureimgData,
+                            contentType: false,
+                            processData: false,
+                            success: function (obj) {
+                                if (obj.Tag == 1) {
+                                    swal.fire({ title: 'Add Contribution', text: 'Contribution was successful', type: 'success' })
+                                        .then(function () {
+                                            // $('#form1').hide();
+                                            /* $('#frmbatch')[0].reset();*/
+                                            clear();
+                                            
+                                        });
+
+                                                                   }
+                                else {
+
+
+                                    swal.fire({ title: 'Contribution', text: 'Contribution failed', type: 'error' })
+                                        .then(function () {
+
+                                            debugger
+                                            $('#BatchErrorList').show();
+                                            var $table = $('#bulkErrorTable');
+                                            $table.bootstrapTable("destroy");
+
+                                            $table.bootstrapTable({
+                                                data: obj.Data.ErrorList,
+
+                                                columns: [
+                                                    {
+                                                        field: 'error',
+                                                        title: 'Error(s)'
+
+                                                    }
+
+                                                ]
+                                            });
+
+
+                                        });
+
+                                }
+                            },
+                            error: function (e) {
+
+                                swal.fire({ title: 'Contribution', text: 'Contribution Encountered an Error', type: 'error' }).then(function () { });
+                                /$("#btnUpdateChangeEmployer").removeAttr("disabled");/
+                            }
+                        });
+                        } else if (result.isDismissed) {
+                        swal.fire({ title: 'Contribution', text: 'You cancelled Contribution', type: 'info' }).then(function () { });
+
+                    }
+                }
+                );
             }
 
-        };
+        });
+    }
 
-        function paymentFormatter(value, row, index) {
-
-
-            return [
-                '<button class="btn btn-danger paym">' + 'Pay' + '</button>'
-            ].join('');
+    window.paymentEvents = {
 
 
-        }
+        'click .paym': function (e, value, row, index) {
 
+            var orderId = row['transactionid'];
+            var rrr = row['rrr'];
 
-
-        function makePayment(orderId, RRR) {
             debugger
-            $('#initialpayment').modal('hide');
-            let rrr = RRR;
-            let transactionId = orderId;
-            var paymentEngine = RmPaymentEngine.init({
-                key: "U09MRHw0MDgxOTUzOHw2ZDU4NGRhMmJhNzVlOTRiYmYyZjBlMmM1YzUyNzYwZTM0YzRjNGI4ZTgyNzJjY2NjYTBkMDM0ZDUyYjZhZWI2ODJlZTZjMjU0MDNiODBlMzI4YWNmZGY2OWQ2YjhiYzM2N2RhMmI1YWEwYTlmMTFiYWI2OWQxNTc5N2YyZDk4NA==",
-                processRrr: true,
-                transactionId: transactionId,
-                extendedData: {
-                    customFields: [
-                        {
-                            name: "rrr",
-                            value: rrr
 
-                        }
-                    ]
-                },
-                onSuccess: function (response) {
-                    console.log('callback Successful Response', response);
+            makePayment(orderId, rrr)
 
-                    //            onError: function (response) {
-                    //console.log('callback Error Response', response);
-
-                },
-                onClose: function () {
-                    console.log("closed");
-
-                }
-            });
-            paymentEngine.showPaymentWidget();
         }
 
-        $(document).ready(function () {
-            $.ajax({
-                url: '@Url.Content("~/Contribution/GetEmployeeDetails")',
-                type: 'GET',
-                dataType: 'json',
-                success: function (obj) {
-                    if (obj.Tag == 1) {
-                        var data = obj.Data;
-                        $('#nhfNumber').val(data.Nhfno);
-                        $('#employeeName').val(data.Name);
-                        $('#employerNumber').val(data.EmployerNo);
-                        $('#employerName').val(data.EmployerName);
-                        $('#remark').val("Contribution By" + " " + data.Name);
-                    } else {
-                        cn.msgError(obj.Message);
+    };
 
-                        cn.closeDialog();
-                        setTimeout(function () {
-                            cn.closeDialog();
-                        }, 3000); // 5000 milliseconds = 5 seconds
+    function paymentFormatter(value, row, index) {
+
+
+        return [
+            '<button class="btn btn-danger paym">' + 'Pay' + '</button>'
+        ].join('');
+
+
+    }
+
+
+
+    function makePayment(orderId, RRR) {
+        debugger
+        $('#initialpayment').modal('hide');
+        let rrr = RRR;
+        let transactionId = orderId;
+        var paymentEngine = RmPaymentEngine.init({
+            key: "U09MRHw0MDgxOTUzOHw2ZDU4NGRhMmJhNzVlOTRiYmYyZjBlMmM1YzUyNzYwZTM0YzRjNGI4ZTgyNzJjY2NjYTBkMDM0ZDUyYjZhZWI2ODJlZTZjMjU0MDNiODBlMzI4YWNmZGY2OWQ2YjhiYzM2N2RhMmI1YWEwYTlmMTFiYWI2OWQxNTc5N2YyZDk4NA==",
+            processRrr: true,
+            transactionId: transactionId,
+            extendedData: {
+                customFields: [
+                    {
+                        name: "rrr",
+                        value: rrr
+
                     }
+                ]
+            },
+            onSuccess: function (response) {
+                console.log('callback Successful Response', response);
 
-                },
-                error: function () {
-                    // Handle error, if any
+                //            onError: function (response) {
+                //console.log('callback Error Response', response);
+
+            },
+            onClose: function () {
+                console.log("closed");
+
+            }
+        });
+        paymentEngine.showPaymentWidget();
+    }
+
+    $('#contributionAmount').on('input', function () {
+        var inputValue = $(this).val();
+        var numericValue = inputValue.replace(/[^0-9]/g, '');
+        $(this).val(numericValue);
+    });
+
+
+
+    $(document).ready(function ($) {
+        var ddlYears = $("#year");
+        debugger
+        // Determine the Current Year.
+        var currentYear = (new Date()).getFullYear();
+
+        // Loop and add the Year values to DropDownList.
+        for (var i = 1992; i <= currentYear; i++) {
+            var option = $("<option />");
+            option.html(i);
+            option.val(i);
+            ddlYears.append(option);
+        }
+    });
+
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Content("~/Contribution/GetEmployeeDetails")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var data = obj.Data;
+                    $('#nhfNumber').val(data.Nhfno);
+                    $('#employeeName').val(data.Name);
+                    $('#employerNumber').val(data.EmployerNo);
+                    $('#employerName').val(data.EmployerName);
+                    $('#remark').val("Contribution By" + " " + data.Name);
+                } else {
+                    cn.msgError(obj.Message);
+
+                    cn.closeDialog();
+                    setTimeout(function () {
+                        cn.closeDialog();
+                    }, 3000); // 5000 milliseconds = 5 seconds
                 }
-            });
 
+            },
+            error: function () {
+                // Handle error, if any
+            }
         });
 
-        //$(document).ready(function () {
-        //$('#btnBatchUpload').on('click', function (e) {
-        //    debugger           
-        //    e.preventDefault();
-        //    batchUpload();       
+    });
 
-        //});
-        //});
 
-        function batchUpload() {
 
-            $('#multipleContributionUploadForm').validate({
-                rules: {
+    function batchUpload() {
 
-                   
-                    paymentOptionBatch: {
-                        required: true
-                    },
-                    contributionTemplate: {
-                        required: true
-                    },
-                    accountName: {
-                        required: true
-                    },
-                    phoneNumber: {
-                        required: true
-                    },
-                    emailAddress: {
-                        required: true
-                    },
+        $('#multipleContributionUploadForm').validate({
+            rules: {
+
+
+                paymentOptionBatch: {
+                    required: true
                 },
-                messages: {
-                    accountname: { required: "Account Number is Required" },                    
-                    paymentOptionbatch: { required: "payment Option is required" },
-                    contributionTemplate: { required: "Excel Sheet is required" },                  
-                    phonenumber: { required: "Phone Number Sheet is required" },
-                    emailaddress: { required: "Email is required" },
+                contributionTemplate: {
+                    required: true
                 },
+                accountName: {
+                    required: true
+                },
+                phoneNumber: {
+                    required: true
+                },
+                emailAddress: {
+                    required: true
+                },
+            },
+            messages: {
+                accountname: { required: "Account Number is Required" },
+                paymentOptionbatch: { required: "payment Option is required" },
+                contributionTemplate: { required: "Excel Sheet is required" },
+                phonenumber: { required: "Phone Number Sheet is required" },
+                emailaddress: { required: "Email is required" },
+            },
 
-                submitHandler: function (form) {
-                    debugger
-                    $("input[type=submit]").attr("disabled", "disabled");
-                    swal({
-                        title: "Are you sure?",
-                        text: "Batch Upload will be made!",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#ff9800",
-                        confirmButtonText: "Yes, continue",
-                        cancelButtonText: "No, stop!",
-                        showLoaderOnConfirm: true,
-                        preConfirm: function () {
-                            return new Promise(function (resolve) {
-                                setTimeout(function () {
-                                    resolve();
-                                }, 4000);
+            submitHandler: function (form) {
+                debugger
+                $("input[type=submit]").attr("disabled", "disabled");
+                swal({
+                    title: "Are you sure?",
+                    text: "Batch Upload will be made!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#ff9800",
+                    confirmButtonText: "Yes, continue",
+                    cancelButtonText: "No, stop!",
+                    showLoaderOnConfirm: true,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            setTimeout(function () {
+                                resolve();
+                            }, 4000);
+                        });
+                    }
+                }).then(
+                    function (isConfirm) {
+                        if (isConfirm) {
+
+                            swal({
+                                title: 'Uploading Multiple Contributions...',
+                                html: 'Please wait...',
+                                showConfirmButton: false,
+
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    swal.showLoading()
+                                }
+                            });
+                            debugger
+                            var file = $("#contributionTemplate").get(0).files[0];
+                            var signatureimgData = new FormData();
+
+
+                            signatureimgData.append("ContributionTemplate", $("#contributionTemplate").get(0).files[0]);
+                            signatureimgData.append("accountName", $('#accountname').val());
+
+                            signatureimgData.append("paymentOptionBatch", $('#paymentOptionbatch').val());
+
+                            signatureimgData.append("phoneNumber", $('#phonenumber').val());
+                            signatureimgData.append("BatchEmailAddress", $('#batchEmailaddress').val());
+                            signatureimgData.append("narration", $('#naration').val());
+
+                            console.log(signatureimgData);
+
+                            $.ajax({
+                                url: '@Url.Content("~/Contribution/BatchContribution")',
+                                type: "POST",
+                                data: signatureimgData,
+                                contentType: false,
+                                processData: false,
+                                success: function (obj) {
+
+                                    if (obj.Tag == 1) {
+                                        swal({ title: 'Add BatchUpload', text: 'Batch Upload was successful', type: 'success' })
+                                            .then(function () {
+
+                                                /* $('#frmbatch')[0].reset();*/
+                                                clear();
+                                                //$('#btchupload').modal('hide');
+                                                //$('#initialpayment').modal('show');
+                                                //var $table = $('#batchpaymenTempTab');
+                                                //$table.bootstrapTable("destroy");
+
+                                                //$table.bootstrapTable({
+                                                //    data: result.message,
+
+                                                //    columns: [
+
+
+                                                //        {
+                                                //            field: 'rrr',
+                                                //            title: 'RRR'
+                                                //        },
+
+                                                //        {
+                                                //            field: 'transactionid',
+                                                //            title: 'Transaction ID'
+                                                //        }
+
+                                                //        ,
+                                                //        {
+                                                //            field: 'amount',
+                                                //            title: 'Amount',
+                                                //            formatter: 'formatnumber'
+                                                //        },
+                                                //        {
+                                                //            align: 'right',
+                                                //            events: paymentEvents,
+                                                //            formatter: paymentFormatter
+                                                //        }
+
+                                                //    ]
+                                                //});
+
+                                                //var $table = $('#PaymentDetailsTable');
+                                                //$table.bootstrapTable("destroy");
+                                                //
+                                                //window.location.href = "../BatchUpload/BatchPaymentDetails";
+
+
+
+                                            });
+
+                                        //$('#batchpaymenTable').
+                                        //    bootstrapTable(
+                                        //        'refresh', { url: "../BatchUpload/BatchPaymentDetails" });
+                                    }
+                                    else {
+
+
+                                        swal({ title: 'Add BatchUpload', text: 'Batch Upload Completed With Error', type: 'error' })
+                                            .then(function () {
+
+                                                debugger
+                                                $('.BatchErrorList').show();
+                                                var $table = $('#bulkErrorTable');
+                                                $table.bootstrapTable("destroy");
+
+                                                $table.bootstrapTable({
+                                                    data: obj.Data.ErrorList,
+
+                                                    columns: [
+                                                        {
+                                                            field: 'error',
+                                                            title: 'Error(s)'
+
+                                                        }
+
+                                                    ]
+                                                });
+
+
+                                            });
+
+                                    }
+                                },
+                                error: function (e) {
+
+                                    swal({ title: 'Batch Upload', text: 'Batch Upload Encountered an Error', type: 'error' }).then(function () { clear(); });
+                                    /$("#btnUpdateChangeEmployer").removeAttr("disabled");/
+                                }
                             });
                         }
-                    }).then(
-                        function (isConfirm) {
-                            if (isConfirm) {
-                                
-                                swal({
-                                    title: 'Uploading Multiple Contributions...',
-                                    html: 'Please wait...',
-                                    showConfirmButton: false,
+                    }
+                );
+            }
 
-                                    allowEscapeKey: false,
-                                    allowOutsideClick: false,
-                                    didOpen: () => {
-                                        swal.showLoading()
+        });
+    }
+
+    //function clear() {
+    //    $("#accountname").val('');
+    //    $("#phonenumber").val('');
+    //    $("#naration").val('');
+    //    $("#batchEmailaddress").val('');
+    //    $("#contributionTemplate").val('');
+    //}
+
+    function backlogUpload() {
+
+        $('#multipleBacklogUploadForm').validate({
+            rules: {
+
+
+                backlogPaymentOption: {
+                    required: true
+                },
+                backlogTemplate: {
+                    required: true
+                },
+                backlogAccountName: {
+                    required: true
+                },
+                backlogPhoneNumber: {
+                    required: true
+                },
+                backlogEmailAddress: {
+                    required: true
+                },
+                backlogNarration: {
+                    required: true
+                },
+            },
+            messages: {
+                backlogAccountName: { required: "Account Number is Required" },
+                backlogPaymentOption: { required: "payment Option is required" },
+                backlogTemplate: { required: "Excel Sheet is required" },
+                backlogPhoneNumber: { required: "Phone Number Sheet is required" },
+                backlogEmailAddress: { required: "Email is required" },
+
+            },
+
+            submitHandler: function (form) {
+                debugger
+                $("input[type=submit]").attr("disabled", "disabled");
+                swal.fire({
+                    title: "Are you sure?",
+                    text: "Proceed with Backlog Payment!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#ff9800",
+                    confirmButtonText: "Yes, continue",
+                    cancelButtonText: "No, stop!",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            setTimeout(function () {
+                                resolve();
+                            }, 4000);
+                        });
+                    }
+                }).then(
+                    function (result) {
+                        if (result.isConfirmed) {
+                            swal.fire({
+                                title: 'Upload in progress...',
+                                html: 'Please wait...',
+                                showConfirmButton: false,
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    swal.showLoading();
+                                }
+                            });
+                            //debugger
+                            var file = $("#backlogTemplate").get(0).files[0];
+                            var signatureimgData = new FormData();
+
+
+                            signatureimgData.append("BacklogTemplate", $("#backlogTemplate").get(0).files[0]);
+                            signatureimgData.append("AccountName", $('#backlogAccountName').val());
+
+                            signatureimgData.append("BacklogPaymentOption", $('#backlogPaymentOption').val());
+
+                            signatureimgData.append("PhoneNumber", $('#backlogPhoneNumber').val());
+                            signatureimgData.append("EmailAddress", $('#backlogEmailAddress').val());
+                            signatureimgData.append("BacklogNarration", $('#backlogNarration').val());
+
+                            console.log(signatureimgData);
+
+                            $.ajax({
+                                url: '@Url.Content("~/Contribution/BacklogSingleContribution")',
+                                type: "POST",
+                                data: signatureimgData,
+                                contentType: false,
+                                processData: false,
+                                success: function (obj) {
+                                    debugger
+                                    if (obj.success == true) {
+                                        swal.fire({ title: 'Add BacklogUpload', text: 'Backlog Upload was successful', type: 'success' })
+                                            .then(function () {
+
+                                                clear();
+                                                
+
+                                            });
+
+                                       
                                     }
-                                });
-                                debugger
-                                var file = $("#contributionTemplate").get(0).files[0];
-                                var signatureimgData = new FormData();
+                                    else {
 
 
-                                signatureimgData.append("ContributionTemplate", $("#contributionTemplate").get(0).files[0]);
-                                signatureimgData.append("accountName", $('#accountname').val());
+                                        swal.fire({ title: 'Add BacklogUpload', text: 'Backlog Upload Completed With Error', type: 'error' })
+                                            .then(function () {
 
-                                signatureimgData.append("paymentOptionBatch", $('#paymentOptionbatch').val());
+                                                debugger
+                                                $('#BatchErrorList').show();
+                                                var $table = $('#bulkErrorTable');
+                                                $table.bootstrapTable("destroy");
 
-                                signatureimgData.append("phoneNumber", $('#phonenumber').val());
-                                signatureimgData.append("BatchEmailAddress", $('#batchEmailaddress').val());
-                                signatureimgData.append("narration", $('#naration').val());
+                                                $table.bootstrapTable({
+                                                    data: obj.message,
 
-                                console.log(signatureimgData);
+                                                    columns: [
+                                                        {
+                                                            field: 'error',
+                                                            title: 'Error(s)'
 
-                                $.ajax({
-                                    url: '@Url.Content("~/Contribution/BatchContribution")',
-                                    type: "POST",
-                                    data: signatureimgData,
-                                    contentType: false,
-                                    processData: false,
-                                    success: function (obj) {
+                                                        }
 
-                                        if (obj.Tag ==1) {
-                                            swal({ title: 'Add BatchUpload', text: 'Batch Upload was successful', type: 'success' })
-                                                .then(function () {
-
-                                                    /* $('#frmbatch')[0].reset();*/
-                                                    clear();
-                                                    //$('#btchupload').modal('hide');
-                                                    //$('#initialpayment').modal('show');
-                                                    //var $table = $('#batchpaymenTempTab');
-                                                    //$table.bootstrapTable("destroy");
-
-                                                    //$table.bootstrapTable({
-                                                    //    data: result.message,
-
-                                                    //    columns: [
-
-
-                                                    //        {
-                                                    //            field: 'rrr',
-                                                    //            title: 'RRR'
-                                                    //        },
-
-                                                    //        {
-                                                    //            field: 'transactionid',
-                                                    //            title: 'Transaction ID'
-                                                    //        }
-
-                                                    //        ,
-                                                    //        {
-                                                    //            field: 'amount',
-                                                    //            title: 'Amount',
-                                                    //            formatter: 'formatnumber'
-                                                    //        },
-                                                    //        {
-                                                    //            align: 'right',
-                                                    //            events: paymentEvents,
-                                                    //            formatter: paymentFormatter
-                                                    //        }
-
-                                                    //    ]
-                                                    //});
-
-                                                    //var $table = $('#PaymentDetailsTable');
-                                                    //$table.bootstrapTable("destroy");
-                                                    //
-                                                    //window.location.href = "../BatchUpload/BatchPaymentDetails";
-
-
-
+                                                    ]
                                                 });
 
-                                            //$('#batchpaymenTable').
-                                            //    bootstrapTable(
-                                            //        'refresh', { url: "../BatchUpload/BatchPaymentDetails" });
-                                        }
-                                        else {
 
+                                            });
 
-                                            swal({ title: 'Add BatchUpload', text: 'Batch Upload Completed With Error', type: 'error' })
-                                                .then(function () {
-                                                    
-                                                    debugger
-                                                    $('.BatchErrorList').show();
-                                                    var $table = $('#bulkErrorTable');
-                                                    $table.bootstrapTable("destroy");
-
-                                                    $table.bootstrapTable({
-                                                        data: obj.Data.ErrorList,
-
-                                                        columns: [
-                                                            {
-                                                                field: 'error',
-                                                                title: 'Error(s)'
-
-                                                            }
-
-                                                        ]
-                                                    });
-
-
-                                                });
-
-                                        }
-                                    },
-                                    error: function (e) {
-
-                                        swal({ title: 'Batch Upload', text: 'Batch Upload Encountered an Error', type: 'error' }).then(function () { clear(); });
-                                        /*$("#btnUpdateChangeEmployer").removeAttr("disabled");*/
                                     }
-                                });
-                            }
-                        }
-                    );
-                }
+                                },
+                                error: function (e) {
 
-            });
-        }
-
-        function backlogUpload() {
-
-            $('#multipleBacklogUploadForm').validate({
-                rules: {
-
-                   
-                    backlogPaymentOption: {
-                        required: true
-                    },
-                    backlogTemplate: {
-                        required: true
-                    },
-                    backlogAccountName: {
-                        required: true
-                    },
-                    backlogPhoneNumber: {
-                        required: true
-                    },
-                     backlogEmailAddress: {
-                        required: true
-                    },
-                    backlogNarration: {
-                        required: true
-                    },
-                },
-                messages: {
-                    backlogAccountName: { required: "Account Number is Required" },
-                    backlogPaymentOption: { required: "payment Option is required" },
-                    backlogTemplate: { required: "Excel Sheet is required" },
-                    backlogPhoneNumber: { required: "Phone Number Sheet is required" },
-                    backlogEmailAddress: { required: "Email is required" },
-                   
-                },
-
-                submitHandler: function (form) {
-                    debugger
-                    $("input[type=submit]").attr("disabled", "disabled");
-                    swal({
-                        title: "Are you sure?",
-                        text: "Batch Upload will be made!",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#ff9800",
-                        confirmButtonText: "Yes, continue",
-                        cancelButtonText: "No, stop!",
-                        showLoaderOnConfirm: true,
-                        preConfirm: function () {
-                            return new Promise(function (resolve) {
-                                setTimeout(function () {
-                                    resolve();
-                                }, 4000);
+                                    swal.fire({ title: 'Batch Upload', text: 'Batch Upload Encountered an Error', type: 'error' }).then(function () { clear(); });
+                                    /$("#btnUpdateChangeEmployer").removeAttr("disabled");/
+                                }
                             });
                         }
-                    }).then(
-                        function (isConfirm) {
-                            if (isConfirm) {
-                                
-                                swal({
-                                    title: 'Uploading Backlog Contributions...',
-                                    html: 'Please wait...',
-                                    showConfirmButton: false,
-
-                                    allowEscapeKey: false,
-                                    allowOutsideClick: false,
-                                    didOpen: () => {
-                                        swal.showLoading()
-                                    }
-                                });
-                                //debugger
-                                var file = $("#backlogTemplate").get(0).files[0];
-                                var signatureimgData = new FormData();
-
-
-                                signatureimgData.append("BacklogTemplate", $("#backlogTemplate").get(0).files[0]);
-                                signatureimgData.append("AccountName", $('#backlogAccountName').val());
-
-                                signatureimgData.append("BacklogPaymentOption", $('#backlogPaymentOption').val());
-
-                                signatureimgData.append("PhoneNumber", $('#backlogPhoneNumber').val());
-                                signatureimgData.append("EmailAddress", $('#backlogEmailAddress').val());
-                                signatureimgData.append("BacklogNarration", $('#backlogNarration').val());
-
-                                console.log(signatureimgData);
-
-                                $.ajax({
-                                    url: '@Url.Content("~/Contribution/BacklogSingleContribution")',
-                                    type: "POST",
-                                    data: signatureimgData,
-                                    contentType: false,
-                                    processData: false,
-                                    success: function (obj) {
-
-                                        if (obj.Tag ==1) {
-                                            swal({ title: 'Add BacklogUpload', text: 'Backlog Upload was successful', type: 'success' })
-                                                .then(function () {
-
-                                                    /* $('#frmbatch')[0].reset();*/
-                                                    clear();
-                                                    //$('#btchupload').modal('hide');
-                                                    //$('#initialpayment').modal('show');
-                                                    //var $table = $('#batchpaymenTempTab');
-                                                    //$table.bootstrapTable("destroy");
-
-                                                    //$table.bootstrapTable({
-                                                    //    data: result.message,
-
-                                                    //    columns: [
-
-
-                                                    //        {
-                                                    //            field: 'rrr',
-                                                    //            title: 'RRR'
-                                                    //        },
-
-                                                    //        {
-                                                    //            field: 'transactionid',
-                                                    //            title: 'Transaction ID'
-                                                    //        }
-
-                                                    //        ,
-                                                    //        {
-                                                    //            field: 'amount',
-                                                    //            title: 'Amount',
-                                                    //            formatter: 'formatnumber'
-                                                    //        },
-                                                    //        {
-                                                    //            align: 'right',
-                                                    //            events: paymentEvents,
-                                                    //            formatter: paymentFormatter
-                                                    //        }
-
-                                                    //    ]
-                                                    //});
-
-                                                    //var $table = $('#PaymentDetailsTable');
-                                                    //$table.bootstrapTable("destroy");
-                                                    //
-                                                    //window.location.href = "../BatchUpload/BatchPaymentDetails";
-
-
-
-                                                });
-
-                                            //$('#batchpaymenTable').
-                                            //    bootstrapTable(
-                                            //        'refresh', { url: "../BatchUpload/BatchPaymentDetails" });
-                                        }
-                                        else {
-
-
-                                            swal({ title: 'Add BacklogUpload', text: 'Backlog Upload Completed With Error', type: 'error' })
-                                                .then(function () {
-                                                    
-                                                    debugger
-                                                    $('.BatchErrorList').show();
-                                                    var $table = $('#bulkErrorTable');
-                                                    $table.bootstrapTable("destroy");
-
-                                                    $table.bootstrapTable({
-                                                        data: obj.Data.ErrorList,
-
-                                                        columns: [
-                                                            {
-                                                                field: 'error',
-                                                                title: 'Error(s)'
-
-                                                            }
-
-                                                        ]
-                                                    });
-
-
-                                                });
-
-                                        }
-                                    },
-                                    error: function (e) {
-
-                                        swal({ title: 'Batch Upload', text: 'Batch Upload Encountered an Error', type: 'error' }).then(function () { clear(); });
-                                        /*$("#btnUpdateChangeEmployer").removeAttr("disabled");*/
-                                    }
-                                });
-                            }
+                        else if (result.isDismissed) {
+                            swal.fire("Operation Cancelled", "You have cancelled the risk assessment.", "info");
                         }
-                    );
-                }
+                    }
+                );
+            }
 
-            });
+        });
+    }
+
+    $('#phonenumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
         }
+    })
 
 
+
+    function clear() {
+        $("#contributionAmount").val('');
+        $("#year").val('');
+        $("#phoneNumber").val('');
+        $("#emailAddress").val('');
+        $("#backlogAccountName").val('');
+        $("#backlogNarration").val('');
+        $("#backlogPhoneNumber").val('');
+        $("#backlogEmailAddress").val('');
+        $("#backlogTemplate").val('');
+        $("#month").prop('selectedIndex', 0); // Reset ComboBox after successful contribution
+
+    }
+
+    $(document).ready(function () {
+        // Select the input element by its ID and add the required attribute
+        $('#phoneNumber').prop('required', true);
+        $('#emailAddress').prop('required', true);
+        $('#contributionAmount').prop('required', true);
+        $('#backlogPhoneNumber').prop('required', true);
+        $('#backlogEmailAddress').prop('required', true);
+        $('#accountname').prop('required', true);
+        $('#phonenumber').prop('required', true);
+        $('#batchEmailaddress').prop('required', true);
+        $('#naration').prop('required', true);
+    });
+
+    $('#phoneNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {           
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+        }
+    })
+
+    $('#backlogPhoneNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+        }
+    })
+
+     $(document).ready(function () {
+        $('#backlogPhoneNumber').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+     $(document).ready(function () {
+        $('#phonenumber').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+
+    $('#phonenumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+        }
+    })
+
+    $(document).ready(function () {
+        $('#phoneNumber').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
+        });
+    });
+
+    function clearForm() {
+        $("#contributionAmount").val('');
+        $("#year").val('');
+        $("#accountName").val('');
+        $("#phoneNumber").val('');
+        $("#emailAddress").val('');
+        $("#month").val('');
+        $("#backlogAccountName").val('');
+        $("#backlogNarration").val('');
+        $("#backlogPhoneNumber").val('');
+        $("#backlogEmailAddress").val('');
+        $("#batchEmailaddress").val('');
+        $("#backlogTemplate").val('');
+    }
 
 </script>
-

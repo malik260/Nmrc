@@ -4,10 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     OperatorInfo operatorInfo = ViewBag.OperatorInfo;
+    string company = ViewBag.company;
+
     string logo = Url.Content("~/image/finTrakLogo.jpg");
     string cLogo = string.Empty;
     string cName = string.Empty;
     string portrait = string.Empty;
+   var sessionTimeout = TimeSpan.FromSeconds(180);
     if (operatorInfo.EmployeeInfo?.Portrait == null || operatorInfo.EmployeeInfo?.Portrait.Length == 0)
     {
         switch (operatorInfo.EmployeeInfo?.Gender)
@@ -28,19 +31,30 @@
         portrait = Url.Content(string.Format($"data:{operatorInfo.EmployeeInfo?.PortraitType};base64,{Convert.ToBase64String(operatorInfo.EmployeeInfo?.Portrait)}"));
     }
 
-    if (operatorInfo.CompanyInfo?.Logo?.Length != 0 || !string.IsNullOrEmpty(operatorInfo.CompanyInfo?.LogoType))
+    if (operatorInfo.CompanyInfo != null)
     {
-        cLogo = Url.Content(string.Format($"data:{operatorInfo.CompanyInfo?.LogoType};base64,{Convert.ToBase64String(operatorInfo.CompanyInfo?.Logo)}"));
-    }
 
-    if (string.IsNullOrEmpty(operatorInfo.CompanyInfo?.Name))
-    {
-        cLogo = string.Empty;
-        cName = GlobalConstant.APP_NAME;
+        if (operatorInfo.CompanyInfo?.Logo?.Length != 0 || !string.IsNullOrEmpty(operatorInfo.CompanyInfo?.LogoType))
+        {
+            cLogo = Url.Content(string.Format($"data:{operatorInfo.CompanyInfo?.LogoType};base64,{Convert.ToBase64String(operatorInfo.CompanyInfo?.Logo)}"));
+        }
+
+        if (string.IsNullOrEmpty(operatorInfo.CompanyInfo?.Name))
+        {
+            cLogo = string.Empty;
+            cName = GlobalConstant.APP_NAME;
+        }
+        else
+        {
+            //cName = operatorInfo.CompanyInfo?.Name;
+            cName = company;
+
+        }
     }
     else
     {
-        cName = operatorInfo.CompanyInfo?.Name;
+        cLogo = string.Empty;
+        cName = GlobalConstant.APP_NAME;
     }
 }
 @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/central/js/central-data.min.js"))
@@ -53,7 +67,7 @@
         </div>
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
-                <li class="logo" style="margin-left:-9px;">Eco</li>
+                <li class="logo" style="margin-left:-9px;">Ecosystem</li>
                 <li class="nav-header">
                     <div class="dropdown profile-element clear">
                         <div class="image-left">
@@ -150,7 +164,7 @@
                 <strong style="font-size: large; font-weight: bold; color: #fff; letter-spacing: 15px; text-align: center; text-shadow: 1px 1px 1px #333;">@cName</strong>
                 <ul class="nav navbar-top-links navbar-right welcome-message">
                     <li><a id="fullScreen"><i class="fa fa-arrows-alt"></i>Full screen</a></li>
-                    @if (operatorInfo.ApprovalItemCount > 0)
+@*                     @if (operatorInfo.ApprovalItemCount > 0)
                     {
                         <li>
                             <a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
@@ -183,7 +197,7 @@
                             </ul>
                         </li>
                     }
-                    <li class="dropdown user-menu">
+ *@                    <li class="dropdown user-menu">
                         <a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
                             <img src="@portrait" class="user-image">
                             <span class="hidden-xs">@operatorInfo.RealName</span>
@@ -207,6 +221,8 @@
                             <li class="divider"></li>
                             <li>
                                 <a href="#" onclick="loginOff()">
+                                <span id="SessionValue" style="display:none">@sessionTimeout>@operatorInfo.RealName</span>
+                                   <form id="logoffForm" action="@Url.Action("Login","Home")" method="post"> </form>
                                     <i class="fa fa-sign-out"></i> Sign out
                                 </a>
                             </li>
@@ -251,6 +267,7 @@
     <!--Right part Finish-->
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 <script type="text/javascript">
     if (!cn.isNullOrEmpty($.cookie('Skin'))) {
         var skin = decodeURIComponent($.cookie('Skin'));
@@ -300,4 +317,77 @@
             }
         });
     }
+
+    //var currentIdleTime;
+    //var sessionTimeout = $("#SessionValue").html();
+    //var maxIdleBeforeRedirectInMin = 90; // Set session timeout to 1 minute
+    //var idleAlertMessageTimeInMin = maxIdleBeforeRedirectInMin - (1 * 60);
+    //var checkFunctionTimerInSec = 1 * 1000;
+    //var alerted = false;
+
+    //$(document).ready(function () {
+    //    currentIdleTime = 0;
+    //    // Event Listeners: Zero the idle timer on mouse movement.
+    //    $(this).mousemove(function (e) {
+    //        currentIdleTime = 0;
+    //    });
+    //    $(this).keypress(function (e) {
+    //        currentIdleTime = 0;
+    //    });
+
+    //    setInterval(handleIdleness, checkFunctionTimerInSec);
+
+    //});
+
+
+
+    //function handleIdleness() {
+    //    currentIdleTime++;
+    //    if (currentIdleTime >= idleAlertMessageTimeInMin && !alerted) {
+    //        // alert users about session timeout & set alerted to true
+    //        debugger
+    //        swal({
+    //            title: "Session Idle",
+    //            text: "You would be logged out in a minute.",
+    //            type: "warning",
+    //            confirmButtonText: "Prevent logout"
+    //        }).then(function (value) {
+    //            currentIdleTime = 0;
+    //            alerted = false;
+    //        });
+    //        alerted = true;
+    //    }
+
+    //    if (currentIdleTime >= maxIdleBeforeRedirectInMin) {
+
+    //        $("#logoffForm").trigger("submit");
+    //    }
+    //}
+
+    //function handleIdleness() {
+    //    currentIdleTime++;
+
+    //    if (currentIdleTime >= idleAlertMessageTimeInMin && !alerted) {
+    //        // alert users about session timeout & set alerted to true
+    //        swal({
+    //            title: "Session Idle",
+    //            text: "You would be logged out in a minute.",
+    //            type: "warning",
+    //            confirmButtonText: "Prevent logout"
+    //        }).then(function (value) {
+    //            currentIdleTime = 0;
+    //            alerted = false;
+    //        });
+    //        alerted = true;
+    //    }
+
+    //    if (currentIdleTime >= maxIdleBeforeRedirectInMin) {
+    //        debugger
+    //        // Redirect to the login page
+    //        location.href = '@Url.Content("~/Home/Login")';
+    //    }
+
+    //}
+
+
 </script>

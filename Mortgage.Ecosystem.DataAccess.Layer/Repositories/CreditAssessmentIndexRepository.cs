@@ -20,6 +20,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+
+        public async Task<List<CreditAssessmentIndexEntity>> GetPageList(CreditAssessmentIndexListParam param, Pagination pagination)
+        {
+            var expression = ListFilters(param);
+            var list = await BaseRepository().FindList(expression, pagination);
+            return list.ToList();
+        }
+
         public async Task<CreditAssessmentIndexEntity> GetEntity(long id)
         {
             return await BaseRepository().FindEntity<CreditAssessmentIndexEntity>(id)
@@ -51,18 +59,32 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Private method
         private Expression<Func<CreditAssessmentIndexEntity, bool>> ListFilter(int indexTitleId)
         {
-           var expression = ExtensionLinq.True<CreditAssessmentIndexEntity>();
+            var expression = ExtensionLinq.True<CreditAssessmentIndexEntity>();
             if (indexTitleId != null)
             {
                 if (indexTitleId > 0)
                 {
-                    expression = expression.And(t => t.Indexid == indexTitleId);
+                    expression = expression.And(t => t.Indextitleid == indexTitleId);
                 }
 
 
             }
             return expression;
         }
+
+        private Expression<Func<CreditAssessmentIndexEntity, bool>> ListFilters(CreditAssessmentIndexListParam param)
+        {
+            var expression = ExtensionLinq.True<CreditAssessmentIndexEntity>();
+            if (param != null)
+            {
+                if (!string.IsNullOrEmpty(param.ProductCode))
+                {
+                    expression = expression.And(second: t => t.Productcode.Contains(param.ProductCode));
+                }
+            }
+            return expression;
+        }
+
         #endregion
     }
 }

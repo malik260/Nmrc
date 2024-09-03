@@ -43,6 +43,16 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
+
+        public async Task<TData<NextOfKinEntity>> GetEntityByEmployee(long employeeId)
+        {
+            TData<NextOfKinEntity> obj = new TData<NextOfKinEntity>();
+            NextOfKinEntity nextOfKinEntity = await _iUnitOfWork.NextOfKins.GetEntityByEmployeeId(employeeId);
+            obj.Data = nextOfKinEntity;
+            obj.Tag = 1;
+            return obj;
+        }
+
         #endregion
 
         #region Submit data

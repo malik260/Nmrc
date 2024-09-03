@@ -12,5 +12,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels
         public string? Name { get; set; }
         public string? EmployerNo { get; set; }
         public string? EmployerName { get; set; }
+        public string? EmailAddress { get; set; }
     }
 }

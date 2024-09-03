@@ -58,12 +58,12 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'PaymentDate', title: 'Payment Date', visible: true, sortable: true },
-                { field: 'StartPrincipalAmount', title: 'StartPrincipalAmount', sortable: true },
-                { field: 'PeriodPaymentAmount', title: 'Period Payment Amount', sortable: true },
-                { field: 'PeriodInterestAmount', title: 'Period Interest Amount', sortable: true },
-                { field: 'PeriodPrincipalAmount', title: 'Period Principal Amount', visible: true, sortable: true },
-                { field: 'EndPrincipalAmount', title: 'End Principal Amount', visible: true, sortable: true },
+                { field: 'PaymentDate', title: 'Payment Date', visible: true, sortable: false },
+                { field: 'StartPrincipalAmount', title: 'StartPrincipalAmount', sortable: false },
+                { field: 'PeriodPaymentAmount', title: 'Period Payment Amount', sortable: false },
+                { field: 'PeriodInterestAmount', title: 'Period Interest Amount', sortable: false },
+                { field: 'PeriodPrincipalAmount', title: 'Period Principal Amount', visible: true, sortable: false },
+                { field: 'EndPrincipalAmount', title: 'End Principal Amount', visible: true, sortable: false },
 
             ],
             queryParams: function (params) {

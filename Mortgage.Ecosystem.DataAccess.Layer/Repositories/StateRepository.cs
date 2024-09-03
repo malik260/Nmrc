@@ -29,7 +29,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task<StateEntity> GetEntity(long id)
         {
-            return await BaseRepository().FindEntity<StateEntity>(id);
+            return await BaseRepository().FindEntity<StateEntity>(x=> x.Id == id);
         }
         #endregion
 

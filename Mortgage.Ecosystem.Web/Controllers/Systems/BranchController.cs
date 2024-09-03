@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class BranchController : BaseController
     {
         private readonly IBranchService _iBranchService;
-
-        public BranchController(IUnitOfWork iUnitOfWork, IBranchService iBranchService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public BranchController(IUnitOfWork iUnitOfWork, IBranchService iBranchService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iBranchService = iBranchService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +36,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("branch:search,user:search")]
+       // [AuthorizeFilter("branch:search,user:search")]
         public async Task<IActionResult> GetListJson(BranchListParam param)
         {
             TData<List<BranchEntity>> obj = await _iBranchService.GetList(param);
@@ -68,6 +70,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetBranchName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Branch.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
+
             return Json(obj);
         }
         #endregion

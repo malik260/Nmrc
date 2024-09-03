@@ -3,11 +3,13 @@ using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Extensions;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 using Mortgage.Ecosystem.DataAccess.Layer.Request;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
@@ -28,16 +30,76 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var list = await BaseRepository().FindList(expression, pagination);
             return list.ToList();
         }
-
-        public async Task<List<CompanyEntity>> GetApprovalPageList(CompanyListParam param, Pagination pagination)
+        public async Task<List<CompanyEntity>> GetPageList2(CompanyListParam param, Pagination pagination)
         {
-            var list = await new DataRepository().GetCompanyApprovalItems();
+            var expression = ListFilter2(param);
+            var list = await BaseRepository().FindList(expression, pagination);
             return list.ToList();
         }
 
-        public async Task<CompanyEntity> GetEntity(long id)
+        //public async Task<List<CompanyEntity>> GetApprovalPageList(CompanyListParam param, Pagination pagination)
+        //{
+        //    var list = await new DataRepository().GetCompanyApprovalItems();
+        //    return list.ToList();
+        //}
+
+        //public async Task<List<CompanyEntity>> GetApprovalPageList(CompanyListParam param, Pagination pagination)
+        //{
+        //    var expression = ListFilter(param);
+        //    expression = expression.And(i => i.Status == GlobalConstant.ZERO && i.CompanyType == GlobalConstant.ONE);
+        //    var baseList = await BaseRepository().FindList(expression, pagination);
+        //    var approvalItems = await new DataRepository().GetCompanyApprovalItems();
+        //    var combinedList = baseList.Concat(approvalItems)
+        //                              .GroupBy(e => e.Id)
+        //                              .Select(g => g.First())
+        //                              .ToList();
+        //    return combinedList;
+        //}
+
+        public async Task<List<CompanyEntity>> GetApprovalPageList(CompanyListParam param, Pagination pagination)
+        {
+            // Build the initial filter expression
+            var expression = ListFilter(param);
+            expression = expression.And(i => i.Status == GlobalConstant.ZERO && i.CompanyType == GlobalConstant.ONE);
+
+            // Get the base list without pagination
+            var baseList = await BaseRepository().FindList(expression);
+
+            // Get approval items
+            var approvalItems = await new DataRepository().GetCompanyApprovalItems();
+
+            // Perform the join operation
+            var joinedList = (from baseItem in baseList
+                              join approvalItem in approvalItems
+                              on baseItem.Id equals approvalItem.Id
+                              select baseItem).ToList();
+
+            // Set the total count for pagination before applying Skip and Take
+            pagination.TotalCount = joinedList.Count;
+
+            // Apply pagination to the joined list
+            var paginatedList = joinedList
+                .Skip((pagination.PageIndex - 1) * pagination.PageSize)
+                .Take(pagination.PageSize)
+                .ToList();
+
+            return paginatedList;
+        }
+
+        public async Task<CompanyEntity> GetById(long id)
         {
             return await BaseRepository().FindEntity<CompanyEntity>(id);
+        }
+
+        public async Task<CompanyEntity> GetByName(string CompanyName)
+        {
+            return await BaseRepository().FindEntity<CompanyEntity>(x => x.Name == CompanyName);
+        }
+
+
+        public async Task<CompanyEntity> GetEntity(long id)
+        {
+            return await BaseRepository().FindEntity<CompanyEntity>(x => x.Id == id);
         }
 
         // Whether the company name exists
@@ -106,7 +168,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await db.Update(entity);
                 }
                 // Individual employee record
-                if (!string.IsNullOrEmpty(entity.IndBVN) && !string.IsNullOrEmpty(entity.IndFirstName) && !string.IsNullOrEmpty(entity.IndLastName))
+                if (!string.IsNullOrEmpty(entity.IndFirstName) && !string.IsNullOrEmpty(entity.IndLastName))
                 {
                     var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.EMPLOYEE_MENU_URL);
                     EmployeeEntity employeeEntity = new()
@@ -114,7 +176,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                         Company = entity.Id,
                         Branch = GlobalConstant.ZERO,
                         Department = GlobalConstant.ZERO,
-                        NHFNumber = entity.NHFNumber,
+                        NHFNumber = long.Parse(entity.EmployerNhfNumber),
                         BVN = entity.IndBVN,
                         NIN = string.Empty,
                         EmploymentType = EmploymentTypeEnum.Employed.ParseToInt(),
@@ -137,15 +199,19 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                         AlertType = GlobalConstant.ZERO,
                         Portrait = null,
                         PortraitType = string.Empty,
-                        BaseProcessMenu = currentMenu
+                        BaseProcessMenu = currentMenu,
+                        UserType = 1
+                        
                     };
                     await employeeEntity.Create();
                     entity.Employee = employeeEntity.Id;
                     await db.Insert(employeeEntity);
                 }
 
+
                 // User login record
-                if (!string.IsNullOrEmpty(entity.UserName) && !entity.Role.IsNullOrZero())
+                //if (!string.IsNullOrEmpty(entity.UserName) && !entity.Role.IsNullOrZero())
+                if (!string.IsNullOrEmpty(entity.UserName))
                 {
                     var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.USER_MENU_URL);
                     UserEntity userEntity = new()
@@ -169,6 +235,99 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await db.Insert(userEntity);
                 }
 
+                if (entity.AgentType == GlobalConstant.THREE.ToString())
+                {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.PMB_MENU_URL);
+                    PmbEntity pmbEntity = new PmbEntity();
+                    pmbEntity.Id = entity.Id;
+                    pmbEntity.RCNumber = entity.RCNumber;
+                    pmbEntity.Name = entity.Name;
+                    pmbEntity.Website = entity.Website;
+                    pmbEntity.MobileNumber = entity.MobileNumber;
+                    pmbEntity.Address = entity.Address;
+                    pmbEntity.DateOfIncorporation = entity.DateOfIncorporation;
+                    pmbEntity.EmailAddress = entity.EmailAddress;
+                    pmbEntity.Sector = entity.Sector;
+                    //pmbEntity.PmbNhfNumber = entity.EmployerNhfNumber;
+                    pmbEntity.ContributionFrequency = entity.ContributionFrequency;
+                    pmbEntity.Subsector = entity.Subsector;
+                    pmbEntity.BaseProcessMenu = currentMenu;
+                    pmbEntity.BaseCreateTime = DateTime.Now;
+                    pmbEntity.BaseCreatorId = entity.BaseCreatorId;
+                    pmbEntity.BaseModifierId = entity.BaseModifierId;
+                    pmbEntity.NHFNumber = Convert.ToString(entity.EmployerNhfNumber);
+                    await db.Insert(pmbEntity);
+
+                }
+
+
+                if (entity.AgentType == GlobalConstant.TWO.ToString())
+                {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.BROKER_MENU_URL);
+                    BrokerEntity brokerEntity = new BrokerEntity();
+                    brokerEntity.Id = entity.Id;
+                    brokerEntity.RCNumber = entity.RCNumber;
+                    brokerEntity.Name = entity.Name;
+                    brokerEntity.Website = entity.Website;
+                    brokerEntity.MobileNumber = entity.MobileNumber;
+                    brokerEntity.Address = entity.Address;
+                    brokerEntity.DateOfIncorporation = entity.DateOfIncorporation;
+                    brokerEntity.EmailAddress = entity.EmailAddress;
+                    brokerEntity.Sector = entity.Sector;
+                    brokerEntity.Subsector = entity.Subsector;
+                    brokerEntity.BaseProcessMenu = currentMenu;
+                    brokerEntity.BaseCreateTime = DateTime.Now;
+                    brokerEntity.BaseCreatorId = entity.BaseCreatorId;
+                    brokerEntity.BaseModifierId = entity.BaseModifierId;
+                    brokerEntity.NHFNumber = Convert.ToString(entity.NHFNumber);
+                    await db.Insert(brokerEntity);
+
+                }
+
+                //if (entity.AgentType == GlobalConstant.FIVE.ToString())
+                //{
+                //    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.EMPLOYEE_MENU_URL);
+                //    EmployeeEntity employeeEntity = new EmployeeEntity();
+                //    employeeEntity.Id = entity.Id;
+                //    employeeEntity.CoyRCNumber = entity.RCNumber;
+                //    employeeEntity.CompanyName = entity.Name;
+                //    employeeEntity.UserName = entity.EmailAddress;
+                //    //employeeEntity.DateOfEmployment = entity.date;
+                //    employeeEntity.EmailAddress = entity.EmailAddress;
+                //    employeeEntity.CoySector = entity.Sector;
+                //    employeeEntity.CoySubsector = entity.Subsector;
+                //    employeeEntity.CoyAddress = entity.Address;
+                //    employeeEntity.KinAddress = entity.KinAddress;
+                //    employeeEntity.KinFirstName = entity.KinFirstName;
+                //    employeeEntity.KinLastName = entity.KinLastName;
+                //    employeeEntity.KinRelationship = entity.KinRelationship;
+                //    employeeEntity.BaseProcessMenu = currentMenu;
+                //    employeeEntity.BaseCreateTime = DateTime.Now;
+                //    employeeEntity.BaseCreatorId = entity.BaseCreatorId;
+                //    employeeEntity.BaseModifierId = entity.BaseModifierId;
+                //    //employeeEntity.NHFNumber = Convert.ToString(entity.NHFNumber);
+                //    await db.Insert(employeeEntity);
+
+                //}
+
+                ////Next of kin record
+                //if (!string.IsNullOrEmpty(entity.KinFirstName) && !string.IsNullOrEmpty(entity.KinLastName) && !string.IsNullOrEmpty(entity.KinMobileNumber) && !entity.KinRelationship.IsNullOrZero())
+                //{
+                //    NextOfKinEntity nextOfKinEntity = new()
+                //    {
+                //        Company = entity.Id,
+                //        Employee = entity.Employee,
+                //        FirstName = entity.KinFirstName,
+                //        LastName = entity.KinLastName,
+                //        MobileNumber = entity.KinMobileNumber,
+                //        Relationship = entity.KinRelationship
+                //    };
+                //    await nextOfKinEntity.Create();
+                //    await db.Insert(nextOfKinEntity);
+                //}
+
+
+
                 // Role
                 if (!entity.Role.IsNullOrZero())
                 {
@@ -181,25 +340,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await db.Insert(userBelongEntity);
                 }
 
-                MailParameter mailParameter = new()
-                {
-                    RealName = entity.IndFirstName,
-                    UserName = entity.UserName,
-                    UserEmail = entity.EmailAddress,
-                    UserPassword = entity.DecryptedPassword,
-                    UserCompany = entity.Name
-                };
 
-                //if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
-                //{
-                //    if (string.IsNullOrEmpty(message))
-                //    {
-                //        await db.CommitTrans();
-                //    }
-                //}
                 await db.CommitTrans();
             }
-            catch
+            catch (Exception ex)
             {
                 await db.RollbackTrans();
                 throw;
@@ -212,7 +356,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             await BaseRepository().Delete<CompanyEntity>(idArr);
         }
 
-        public async Task ApproveForm(CompanyEntity entity, MenuEntity menu, OperatorInfo user)
+        public async Task<bool> ApproveForm(CompanyEntity entity, MenuEntity menu, OperatorInfo user)
         {
             var message = string.Empty;
             var approvalLog = new ApprovalLogEntity();
@@ -242,50 +386,102 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await db.Update(entity);
                 }
 
-                //if (approvalLog.ApprovalCount < approvalLog.ApprovalLevel)
-                //{
-                //    await db.CommitTrans();
-                //}
-                //else if (approvalLog.ApprovalCount == approvalLog.ApprovalLevel)
-                //{
-                //    MailParameter mailParameter = new()
-                //    {
-                //        UserName = user.UserName,
-                //        UserEmail = entity.EmailAddress,
-                //        UserPassword = user.DecryptedPassword
-                //    };
+                if (approvalLog.ApprovalCount < approvalLog.ApprovalLevel)
+                {
+                    await db.CommitTrans();
+                }
+                else if (approvalLog.ApprovalCount == approvalLog.ApprovalLevel)
+                {
 
-                //    if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
-                //    {
-                //        if (string.IsNullOrEmpty(message))
-                //        {
-                //            await db.CommitTrans();
-                //        }
-                //    }
-                //}
+
+                    MailParameter mailParameter = new()
+                    {
+                        UserName = user.UserName,
+                        UserEmail = entity.EmailAddress,
+                        UserPassword = user.DecryptedPassword,
+                        NhfNumber = entity.EmployerNhfNumber
+                    };
+
+                    if (EmailHelper.IsPasswordEmailSent(mailParameter, out message))
+                    {
+                        if (string.IsNullOrEmpty(message))
+                        {
+                            await db.CommitTrans();
+                            return true;
+                        }
+                    }
+                }
                 await db.CommitTrans();
+                return true;
             }
-            catch
+            catch (Exception e)
             {
                 await db.RollbackTrans();
                 throw;
             }
         }
+
+
+        public async Task<bool> DisApproveForm(CompanyEntity entity, OperatorInfo user)
+        {
+            var message = string.Empty;
+            var approvalLog = new ApprovalLogEntity();
+            var db = await BaseRepository().BeginTrans();
+            try
+            {
+
+                entity.Status = (int)ApprovalEnum.Rejected;
+                await entity.Modify();
+                await db.Update(entity);
+
+                //user.UserStatus = (int)ApprovalEnum.Rejected;
+                //await entity.Modify();
+                //await db.Update(user);
+
+
+                await db.CommitTrans();
+                return true;
+            }
+            catch (Exception e)
+            {
+                await db.RollbackTrans();
+                throw;
+            }
+        }
+
+
+
         #endregion
 
         #region Private method
         private Expression<Func<CompanyEntity, bool>> ListFilter(CompanyListParam param)
         {
+            // param.CompanyType = 1;
             var expression = ExtensionLinq.True<CompanyEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.Name))
+                if (param.Name != null)
                 {
                     expression = expression.And(t => t.Name.Contains(param.Name));
                 }
             }
             return expression;
         }
+
+        private Expression<Func<CompanyEntity, bool>> ListFilter2(CompanyListParam param)
+        {
+            param.CompanyType = 1;
+            var expression = ExtensionLinq.True<CompanyEntity>();
+            if (param != null)
+            {
+                if (param.CompanyType != 0)
+                {
+                    expression = expression.And(t => t.CompanyType == param.CompanyType);
+                }
+            }
+            return expression;
+        }
+
         #endregion
     }
 }

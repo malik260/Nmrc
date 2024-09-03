@@ -103,6 +103,13 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<TData<string>> SaveForm(CreditTypeEntity entity)
         {
             TData<string> obj = new TData<string>();
+            var ProductExist = await _iUnitOfWork.CreditTypes.GetEntityByProductCode(entity.Code);
+            if (ProductExist != null)
+            {
+                obj.Message = "Code already exists!";
+                obj.Tag = 0;
+                return obj;
+            }
             await _iUnitOfWork.CreditTypes.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;

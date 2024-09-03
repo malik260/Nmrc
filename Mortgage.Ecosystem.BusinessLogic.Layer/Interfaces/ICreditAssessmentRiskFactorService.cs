@@ -8,16 +8,17 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface ICreditAssessmentRiskFactorService
     {
-        Task<List<CreditAssessmentRiskFactorEntity>> GetList(string productcode);        //Task<TData<List<CreditAssessmentRiskFactor>>> GetPageList(CreditAssessmentRiskFactorListParam param, Pagination pagination);
-        //Task<TData<List<ZtreeInfo>>> GetZtreeCreditAssesstmentRiskFactorList(CreditAssessmentRiskFactorListParam param);
-        //Task<TData<List<ZtreeInfo>>> GetZtreeUserList(CreditAssessmentRiskFactorListParam param);
+        Task<TData<List<CreditAssessmentRiskFactorEntity>>> GetPageList(CreditAssessmentRiskFactorListParam param, Pagination pagination);
+        
         Task<TData<List<CreditAssessmentRiskFactorEntity>>> Getrisks(string productcode);
         Task<TData<CreditAssessmentRiskFactorEntity>> GetEntity(long id);
-        //Task<TData<int>> GetMaxSort();
         Task<TData<string>> SaveForm(CreditAssessmentRiskFactorEntity entity);
         Task<TData<string>> UpdateForm(CreditAssessmentRiskFactorEntity entity);
+        Task<List<CreditAssessmentRiskFactorEntity>> GetList(string productcode);
 
         Task<TData> DeleteForm(string ids);
-       
-    }
+        Task<TData<CreditAssessmentRiskFactorEntity>> GetEntities(int id);
+        
+
+        }
 }

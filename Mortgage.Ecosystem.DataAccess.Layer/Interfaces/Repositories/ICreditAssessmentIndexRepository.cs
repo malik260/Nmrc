@@ -11,5 +11,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         //Task<int> GetMaxSort();
         Task SaveForm(CreditAssessmentIndexEntity entity);
         Task DeleteForm(string ids);
+        Task<List<CreditAssessmentIndexEntity>> GetPageList(CreditAssessmentIndexListParam param, Pagination pagination);
     }
 }

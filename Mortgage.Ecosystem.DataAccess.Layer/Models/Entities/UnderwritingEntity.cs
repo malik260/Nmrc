@@ -32,8 +32,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         public string? DocumentTitle { get; set; }
 
         // Document Upload
-        [Column("DocumentUpload")]
-        public byte[]? DocumentUpload { get; set; }
+        //[Column("DocumentUpload")]
+        //public byte[]? DocumentUpload { get; set; }
 
         //Comments
         [Column("Comments")]
@@ -47,6 +47,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("CheckList")]
         public string? CheckList { get; set; }
 
+
+        [Column("Rated")]
+        public int? Rated { get; set; }
+
+
+        [Column("Reviewed")]
+        public int? Reviewed { get; set; }
+
         // Check List
         [Column("Remark")]
         public string? Remark { get; set; }
@@ -54,5 +62,43 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // NHF Number
         [Column("NHFNumber")]
         public string NHFNumber { get; set; }
+
+        [Column("LoanId")]
+        public string? LoanId { get; set; }
+
+        [Column("Company")]
+        public long Company { get; set; }
+
+        [Column("Approved")]
+        public int Approved { get; set; }
+
+        [Column("LoanRefNo")]
+        public string? LoanRefNo { get; set; }
+
+        [Column("BatchRefNo")]
+        public string? BatchRefNo { get; set; }
+
+        [Column("isBatched")]
+        public bool? isBatched { get; set; }
+
+        [NotMapped]
+        public string? Branch { get; set; }
+        [NotMapped]
+        public decimal? totalAmount { get; set; }
+        [NotMapped]
+        public string? pmb { get; set; }
+        [NotMapped]
+        public string? Bvn { get; set; }
+        [NotMapped]
+        public decimal MonthlyIncome { get; set; }
+        [NotMapped]
+        public DateTime? DateofEmployment { get; set; }
+        [NotMapped]
+        public string? DOB { get; set; }
+        [NotMapped]
+        public string? Rating{ get; set; }
+        [NotMapped]
+        public string? RiskScore{ get; set; }
+
     }
 }

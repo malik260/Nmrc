@@ -9,5 +9,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task SaveForm(ChecklistProcedureEntity entity);
         Task DeleteForm(string ids);
         Task SaveForms(List<ChecklistProcedureEntity> entity);
+        Task<ChecklistProcedureEntity> GetEntity(string Nhf);
     }
 }

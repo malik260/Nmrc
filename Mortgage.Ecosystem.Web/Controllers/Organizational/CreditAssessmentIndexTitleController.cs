@@ -11,13 +11,15 @@ using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
+    [ExceptionFilter]
     public class CreditAssessmentIndexTitleController : BaseController
     {
         private readonly ICreditAssessmentIndexTitleService _iCreditAssessmentIndexTitleService;
-
-        public CreditAssessmentIndexTitleController(IUnitOfWork iUnitOfWork, ICreditAssessmentIndexTitleService iCreditAssessmentIndexTitleService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public CreditAssessmentIndexTitleController(IUnitOfWork iUnitOfWork, ICreditAssessmentIndexTitleService iCreditAssessmentIndexTitleService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iCreditAssessmentIndexTitleService = iCreditAssessmentIndexTitleService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -28,6 +30,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         public IActionResult CreditAssessmentIndexTitleForm()
+        {
+            return View();
+        }
+
+        public IActionResult CreditAssessmentIndexTitleEditForm()
         {
             return View();
         }
@@ -50,6 +57,20 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
+        public async Task<IActionResult> GetIndexTitle(int FactorIndexId)
+        {
+            TData<List<CreditAssessmentIndexTitleEntity>> obj = await _iCreditAssessmentIndexTitleService.GetIndexTitle(FactorIndexId);
+            return Json(obj);
+        }
+
+
+        public async Task<IActionResult> GetCreditTypePageListJson(CreditAssessmentIndexTitleListParam param, Pagination pagination)
+        {
+            TData<List<CreditAssessmentIndexTitleEntity>> obj = await _iCreditAssessmentIndexTitleService.GetPageList(param, pagination);
+            return Json(obj);
+        }
+
+
         [HttpGet]
         [AuthorizeFilter("creditassessmentindextitle:view")]
         public async Task<IActionResult> GetFormJson(int id)
@@ -58,6 +79,17 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 ;
             return Json(obj);
         }
+
+        [HttpGet]
+        [AuthorizeFilter("creditassessmentindextitle:view")]
+        public async Task<IActionResult> GetFormJsonn(int id)
+        {
+            TData<CreditAssessmentIndexTitleEntity> obj = await _iCreditAssessmentIndexTitleService.GetEntities(id)
+;
+            return Json(obj);
+        }
+
+
         #endregion
 
         #region Submit data

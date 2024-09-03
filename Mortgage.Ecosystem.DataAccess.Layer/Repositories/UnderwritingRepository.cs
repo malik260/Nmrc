@@ -27,10 +27,58 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<UnderwritingEntity>> GetLoanBatches(string id, Pagination pagination)
+        {
+            var expression = ListFilter2(id);
+            var list = await BaseRepository().FindList(expression, pagination);
+            return list.ToList();
+        }
+
+        public async Task<List<UnderwritingEntity>> GetApprovalPageList()
+        {
+            var list = await new DataRepository().GetReviewedLoan();
+            return list.ToList();
+        }
+
+        public async Task<List<UnderwritingEntity>> GetLoanForBatching()
+        {
+            var list = await new DataRepository().GetApprovedLoan();
+            return list.ToList();
+        }
+
+        public async Task<List<UnderwritingEntity>> GetBatchedLoan()
+        {
+            var list = await new DataRepository().GetBatchedLoan();
+            return list.ToList();
+        }
+
+
+        public async Task<List<UnderwritingEntity>> GetLoanForReview()
+        {
+            var list = await new DataRepository().GetRiskRatedLoan();
+            return list.ToList();
+        }
+
+        public async Task<List<UnderwritingEntity>> GetLoanForUnderwriting()
+        {
+            var list = await new DataRepository().GetLoanforUnderwriting();
+            return list.ToList();
+        }
+
 
         public async Task<UnderwritingEntity> GetEntity(long id)
         {
             return await BaseRepository().FindEntity<UnderwritingEntity>(id);
+        }
+
+        public async Task<UnderwritingEntity> GetEntitybyNHF(string NHF)
+        {
+            return await BaseRepository().FindEntity<UnderwritingEntity>(i=> i.NHFNumber == NHF);
+        }
+
+        public async Task<UnderwritingEntity> GetEntitybyLoanId(string id)
+        {
+            return await BaseRepository().FindEntity<UnderwritingEntity>(i => i.LoanId == id);
         }
 
         public async Task<int> GetMaxSort()
@@ -63,29 +111,29 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(UnderwritingEntity entity)
         {
-                var db = await BaseRepository().BeginTrans();
-                try
+            var db = await BaseRepository().BeginTrans();
+            try
+            {
+                if (entity.Id.IsNullOrZero())
                 {
-                    if (entity.Id.IsNullOrZero())
-                    {
-                        await entity.Create();
-                        await db.Insert(entity);
-                    }
-                    else
-                    {
-                        await entity.Modify();
-                        await db.Update(entity);
-                    }
-                    await db.CommitTrans();
+                    await entity.Create();
+                    await db.Insert(entity);
                 }
-                    catch
-                    {
-                    await db.RollbackTrans();
-                    throw;
-                    }
+                else
+                {
+                    await entity.Modify();
+                    await db.Update(entity);
+                }
+                await db.CommitTrans();
+            }
+            catch
+            {
+                await db.RollbackTrans();
+                throw;
+            }
         }
 
-            public async Task DeleteForm(string ids)
+        public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
             await BaseRepository().Delete<UnderwritingEntity>(idArr);
@@ -98,10 +146,22 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var expression = ExtensionLinq.True<UnderwritingEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.ProductName))
+                if (!string.IsNullOrEmpty(param.pmb))
                 {
-                    expression = expression.And(t => t.Name.Contains(param.ProductName));
+                    expression = expression.And(t => t.NextStafffLevel.Contains(param.pmb));
                 }
+            }
+            return expression;
+        }
+
+        private Expression<Func<UnderwritingEntity, bool>> ListFilter2(string id)
+        {
+            var expression = ExtensionLinq.True<UnderwritingEntity>();
+            if (id != null)
+            {
+
+                expression = expression.And(t => t.BatchRefNo == id);
+
             }
             return expression;
         }

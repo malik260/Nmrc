@@ -6,6 +6,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
@@ -28,6 +29,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<List<UserEntity>> obj = new TData<List<UserEntity>>();
             obj.Data = await _iUnitOfWork.Users.GetList(param);
+            
             obj.Tag = 1;
             return obj;
         }
@@ -45,6 +47,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 param.UserIdList = await GetUserIdList(null, user.Company, user.Employee);
             }
             obj.Data = await _iUnitOfWork.Users.GetPageList(param, pagination);
+            obj.Data = obj.Data.Where(i=> i.UserStatus == 1).ToList();
             List<UserBelongEntity> userBelongList = await _iUnitOfWork.UserBelongs.GetList(new UserBelongEntity { UserIds = obj.Data.Select(p => p.Id).ToStrs<long>() });
             if (obj.Data.Count > 0)
             {
@@ -52,6 +55,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 foreach (UserEntity user in obj.Data)
                 {
                     user.CompanyName = companyList.Where(p => p.Id == user.Company).Select(p => p.Name).FirstOrDefault();
+                    var emp = await _iUnitOfWork.Employees.GetEntity(user.Employee);
+                    user.BaseCreateTime = emp.BaseCreateTime;
                 }
             }
             obj.Total = pagination.TotalCount;
@@ -59,21 +64,16 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
-        public async Task<TData<UserEntity>> GetEntity(int id)
+        public async Task<TData<EmployeeEntity>> GetEntity(int id)
         {
-            TData<UserEntity> obj = new TData<UserEntity>();
-            obj.Data = await _iUnitOfWork.Users.GetEntity(id);
+            TData<EmployeeEntity> obj = new TData<EmployeeEntity>();
+            var user = await _iUnitOfWork.Users.GetEntity(id);
 
-            await GetUserBelong(obj.Data);
+            obj.Data = await _iUnitOfWork.Employees.GetEntity(user.Employee);
+            var genderInfo = await _iUnitOfWork.Genders.GetEntity(obj.Data.Gender);
+            obj.Data.FullName = obj.Data.FirstName + " " + obj.Data.LastName;
+            obj.Data.GenderName = genderInfo?.Name ?? "Not Specified";
 
-            if (obj.Data.Company > 0)
-            {
-                CompanyEntity companyEntity = await _iUnitOfWork.Companies.GetEntity(obj.Data.Company);
-                if (companyEntity != null)
-                {
-                    obj.Data.CompanyName = companyEntity.Name;
-                }
-            }
 
             obj.Tag = 1;
             return obj;
@@ -84,7 +84,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             TData<UserEntity> obj = new TData<UserEntity>();
             if (userName.IsNull() || password.IsNull())
             {
-                obj.Message = "Username or password cannot be empty";
+                obj.Message = "<span style='color: black;'>Username or password cannot be empty</span>";
                 return obj;
             }
             UserEntity user = await _iUnitOfWork.Users.CheckLogin(userName);
@@ -99,8 +99,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                         {
                             if (user.IsOnline == 1) // If the same user is not allowed to log in multiple times, when the user logs out, he/she is not online
                             {
-                                obj.Message = "The user is already online.";
-                                goto branch;
+                                obj.Message = "<span style='color: black;'>The user is already online.</span>";
+                                await LogoutUser(user);
+                                //goto branch;
                             }
                         }
                         #endregion
@@ -142,24 +143,57 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                         await GetUserBelong(user);
 
                         obj.Data = user;
-                        obj.Message = "Login successful";
+                        obj.Message = "<span style='color: black;'>Login successful</span>";
                         obj.Tag = 1;
                     }
                     else
                     {
-                        obj.Message = "The password is incorrect, please re-enter";
+                        obj.Message = "<span style='color: black;'>The password is incorrect, please re-enter</span>";
+                        var context = new ApplicationDbContext();
+                        var loglogin = new LogLoginEntity
+                        {
+                            LogStatus = OperateStatusEnum.Fail.ToInt(),
+                            Remark = "Login Attempt",
+                            IpAddress = NetHelper.Ip,
+                            IpLocation = string.Empty,
+                            Browser = NetHelper.Browser,
+                            OS = NetHelper.GetOSVersion(),
+                            ExtraRemark = NetHelper.UserAgent,
+                            BaseCreatorId = user.Employee,
+                            Company = user.Company,
+                            FailureReason = "Incorrect Password",
+                            BaseCreateTime = DateTime.Now
+                        };
+                        context.LogLoginEntity.Add(loglogin);
+                        context.SaveChanges();
+
+
                     }
                 }
                 else
                 {
-                    obj.Message = "The account is disabled, please contact the administrator";
+                    obj.Message = "<span style='color: black;'>The account is disabled, please contact the administrator</span>";
                 }
             }
             else
             {
-                obj.Message = "The account does not exist, please re-enter";
+                obj.Message = "<span style='color: black;'>The account does not exist, please re-enter</span>";
+                var context = new ApplicationDbContext();
+                var loglogin = new LogLoginEntity
+                {
+                    LogStatus = OperateStatusEnum.Success.ToInt(),
+                    Remark = "Account does not exist",
+                    IpAddress = NetHelper.Ip,
+                    IpLocation = string.Empty,
+                    Browser = NetHelper.Browser,
+                    OS = NetHelper.GetOSVersion(),
+                    ExtraRemark = NetHelper.UserAgent,
+                };
+                context.LogLoginEntity.Add(loglogin);
+                context.SaveChanges();
+
             }
-        branch:
+        //branch:
             return obj;
         }
         #endregion
@@ -170,7 +204,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             TData<string> obj = new TData<string>();
             if (_iUnitOfWork.Users.ExistUserName(entity))
             {
-                obj.Message = "Username already exists!";
+                obj.Message = "<span style='color: black;'>Username already exists!</span>";
                 return obj;
             }
             if (entity.Id.IsNullOrZero())
@@ -186,6 +220,13 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Data = entity.Id.ToStr();
             obj.Tag = 1;
             return obj;
+        }
+
+        private async Task LogoutUser(UserEntity user)
+        {
+
+            user.IsOnline = 0;
+            await _iUnitOfWork.Users.UpdateUser(user);
         }
 
         public async Task<TData> DeleteForm(string ids)
@@ -230,28 +271,116 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<TData<long>> ChangePassword(ChangePasswordParam param)
         {
             TData<long> obj = new TData<long>();
+            var user = await Operator.Instance.Current();
             if (param.Id > 0)
             {
-                if (string.IsNullOrEmpty(param.Password) || string.IsNullOrEmpty(param.NewPassword))
+                if (string.IsNullOrEmpty(param.Username) || string.IsNullOrEmpty(param.Username))
+                {
+                    obj.Message = "Username cannot be empty";
+                    return obj;
+                }
+                if (string.IsNullOrEmpty(param.OldPassword))
+                {
+                    obj.Message = "Old password cannot be empty";
+                    return obj;
+                }
+                if (string.IsNullOrEmpty(param.NewPassword))
                 {
                     obj.Message = "New password cannot be empty";
                     return obj;
                 }
+
+                if (param.NewPassword.Length < 6 || param.NewPassword.Length > 20)
+                {
+                    obj.Message = "Password must be between 6 and 20 characters long";
+                    return obj;
+                }
+
+                if (param.NewPassword != param.ConfirmPassword)
+                {
+                    obj.Message = "New password and confirm password do not match";
+                    return obj;
+                }
+
                 UserEntity dbUserEntity = await _iUnitOfWork.Users.GetEntity(param.Id);
-                if (dbUserEntity.Password != EncryptUserPassword(param.Password, dbUserEntity.Salt))
+                user.DecryptedPassword = EncryptionHelper.Decrypt(user.Password, user.Salt);
+                if (user.DecryptedPassword != param.OldPassword)
                 {
                     obj.Message = "The old password is incorrect";
                     return obj;
                 }
-                dbUserEntity.Salt = GetPasswordSalt();
-                dbUserEntity.Password = EncryptUserPassword(param.NewPassword, dbUserEntity.Salt);
+                if (user.UserName != param.Username)
+                {
+                    obj.Message = " Username is incorrect";
+                    return obj;
+                }
+                //dbUserEntity.Salt = GetPasswordSalt();
+                dbUserEntity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
+                dbUserEntity.DecryptedPassword = param.NewPassword;
+                //entity.DecryptedPassword = new UserService(_iUnitOfWork).GenerateDefaultPassword();
+                dbUserEntity.Password = EncryptionHelper.Encrypt(dbUserEntity.DecryptedPassword, dbUserEntity.Salt);
+                //dbUserEntity.Password = EncryptionHelper.Encrypt(param.NewPassword, user.Salt);
                 await _iUnitOfWork.Users.ResetPassword(dbUserEntity);
-
                 await RemoveCacheById(param.Id);
-
                 obj.Data = dbUserEntity.Id;
                 obj.Tag = 1;
+                obj.Message = "Password changed successfully. Your new password has been set.";
             }
+            return obj;
+        }
+
+        public async Task<TData<long>> ForgotPassword(ChangePasswordParam param)
+        {
+            TData<long> obj = new TData<long>();
+            var user = await Operator.Instance.Current();
+
+            if (string.IsNullOrEmpty(param.Username))
+            {
+                obj.Message = "Username cannot be empty";
+                return obj;
+            }
+            if (string.IsNullOrEmpty(param.NewPassword))
+            {
+                obj.Message = "New password cannot be empty";
+                return obj;
+            }
+            if (param.NewPassword.Length < 4 || param.NewPassword.Length > 20)
+            {
+                obj.Message = "Password must be between 4 and 20 characters long";
+                return obj;
+            }
+            if (param.NewPassword != param.ConfirmPassword)
+            {
+                obj.Message = "New password and confirm password do not match";
+                return obj;
+            }
+
+            // Fetch user entity by username
+            UserEntity dbUserEntity = await _iUnitOfWork.Users.GetEntityByUsername(param.Username);
+            if (dbUserEntity == null)
+            {
+                obj.Message = "User not found";
+                return obj;
+            }
+            if (dbUserEntity.UserName != param.Username)
+            {
+                obj.Message = " Username is incorrect";
+                return obj;
+            }
+
+            //dbUserEntity.Salt = GetPasswordSalt();
+            dbUserEntity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
+            dbUserEntity.DecryptedPassword = param.NewPassword;
+            dbUserEntity.Password = EncryptionHelper.Encrypt(dbUserEntity.DecryptedPassword, dbUserEntity.Salt);
+            //dbUserEntity.Password = EncryptUserPassword(param.NewPassword, dbUserEntity.Salt);
+            await _iUnitOfWork.Users.ResetPassword(dbUserEntity);
+
+            await RemoveCacheById(dbUserEntity.Id);
+
+            obj.Data = dbUserEntity.Id;
+            obj.Tag = 1;
+            obj.Message = "<span style='color: black;'>Your new password has been set.</span>";
+
             return obj;
         }
 
@@ -278,6 +407,15 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             TData obj = new TData();
             await _iUnitOfWork.Users.UpdateUser(entity);
 
+            obj.Tag = 1;
+            return obj;
+        }
+
+        public async Task<TData<UserEntity>> GetEntityByEmail(string username)
+        {
+            TData<UserEntity> obj = new TData<UserEntity>();
+            UserEntity employeeEntity = await _iUnitOfWork.Users.GetEntityByUsername(username);
+            obj.Data = employeeEntity;
             obj.Tag = 1;
             return obj;
         }

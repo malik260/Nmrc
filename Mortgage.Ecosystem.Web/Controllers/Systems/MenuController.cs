@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class MenuController : BaseController
     {
         private readonly IMenuService _iMenuService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public MenuController(IUnitOfWork iUnitOfWork, IMenuService iMenuService) : base(iUnitOfWork)
+        public MenuController(IUnitOfWork iUnitOfWork, IMenuService iMenuService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iMenuService = iMenuService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region view function
@@ -58,6 +61,40 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
         public async Task<IActionResult> GetMenuTreeListJson(MenuListParam param)
         {
             TData<List<ZtreeInfo>> obj = await _iMenuService.GetZtreeList(param);
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetMenuTreeListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Menu.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
+            return Json(obj);
+        }
+
+
+        [HttpGet]
+        [AuthorizeFilter("menu:search,role:search")]
+        public async Task<IActionResult> GetMenuTreeListJson1(MenuListParam param)
+        {
+            TData<List<ZtreeInfo>> obj = await _iMenuService.GetZtreeList1(param);
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetMenuTreeListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Menu.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
+            return Json(obj);
+        }
+
+
+
+        public async Task<IActionResult> GetMenuTreeListJson2(MenuListParam param)
+        {
+            TData<List<ZtreeInfo>> obj = await _iMenuService.GetZtreeList2(param);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetMenuTreeListJson2.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Menu.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 
@@ -71,7 +108,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
         //}
 
         [HttpGet]
-        [AuthorizeFilter("menu:view")]
+        //[AuthorizeFilter("menu:view")]
         public async Task<IActionResult> GetFormJson(long id)
         {
             TData<MenuEntity> obj = await _iMenuService.GetEntity(id);

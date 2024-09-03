@@ -9,13 +9,9 @@
             <div class="dialogblock-header" style="height: auto;">
                 <span class="dialogblockheader">Credit Assessment Index Title Form</span>
                 <div class="form-group">
-                    @* <div class="col-sm-4">
-                    <label class="productName control-label" style="margin-left: 100px;">Product Name</label>
-                    <input type="text" col="ProductName" style="margin-left: 100px; width: 550px;" class="form-control" id="Name">
-                    </div>  *@
+                    
                     <div class="col-sm-6">
-                        <label class="productName control-label">Product Name</label>
-                        @* <input type="text" col="CreditType" style="margin-left: 100px;" class="form-control" id="creditType">*@
+                        <label class="productName control-label">Product Name <font class="red"> *</font></label>
                         <div id="ProductName" col="ProductName"></div>
                     </div>
                 </div>
@@ -27,29 +23,29 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="RiskFactorId control-label">Risk Factor</label>
+                        <label class="RiskFactorId control-label">Risk Factor <font class="red"> *</font></label>
                         <div id="RiskFactorId" col="RiskFactorId"></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label class="FactorIndexId control-label">Factor Index</label>
+                        <label class="FactorIndexId control-label">Factor Index <font class="red"> *</font></label>
                         <div id="FactorIndexId" col="FactorIndexId"></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label for="indexTitleDescription" class="form-label">Index Title Description</label>
-                        <input type="text" col="IndexTitleDescription" class="form-control" id="indexTitleDescription">
+                        <label class="indexTitleDescription control-label">Index Title Description <font class="red"> *</font></label>
+                        <input type="text" col="IndexTitleDescription" class="form-control" required id="indexTitleDescription">
                     </div>
 
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label for="weight" class="form-label">Weight</label>
-                        <input type="number" col="Weight" class="form-control" id="weight">
+                        <label class="weight control-label">Weight <font class="red"> *</font></label>
+                        <input type="number" col="Weight" class="form-control" required id="weight">
 
                     </div>
 
@@ -59,6 +55,7 @@
         </div>
     </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script>
     //debugger
@@ -83,38 +80,104 @@
                 value: "RiskFactorsDescription"
             });
 
-            
+
         }
     });
 
     $("#RiskFactorId").change(function () {
         debugger
         var selectedrisk = $("#RiskFactorId").cnComboBox('getValue');
-        if(selectedrisk != 0){
-        $("#FactorIndexId").cnComboBox({
-            url: '@Url.Content("~/CreditAssessmentFactorIndex/GetFactorIndex")' + '?RiskFactorId=' + selectedrisk,
-            key: "FactorIndexId",
-            value: "FactorIndexDescription"
-        });
+        if (selectedrisk != 0) {
+            $("#FactorIndexId").cnComboBox({
+                url: '@Url.Content("~/CreditAssessmentFactorIndex/GetFactorIndex")' + '?RiskFactorId=' + selectedrisk,
+                key: "FactorIndexId",
+                value: "FactorIndexDescription"
+            });
+        }
+    });
+
+    $('#weight').on('blur', function (event) {
+        $('span.error-keyup-1').hide();
+        var regex = /^[1-9][0-9]*$/; // Regular expression to match positive integers excluding zero
+        var Nex = $("#weight").val();
+        if (!regex.test(Nex) || Nex === '0') { // Check if it's not a positive integer or it's zero
+            event.preventDefault();
+            $('#weight').val('');
+            $(this).after('<span class="text-danger error-keyup-1">The Weight should be a non-zero positive intege</span>');
+            return false;
         }
     });
 
 
+
+
+
     function saveForm(index) {
+        debugger
         if ($("#form").validate().form()) {
             var postData = $("#form").getWebControls({ Id: id });
+            var Product = $("#ProductName").cnComboBox('getValue');
+            var Risk = $("#RiskFactorId").cnComboBox('getValue');
+            var Factor = $("#FactorIndexId").cnComboBox('getValue');
+
+
+            if (Product <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Please select a product!'
+                });
+                return false;
+            }
+            if (Factor <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Please select a Factor Index!'
+                });
+                return false;
+            }
+            if (Risk <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Please select Risk Factor!'
+                });
+                return false;
+            }
+
             cn.ajax({
                 url: '@Url.Content("~/CreditAssessmentIndexTitle/SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
-                        //parent.searchGrid();
-                        parent.layer.close(index);
-                    }
-                    else {
-                        cn.msgError(obj.Message);
+                        // Show success message with SweetAlert
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: obj.Message,
+
+                            timerProgressBar: true,
+                            onClose: () => {
+                                parent.layer.close(index);
+                                parent.searchGrid();
+
+                            }
+                        });
+                    } else {
+                        // Show error message with SweetAlert
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: obj.Message,
+
+                            timerProgressBar: true,
+
+                           
+                        });
+                        return false;
+
                     }
                 }
             });

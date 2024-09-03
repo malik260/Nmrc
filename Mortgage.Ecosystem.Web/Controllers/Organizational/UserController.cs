@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
@@ -12,20 +14,24 @@ using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
+    [ExceptionFilter]
     public class UserController : BaseController
     {
         private readonly IUserService _iUserService;
         private readonly IMenuAuthorizeService _iMenuAuthorizeService;
-
-        public UserController(IUnitOfWork iUnitOfWork, IUserService iUserService, IMenuAuthorizeService iMenuAuthorizeService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        private readonly IEmployeeService _employeeService;
+        public UserController(IUnitOfWork iUnitOfWork, IUserService iUserService, IMenuAuthorizeService iMenuAuthorizeService, IAuditTrailService AuditTrailService, IEmployeeService employeeService) : base(iUnitOfWork)
         {
             _iUserService = iUserService;
             _iMenuAuthorizeService = iMenuAuthorizeService;
+            _iAuditTrailService = AuditTrailService;
+            _employeeService = employeeService;
         }
 
         #region View function
 
-        [AuthorizeFilter("user:view")]
+        //[AuthorizeFilter("user:view")]
         public IActionResult UserIndex()
         {
             return View();
@@ -38,6 +44,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         public IActionResult UserDetail()
         {
+           
             ViewBag.Ip = NetHelper.Ip;
             return View();
         }
@@ -47,6 +54,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
+
+        public IActionResult ForgotPasswordForm()
+        {
+            return View();
+        }
         public async Task<IActionResult> ChangePassword()
         {
             ViewBag.OperatorInfo = await Operator.Instance.Current();
@@ -90,10 +102,10 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         [HttpGet]
-        [AuthorizeFilter("user:view")]
+        //[AuthorizeFilter("user:view")]
         public async Task<IActionResult> GetFormJson(int id)
         {
-            TData<UserEntity> obj = await _iUserService.GetEntity(id);
+            TData<EmployeeEntity> obj = await _iUserService.GetEntity(id);
             return Json(obj);
         }
 
@@ -143,11 +155,44 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         [HttpPost]
-        [AuthorizeFilter("user:edit")]
+        //[AuthorizeFilter("user:edit")]
         public async Task<IActionResult> ChangePasswordJson(ChangePasswordParam entity)
         {
-            TData<long> obj = await _iUserService.ChangePassword(entity);
-            return Json(obj);
+            try
+            {
+                var getUser = await _iUserService.GetEntityByEmail(entity.Username);
+
+                TData<long> obj = await _iUserService.ChangePassword(entity);
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.ChangePasswordJson.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.User.ToString();
+                auditInstance.UserName = getUser.Data.Employee.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpPost]
+        ////[AuthorizeFilter("user:edit")]
+        public async Task<IActionResult> ForgotPasswordJson(ChangePasswordParam entity)
+        {
+            try
+            {
+                TData<long> obj = await _iUserService.ForgotPassword(entity);
+                
+                return Json(obj);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
 
         [HttpPost]
@@ -171,19 +216,32 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("user:edit")]
         public async Task<IActionResult> ExportUserJson(UserListParam param)
         {
-            TData<string> obj = new TData<string>();
-            TData<List<UserEntity>> userObj = await _iUserService.GetList(param);
-            if (userObj.Tag == 1)
+            try
             {
-                string file = new ExcelHelper<UserEntity>().ExportToExcel("User List.xls",
-                                                                          "user list",
-                                                                          userObj.Data,
-                                                                          new string[] { "UserName", "RealName", "Gender", "Mobile", "Email" });
-                obj.Data = file;
-                obj.Tag = 1;
+                TData<string> obj = new TData<string>();
+                TData<List<UserEntity>> userObj = await _iUserService.GetList(param);
+                if (userObj.Tag == 1)
+                {
+                    string file = new ExcelHelper<UserEntity>().ExportToExcel("User List.xls",
+                                                                              "user list",
+                                                                              userObj.Data,
+                                                                              new string[] { "UserName", "RealName", "Gender", "Mobile", "Email" });
+                    obj.Data = file;
+                    obj.Tag = 1;
+                }
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.ExportEmployee.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.User.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+
             }
-            return Json(obj);
-        }
+            catch (Exception e)
+            {
+
+                throw;
+            }        }
 
         #endregion Submit data
     }

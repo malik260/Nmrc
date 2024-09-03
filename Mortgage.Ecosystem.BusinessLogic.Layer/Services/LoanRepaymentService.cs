@@ -124,12 +124,21 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
         public async Task<TData<RemitaPaymentDetailsEntity>> SingleLoanRepayment(LoanRepaymentDto entity)
         {
-            OperatorInfo loggedUserinfo = new OperatorInfo();
-            var UserCpt = await _iUnitOfWork.FinanceCounterpartyTransactions.GetEntity(loggedUserinfo.Employee);
-            var debitAmount = UserCpt.DebitAmount;
-            var creditAmount = UserCpt.CreditAmount;
-            var loanBalance = debitAmount - creditAmount;
+            var loggedUserinfo = await Operator.Instance.Current();
+            //var UserCpt = await _iUnitOfWork.FinanceCounterpartyTransactions.GetEntity(loggedUserinfo.Employee);
+            var Contribution = _iUnitOfWork.FinanceCounterpartyTransactions.GetLists(loggedUserinfo.EmployeeInfo.NHFNumber.ToString()).Result.Where(i=> i.TransactionType == "70").Select(i=> i.CreditAmount).Sum();
+            var TotalLoan = _iUnitOfWork.FinanceCounterpartyTransactions.GetLists(loggedUserinfo.EmployeeInfo.NHFNumber.ToString()).Result.Where(i => i.TransactionType == "70").Select(i => i.DebitAmount).Sum();
+            var LoanRepaid = _iUnitOfWork.FinanceCounterpartyTransactions.GetLists(loggedUserinfo.EmployeeInfo.NHFNumber.ToString()).Result.Where(i => i.TransactionType == "71").Select(i => i.CreditAmount).Sum();
+
+            var loanBalance = TotalLoan - (LoanRepaid + Contribution);
             TData<RemitaPaymentDetailsEntity> obj = new TData<RemitaPaymentDetailsEntity>();
+
+            if (loanBalance <= 0)
+            {
+                obj.Message = "sorry you have not loan to service at the moment";
+                obj.Tag = 0;
+                return obj;
+            }
 
             if (entity.Amount > loanBalance)
             {
@@ -137,7 +146,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 obj.Tag = 0;
                 return obj;
             }
-            var employeeinfo = await _iUnitOfWork.Employees.GetEntity(loggedUserinfo.Id);
+            var employeeinfo = await _iUnitOfWork.Employees.GetEntityByNhfNumber(loggedUserinfo.EmployeeInfo.NHFNumber);
             RemitaPaymentDTO PaymentDetails = new RemitaPaymentDTO();
             PaymentDetails.amount = entity.Amount;
             PaymentDetails.description = entity.Narration;
@@ -145,10 +154,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             PaymentDetails.payerPhone = employeeinfo.MobileNumber.ToStr();
             PaymentDetails.payerName = employeeinfo.FirstName + " " + employeeinfo.LastName;
 
+            //var Rrrgenerator = await paymentIntegrationService.GenerateRRR(PaymentDetails);
             var Rrrgenerator = await paymentIntegrationService.Generate(PaymentDetails);
             if (Rrrgenerator.Data == null)
             {
-                obj.Message = "Coult not generate RRR";
+                obj.Message = "Could not generate RRR";
                 obj.Tag = 0;
                 return obj;
             }
@@ -156,17 +166,18 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             remitaPaymentDetailsEntity.TransactionId = Rrrgenerator.Data.TransactionId;
             remitaPaymentDetailsEntity.TransactionDate = DateTime.Now;
-            remitaPaymentDetailsEntity.Status = 0;
+            remitaPaymentDetailsEntity.Status = 1;
             remitaPaymentDetailsEntity.Rrr = Rrrgenerator.Data.RRR;
             remitaPaymentDetailsEntity.Amount = PaymentDetails.amount.ToStr();
-            remitaPaymentDetailsEntity.EmployeeNumber = employeeinfo.Id.ToString();
+            remitaPaymentDetailsEntity.EmployeeNumber = employeeinfo.NHFNumber.ToString();
+            remitaPaymentDetailsEntity.EmployerNumber = employeeinfo.Company.ToString();
 
 
             LoanRepaymentEntity loanRepaymentEntity = new LoanRepaymentEntity();
             loanRepaymentEntity.Amount = entity.Amount;
             loanRepaymentEntity.PaymentStatus = "0";
-            loanRepaymentEntity.EmployeeNumber = employeeinfo.Id.ToStr();
-            loanRepaymentEntity.EmployerNumber = "";
+            loanRepaymentEntity.EmployeeNumber = employeeinfo.NHFNumber.ToStr();
+            loanRepaymentEntity.EmployerNumber = employeeinfo.Company.ToString();
             loanRepaymentEntity.Narration = entity.Narration;
             loanRepaymentEntity.Transactionid = Rrrgenerator.Data.RRR;
             loanRepaymentEntity.Amount = entity.Amount;
@@ -176,17 +187,17 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             loanRepaymentEntity.Lastname = employeeinfo.LastName.ToStr();
             loanRepaymentEntity.MiddleName = employeeinfo.OtherName.ToStr();
             loanRepaymentEntity.Valuedate = DateTime.Now;
-            loanRepaymentEntity.PaymentStatus = entity.Paymentoption.ToString();
+            loanRepaymentEntity.PaymentStatus = "1";
             loanRepaymentEntity.Repaymentdate = DateTime.Now;
 
             FinanceCounterpartyTransactionEntity CPT = new FinanceCounterpartyTransactionEntity();
-            CPT.Ref = employeeinfo.Id.ToStr();
+            CPT.Ref = employeeinfo.NHFNumber.ToStr();
             CPT.DebitAmount = 0;
             CPT.CreditAmount = entity.Amount;
             CPT.TransactionDate = DateTime.Now;
             CPT.TransactionType = "71";
             CPT.TransactionId = Rrrgenerator.Data.RRR;
-            CPT.Approved = 0;
+            CPT.Approved = 1;
             CPT.Branch = employeeinfo.Branch.ToStr();
             CPT.Description = entity.Narration;
             CPT.OldAccountNo = employeeinfo.BankAccountNumber.ToStr();
@@ -195,26 +206,26 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             FttCredit.CreditAmt = entity.Amount;
             FttCredit.TransactionDate = DateTime.Now;
             FttCredit.TransactionType = 71;
-            FttCredit.Approved = 0;
+            FttCredit.Approved = 1;
             FttCredit.ApprovedBy = string.Empty;
             FttCredit.DebitAmt = 0;
             FttCredit.Description = entity.Narration; ;
             FttCredit.DestinationBranch = employeeinfo.Branch.ToString();
             FttCredit.ValueDate = DateTime.Now;
-            FttCredit.Ref = employeeinfo.Id.ToString();
+            FttCredit.Ref = employeeinfo.NHFNumber.ToString();
             FttCredit.TransactionId = Rrrgenerator.Data.RRR;
 
             FinanceTransactionEntity FttDebit = new FinanceTransactionEntity();
             FttDebit.CreditAmt = 0;
             FttDebit.TransactionDate = DateTime.Now;
             FttDebit.TransactionType = 71;
-            FttDebit.Approved = 0;
+            FttDebit.Approved = 1;
             FttDebit.ApprovedBy = string.Empty;
             FttDebit.DebitAmt = entity.Amount;
             FttDebit.Description = entity.Narration; ;
             FttDebit.DestinationBranch = employeeinfo.Branch.ToString();
             FttDebit.ValueDate = DateTime.Now;
-            FttDebit.Ref = employeeinfo.Id.ToString();
+            FttDebit.Ref = employeeinfo.NHFNumber.ToString();
             FttDebit.TransactionId = Rrrgenerator.Data.RRR;
 
             await _iUnitOfWork.RemitaPaymentDetails.SaveForm(remitaPaymentDetailsEntity);
@@ -223,7 +234,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             await _iUnitOfWork.FinanceTransactions.SaveForm(FttCredit);
             await _iUnitOfWork.FinanceTransactions.SaveForm(FttDebit);
 
-            obj.Message = "RRR Generataed succesfully";
+            obj.Message = "Repayment Completed Successfully";
             obj.Data = remitaPaymentDetailsEntity;
             obj.Tag = 0;
             return obj;

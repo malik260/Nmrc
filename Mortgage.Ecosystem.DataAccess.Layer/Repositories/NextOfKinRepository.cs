@@ -29,8 +29,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task<NextOfKinEntity> GetEntity(long id)
         {
-            return await BaseRepository().FindEntity<NextOfKinEntity>(id);
+            return await BaseRepository().FindEntity<NextOfKinEntity>(i => i.Employee == id);
         }
+        public async Task<NextOfKinEntity> GetEntityByEmployeeId(long employeeId)
+        {
+            return await BaseRepository().FindEntity<NextOfKinEntity>(x => x.Employee == employeeId);
+        }
+
         #endregion
 
         #region Submit data

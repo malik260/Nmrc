@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class GenderController : BaseController
     {
         private readonly IGenderService _iGenderService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public GenderController(IUnitOfWork iUnitOfWork, IGenderService iGenderService) : base(iUnitOfWork)
+        public GenderController(IUnitOfWork iUnitOfWork, IGenderService iGenderService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iGenderService = iGenderService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +37,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("gender:search,user:search")]
+        //[AuthorizeFilter("gender:search,user:search")]
         public async Task<IActionResult> GetListJson(GenderListParam param)
         {
             TData<List<GenderEntity>> obj = await _iGenderService.GetList(param);
@@ -51,7 +54,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         [HttpGet]
         [AuthorizeFilter("gender:view")]
-        public async Task<IActionResult> GetFormJson(long id)
+        public async Task<IActionResult> GetFormJson(int id)
         {
             TData<GenderEntity> obj = await _iGenderService.GetEntity(id);
             return Json(obj);
@@ -68,6 +71,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetGenderName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Gender.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
         #endregion

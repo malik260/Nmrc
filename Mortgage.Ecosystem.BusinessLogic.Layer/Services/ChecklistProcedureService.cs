@@ -3,6 +3,7 @@ using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
@@ -26,9 +27,10 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #region Submit data
         public async Task<TData<ChecklistProcedureEntity>> SaveForm(List<CheckListVM> selectedData)
         {
+            var db = new ApplicationDbContext();
             TData<ChecklistProcedureEntity> obj = new TData<ChecklistProcedureEntity>();
             var employeeInfo = await Operator.Instance.Current();
-            List<ChecklistProcedureEntity> entities = new List<ChecklistProcedureEntity> ();
+            List<ChecklistProcedureEntity> entities = new List<ChecklistProcedureEntity>();
             foreach (var check in selectedData)
             {
                 ChecklistProcedureEntity entity = new ChecklistProcedureEntity();
@@ -43,6 +45,10 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             }
             await _iUnitOfWork.ChecklistsProcedure.SaveForms(entities);
+
+            //var underwriting = db.UnderwritingEntity.Where(i => i.NHFNumber == selectedData.FirstOrDefault().NhfNumber).DefaultIfEmpty().FirstOrDefault();
+            //underwriting.CheckList = "1";
+            //db.SaveChanges();
             //obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             obj.Message = "Checklist added successfully";
@@ -57,9 +63,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
-       
+
 
 
         #endregion
-    }
+    }
 }

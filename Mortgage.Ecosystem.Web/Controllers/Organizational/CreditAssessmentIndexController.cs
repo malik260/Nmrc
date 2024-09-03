@@ -11,6 +11,7 @@ using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
+    [ExceptionFilter]
     public class CreditAssessmentIndexController : BaseController
     {
         private readonly ICreditAssessmentIndexService _iCreditAssessmentIndexService;
@@ -35,26 +36,32 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("creditassessmentindex:search,user:search")]
+        //[AuthorizeFilter("creditassessmentindex:search,user:search")]
         public async Task<IActionResult> GetListJson(int indexTitleId)
         {
-            TData<List<CreditAssessmentIndexEntity>> obj = await _iCreditAssessmentIndexService.GetList(indexTitleId);
+            List<CreditAssessmentIndexEntity> obj = await _iCreditAssessmentIndexService.GetList(indexTitleId);
             return Json(obj);
         }
 
         [HttpGet]
-        [AuthorizeFilter("creditassessmentindex:view")]
+        //[AuthorizeFilter("creditassessmentindex:view")]
         public async Task<IActionResult> GetFormJson(int id)
         {
-            TData<CreditAssessmentIndexEntity> obj = await _iCreditAssessmentIndexService.GetEntity(id)
-;
+            TData<CreditAssessmentIndexEntity> obj = await _iCreditAssessmentIndexService.GetEntity(id);
             return Json(obj);
         }
+
+        public async Task<IActionResult> GetCreditTypePageListJson(CreditAssessmentIndexListParam param, Pagination pagination)
+        {
+            TData<List<CreditAssessmentIndexEntity>> obj = await _iCreditAssessmentIndexService.GetPageList(param, pagination);
+            return Json(obj);
+        }
+
         #endregion
 
         #region Submit data
         [HttpPost]
-        [AuthorizeFilter("creditassessmentindex:add,company:edit")]
+        //[AuthorizeFilter("creditassessmentindex:add,company:edit")]
         public async Task<IActionResult> SaveFormJson(CreditAssessmentIndexEntity entity)
         {
             TData<string> obj = await _iCreditAssessmentIndexService.SaveForm(entity);

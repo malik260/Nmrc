@@ -119,12 +119,12 @@
                                                 columns: [
                                                     { checkbox: true, visible: true },
                                                     { field: 'Id', title: 'ID', visible: false },
-                                                    { field: 'AssessmentFactors', title: 'Assessment Factors', sortable: true },
-                                                    { field: 'Index', title: 'Index', sortable: true },
-                                                    //{ field: 'Amount', title: 'Amount', sortable: true },
-                                                    //{ field: 'RRR', title: 'RRR', sortable: true },
-                                                    //{ field: 'TransactionId', title: 'Transaction ID', sortable: true },
-                                                    //{ field: 'Status', title: 'Type', visible: true, sortable: true }
+                                                    { field: 'AssessmentFactors', title: 'Assessment Factors', sortable: false },
+                                                    { field: 'Index', title: 'Index', sortable: false },
+                                                    //{ field: 'Amount', title: 'Amount', sortable: false },
+                                                    //{ field: 'RRR', title: 'RRR', sortable: false },
+                                                    //{ field: 'TransactionId', title: 'Transaction ID', sortable: false },
+                                                    //{ field: 'Status', title: 'Type', visible: true, sortable: false }
                                                 ],
                                                 queryParams: function (params) {
                                                     var pagination = $('#gridAssessmentFactorsTable').cnTable('getPagination', params);
@@ -138,12 +138,12 @@
                                                 columns: [
                                                     { checkbox: true, visible: true },
                                                     { field: 'Id', title: 'ID', visible: false },
-                                                    { field: 'IndexHead', title: 'Index Head', sortable: true },
-                                                    { field: 'IndexItem', title: 'Index Item', sortable: true },
-                                                    { field: 'Weight', title: 'Weight', sortable: true },
-                                                    //{ field: 'RRR', title: 'RRR', sortable: true },
-                                                    //{ field: 'TransactionId', title: 'Transaction ID', sortable: true },
-                                                    //{ field: 'Status', title: 'Type', visible: true, sortable: true }
+                                                    { field: 'IndexHead', title: 'Index Head', sortable: false },
+                                                    { field: 'IndexItem', title: 'Index Item', sortable: false },
+                                                    { field: 'Weight', title: 'Weight', sortable: false },
+                                                    //{ field: 'RRR', title: 'RRR', sortable: false },
+                                                    //{ field: 'TransactionId', title: 'Transaction ID', sortable: false },
+                                                    //{ field: 'Status', title: 'Type', visible: true, sortable: false }
                                                 ],
                                                 queryParams: function (params) {
                                                     var pagination = $('#gridIndexHeaderTable').cnTable('getPagination', params);

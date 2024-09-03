@@ -9,10 +9,10 @@
             <div class="dialogblock-header" style="height: auto;">
                 <span class="dialogblockheader">Credit Assessment Factor Index Form</span>
                 <div class="form-group">
-                   
+
                     <div class="col-sm-6">
-                        <label class="productName control-label">Product Name</label>
-                        
+                        <label class="productName control-label">Product Name <font class="red"> *</font></label>
+
                         <div id="ProductName" col="ProductName"></div>
                     </div>
                 </div>
@@ -26,29 +26,26 @@
 
                 </div>
 
-
-
-
                 <div class="form-group">
 
-                <div class="col-sm-6">
-                    <label class="RiskFactorId control-label">Risk Factor</label>
-                   
-                    <div id="RiskFactorId" col="RiskFactorId"></div>
-                </div>
+                    <div class="col-sm-6">
+                        <label class="RiskFactorId control-label">Risk Factor <font class="red"> *</font></label>
+
+                        <div id="RiskFactorId" col="RiskFactorId"></div>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label for="riskFactorDescription" class="form-label">Factor Index Description</label>
-                        <input type="text" col="FactorIndexDescription" class="form-control" id="riskFactorDescription">
+                        <label for="riskFactorDescription" class="control-label">Factor Index Description  <font class="red"> *</font></label>
+                        <input type="text" col="FactorIndexDescription" class="form-control" id="riskFactorDescription" required>
                     </div>
 
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <label for="weight" class="form-label">Weight</label>
-                        <input type="number" col="Weight" class="form-control" id="weight">
+                        <label for="weight" class="control-label">Weight<font class="red"> *</font></label>
+                        <input type="number" col="Weight" class="form-control" id="weight" required>
 
                     </div>
 
@@ -58,6 +55,8 @@
         </div>
     </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <script>
     //debugger
     var id = cn.request("id");
@@ -74,31 +73,85 @@
         $("#ProductCode").val(selectedCredit);
 
         //var id = selectedCredit;
-        if(selectedCredit != 0){
-        $("#RiskFactorId").cnComboBox({
-            url: '@Url.Content("~/CreditAssessmentRiskFactor/GetRisks")' + '?productcode=' + selectedCredit,
-            key: "RiskFactorId",
-            value: "RiskFactorsDescription"
-        });
+        if (selectedCredit != 0) {
+            $("#RiskFactorId").cnComboBox({
+                url: '@Url.Content("~/CreditAssessmentRiskFactor/GetRisks")' + '?productcode=' + selectedCredit,
+                key: "RiskFactorId",
+                value: "RiskFactorsDescription"
+            });
+        }
+    });
+
+    $('#weight').on('blur', function (event) {
+        $('span.error-keyup-1').hide();
+        var regex = /^[1-9][0-9]*$/; // Regular expression to match positive integers excluding zero
+        var Nex = $("#weight").val();
+        if (!regex.test(Nex) || Nex === '0') { // Check if it's not a positive integer or it's zero
+            event.preventDefault();
+            $('#weight').val('');
+            $(this).after('<span class="text-danger error-keyup-1">The Weight should be a non-zero positive intege</span>');
+            return false;
         }
     });
 
 
+
+
     function saveForm(index) {
+        debugger
         if ($("#form").validate().form()) {
             var postData = $("#form").getWebControls({ Id: id });
+            var Product = $("#ProductName").cnComboBox('getValue');
+            var Risk = $("#RiskFactorId").cnComboBox('getValue');
+
+
+            if (Product <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Please select a product!'
+                });
+                return false;
+            }
+            if (Risk <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Please select Risk Factor!'
+                });
+                return false;
+            }
+
             cn.ajax({
                 url: '@Url.Content("~/CreditAssessmentFactorIndex/SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
-                        //parent.searchGrid();
-                        parent.layer.close(index);
-                    }
-                    else {
-                        cn.msgError(obj.Message);
+                        // Show success message with SweetAlert
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: obj.Message,
+
+                            timerProgressBar: true,
+                            onClose: () => {
+                                parent.layer.close(index);
+                                parent.searchGrid();
+
+                            }
+                        });
+                    } else {
+                        // Show error message with SweetAlert
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: obj.Message,
+
+                            timerProgressBar: true,
+
+                        });
+                        return false;
                     }
                 }
             });

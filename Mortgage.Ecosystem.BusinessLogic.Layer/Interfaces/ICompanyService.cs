@@ -21,5 +21,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<bool> IndividualExiting(CreateCustomerRequestDTO createCustomerRequestDTO);
         Task<bool> UpdateCustomer(CustomerUpdateRequestDTO customerUpdateRequestDTO);
         Task<bool> CustomerExist(string customerCode);
+        Task<TData<CustomerDetailsViewModel>> GetCompanyInfo();
+        Task<TData<List<CompanyEntity>>> GetCurrentCompany(CompanyListParam param);
+        Task<TData> RejectForm(CompanyEntity entity, string Remark);
     }
 }

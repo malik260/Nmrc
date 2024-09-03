@@ -100,7 +100,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             {
                 if (!string.IsNullOrEmpty(param.NHFNumber))
                 {
-                    expression = expression.And(t => t.Ref == param.NHFNumber && t.PostDate <= param.StartDate && t.PostDate >= param.EndDate);
+                    expression = expression.And(t => t.Ref == param.NHFNumber && t.PostDate >= Convert.ToDateTime(param.StartDate) && t.PostDate <= Convert.ToDateTime(param.EndDate) && t.Approved == 1);
                 }
             }
             return expression;

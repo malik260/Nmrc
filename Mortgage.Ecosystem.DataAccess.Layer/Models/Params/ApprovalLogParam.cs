@@ -7,7 +7,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Params
     {
         public long Company { get; set; }
         public long? Branch { get; set; }
-        public long MenuId { get; set; }
+        public long? MenuId { get; set; }
         public int MenuType { get; set; }
         public long Authority { get; set; }
         public long Record { get; set; }

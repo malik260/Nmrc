@@ -12,5 +12,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<ApprovalSetupEntity>> GetEntity(long id);
         Task<TData<string>> SaveForm(ApprovalSetupEntity entity);
         Task<TData> DeleteForm(string ids);
+        Task<TData<string>> SaveForm2(ApprovalSetupEntity entity);
     }
 }

@@ -1,0 +1,205 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="container" id="feedback-form-container">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Customer Feedback Form</span>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="name" class="control-label">Name</label>
+                        <input id="name" name="name" col="Name" type="text" class="form-control" readonly />
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="email" class="control-label">Email Address</label>
+                        <input id="email" name="email" col="EmailAddress" type="email" class="form-control" readonly />
+                    </div>
+                </div>
+                <br />
+                <h5 style="font-family: Arial, sans-serif; font-weight: bold; color: #2c3e50; font-size: 1.5em;">Application Usage</h5>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="usedApplicationFeature" class="control-label">1. Which application feature did you use the most?</label>
+                        <textarea id="usedApplicationFeature" name="usedApplicationFeature" class="form-control" style="height:70px" col="UsedApplicationFeature" readonly></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="overallRating" class="control-label">2. How would you rate the overall experience with the application? (E.g: Excellent, Good, Fair & Poor)</label>
+                        <input id="overallRating" name="overallRating" class="form-control" col="OverallRating" readonly></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="navigationRating" class="control-label">3. How easy was it to navigate the application? (E.g: Very Easy, Easy, Neutral & Difficult)</label>
+                        <input id="navigationRating" name="navigationRating" class="form-control" col="NavigationRating" readonly></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="designRating" class="control-label">4. How would you rate the design and layout of the application? (E.g: Excellent, Good, Fair & Poor)</label>
+                        <input id="designRating" name="designRating" class="form-control" col="DesignRating" readonly></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="performanceRating" class="control-label">5. How satisfied are you with the application's performance (speed, responsiveness, etc)?</label>
+                        <input id="performanceRating" name="performanceRating" class="form-control" col="PerformanceRating" readonly></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="applicationMostLiked" class="control-label">6. What did you like most about the application?</label>
+                        <textarea id="applicationMostLiked" name="applicationMostLiked" class="form-control" style="height:70px" col="ApplicationMostLiked" readonly></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="applicationLeastLiked" class="control-label">7. What did you like least about the application?</label>
+                        <textarea id="applicationLeastLiked" name="applicationLeastLiked" class="form-control" style="height:70px" col="ApplicationLeastLiked" readonly></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="suggestedImprovements" class="control-label">8. Do you have any suggestions for improving our application?</label>
+                        <textarea id="suggestedImprovements" name="suggestedImprovements" class="form-control" style="height:70px" col="SuggestedImprovements" readonly></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="additionalComments" class="control-label">9. Please provide any additional comments or concerns you may have?</label>
+                        <textarea id="additionalComments" name="additionalComments" class="form-control" style="height:70px" col="AdditionalComments" readonly></textarea>
+                    </div>
+                </div>
+                @*<div class="form-group">
+                <div class="col-sm-6">
+                <label for="responseMessage" class="control-label">Message</label>
+                <textarea id="responseMessage" name="responseMessage" class="form-control" style="height:70px" col="ResponseMessage"></textarea>
+                </div>
+                </div>*@
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Ensure jQuery and jQuery Validation Plugin are included -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+
+
+<script type="text/javascript">
+    var id = cn.request("id");
+
+    $(document).ready(function () {
+        // Initialize form validation
+        $("#form1").validate();
+
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/FeedbackForm/GetFormJson")' + '?id=' + id,
+                type: "get",
+                contentType: "application/json; charset=utf-8",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Data;
+                        $('#name').val(result.Name);
+                        $('#email').val(result.EmailAddress);
+                        $('#usedApplicationFeature').val(result.UsedApplicationFeature);
+                        $('#overallRating').val(result.OverallRating);
+                        $('#navigationRating').val(result.NavigationRating);
+                        $('#designRating').val(result.DesignRating);
+                        $('#performanceRating').val(result.PerformanceRating);
+                        $('#applicationMostLiked').val(result.ApplicationMostLiked);
+                        $('#applicationLeastLiked').val(result.ApplicationLeastLiked);
+                        $('#suggestedImprovements').val(result.SuggestedImprovements);
+                        $('#additionalComments').val(result.AdditionalComments);
+                    }
+                }
+            });
+        }
+    });
+
+    //function saveForm(index) {
+    //    if ($("#form1").validate().form()) {
+    //        var postData = $("#form1").getWebControls({ Id: id });
+    //        postData.ResponseMessage = cn.getLastValue(postData.ResponseMessage);
+
+    //        $.ajax({
+    //            url: '@Url.Content("~/FeedbackForm/SaveFormDetails")',
+    //            type: "post",
+    //            data: postData,
+    //            success: function (obj) {
+    //                if (obj.Tag == 1) {
+    //                    cn.msgSuccess(obj.Message);
+    //                    parent.searchGrid();
+    //                    parent.layer.close(index);
+    //                } else {
+    //                    cn.msgError(obj.Message);
+    //                }
+    //            }
+    //        });
+    //    }
+    //}
+
+    function saveForm(index) {
+        console.log('saveForm function called');
+        if ($("#form1").validate().form()) {
+            var postData = $("#form1").getWebControls({ Id: id });
+            postData.ResponseMessage = cn.getLastValue(postData.ResponseMessage);
+
+            console.log('Post data:', postData);
+
+            $.ajax({
+                url: '@Url.Content("~/FeedBackForm/SaveFormDetails")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    console.log('Server response:', obj);
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        parent.searchGrid();
+                        parent.layer.close(index);
+                    } else {
+                        cn.msgError(obj.Message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', status, error);
+                }
+            });
+        } else {
+            console.log('Form validation failed');
+        }
+    }
+
+
+    function loadForm(id) {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/FeedbackForm/GetFormJson")' + '?id=' + id,
+                type: "get",
+                contentType: "application/json; charset=utf-8",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Data;
+                        $('#name').val(result.Name);
+                        $('#email').val(result.EmailAddress);
+                        $('#usedApplicationFeature').val(result.UsedApplicationFeature);
+                        $('#overallRating').val(result.OverallRating);
+                        $('#navigationRating').val(result.NavigationRating);
+                        $('#designRating').val(result.DesignRating);
+                        $('#performanceRating').val(result.PerformanceRating);
+                        $('#applicationMostLiked').val(result.ApplicationMostLiked);
+                        $('#applicationLeastLiked').val(result.ApplicationLeastLiked);
+                        $('#suggestedImprovements').val(result.SuggestedImprovements);
+                        $('#additionalComments').val(result.AdditionalComments);
+                    }
+                }
+            });
+        }
+    }
+</script>

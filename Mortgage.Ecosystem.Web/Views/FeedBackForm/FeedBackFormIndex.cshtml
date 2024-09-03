@@ -12,15 +12,7 @@
                     <li>
                         Name: <input id="name" col="Name" type="text" />
                     </li>
-                    <li>
-                        Status: <span id="status" col="Status"></span>
-                    </li>
-                    <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
-                    </li>
+
                     <li>
                         <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
                     </li>
@@ -28,9 +20,7 @@
             </div>
         </div>
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> edit</a>
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Give Feedback</a>
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -43,14 +33,14 @@
     $(function () {
         initGrid();
 
-        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(ETicketStatusEnum).EnumToDictionaryString())) });
 
         laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/FeedBackForm/GetFeedBackFormPageListJson")';
+        var queryUrl = '@Url.Content("~/FeedBackForm/GetEmployeeFeedBackFormPageListJson")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
@@ -59,9 +49,21 @@
                 { field: 'Id', title: 'Id', visible: false },
                 { field: 'Name', title: 'Name', sortable: true },
                 { field: 'EmailAddress', title: 'Email Address', sortable: true },
-                { field: 'Subject', title: 'Subject', sortable: true },
-                { field: 'Messages', title: 'Messages', sortable: true },
-
+                { field: 'DateSent', title: 'Date Sent', sortable: true },
+                // {
+                //     field: 'Status',
+                //     title: 'Status',
+                //     align: 'center',
+                //     formatter: function (value, row, index) {
+                //         if (value == "@ETicketStatusEnum.Pending.ToInt()") {
+                //             return '<span class="badge badge-warning">' + "@ETicketStatusEnum.Pending.GetDescription()" + '</span>';
+                //         } else if (value == "@ETicketStatusEnum.Closed.ToInt()") {
+                //             return '<span class="badge badge-primary">' + "@ETicketStatusEnum.Closed.GetDescription()" + '</span>';
+                //         } else {
+                //             return '<span class="badge badge-info">' + "@ETicketStatusEnum.InProgress.GetDescription()" + '</span>';
+                //         }
+                //     }
+                // },
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);

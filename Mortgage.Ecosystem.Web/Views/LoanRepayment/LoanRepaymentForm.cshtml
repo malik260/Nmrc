@@ -3,300 +3,897 @@
 }
 
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
-@section header{
+@section header {
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
 }
 
 
-    <div class="wrapper animated fadeInRight">
-        <form id="form" class="form-horizontal m">
+<div class="wrapper animated fadeInRight">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Loan Repayment (Single & Multiple)</span>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Choose Repayment Type</label>
+                    <div id="repaymentType" col="RepaymentType"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="singleLoanRepayment" style="margin-top: 10px; margin-bottom:5%">
             <div class="dialogblockborder dialogblockborderheadline">
-                <div class="dialogblock-header" style="height: auto;">
-                    <span class="dialogblockheader">Loan Repayment (Single & Multiple)</span>
+                <div class="dialogblock-body" style="height: 100%;">
+                    <span id="singleLoan" class="dialogblockheader">Single Loan Repayment</span>
+                    <div Class="form-group">
+                        <div class="col-sm-6">
+                            <label for="nhfNumber" class="form-label">NHF Number</label>
+                            <input id="nhfNumberRepayment" col="employeeNumber" class="form-control" readonly />
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="employeeName" class="form-label">Employee&nbsp;Name</label>
+                            <input type="text" col="Firstname" class="form-control" id="employeeNameRepayment" readonly>
+
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Choose Repayment Type</label>
-                        <div id="repaymentType" col="RepaymentType"></div>
-                    </div>
+                        <div class="col-sm-6">
+                            <label class="control-label">Month<font class="red"> *</font></label>
+                            <select class="form-control" col="Month" name="month" id="montht" required>
+                                <option value="">Select Month--</option>
+                                <!-- Populate with months dynamically -->
+                            </select>
 
-                </div>
-            </div>
-
-            <div id="singleContribution" style="margin-top: 10px; margin-bottom:5%">
-                <div class="dialogblockborder dialogblockborderheadline">
-                    <div class="dialogblock-body" style="height: 100%;">
-                        <span id="singleLoan" class="dialogblockheader">Single Loan Repayment</span>
-                        <div Class="form-group">
-                            <div class="col-sm-6">
-                                <label for="nhfNumber" class="form-label">NHF Number</label>
-                                <input id="nhfNumberRepayment" col="employeeNumber" class="form-control" readonly />
-
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label for="employeeName" class="form-label">Employee&nbsp;Name</label>
-                                <input type="text" col="NHFNumber" class="form-control" id="employeeNameRepayment">
-
-                            </div>
                         </div>
 
+                        <div class="col-sm-6">
+                            <label class="control-label"> Year<font class="red"> *</font></label>
 
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label for="amount" class="form-label">Amount</label>
-                                <input type="number" col="Amount" class="form-control" id="amountRepayment">
-
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label for="narration" class="form-label">Narration</label>
-                                <input type="text" col="Narration" class="form-control" id="narrationRepayment">
-                            </div>
-                        </div>
-
-                        <div Class="form-group">
-                            <div class="col-sm-6">
-                                <label for="accountName" class="form-label">Account&nbsp;Name</label>
-                                <input type="text" class="form-control" id="accountNameRepayment">
-
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label for="phoneNumber" class="form-label">Phone&nbsp;Number</label>
-                                <input type="text" class="form-control" id="phoneNumberRepayment">
-
-                            </div>
-                        </div>
+                            <select class="form-control" col="Year" name="year" id="year" data-val="true" required>
+                                <option value="">Select Year--</option>
+                            </select>
 
 
 
-                        <div class="form-group">
-                            <div class="col-sm-6">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="text" class="form-control" id="emailRepayment">
-
-
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label for="paymentOption" class="form-label">Payment&nbsp;Option</label>
-                                <div id="paymentOption" col="PaymentOption"></div>
-                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div id="multipleUpload" style="margin-top: 10px; margin-bottom:5%">
-                <div class="dialogblockborder dialogblockborderheadline">
-                    <div class="dialogblock-body" style="height: 100%;">
-                        <span class="dialogblockheader">Batch Loan Repayment</span>
-                        <div Class="form-group">
-                            <div class="col-sm-6">
-                                <button class="btn btn-primary" type="button" id="downloadTemplateRepayment">
-                                    <i class="fa fa-file-excel-o"></i>
-                                    <span class="bold">Download Loan Repayment Template</span>
-                                </button>
-                            </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="amount" class="control-label">Amount<font class="red"> *</font></label>
+                            <input type="number" col="Amount" class="form-control" id="amountRepayment" required>
 
-                            <div class="col-sm-6">
-                                <input id="templateFile" col="TemplateFile" type="file" />
-
-                            </div>
                         </div>
 
+                        <div class="col-sm-6">
+                            <label for="narration" class="control-label">Narration<font class="red"> *</font></label>
+                            <input type="text" col="Narration" class="form-control" id="narrationRepayment" readonly>
+                        </div>
+                    </div>
+
+                    <div Class="form-group">
+                        <div class="col-sm-6">
+                            <label for="accountName" class="control-label">Account&nbsp;Name <font class="red"> *</font></label>
+                            <input type="text" class="form-control" id="accountNameRepayment" required>
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="phoneNumber" class="control-label">Phone&nbsp;Number <font class="red"> *</font></label>
+                            <input type="text" class="form-control" id="phoneNumberRepayment" required>
+                            <span id="error-message" class="text-danger" style="display:none; font-weight: bold;"></span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label for="email" class="control-label">Email <font class="red"> *</font></label>
+                            <input type="text" class="form-control" id="emailRepayment" required>
+
+
+                        </div>
+
+                        @* <div class="col-sm-6">
+                        <label for="paymentOption" class="form-label">Payment&nbsp;Option</label>
+                        <div id="paymentOption" col="PaymentOption"></div>
+                        </div> *@
+                    </div>
+                    <div Class="form-group" style="display: flex; justify-content: left; align-items: center; margin-left: 2px">
+
+                        <button class="btn btn-info" type="submit" id="btnSingle" onclick="saveForm()" style="margin-right: 15px;">
+                            Submit
+                        </button>
+                        <button class="btn btn-danger" type="button" id="btnclear" onclick="clearForm()">
+                            <i class="fa fa-recycle"></i>
+                            Clear
+                        </button>
 
                     </div>
                 </div>
             </div>
+        </div>
+    </form>
 
-        </form>
-    </div>
 
-    <script>
-        $(document).ready(function () {
+    <form id="multipleUpload" class="form-horizontal m" style="margin-top: 10px; margin-bottom:5%">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-body" style="height: 100%;">
+                <span class="dialogblockheader">Batch Loan Repayment</span>
+                <div Class="form-group">
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary" type="button" id="downloadTemplateRepayment">
+                            <i class="fa fa-file-excel-o"></i>
+                            <span class="bold">Repayment Template</span>
+                        </button>
+                    </div>
 
-            $('#downloadTemplateRepayment').click(function () {
-                // Define the URL of the download endpoint
-                var downloadUrl = '@Url.Content("~/LoanRepayment/Download")'; // Replace with the actual controller and action name
 
-                // Create a hidden iframe to initiate the file download
-                var iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = downloadUrl;
-                document.body.appendChild(iframe);
+                    <div class="col-sm-6">
+                        <input id="templateFile" type="file">
+                    </div>
 
-                // Clean up the iframe after the download is initiated
-                $(iframe).on('load', function () {
-                    document.body.removeChild(iframe);
-                });
+                </div>
+                <div Class="form-group">
+                    <div class="col-sm-6">
+                        <label for="accountName" class="control-label">Account&nbsp;Name <font class="red"> *</font></label>
+                        <input id="batchAccountName" col="AccountName" class="form-control" />
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="narration" class="control-label">Narration <font class="red"> *</font></label>
+                        <input id="batchNarration" col="Narration" class="form-control" required />
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="phoneNumber" class="control-label">Phone&nbsp;Number<font class="red"> *</font></label>
+                        <input id="batchPhoneNumber" col="PhoneNumber" class="form-control" required />
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="emailAddress" class="control-label">Email&nbsp;Address <font class="red"> *</font></label>
+                        <input id="batchEmailAddress" col="EmailAddress" class="form-control" required />
+                    </div>
+
+
+                </div>
+
+                <div Class="form-group" style="display: flex; justify-content: center; align-items: center">
+                    <button class="btn btn-warning" type="submit" id="backbatchLoanRepayment" style="margin-right: 10px;">
+                        <i class="fa fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <button class="btn btn-info" type="submit" id="batchLoanRepayment" onclick="batchLoanRepaymentUpload()" style="margin-right: 10px;">
+                        <i class="fa fa-save"></i>
+                        Submit
+                    </button>
+                    <button class="btn btn-danger" type="reset">
+                        <i class="fa fa-recycle"></i>
+                        Clear
+                    </button>
+                </div>
+                <div class="modal-body BatchErrorList" hidden>
+                    <table id="bulkErrorTable" data-toggle="table" class="data-table d-none">
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#downloadTemplateRepayment').click(function () {
+            // Define the URL of the download endpoint
+            var downloadUrl = '@Url.Content("~/LoanRepayment/BatchDownload")'; // Replace with the actual controller and action name
+
+            // Create a hidden iframe to initiate the file download
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = downloadUrl;
+            document.body.appendChild(iframe);
+
+            // Clean up the iframe after the download is initiated
+            $(iframe).on('load', function () {
+                document.body.removeChild(iframe);
             });
         });
+    });
 
-        function validateAndProcessUploadedFile(filePath) {
+    function validateAndProcessUploadedFile(filePath) {
 
-            // Implement server-side validation logic here
-            // Compare the uploaded file with the template file
-            // If the uploaded file matches the template, proceed with further processing
-            // Otherwise, handle the case where the file is not valid
-            // You may need to make an AJAX request to the server for this validation
-            $.ajax({
-                url: '@Url.Content("~/LoanRepayment/ValidateUploadedFile")', // Replace with the actual validation endpoint
-                type: 'POST',
-                data: { filePath: filePath },
-                success: function (response) {
-                    if (response.isValid) {
-                        // The uploaded file matches the template; proceed with further processing
-                        alert('File is valid. Proceed with processing.');
-                    } else {
-                        // The uploaded file does not match the template; handle this case
-                        alert('Invalid uploaded file. Please upload the correct template.');
+        // Implement server-side validation logic here
+        // Compare the uploaded file with the template file
+        // If the uploaded file matches the template, proceed with further processing
+        // Otherwise, handle the case where the file is not valid
+        // You may need to make an AJAX request to the server for this validation
+        $.ajax({
+            url: '@Url.Content("~/LoanRepayment/ValidateUploadedFile")', // Replace with the actual validation endpoint
+            type: 'POST',
+            data: { filePath: filePath },
+            success: function (response) {
+                if (response.isValid) {
+                    // The uploaded file matches the template; proceed with further processing
+                    alert('File is valid. Proceed with processing.');
+                } else {
+                    // The uploaded file does not match the template; handle this case
+                    alert('Invalid uploaded file. Please upload the correct template.');
+                }
+            },
+            error: function () {
+                // Handle AJAX error
+                alert('An error occurred during validation.');
+            }
+        });
+    }
+    //$(document).ready(function () {
+    //    $("#repaymentType").cnComboBox({
+    //        data: cn.getJson(@Html.Raw(typeof(LoanRepaymentEnum).EnumToDictionaryString()))
+    //    });
+    //    $("#singleContribution").hide();
+    //    $("#multipleUpload").hide();
+    //    // Show the singleContribution div when option value 1 is selected
+    //    $('#repaymentType').change(function () {
+
+    //        var repaymentType = $("#repaymentType").cnComboBox('getValue');
+
+    //        if (repaymentType == 1) {
+    //            $("#singleContribution").show();
+    //            $("#multipleUpload").hide();
+    //        }
+    //        else if (repaymentType == 2) {
+    //            $("#singleContribution").hide();
+    //            $("#multipleUpload").show();
+    //        }
+    //        else {
+    //            $("#singleContribution").hide();
+    //            $("#multipleUpload").hide();
+    //        }
+
+    //    });
+    //});
+
+    $("#month").cnComboBox({
+        data: cn.getJson(@Html.Raw(typeof(ContributionMonthsEnum).EnumToDictionaryString()))
+    });
+
+
+    $('#phoneNumberRepayment').on('input', function () {
+        var maxLength = 11;
+        if ($(this).val().length > maxLength) {
+            $(this).val($(this).val().slice(0, maxLength));
+        }
+    });
+
+    $('#batchPhoneNumber').on('input', function () {
+        var maxLength = 11;
+        if ($(this).val().length > maxLength) {
+            $(this).val($(this).val().slice(0, maxLength));
+        }
+    });
+
+    $('#phoneNumberRepayment').on('input keyup', function () {
+        var mobileNumber = $(this).val();
+        var errorMessage = $('#error-message');
+
+        // Remove existing error message
+        errorMessage.hide();
+
+        // Check if the input is numeric
+        var numericReg = /^\d*$/;
+        if (!numericReg.test(mobileNumber)) {
+            errorMessage.text('Numeric characters only.').show();
+            return;
+        }
+
+        // Check if the input starts with '0'
+        if (phoneNumberRepayment.length > 0 && phoneNumberRepayment[0] !== '0') {
+            errorMessage.text('Mobile Number must start with 0').show();
+        } else {
+            errorMessage.hide();
+        }
+    });
+
+    $('#batchPhoneNumber').on('input keyup', function () {
+        var mobileNumber = $(this).val();
+        var errorMessage = $('#error-message');
+
+        // Remove existing error message
+        errorMessage.hide();
+
+        // Check if the input is numeric
+        var numericReg = /^\d*$/;
+        if (!numericReg.test(mobileNumber)) {
+            errorMessage.text('Numeric characters only.').show();
+            return;
+        }
+
+        // Check if the input starts with '0'
+        if (batchPhoneNumber.length > 0 && batchPhoneNumber[0] !== '0') {
+            errorMessage.text('Mobile Number must start with 0').show();
+        } else {
+            errorMessage.hide();
+        }
+    });
+
+
+    $("#nhfNumberRepayment").cnComboBox({
+        url: '@Url.Content("~/Employee/GetListJson")',
+        key: "Id",
+        value: "NHFNumber",
+        class: "form-control"
+    });
+
+    $(document).ready(function ($) {
+        var ddlYears = $("#year");
+        debugger
+        // Determine the Current Year.
+        var currentYear = (new Date()).getFullYear();
+
+        // Loop and add the Year values to DropDownList.
+        for (var i = 1992; i <= currentYear; i++) {
+            var option = $("<option />");
+            option.html(i);
+            option.val(i);
+            ddlYears.append(option);
+        }
+    });
+
+
+    $(document).ready(function () {
+        $("#repaymentType").cnComboBox({
+            data: cn.getJson(@Html.Raw(typeof(LoanRepaymentEnum).EnumToDictionaryString()))
+        });
+
+
+        function handleAgentTypeChange() {
+            var selectedType = $("#repaymentType").cnComboBox('getValue');
+
+            if (selectedType == @GlobalConstant.ZERO) {
+
+                $("#nhfNumberRepayment").attr("disabled", "disabled");
+                $("#employeeNameRepayment").attr("disabled", "disabled");
+                $("#amountRepayment").attr("disabled", "disabled");
+                $("#narrationRepayment").attr("disabled", "disabled");
+                $("#accountNameRepayment").attr("disabled", "disabled");
+                $("#phoneNumberRepayment").attr("disabled", "disabled");
+                $("#emailRepayment").attr("disabled", "disabled");
+                $("#paymentOption_select").attr("disabled", "disabled");
+                $('#singleLoanRepayment').show();
+                $('#multipleUpload').hide();
+            }
+
+            if (selectedType == @GlobalConstant.ONE) {
+
+
+                $("#nhfNumberRepayment").removeAttr("disabled");
+                $("#employeeNameRepayment").removeAttr("disabled");
+                $("#amountRepayment").removeAttr("disabled");
+                $("#narrationRepayment").removeAttr("disabled");
+                $("#accountNameRepayment").removeAttr("disabled");
+                $("#phoneNumberRepayment").removeAttr("disabled");
+                $("#emailRepayment").removeAttr("disabled");
+                $("#paymentOption_select").removeAttr("disabled");
+                $('#singleLoanRepayment').show();
+                $('#multipleUpload').hide();
+
+                document.getElementById("singleLoan").innerHTML = "Single Loan Repayment";
+
+            }
+
+            if (selectedType == @GlobalConstant.TWO) {
+                $('#multipleUpload').show();
+                $('#singleLoanRepayment').hide();
+                $("#downloadTemplateRepayment").parents(".form-group").show();
+                $("#templateFile").parents(".form-group").show();
+                document.getElementById("singleLoan").innerHTML = "Batch Loan Repayment";
+            }
+
+        }
+        $('#repaymentType').change(handleAgentTypeChange);
+
+        // Initial setup when the page loads
+        handleAgentTypeChange();
+    });
+
+
+    $("#paymentOption").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
+    $("#batchPaymentOption").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
+
+    $("#templateFile").fileinput({
+
+        language: 'en',
+        showPreview: false,
+        allowedFileExtensions: ['xlsx', 'xls']
+    }).on("fileuploaded", function (event, data) {
+        var obj = data.response;
+
+        if (obj && obj.Tag === @GlobalConstant.ONE) {
+            // The uploaded file is valid; you can use filePath as needed
+            var filePath = obj.Data;
+            // Here, you can proceed with processing the uploaded file
+            // Compare the uploaded file with the template, and perform any necessary actions
+            validateAndProcessUploadedFile(filePath);
+        } else {
+            // The uploaded file is not valid; you can handle this case as needed
+            var filePath = '';
+            alert('Invalid uploaded file. Please upload the correct template.');
+        }
+    });
+
+    var months = [
+        { value: '01', text: 'January' },
+        { value: '02', text: 'February' },
+        { value: '03', text: 'March' },
+        { value: '04', text: 'April' },
+        { value: '05', text: 'May' },
+        { value: '06', text: 'June' },
+        { value: '07', text: 'July' },
+        { value: '08', text: 'August' },
+        { value: '09', text: 'September' },
+        { value: '10', text: 'October' },
+        { value: '11', text: 'November' },
+        { value: '12', text: 'December' }
+    ];
+    $(document).ready(function () {
+        var $monthSelect = $('#montht'); // Select the <select> element
+
+        // Clear existing options (if any)
+        $monthSelect.empty();
+
+        // Add default option
+        $monthSelect.append('<option value="">Select Month--</option>');
+
+        // Add months dynamically
+        $.each(months, function (index, month) {
+            $monthSelect.append(
+                $('<option></option>').val(month.value).text(month.text)
+            );
+        });
+    });
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Content("~/Contribution/GetEmployeeDetails")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var data = obj.Data;
+                    $('#nhfNumberRepayment').val(data.Nhfno);
+                    $('#employeeNameRepayment').val(data.Name);
+                    $('#employerNumber').val(data.EmployerNo);
+                    $('#employerName').val(data.EmployerName);
+                    $('#narrationRepayment').val("Loan repayment By" + " " + data.Name);
+                    $('#batchNarration').val("Loan repayment By" + " " + data.Name);
+                } else {
+                    cn.msgError(obj.Message);
+
+                    cn.closeDialog();
+                    setTimeout(function () {
+                        cn.closeDialog();
+                    }, 3000); // 5000 milliseconds = 5 seconds
+                }
+
+            },
+            error: function () {
+                // Handle error, if any
+            }
+        });
+
+    });
+
+    $('#backbatchLoanRepayment').click(function () {
+
+        // unhide the form
+        $('#singleLoanRepayment').show();
+        $('#multipleUpload').hide();
+
+
+
+        // prevent the default behavior of the button
+        event.preventDefault();
+    });
+    function saveForm() {
+
+
+        $('#form1').validate({
+
+
+            submitHandler: function (form) {
+                debugger
+                $("input[type=submit]").attr("disabled", "disabled");
+
+                swal.fire({
+                    title: "Are you sure?",
+                    text: "Proceed with Loan Payment!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#ff9800",
+                    confirmButtonText: "Yes, continue",
+                    cancelButtonText: "No, stop!",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            setTimeout(function () {
+                                resolve();
+                            }, 4000);
+                        });
                     }
+                }).then(
+                    function (result) {
+                        if (result.isConfirmed) {
+                            swal.fire({
+                                title: 'Payment in progress...',
+                                html: 'Please wait...',
+                                showConfirmButton: false,
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    swal.showLoading();
+                                }
+                            });
+
+                            var selectedMonth = $("#montht").find(":selected").text();
+
+                            var json_data = {};
+
+                            json_data.EmployeeNhfNumber = $('#nhfNumberRepayment').val();
+                            json_data.EmployeeName = $('#employeeNameRepayment').val();
+                            json_data.Amount = $('#amountRepayment').val();
+                            json_data.Year = $('#year').val();
+                            json_data.Narration = $('#narrationRepayment').val();
+                            json_data.Month = selectedMonth;
+                            json_data.PhoneNumber = $('#phoneNumberRepayment').val();
+                            json_data.EmailAddress = $('#emailRepayment').val();
+
+
+                            $.ajax({
+                                url: '@Url.Content("~/LoanRepayment/SingleLoanRepayment")',
+                                type: "POST",
+                                data: json_data,
+                                dataType: 'json',
+                                success: function (obj) {
+                                    if (obj.Tag == 1) {
+                                        swal.fire({ title: 'Add Loan Repayment', text: 'Loan Repayment was successful', type: 'success' })
+                                            .then(function () {
+
+                                                clear();
+
+                                            });
+
+                                    }
+                                    else {
+
+
+                                        swal.fire({ title: 'Add Loan Repayment', text: obj.Message, type: 'error' })
+                                            
+
+                                    }
+                                },
+
+                            });
+                        }
+                    }
+                );
+            }
+
+        });
+    }
+
+    window.paymentEvents = {
+
+
+        'click .paym': function (e, value, row, index) {
+
+            var orderId = row['transactionid'];
+            var rrr = row['rrr'];
+
+            debugger
+
+            makePayment(orderId, rrr)
+
+        }
+
+    };
+
+    function clearForm() {
+        $("#amountRepayment").val('');
+        //$("#narrationRepayment").val('');
+        $("#accountNameRepayment").val('');
+        $("#phoneNumberRepayment").val('');
+        $("#montht").prop('selectedIndex', 0);
+        $("#year").prop('selectedIndex', 0);
+    }
+    function paymentFormatter(value, row, index) {
+
+
+        return [
+            '<button class="btn btn-danger paym">' + 'Pay' + '</button>'
+        ].join('');
+
+
+    }
+
+
+
+    function makePayment(orderId, RRR) {
+        debugger
+        $('#initialpayment').modal('hide');
+        let rrr = RRR;
+        let transactionId = orderId;
+        var paymentEngine = RmPaymentEngine.init({
+            key: "U09MRHw0MDgxOTUzOHw2ZDU4NGRhMmJhNzVlOTRiYmYyZjBlMmM1YzUyNzYwZTM0YzRjNGI4ZTgyNzJjY2NjYTBkMDM0ZDUyYjZhZWI2ODJlZTZjMjU0MDNiODBlMzI4YWNmZGY2OWQ2YjhiYzM2N2RhMmI1YWEwYTlmMTFiYWI2OWQxNTc5N2YyZDk4NA==",
+            processRrr: true,
+            transactionId: transactionId,
+            extendedData: {
+                customFields: [
+                    {
+                        name: "rrr",
+                        value: rrr
+
+                    }
+                ]
+            },
+            onSuccess: function (response) {
+                console.log('callback Successful Response', response);
+
+                //            onError: function (response) {
+                //console.log('callback Error Response', response);
+
+            },
+            onClose: function () {
+                console.log("closed");
+
+            }
+        });
+        paymentEngine.showPaymentWidget();
+    }
+
+    // $(document).ready(function () {
+    //     $.ajax({
+    //         url: '@Url.Content("~/LoanRepayment/GetEmployeeDetails")',
+    //         type: 'GET',
+    //         dataType: 'json',
+    //         success: function (obj) {
+    //             if (obj.Tag == 1) {
+    //                 var data = obj.Data;
+    //                 $('#nhfNumberRepayment').val(data.Nhfno);
+    //                 $('#employeeNameRepayment').val(data.Name);
+    //             } else {
+    //                 cn.msgError(obj.Message);
+
+    //                 cn.closeDialog();
+    //                 setTimeout(function () {
+    //                     cn.closeDialog();
+    //                 }, 3000); // 5000 milliseconds = 5 seconds
+    //             }
+
+    //         },
+    //         error: function () {
+    //             // Handle error, if any
+    //         }
+    //     });
+
+    // });
+
+    function batchLoanRepaymentUpload() {
+
+        var selectedFile = $("#templateFile").val();
+
+
+
+        if (!selectedFile || selectedFile === "") {
+            swal({
+                title: "File Not Selected",
+                text: "Please choose a file before proceeding.",
+                type: "warning",
+                confirmButtonText: "OK"
+            });
+            return; // Prevent the form from submitting
+        }
+        debugger
+
+        $('#multipleUpload').validate({
+            rules: {
+
+
+                // paymentOptionBatch: {
+                //     required: true
+                // },
+                templateFile: {
+                    required: true
                 },
-                error: function () {
-                    // Handle AJAX error
-                    alert('An error occurred during validation.');
-                }
-            });
-        }
-        //$(document).ready(function () {
-        //    $("#repaymentType").cnComboBox({
-        //        data: cn.getJson(@Html.Raw(typeof(LoanRepaymentEnum).EnumToDictionaryString()))
-        //    });
-        //    $("#singleContribution").hide();
-        //    $("#multipleUpload").hide();
-        //    // Show the singleContribution div when option value 1 is selected
-        //    $('#repaymentType').change(function () {
+                batchAccountName: {
+                    required: true
+                },
+                batchPhoneNumber: {
+                    required: true
+                },
+                batchEmailAddress: {
+                    required: true
+                },
+            },
+            messages: {
 
-        //        var repaymentType = $("#repaymentType").cnComboBox('getValue');
+                batchAccountName: { required: "Account Number is Required" },
+                // paymentOptionbatch: { required: "payment Option is required" },
+                templateFile: { required: "Excel Sheet is required", extension: "Only Excel files (.xls, .xlsx) are allowed" },
+                batchPhoneNumber: { required: "Phone Number Sheet is required" },
+                batchEmailAddress: { required: "Email is required" },
+            },
 
-        //        if (repaymentType == 1) {
-        //            $("#singleContribution").show();
-        //            $("#multipleUpload").hide();
-        //        }
-        //        else if (repaymentType == 2) {
-        //            $("#singleContribution").hide();
-        //            $("#multipleUpload").show();
-        //        }
-        //        else {
-        //            $("#singleContribution").hide();
-        //            $("#multipleUpload").hide();
-        //        }
+            submitHandler: function (form) {
+                debugger
+                $("input[type=submit]").attr("disabled", "disabled");
+                swal({
+                    title: "Are you sure?",
+                    text: "Batch Upload will be made!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#ff9800",
+                    confirmButtonText: "Yes, continue",
+                    cancelButtonText: "No, stop!",
+                    showLoaderOnConfirm: true,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            setTimeout(function () {
+                                resolve();
+                            }, 4000);
+                        });
+                    }
+                }).then(
+                    function (isConfirm) {
+                        if (isConfirm) {
 
-        //    });
-        //});
+                            swal({
+                                title: 'Uploading Multiple Loan Repayment...',
+                                html: 'Please wait...',
+                                showConfirmButton: false,
 
-        $("#nhfNumberRepayment").cnComboBox({
-            url: '@Url.Content("~/Employee/GetListJson")',
-            key: "Id",
-            value: "NHFNumber",
-            class: "form-control"
-        });
-
-
-        $(document).ready(function () {
-            $("#repaymentType").cnComboBox({
-                data: cn.getJson(@Html.Raw(typeof(LoanRepaymentEnum).EnumToDictionaryString()))
-            });
-
-
-            function handleAgentTypeChange() {
-                var selectedType = $("#repaymentType").cnComboBox('getValue');
-
-                if (selectedType == @GlobalConstant.ZERO) {
-
-                    $("#nhfNumberRepayment").attr("disabled", "disabled");
-                    $("#employeeNameRepayment").attr("disabled", "disabled");
-                    $("#amountRepayment").attr("disabled", "disabled");
-                    $("#narrationRepayment").attr("disabled", "disabled");
-                    $("#accountNameRepayment").attr("disabled", "disabled");
-                    $("#phoneNumberRepayment").attr("disabled", "disabled");
-                    $("#emailRepayment").attr("disabled", "disabled");
-                    $("#paymentOption_select").attr("disabled", "disabled");
-                    $('#singleContribution').show();
-                    $('#multipleUpload').hide();
-                }
-
-                if (selectedType == @GlobalConstant.ONE) {
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    swal.showLoading()
+                                }
+                            });
+                            debugger
+                            var file = $("#templateFile").get(0).files[0];
+                            var signatureimgData = new FormData();
 
 
-                    $("#nhfNumberRepayment").removeAttr("disabled");
-                    $("#employeeNameRepayment").removeAttr("disabled");
-                    $("#amountRepayment").removeAttr("disabled");
-                    $("#narrationRepayment").removeAttr("disabled");
-                    $("#accountNameRepayment").removeAttr("disabled");
-                    $("#phoneNumberRepayment").removeAttr("disabled");
-                    $("#emailRepayment").removeAttr("disabled");
-                    $("#paymentOption_select").removeAttr("disabled");
-                    $('#singleContribution').show();
-                    $('#multipleUpload').hide();
-
-                    document.getElementById("singleLoan").innerHTML = "Single Loan Repayment";
-
-                }
-
-                if (selectedType == @GlobalConstant.TWO) {
-                    $('#multipleUpload').show();
-                    $('#singleContribution').hide();
-                    $("#downloadTemplateRepayment").parents(".form-group").show();
-                    $("#templateFile").parents(".form-group").show();
-                    document.getElementById("singleLoan").innerHTML = "Batch Loan Repayment";
-                }
-
-            }
-            $('#repaymentType').change(handleAgentTypeChange);
-
-            // Initial setup when the page loads
-            handleAgentTypeChange();
-        });
+                            signatureimgData.append("ContributionTemplate", $("#templateFile").get(0).files[0]);
 
 
-        $("#paymentOption").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(PaymentOptionEnum).EnumToDictionaryString())) });
+                            signatureimgData.append("PhoneNumber", $('#batchPhoneNumber').val());
+                            signatureimgData.append("BatchEmailAddress", $('#batchEmailAddress').val());
+                            signatureimgData.append("Narration", $('#batchNarration').val());
 
-        $("#templateFile").fileinput({
 
-            language: 'en',
-            showPreview: false,
-            allowedFileExtensions: ['xlsx', 'xls']
-        }).on("fileuploaded", function (event, data) {
-            var obj = data.response;
 
-            if (obj && obj.Tag === @GlobalConstant.ONE) {
-                // The uploaded file is valid; you can use filePath as needed
-                var filePath = obj.Data;
-                // Here, you can proceed with processing the uploaded file
-                // Compare the uploaded file with the template, and perform any necessary actions
-                validateAndProcessUploadedFile(filePath);
-            } else {
-                // The uploaded file is not valid; you can handle this case as needed
-                var filePath = '';
-                alert('Invalid uploaded file. Please upload the correct template.');
-            }
-        });
+                            $.ajax({
+                                url: '@Url.Content("~/LoanRepayment/BatchLoanRepayment")',
+                                type: "POST",
+                                data: signatureimgData,
+                                contentType: false,
+                                processData: false,
+                                success: function (obj) {
 
-        var id = cn.request("id");
+                                    if (obj.Tag == 1) {
+                                        swal({ title: 'Add BatchUpload', text: 'Batch Upload was successful', type: 'success' })
+                                            .then(function () {
+                                                clear();
+                                                /* $('#frmbatch')[0].reset();*/
 
-        function saveForm(index) {
-            if ($("#form").validate().form()) {
-                var postData = $("#form").getWebControls({ Id: id });
-                cn.ajax({
-                    url: '@Url.Content("~/LoanRepayment/SingleLoanRepayment")',
-                    type: "post",
-                    data: postData,
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            parent.searchGrid();
-                            parent.layer.close(index);
-                        }
-                        else {
-                            cn.msgError(obj.Message);
+                                                //$('#btchupload').modal('hide');
+                                                //$('#initialpayment').modal('show');
+                                                //var $table = $('#batchpaymenTempTab');
+                                                //$table.bootstrapTable("destroy");
+
+                                                //$table.bootstrapTable({
+                                                //    data: result.message,
+
+                                                //    columns: [
+
+
+                                                //        {
+                                                //            field: 'rrr',
+                                                //            title: 'RRR'
+                                                //        },
+
+                                                //        {
+                                                //            field: 'transactionid',
+                                                //            title: 'Transaction ID'
+                                                //        }
+
+                                                //        ,
+                                                //        {
+                                                //            field: 'amount',
+                                                //            title: 'Amount',
+                                                //            formatter: 'formatnumber'
+                                                //        },
+                                                //        {
+                                                //            align: 'right',
+                                                //            events: paymentEvents,
+                                                //            formatter: paymentFormatter
+                                                //        }
+
+                                                //    ]
+                                                //});
+
+                                                //var $table = $('#PaymentDetailsTable');
+                                                //$table.bootstrapTable("destroy");
+                                                //
+                                                //window.location.href = "../BatchUpload/BatchPaymentDetails";
+
+
+
+                                            });
+
+                                        //$('#batchpaymenTable').
+                                        //    bootstrapTable(
+                                        //        'refresh', { url: "../BatchUpload/BatchPaymentDetails" });
+                                    }
+                                    else {
+
+
+                                        swal({ title: 'Add BatchUpload', text: 'Batch Upload Completed With Error', type: 'error' })
+                                            .then(function () {
+
+                                                debugger
+                                                $('.BatchErrorList').show();
+                                                var $table = $('#bulkErrorTable');
+                                                $table.bootstrapTable("destroy");
+
+                                                $table.bootstrapTable({
+                                                    data: obj.Data.ErrorList,
+
+                                                    columns: [
+                                                        {
+                                                            field: 'error',
+                                                            title: 'Error(s)'
+
+                                                        }
+
+                                                    ]
+                                                });
+
+
+                                            });
+
+                                    }
+                                },
+                                error: function (e) {
+
+                                    swal({ title: 'Batch Upload', text: 'Batch Upload Encountered an Error', type: 'error' }).then(function () { clear(); });
+                                    /*$("#btnUpdateChangeEmployer").removeAttr("disabled");*/
+                                }
+                            });
                         }
                     }
-                });
+                );
             }
-        }
+
+        });
+    }
 
 
-
-    </script>
+</script>

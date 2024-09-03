@@ -20,11 +20,31 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+        public async Task<List<CreditAssessmentIndexTitleEntity>> GetListbyProduct(string productcode)
+        {
+            var expression = ListFilter2(productcode);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
+
         public async Task<CreditAssessmentIndexTitleEntity> GetEntity(long id)
         {
             return await BaseRepository().FindEntity<CreditAssessmentIndexTitleEntity>(id)
 ;
         }
+
+        public async Task<CreditAssessmentIndexTitleEntity> GetEntities(int id)
+        {
+            return await BaseRepository().FindEntity<CreditAssessmentIndexTitleEntity>(id)
+;
+        }
+
+        public async Task<CreditAssessmentIndexTitleEntity> GetEntityByIndextitleId(int id)
+        {
+            return await BaseRepository().FindEntity<CreditAssessmentIndexTitleEntity>(x => x.IndexTitleId == id)
+;
+        }
+
         #endregion
 
         #region Submit data
@@ -46,17 +66,55 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
             await BaseRepository().Delete<CreditAssessmentIndexTitleEntity>(idArr);
         }
+
+
+        public async Task<List<CreditAssessmentIndexTitleEntity>> GetPageList(CreditAssessmentIndexTitleListParam param, Pagination pagination)
+        {
+            var expression = ListFilters(param);
+            var list = await BaseRepository().FindList(expression, pagination);
+            return list.ToList();
+        }
+
+        private Expression<Func<CreditAssessmentIndexTitleEntity, bool>> ListFilters(CreditAssessmentIndexTitleListParam param)
+        {
+            var expression = ExtensionLinq.True<CreditAssessmentIndexTitleEntity>();
+            if (param != null)
+            {
+                if (!string.IsNullOrEmpty(param.ProductCode))
+                {
+                    expression = expression.And(second: t => t.ProductCode.Contains(param.ProductCode));
+                }
+            }
+            return expression;
+        }
+
+
         #endregion
 
         #region Private method
         private Expression<Func<CreditAssessmentIndexTitleEntity, bool>> ListFilter(int factorIndexId)
         {
-           var expression = ExtensionLinq.True<CreditAssessmentIndexTitleEntity>();
+            var expression = ExtensionLinq.True<CreditAssessmentIndexTitleEntity>();
             if (factorIndexId != null)
             {
                 if (factorIndexId > 0)
                 {
                     expression = expression.And(t => t.FactorIndexId == factorIndexId);
+                }
+
+
+            }
+            return expression;
+        }
+
+        private Expression<Func<CreditAssessmentIndexTitleEntity, bool>> ListFilter2(string productcode)
+        {
+            var expression = ExtensionLinq.True<CreditAssessmentIndexTitleEntity>();
+            if (productcode != null)
+            {
+                if (productcode != null)
+                {
+                    expression = expression.And(t => t.ProductCode == productcode);
                 }
 
 

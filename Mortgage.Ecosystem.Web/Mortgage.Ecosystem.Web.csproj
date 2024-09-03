@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -16,7 +16,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="Views\PropertyRegistration\PropertyRegistrationEditForm.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+		<PackageReference Include="Hangfire" Version="1.8.11" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.8" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.13">
@@ -42,6 +47,7 @@
 	<ItemGroup>
 		<None Include="Views\PaymentHistory\PaymentHistoryForm.cshtml" />
 		<None Include="Views\PaymentHistory\PaymentHistoryIndex.cshtml" />
+		<None Include="Views\PropertyRegistration\PropertyRegistrationEditForm.cshtml" />
 	</ItemGroup>
 
 	<ProjectExtensions>
@@ -49,4 +55,12 @@
 			<UserProperties appsettings_1json__JsonSchema="" />
 		</VisualStudio>
 	</ProjectExtensions>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Views\PropertyRegistration\PropertyRegistrationEditForm.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Views\PropertyRegistration\PropertyRegistrationEditForm.cshtml" />
+	</ItemGroup>
 </Project>

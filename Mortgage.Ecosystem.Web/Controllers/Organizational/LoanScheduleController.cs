@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -15,10 +16,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     {
         private readonly ILoanScheduleService _iLoanScheduleService;
         private readonly ILoanInitiationService iloanInitiationService;
-        public LoanScheduleController(IUnitOfWork iUnitOfWork, ILoanScheduleService iLoanScheduleService, ILoanInitiationService loanInitiationService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public LoanScheduleController(IUnitOfWork iUnitOfWork, ILoanScheduleService iLoanScheduleService, ILoanInitiationService loanInitiationService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iLoanScheduleService = iLoanScheduleService;
             iloanInitiationService = loanInitiationService; ;
+            _iAuditTrailService = iAuditTrailService;
         }
 
 
@@ -51,6 +54,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetLoanSchedulePageListJson(LoanScheduleListParam param, Pagination pagination)
         {
             TData<List<LoanScheduleEntity>> obj = await _iLoanScheduleService.GetPageList(param, pagination);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetLoanSchedulePageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.LoanSchedule.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 
@@ -118,6 +126,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetCustomerLoan(string nhfNo)
         {
             TData<List<LoanApplications>> obj = await iloanInitiationService.GetLoans(nhfNo);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetCustomerLoan.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.LoanSchedule.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 
@@ -127,6 +140,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetCustomerLoanSchedule(string nhfNo)
         {
             TData<List<LoanSchedule>> obj = await _iLoanScheduleService.LoanSchedule(nhfNo);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetCustomerLoanSchedule.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.LoanSchedule.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

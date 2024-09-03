@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -14,10 +15,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class InternetBankingUsersController : BaseController
     {
         private readonly IInternetBankingUsersService _iInternetBankingUsersService;
-
-        public InternetBankingUsersController(IUnitOfWork iUnitOfWork, IInternetBankingUsersService iInternetBankingUsersService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public InternetBankingUsersController(IUnitOfWork iUnitOfWork, IInternetBankingUsersService iInternetBankingUsersService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iInternetBankingUsersService = iInternetBankingUsersService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -49,6 +51,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetInternetBankingUsersPageListJson(InternetBankingUsersListParam param, Pagination pagination)
         {
             TData<List<InternetBankingUsersEntity>> obj = await _iInternetBankingUsersService.GetPageList(param, pagination);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetInternetBankingUsersPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.InternetBanking.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

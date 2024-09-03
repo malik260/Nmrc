@@ -22,15 +22,26 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
         #region Retrieve data
-        public async Task<TData<List<CreditAssessmentIndexEntity>>> GetList(int indexTitleId)
+        public async Task<List<CreditAssessmentIndexEntity>> GetList(int indexTitleId)
         {
-            TData<List<CreditAssessmentIndexEntity>> obj = new TData<List<CreditAssessmentIndexEntity>>();
-            obj.Data = await _iUnitOfWork.CreditAssessmentIndexes.GetList(indexTitleId);
-            obj.Total = obj.Data.Count;
-            obj.Tag = 1;
+            List<CreditAssessmentIndexEntity> obj = new List<CreditAssessmentIndexEntity>();
+            obj = await _iUnitOfWork.CreditAssessmentIndexes.GetList(indexTitleId);
+
             return obj;
         }
 
+        public async Task<TData<List<CreditAssessmentIndexEntity>>> GetPageList(CreditAssessmentIndexListParam param, Pagination pagination)
+        {
+            TData<List<CreditAssessmentIndexEntity>> obj = new TData<List<CreditAssessmentIndexEntity>>();
+            obj.Data = await _iUnitOfWork.CreditAssessmentIndexes.GetPageList(param, pagination);
+            foreach (var item in obj.Data)
+            {
+                item.IndexTitle =  _iUnitOfWork.CreditAssessmentIndexTitles.GetEntityByIndextitleId(item.Indextitleid).Result.IndexTitleDescription;
+            }
+            obj.Total = pagination.TotalCount;
+            obj.Tag = 1;
+            return obj;
+        }
 
 
         public async Task<TData<CreditAssessmentIndexEntity>> GetEntity(long id)

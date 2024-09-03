@@ -2,6 +2,7 @@
 using Mortgage.Ecosystem.DataAccess.Layer.Extensions;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
@@ -23,6 +24,19 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         public async Task<List<FeedBackFormEntity>> GetPageList(FeedBackFormListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
+            var list = await BaseRepository().FindList(expression, pagination);
+            return list.ToList();
+        }
+
+        public async Task<List<FeedBackFormEntity>> GetEmployeePageList(FeedBackFormListParam param, Pagination pagination)
+        {
+            var DB = new ApplicationDbContext();
+            var user = await Operator.Instance.Current();
+            var employeeDetails = DB.EmployeeEntity.Where(i => i.Id == user.Employee).FirstOrDefault();
+            var expression = ListFilter(param);
+
+            expression = expression.And(feedbackform => feedbackform.NHFNumber == employeeDetails.NHFNumber);
+
             var list = await BaseRepository().FindList(expression, pagination);
             return list.ToList();
         }
@@ -83,6 +97,32 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 throw;
             }
         }
+
+        public async Task UpdateForm(FeedBackFormEntity entity)
+        {
+            var db = await BaseRepository().BeginTrans();
+            try
+            {
+                if (entity.Id.IsNullOrZero())
+                {
+                    await entity.Create();
+                    await BaseRepository().Insert<FeedBackFormEntity>(entity);
+                }
+                else
+                {
+                    await entity.Modify();
+                    await BaseRepository().Update<FeedBackFormEntity>(entity);
+                }
+                await db.CommitTrans();
+            }
+            catch (Exception)
+            {
+                await db.RollbackTrans();
+
+                throw;
+            }
+        }
+
 
         public async Task DeleteForm(string ids)
         {

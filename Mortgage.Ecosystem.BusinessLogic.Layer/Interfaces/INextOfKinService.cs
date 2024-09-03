@@ -12,5 +12,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<NextOfKinEntity>> GetEntity(long id);
         Task<TData<string>> SaveForm(NextOfKinEntity entity);
         Task<TData> DeleteForm(string ids);
+        Task<TData<NextOfKinEntity>> GetEntityByEmployee(long employeeId);
     }
 }

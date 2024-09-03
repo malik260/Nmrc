@@ -11,5 +11,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<NextOfKinEntity> GetEntity(long id);
         Task SaveForm(NextOfKinEntity entity);
         Task DeleteForm(string ids);
+        Task<NextOfKinEntity> GetEntityByEmployeeId(long employeeId);
     }
 }

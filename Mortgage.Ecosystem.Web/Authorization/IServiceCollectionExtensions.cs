@@ -39,13 +39,17 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IAgentTypeService, AgentTypeService>();
             services.AddScoped<IAlertTypeService, AlertTypeService>();
             services.AddScoped<IAllNHFSubscriberService, AllNHFSubscriberService>();
+            services.AddScoped<IErrorLogService, ErrorLogService>();
             services.AddScoped<IApprovalLogService, ApprovalLogService>();
             services.AddScoped<IApprovalSetupService, ApprovalSetupService>();
             services.AddScoped<IApproveAgentsService, ApproveAgentsService>();
             services.AddScoped<IApproveEmployerAggregatorService, ApproveEmployerAggregatorService>();
+            services.AddScoped<IAuditTrailService, AuditTrailService>();
             services.AddScoped<IAutoJobLogService, AutoJobLogService>();
             services.AddScoped<IAutoJobService, AutoJobService>();
+            services.AddScoped<IAddDocumentProcedureService, AddDocumentProcedureService>();
             services.AddScoped<IBankService, BankService>();
+            services.AddScoped<IBrokerService, BrokerService>();
             services.AddScoped<IBranchService, BranchService>();
             services.AddScoped<IChangeEmployerService, ChangeEmployerService>();
             services.AddScoped<IChangePasswordService, ChangePasswordService>();
@@ -66,6 +70,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<ICreditScoreService, CreditScoreService>();
             services.AddScoped<ICreditTypeService, CreditTypeService>();
             services.AddScoped<ICustomerProfileUpdateService, CustomerProfileUpdateService>(); services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<IDeveloperService, DeveloperService>();
             services.AddScoped<IDesignationService, DesignationService>();
             services.AddScoped<IDiasporaUserService, DiasporaUserService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
@@ -76,6 +81,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IGenderService, GenderService>();
             services.AddScoped<IInternetBankingUsersService, InternetBankingUsersService>();
             services.AddScoped<ILoanInitiationService, LoanInitiationService>();
+            services.AddScoped<ILoanInitiationUploadService, loanInitiationUploadService>();
             services.AddScoped<ILoanRepaymentService, LoanRepaymentService>();
             services.AddScoped<ILoanScheduleService, LoanScheduleService>();
             services.AddScoped<ILogLoginService, LogLoginService>();
@@ -93,13 +99,15 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IPropertySubscriptionService, PropertySubscriptionService>();
             services.AddScoped<IPropertyRegistrationService, PropertyRegistrationService>();
             services.AddScoped<IPropertyGalleryService, PropertyGalleryService>();
+            services.AddScoped<IPropertyUploadService, PropertyUploadService>();
+            services.AddScoped<IPmbService, PmbService>();
             services.AddScoped<IRefundService, RefundService>();
             services.AddScoped<IRefundConditionService, RefundConditionService>();
             services.AddScoped<IRefundProfilingService, RefundProfilingService>();
             services.AddScoped<IRemitaPaymentDetailsService, RemitaPaymentDetailsService>();
             services.AddScoped<IRelationService, RelationService>();
             services.AddScoped<IRiskAssessmentSetupService, RiskAssessmentSetupService>();
-            services.AddScoped<IRiskAssessmentProcedureService,RiskAssessmentProcedureService>();
+            services.AddScoped<IRiskAssessmentProcedureService, RiskAssessmentProcedureService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ISectorService, SectorService>();
             services.AddScoped<IStateService, StateService>();
@@ -110,6 +118,8 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IUnderwritingService, UnderwritingService>();
             services.AddScoped<IUnlockNhfPortalService, UnlockNhfPortalService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IResetPasswordTokenService, ResetPasswordTokenService>();
+
             //services.AddTransient<IEmailSender, EmailSender>();
             services.AddSingleton<RepositoryFactory>();
 

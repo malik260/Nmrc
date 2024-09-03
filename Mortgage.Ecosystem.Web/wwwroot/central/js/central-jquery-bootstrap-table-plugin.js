@@ -35,7 +35,7 @@
         striped: true, // whether to display line spacing color
         cache: false, // Whether to use the cache, the default is true, so in general, you need to set this property (*)
         pagination: true, // whether to display pagination (*)
-        sortable: true, // whether to enable sorting
+        sortable: false, // whether to enable sorting
         sortStable: true, // set to true to get a stable sort
         sortName: 'Id', // sort column name
         sortOrder: "desc", // sort order

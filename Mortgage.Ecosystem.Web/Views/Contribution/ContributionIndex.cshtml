@@ -10,17 +10,13 @@
         <div id="searchDiv" class="col-sm-12 search-collapse">
             <div class="select-list">
                 <ul>
-                    <li>
-                        Name: <input id="name" col="Name" type="text" />
-                    </li>
-                    <li>
-                        Status: <span id="status" col="Status"></span>
-                    </li>
+                    
                     <li class="select-time">
-                        <label>Created: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                        <label>Start Date: </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start date" />
                         <span>-</span>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                        <label>End Date: </label>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end date" />
                     </li>
                     <li>
                         <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;search</a>
@@ -30,8 +26,8 @@
         </div>
         <div class="btn-group-sm" id="toolbar">
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> edit</a>
-            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>
+            @*<a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> edit</a>
+            <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> delete</a>*@
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -51,29 +47,29 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/Contribution/GetListJson")';
+        var queryUrl = '@Url.Content("~/Contribution/GetListJson2")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'NhfNo', title: 'NHF Number', sortable: true },
-                { field: 'EmployeeName', title: 'Employee Name', sortable: true },
-                { field: 'contributionAmount', title: 'Contribution Amount', sortable: true },
-                { field: 'month', title: 'Month', sortable: true },
-                { field: 'year', title: 'Year', visible: true, sortable: true },
-                { field: 'EmployerName', title: 'Employer Name', visible: false, sortable: true },
-                { field: 'PaymentOption', title: 'Payment Option', visible: true, sortable: true },
-                { field: 'accountName', title: 'Account Name', sortable: true },
-                { field: 'Email', title: 'Email Address', sortable: true },
+                { field: 'NhfNo', title: 'NHF Number', sortable: false },
+                { field: 'EmployeeName', title: 'Employee Name', sortable: false },
+                { field: 'contributionAmount', title: 'Contribution Amount', sortable: false },
+                { field: 'month', title: 'Month', sortable: false },
+                { field: 'year', title: 'Year', visible: true, sortable: false },
+                { field: 'EmployerName', title: 'Employer Name', visible: false, sortable: false },
+                //{ field: 'PaymentOption', title: 'Payment Option', visible: true, sortable: false },
+                { field: 'accountName', title: 'Account Name', visible: true, sortable: false },
+                { field: 'Email', title: 'Email Address', sortable: false },
                 {
                     field: 'Status', title: 'Status', align: 'center',
                     formatter: function (value, row, index) {
-                        value = "2";
-                        if (value == "@StatusEnum.Yes.ToInt()") {
-                            return '<span class="badge badge-primary">' + "@StatusEnum.Yes.GetDescription()" + '</span>';
+                        value = "3";
+                        if (value == "@PayStatusEnum.Success.ToInt()") {
+                            return '<span class="badge badge-primary">' + "@PayStatusEnum.Success.GetDescription()" + '</span>';
                         } else {
-                            return '<span class="badge badge-warning">' + "@StatusEnum.No.GetDescription()" + '</span>';
+                            return '<span class="badge badge-warning">' + "@PayStatusEnum.Success.GetDescription()" + '</span>';
                         }
                     }
                 },
@@ -107,7 +103,21 @@
                 id = selectedRow[0].Id;
             }
         }
-        cn.openDialog({
+
+        function openCustomDialog(options) {
+            layer.open({
+                type: 2,
+                title: options.title,
+                content: options.content,
+                area: [options.width, '90%'],
+                btn: [], // Remove the default confirm and close buttons
+                success: function (layero, index) {
+                    options.callback(index, layero);
+                }
+            });
+        }
+
+        openCustomDialog({
             title: id > 0 ? "Edit  Contribution" : "Contribution",
             content: '@Url.Content("~/Contribution/ContributionForm")' + '?id=' + id,
             width: "780px",

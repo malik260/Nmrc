@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -10,13 +11,16 @@ using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Systems
 {
+    [ExceptionFilter]
     public class RoleController : BaseController
     {
         private readonly IRoleService _iRoleService;
+        private readonly IAuditTrailService _iAuditTrailService;
 
-        public RoleController(IUnitOfWork iUnitOfWork, IRoleService iRoleService) : base(iUnitOfWork)
+        public RoleController(IUnitOfWork iUnitOfWork, IRoleService iRoleService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iRoleService = iRoleService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -77,6 +81,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.RoleName));
                 obj.Tag = 1;
             }
+
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetRoleName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.Role.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

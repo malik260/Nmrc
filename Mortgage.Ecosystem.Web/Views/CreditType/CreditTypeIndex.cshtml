@@ -7,7 +7,7 @@
 <div class="container-div">
     <div class="row">
         <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
+@*            <div class="select-list">
                 <ul>
                     <li>
                         Name: <input id="name" col="Name" type="text" />
@@ -26,10 +26,10 @@
                     </li>
                 </ul>
             </div>
-        </div>
+*@        </div>
         <div class="btn-group-sm" id="toolbar">
             <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
-            <a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>
+            @*<a id="btnEdit" class="btn btn-primary disabled" onclick="showSaveForm(false)"><i class="fa fa-edit"></i> Edit</a>*@
             <a id="btnDelete" class="btn btn-danger disabled" onclick="deleteForm()"><i class="fa fa-remove"></i> Delete</a>
         </div>
 
@@ -57,9 +57,9 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'Name', title: 'Name', sortable: true },
-                { field: 'Description', title: 'Description', sortable: true },
-                { field: 'Code', title: 'Code', sortable: true },
+                { field: 'Name', title: 'Name', sortable: false },
+                { field: 'Description', title: 'Description', sortable: false },
+                { field: 'Code', title: 'Code', sortable: false },
 
 
             ],

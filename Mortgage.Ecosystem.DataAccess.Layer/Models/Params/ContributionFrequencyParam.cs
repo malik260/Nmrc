@@ -2,6 +2,7 @@
 {
     public class ContributionFrequencyListParam
     {
+        public List<int>? Ids { get; set; }
         public string? Name { get; set; }
     }
 }

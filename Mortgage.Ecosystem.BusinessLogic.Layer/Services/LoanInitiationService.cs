@@ -1,17 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Protobuf;
+using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Resources;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Result;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
+using Mortgage.Ecosystem.DataAccess.Layer.Repositories;
+using Mortgage.Ecosystem.DataAccess.Layer.Request;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NPOI.SS.Formula.Functions;
 using System.Drawing;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
@@ -44,11 +50,61 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
         }
 
+
+        public async Task<TData<CustomerDetailsViewModel>> GetCustomerDetails()
+        {
+            var _db = new ApplicationDbContext();
+            TData<CustomerDetailsViewModel> obj = new TData<CustomerDetailsViewModel>();
+            var cust = new CustomerDetailsViewModel();
+            decimal monthlysal = 0;
+            var user = await Operator.Instance.Current();
+            var employeeInfo = await _iUnitOfWork.Employees.GetById(user.Employee);
+            var customerDetails = await _iUnitOfWork.Employees.GetEntityByNhfNumber(employeeInfo.NHFNumber);
+            var selectedPropertyInfo = await _iUnitOfWork.PropertySubscriptions.GetSubcribedProperties(Convert.ToString(customerDetails.NHFNumber));
+            if (selectedPropertyInfo == null)
+            {
+                obj.Message = "Please subscribe to a property before applying for a loan";
+                obj.Tag = 0;
+                return obj;
+            }
+            var result = from a in _db.PmbEntity
+                         join b in _db.PropertySubscriptionEntity
+                         on a.NHFNumber equals b.Developer
+                         where b.Subscriber == Convert.ToString(employeeInfo.NHFNumber) && a.Status == 1
+                         select a.Name;
+            var ecosytem = result.FirstOrDefault();
+            if (ecosytem == null)
+            {
+                obj.Message = "Selected Pmb has been deactivated";
+                obj.Tag = 0;
+                return obj;
+            }
+            var pmbName = await _iUnitOfWork.Pmbs?.GetEntitybyNhf(selectedPropertyInfo?.Developer);
+           
+            monthlysal = customerDetails.MonthlySalary;
+            cust.MonthlyIncome = monthlysal;
+            cust.PmbNo = selectedPropertyInfo?.Developer;
+            cust.PmbName = ecosytem;
+            cust.LoanRepayment = "Monthly";
+            obj.Data = cust;
+            obj.Tag = 1;
+            return obj;
+        }
+
+
         #region Retrieve data
         public async Task<TData<List<LoanInitiationEntity>>> GetList(LoanInitiationListParam param)
         {
+            var user = await Operator.Instance.Current();
+            var employeeInfo = await _iUnitOfWork.Employees.GetById(user.Employee);
+            param.NHFNumber = Convert.ToString(employeeInfo.NHFNumber);
             TData<List<LoanInitiationEntity>> obj = new TData<List<LoanInitiationEntity>>();
             obj.Data = await _iUnitOfWork.LoanInitiations.GetList(param);
+            foreach (var item in obj.Data)
+            {
+                item.LoanProduct = _iUnitOfWork.CreditTypes.GetEntitybiId(Convert.ToInt32(item.LoanProduct)).Result.Name;
+
+            }
             obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
@@ -57,6 +113,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<TData<List<LoanInitiationEntity>>> GetPageList(LoanInitiationListParam param, Pagination pagination)
         {
             TData<List<LoanInitiationEntity>> obj = new TData<List<LoanInitiationEntity>>();
+            var user = await Operator.Instance.Current();
+            param.NHFNumber = user.EmployeeInfo.NHFNumber.ToString();
             obj.Data = await _iUnitOfWork.LoanInitiations.GetPageList(param, pagination);
             obj.Total = pagination.TotalCount;
             obj.Tag = 1;
@@ -112,11 +170,12 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             string userName = Environment.UserName;
             return userName;
         }
-        public async Task<TData<LoanInitiationEntity>> GetEntity(string code)
+        public async Task<TData<LoanInitiationEntity>> GetEntity()
         {
+            var user = await Operator.Instance.Current();
             TData<LoanInitiationEntity> obj = new TData<LoanInitiationEntity>();
-            obj.Data = await _iUnitOfWork.LoanInitiations.GetEntity(code)
-;
+            obj.Data = await _iUnitOfWork.LoanInitiations.GetEntity(Convert.ToString(user.EmployeeInfo.NHFNumber));
+            obj.Data.LoanProduct = _iUnitOfWork.CreditTypes.GetEntitybiId(Convert.ToInt32(obj.Data.LoanProduct)).Result.Name;
             obj.Tag = 1;
             return obj;
         }
@@ -239,16 +298,20 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             }
         }
 
+        public class res
+        {
+            public bool success { get; set; }
+            public string message { get; set; }
+        }
 
         [HttpPost]
-
         public async Task<List<messages>> UpdateLoanAffordability(checkafford affordabilityVM)
         {
 
             try
             {
                 var jsonPayload = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(affordabilityVM), Encoding.UTF8, ApiResource.ApplicationJson);
-
+                var load = JsonConvert.SerializeObject(affordabilityVM);
                 var response = await _client.PostAsync(ApiResource.loanAffordability, jsonPayload);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<AffordabilityVM>(responseContent);
@@ -261,9 +324,13 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 }
                 else
                 {
-                    List<messages> obj = new List<messages>();
+                    var results = JsonConvert.DeserializeObject<res>(responseContent);
 
-                    obj = result.result;
+                    List<messages> obj = new List<messages>();
+                    messages mm = new messages();
+                    string mess = results.message;
+                    mm.applicationUrl = mess;
+                    obj.Add(mm);
 
                     return obj;
                 }
@@ -298,11 +365,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #endregion
 
         #region Perform Afforddability 
-        public async Task<TData<AffordabilityResponseDto>> Performaffordability(InitiateLoanDto initiateLoanDto)
+        public async Task<AffordabilityResponseDto> Performaffordability(InitiateLoanDto initiateLoanDto)
         {
-            OperatorInfo loggedUserinfo = new OperatorInfo();
-            var EmployeeInformation = await _iUnitOfWork.Employees.GetEntity(loggedUserinfo.Employee);
-            bool employeeExist = await _companyService.CustomerExist(loggedUserinfo.Employee.ToString());
+            var loggedUserinfo = await Operator.Instance.Current();
+            var employeeInfo = await _iUnitOfWork.Employees.GetById(loggedUserinfo.Employee);
+            var EmployeeInformation = await _iUnitOfWork.Employees.GetEntityByNhfNumber(employeeInfo.NHFNumber);
+            var employerinfo = await _iUnitOfWork.Companies.GetEntity(EmployeeInformation.Company);
+            var KinInfo = await _iUnitOfWork.NextOfKins.GetEntity(EmployeeInformation.Id);
+            bool employeeExist = await _companyService.CustomerExist(EmployeeInformation.EmployeeCode);
             string Message = string.Empty;
             AffordabilityResponseDto result = new AffordabilityResponseDto();
             if (!employeeExist)
@@ -322,14 +392,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 };
                 NextofKin NOK = new NextofKin()
                 {
-                    firstName = EmployeeInformation.NOKName,
-                    lastName = EmployeeInformation.NOKName,
-                    contactAddress = EmployeeInformation.NOKAddress,
-                    emailAddress = EmployeeInformation.NOKEmailAddress,
-                    mobilePhoneNo = EmployeeInformation.NOKNumber,
+                    firstName = KinInfo.FirstName ?? "Operator",
+                    lastName = KinInfo.LastName ?? "Developer",
+                    contactAddress = KinInfo.Address ?? "Lagos",
+                    emailAddress = KinInfo.EmailAddress ?? "KinInfo@gmail.com",
+                    mobilePhoneNo = KinInfo.MobileNumber ?? "08054112111",
                     nearestLandmark = "",
                     cityId = 3017,
-                    relationship = EmployeeInformation.KinRelationship.ToString(),
+                    relationship = "Family",
                     dateOfBirth = DateTime.MinValue,
                     gender = EmployeeInformation.Gender.ToString(),
 
@@ -343,21 +413,23 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 {
                     AccountStatusName = "Active",
                     ProductAccountName = "NHF",
-                    AccountNumber = EmployeeInformation.Id.ToString(),
+                    AccountNumber = EmployeeInformation.NHFNumber.ToString(),
                     DateOfEmployment = EmployeeInformation.DateOfEmployment,
                     MonthlyIncome = EmployeeInformation.MonthlySalary.ToString(),
                     OtherBankAccountNumber = EmployeeInformation.BankAccountNumber,
                     OtherBankSortCode = "214"
                 };
-
+                customercreateRequest.CustomerCode = EmployeeInformation.EmployeeCode;
+                customercreateRequest.customerTypeId = 1;
                 customercreateRequest.FirstName = EmployeeInformation.FirstName;
-                customercreateRequest.Gender = EmployeeInformation.FirstName;
+                customercreateRequest.Gender = EmployeeInformation.Gender.ToString();
                 customercreateRequest.LastName = EmployeeInformation.LastName;
                 customercreateRequest.MiddleName = EmployeeInformation.OtherName;
-                customercreateRequest.Nationality = string.Empty;
+                customercreateRequest.PlaceOfBirth = "Nigeria";
+                customercreateRequest.Nationality = "Nigerian";
                 customercreateRequest.DateOfBirth = Convert.ToDateTime(EmployeeInformation.DateOfBirth);
                 customercreateRequest.EmailAddress = EmployeeInformation.EmailAddress;
-                customercreateRequest.CustomerBVN = EmployeeInformation.BVN;
+                //customercreateRequest.CustomerBVN = EmployeeInformation.BVN;
                 customercreateRequest.IsBvnValidated = true;
                 customercreateRequest.IsEmailValidated = true;
                 customercreateRequest.IsPhoneValidated = true;
@@ -366,11 +438,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 customercreateRequest.CrmsRelationshipTypeId = 152;
                 customercreateRequest.TaxNumber = EmployeeInformation.NIN;
                 customercreateRequest.Title = EmployeeInformation.Title.ToString();
-                customercreateRequest.SubSectorId = int.Parse(EmployeeInformation.MobileNumber);
-                customercreateRequest.BranchCode = EmployeeInformation.Branch.ToString();
+                customercreateRequest.SubSectorId = 1;
+                customercreateRequest.CustomerBVN = EmployeeInformation.BVN;
+                customercreateRequest.BranchCode = "101";
+                customercreateRequest.employerNumber = EmployeeInformation.EmployerNhfNumber;
                 customercreateRequest.AccountDetails = acctdetails;
                 customercreateRequest.contactPhone = phone;
                 customercreateRequest.contactAddress = address;
+                customercreateRequest.nextOfKin = NOK;
                 bool CreateCustomer = await _companyService.IndividualExiting(customercreateRequest);
                 if (!CreateCustomer)
                 {
@@ -379,25 +454,45 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
 
             }
-            else
+
+            var product = await _iUnitOfWork.CreditTypes.GetEntitybyName(initiateLoanDto.LoanProduct);
+            checkafford CustomersAffordabilityvm = new checkafford();
+            CustomersAffordabilityvm.amountRequested = Convert.ToDecimal(initiateLoanDto.PrincipalAmount);
+            CustomersAffordabilityvm.productId = product.ProductId;
+            CustomersAffordabilityvm.nhfAccount = EmployeeInformation.NHFNumber.ToString();
+            CustomersAffordabilityvm.proposedTenor = 0;
+            var AffordabilityCheck = await UpdateLoanAffordability(CustomersAffordabilityvm);
+            if (AffordabilityCheck.FirstOrDefault().applicationUrl != null)
             {
-                checkafford CustomersAffordabilityvm = new checkafford();
-                CustomersAffordabilityvm.amountRequested = Convert.ToDecimal(initiateLoanDto.PrincipalAmount);
-                CustomersAffordabilityvm.productId = Convert.ToInt32(initiateLoanDto.Product);
-                CustomersAffordabilityvm.nhfAccount = loggedUserinfo.Employee.ToString();
-                CustomersAffordabilityvm.proposedTenor = Convert.ToInt32(initiateLoanDto.Tenor);
-                var AffordabilityCheck = await UpdateLoanAffordability(CustomersAffordabilityvm);
-                result.affordableAmount = AffordabilityCheck.FirstOrDefault().affordableAmount.ToString();
-                result.amountRequested = AffordabilityCheck.FirstOrDefault().amountRequested.ToString();
-                result.monthlyRepayment = AffordabilityCheck.FirstOrDefault().amountRequested.ToString();
-                result.rate = AffordabilityCheck.FirstOrDefault().rate;
-                result.proposedTenor = AffordabilityCheck.FirstOrDefault().proposedTenor;
-
-
+                var context = new ApplicationDbContext();
+                result.message = AffordabilityCheck.FirstOrDefault().applicationUrl;
+                var errorlog = new ErrorLogEntity();
+                errorlog.ErrorCode = "500";
+                errorlog.Device = Environment.MachineName;
+                errorlog.InnerException = result.message;
+                errorlog.AdditionalInfo = result.message;
+                errorlog.Type = "API Exception";
+                errorlog.IpAddress = NetHelper.Ip;
+                errorlog.Level = "Error";
+                errorlog.Message = result.message;
+                errorlog.LoggedOnDate = DateTime.Now;
+                errorlog.OriginatingProcess = "https://testcorebanking.fmbn.gov.ng:4448/api/v1/loan/loan-affordability-check";
+                errorlog.StackTrace = "Update Loan Application, Underwriting Controller";
+                errorlog.Username = EmployeeInformation.EmailAddress;
+                errorlog.Callsite = "https://testcorebanking.fmbn.gov.ng:4448/api/v1/loan/loan-affordability-check";
+                context.ErrorLogEntity.Add(errorlog);
+                context.SaveChanges();
             }
-            TData<AffordabilityResponseDto> obj = new TData<AffordabilityResponseDto>();
-            obj.Data = result;
-            obj.Tag = 1;
+            result.affordableAmount = AffordabilityCheck.FirstOrDefault().affordableAmount.ToString();
+            result.amountRequested = AffordabilityCheck.FirstOrDefault().amountRequested.ToString();
+            result.monthlyRepayment = AffordabilityCheck.FirstOrDefault().monthlyRepayment.ToString();
+            result.rate = AffordabilityCheck.FirstOrDefault().rate;
+            result.proposedTenor = AffordabilityCheck.FirstOrDefault().repaymentPeriod;
+
+
+
+            AffordabilityResponseDto obj = new AffordabilityResponseDto();
+            obj = result;
             return obj;
 
 
@@ -405,172 +500,147 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #endregion
 
 
-                #region LoanApplicaiton
+        #region LoanApplicaiton
         public async Task<TData<LoanInitiationEntity>> LoanApplication(InitiateLoanDto initiateLoanDto)
         {
-            TData<LoanInitiationEntity> obj1 = new TData<LoanInitiationEntity>();
+            var context = new ApplicationDbContext();
+            TData<LoanInitiationEntity> obj = new TData<LoanInitiationEntity>();
+            EmployeeListParam employeeListParam = new EmployeeListParam();
             var user = await Operator.Instance.Current();
-            var employeedetails = await _iUnitOfWork.Employees.GetEntityByNhfNumber(user.EmployeeInfo.NHFNumber);
-            var productName = _iUnitOfWork.CreditTypes.GetEntity(initiateLoanDto.Product).Result.Name;
-            LoanInitiationEntity entity = new LoanInitiationEntity();
-            var loanParam = new LoanInitiationListParam
+            var employeedetails = await _iUnitOfWork.Employees.GetById(user.Employee);
+            var loanss = context.UnderwritingEntity.Where(x=> x.NHFNumber == employeedetails.NHFNumber.ToString()).ToList();
+            
+            if (loanss.Count >= 1)
             {
-               NHFNumber = user.EmployeeInfo.NHFNumber.ToStr(),
-                //Principal = initiateLoanDto.PrincipalAmount.ToString(),
-
-            };
-            var noOfLoans = await _iUnitOfWork.LoanInitiations.GetList(loanParam);
-            if (noOfLoans.Count() > 0)
-            {
-                obj1.Message = "You currently have an ongoing loans process in progress.";
-                obj1.Tag = 0;
-                return obj1;
+                var UnderApproved = loanss.Where(i => i.Approved == 0).ToList();
+                if (UnderApproved.Count != 0)
+                {
+                    obj.Message = "You currently have an ongoing loans process in progress.";
+                    obj.Tag = 0;
+                    return obj;
+                }
             }
+
+            
+            var noOfLoans = context.LoanInitiationEntity.Where(x=> x.NHFNumber == employeedetails.NHFNumber.ToString()).ToList();
+            
+            if (noOfLoans.Count >= 1)
+            {
+                var UnderApproved = noOfLoans.Where(i => i.Status == "0" || i.Status == null || i.Status == "").ToList();
+
+                if (UnderApproved.Count >=1)
+                {
+                    obj.Message = "You currently have an ongoing loans process in progress.";
+                    obj.Tag = 0;
+                    return obj;
+                }
+               
+            }
+
+            var affordablityDetails = await Performaffordability(initiateLoanDto);
+            if (affordablityDetails.proposedTenor == 0 && affordablityDetails.affordableAmount == "0")
+            {
+                obj.Tag = 0;
+                obj.Message = affordablityDetails.message;
+                return obj;
+            }
+            if (initiateLoanDto.PrincipalAmount > Convert.ToDecimal(affordablityDetails.affordableAmount))
+            {
+                obj.Tag = 0;
+                obj.Message = "Principal Amount cannot be greater than Affordable Amount";
+                return obj;
+
+            }
+            //if (initiateLoanDto.Tenor > Convert.ToDecimal(affordablityDetails.proposedTenor))
+            //{
+            //    obj.Tag = 0;
+            //    obj.Message = "Tenor cannot be greater than Proposed Tenor " + affordablityDetails.proposedTenor;
+            //    return obj;
+
+            //}
+
+            FinanceCounterpartyTransactionListParam param = new FinanceCounterpartyTransactionListParam();
+            param.Ref = employeedetails.NHFNumber.ToString();
+            var contribution = await _iUnitOfWork.FinanceCounterpartyTransactions.GetList(param);
+            var startDate = DateTime.Now.AddMonths(-6);
+            var endDate  = DateTime.Now;
+            var NoofContribution = contribution.Where(i=> i.TransactionDate <= endDate && i.TransactionDate >= startDate).Select(i=>i.CreditAmount).Count();
+            if (NoofContribution < 6)
+            {
+                obj.Tag = 0;
+                obj.Message = "Cannot apply for loan at the moment as your contribution is not up to date";
+                return obj;
+            }
+
+          
+            var productName = _iUnitOfWork.CreditTypes.GetEntitybyName(initiateLoanDto.LoanProduct).Result.ProductId;
+            var pmbinfo = await _iUnitOfWork.Pmbs.GetEntitybyNhf(initiateLoanDto.PMB);
+            LoanInitiationEntity entity = new LoanInitiationEntity();
+            
             entity.Principal = initiateLoanDto.PrincipalAmount;
-            entity.Rate = initiateLoanDto.InterestRate;
-            entity.Tenor = initiateLoanDto.Tenor;
-            entity.LoanProduct = productName;
+            entity.Rate =  initiateLoanDto.InterestRate;
+            entity.Tenor = Convert.ToInt32(affordablityDetails.proposedTenor);
+            entity.LoanProduct = Convert.ToString(productName);
             entity.LoanPurpose = initiateLoanDto.Purpose;
             entity.Status = "Undergoing Approval";
             entity.NHFNumber = employeedetails.NHFNumber.ToStr();
+            entity.PMB = pmbinfo.NHFNumber;
+            entity.RepaymentPattern = "Monthly";
+            entity.file = initiateLoanDto.file;
+            var saveform = _iUnitOfWork.LoanInitiations.SaveForm(entity);
 
-            
+
 
             var underwriting = new UnderwritingEntity
             {
                 LoanAmount = initiateLoanDto.PrincipalAmount,
                 InterestRate = initiateLoanDto.InterestRate,
-                Tenor = initiateLoanDto.Tenor.ToStr(),
+                Tenor = affordablityDetails.proposedTenor.ToStr(),
                 Name = employeedetails.FirstName + " " + employeedetails.LastName,
-                ProductName = productName,
+                ProductName = Convert.ToString(productName),
                 NHFNumber = employeedetails.NHFNumber.ToStr(),
-
+                NextStafffLevel = pmbinfo.NHFNumber,
+                LoanId = Convert.ToString(entity.Id),
+                Rated = 0,
+                CheckList = "0",
+                Reviewed = 0,
+                Company = pmbinfo.Id,
+                BaseProcessMenu = 563327185478225920
             };
             await _iUnitOfWork.Underwritings.SaveForm(underwriting);
-            await _iUnitOfWork.LoanInitiations.SaveForm(entity);
-            obj1.Data = entity;
-            obj1.Tag = 1;
-            obj1.Message = "Loan Initiated Successfully, Passed to Underwritting";
-            return obj1;
+
+            var customerInfo = await _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(underwriting.NHFNumber));
+            var pmbInfo = await _iUnitOfWork.Pmbs.GetEntitybyNhf(underwriting.NextStafffLevel.ToString());
+            employeeListParam.Company = pmbInfo.Id;
+            var contactPerson = _iUnitOfWork.Employees.GetListByCompany(employeeListParam).Result.Where(i => i.EmployerType == 0).FirstOrDefault();
+            var message = string.Empty;
+            MailParameter mailParameter = new()
+            {
+                ContactPerson = contactPerson.FirstName + ' ' + contactPerson.LastName,
+                ContactPersonEmail = pmbInfo.EmailAddress,
+                UserName = customerInfo.FirstName + ' ' + customerInfo.LastName,
+                PmbName = pmbinfo.Name,
+
+            };
+            bool sendemail = EmailHelper.IsContactPmbSent(mailParameter, out message);
+
+            MailParameter LoanmailParameter = new()
+            {
+                UserCompany = "Federal Mortgage Of Nigeria",
+                UserEmail = employeedetails.EmailAddress,
+                RealName = employeedetails.LastName + " " + employeedetails.FirstName,
+
+            };
+            bool sendLoanemail = EmailHelper.IsSuccessfulLoanEmail(LoanmailParameter, out message);
+
+
+            obj.Data = entity;
+            obj.Tag = 1;
+            obj.Message = "Loan Initiated Successfully, Passed to PMB Underwritting";
+            return obj;
         }
-            //bool employeeExist = await _companyService.CustomerExist(loggedUserinfo.Employee.ToString());
-            //string Message = string.Empty;
-            //AffordabilityResponseDto result = new AffordabilityResponseDto();
-            //if (!employeeExist)
-            //{
-            //    CreateCustomerRequestDTO customercreateRequest = new CreateCustomerRequestDTO();
-            //    ContactAddress address = new ContactAddress()
-            //    {
-            //        contactAddress = EmployeeInformation.PostalAddress,
-            //        NearestLandmark = EmployeeInformation.PostalAddress,
-            //        MailingAddress = EmployeeInformation.EmailAddress,
-            //        CityId = 3017,
-            //        StateId = 1,
-            //        AddressTypeId = 3,
-            //        UtilityBillNo = "3456789"
 
 
-            //    };
-            //    NextofKin NOK = new NextofKin()
-            //    {
-            //        firstName = EmployeeInformation.NOKName,
-            //        lastName = EmployeeInformation.NOKName,
-            //        contactAddress = EmployeeInformation.NOKAddress,
-            //        emailAddress = EmployeeInformation.NOKEmailAddress,
-            //        mobilePhoneNo = EmployeeInformation.NOKNumber,
-            //        nearestLandmark = "",
-            //        cityId = 3017,
-            //        relationship = EmployeeInformation.KinRelationship.ToString(),
-            //        dateOfBirth = DateTime.MinValue,
-            //        gender = EmployeeInformation.Gender.ToString(),
-
-            //    };
-            //    ContactPhone phone = new ContactPhone()
-            //    {
-            //        OfficeLandNo = EmployeeInformation.MobileNumber,
-            //        MobilePhoneNo = EmployeeInformation.MobileNumber
-            //    };
-            //    AccountDetails acctdetails = new AccountDetails()
-            //    {
-            //        AccountStatusName = "Active",
-            //        ProductAccountName = "NHF",
-            //        AccountNumber = EmployeeInformation.Id.ToString(),
-            //        DateOfEmployment = EmployeeInformation.DateOfEmployment,
-            //        MonthlyIncome = EmployeeInformation.MonthlySalary.ToString(),
-            //        OtherBankAccountNumber = EmployeeInformation.BankAccountNumber,
-            //        OtherBankSortCode = "214"
-            //    };
-
-            //    customercreateRequest.FirstName = EmployeeInformation.FirstName;
-            //    customercreateRequest.Gender = EmployeeInformation.FirstName;
-            //    customercreateRequest.LastName = EmployeeInformation.LastName;
-            //    customercreateRequest.MiddleName = EmployeeInformation.OtherName;
-            //    customercreateRequest.Nationality = string.Empty;
-            //    customercreateRequest.DateOfBirth = Convert.ToDateTime(EmployeeInformation.DateOfBirth);
-            //    customercreateRequest.EmailAddress = EmployeeInformation.EmailAddress;
-            //    customercreateRequest.CustomerBVN = EmployeeInformation.BVN;
-            //    customercreateRequest.IsBvnValidated = true;
-            //    customercreateRequest.IsEmailValidated = true;
-            //    customercreateRequest.IsPhoneValidated = true;
-            //    customercreateRequest.IsPoliticallyExposed = true;
-            //    customercreateRequest.CrmsLegalStatusId = 104;
-            //    customercreateRequest.CrmsRelationshipTypeId = 152;
-            //    customercreateRequest.TaxNumber = EmployeeInformation.NIN;
-            //    customercreateRequest.Title = EmployeeInformation.Title.ToString();
-            //    customercreateRequest.SubSectorId = int.Parse(EmployeeInformation.MobileNumber);
-            //    customercreateRequest.BranchCode = EmployeeInformation.Branch.ToString();
-            //    customercreateRequest.AccountDetails = acctdetails;
-            //    customercreateRequest.contactPhone = phone;
-            //    customercreateRequest.contactAddress = address;
-            //    bool CreateCustomer = await _companyService.IndividualExiting(customercreateRequest);
-            //    if (!CreateCustomer)
-            //    {
-            //        Message = "Error Creating Customer";
-            //    }
-
-
-            //}
-            //checkafford affordPayload = new checkafford();
-            //affordPayload.amountRequested = Convert.ToDecimal(initiateLoanDto.PrincipalAmount);
-            //affordPayload.proposedTenor = Convert.ToInt32(initiateLoanDto.Tenor);
-            //affordPayload.productId = Convert.ToInt32(initiateLoanDto.Product);
-            //affordPayload.nhfAccount = loggedUserinfo.Employee.ToString();
-            //var affordabilitydetails = UpdateLoanAffordability(affordPayload);
-            //LoanApplicationViewModel2 lad = new LoanApplicationViewModel2()
-            //{
-
-            //    proposedAmount = Convert.ToDecimal(initiateLoanDto.PrincipalAmount),
-            //    proposedProductId = Convert.ToInt32(initiateLoanDto.Product),
-            //    proposedTenor = Convert.ToInt32(initiateLoanDto.Tenor),
-            //    loanPurpose = initiateLoanDto.Purpose,
-            //    operatingAccountNo = Convert.ToString(loggedUserinfo.Employee),
-            //    subSectorId = Convert.ToInt32(EmployeeInformation.StaffNumber),
-            //    requestedAmount = initiateLoanDto.PrincipalAmount,
-            //    repaymentDate = initiateLoanDto.repaymentDate,
-            //};
-            //AffordabilityDetails loanaff = new AffordabilityDetails()
-            //{
-            //    productId = affordabilitydetails.Result.FirstOrDefault().productId,
-            //    yearsInService = affordabilitydetails.Result.FirstOrDefault().yearsInService,
-            //    affordableAmount = affordabilitydetails.Result.FirstOrDefault().affordableAmount,
-            //    age = affordabilitydetails.Result.FirstOrDefault().age,
-            //    casaAccountId = affordabilitydetails.Result.FirstOrDefault().casaAccountId,
-            //    amountRequested = affordabilitydetails.Result.FirstOrDefault().amountRequested,
-            //    monthlyRepayment = affordabilitydetails.Result.FirstOrDefault().monthlyRepayment,
-            //    presentValue = affordabilitydetails.Result.FirstOrDefault().presentValue,
-            //    profitability = affordabilitydetails.Result.FirstOrDefault().profitability,
-            //    repaymentPeriod = affordabilitydetails.Result.FirstOrDefault().repaymentPeriod,
-            //    rate = affordabilitydetails.Result.FirstOrDefault().rate,
-            //    tenorOverride = affordabilitydetails.Result.FirstOrDefault().tenorOverride
-
-            //};
-            //LoanApplicationRequestDTO loanDetails = new LoanApplicationRequestDTO();
-            //loanDetails.customerCode = Convert.ToString(EmployeeInformation.Id);
-            //loanDetails.loanApplicationDetail = lad;
-            //loanDetails.affordabilityDetails = loanaff;
-            //var message = UpdateLoanApplication(loanDetails);
-
-        
 
         #endregion
     }

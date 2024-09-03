@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -14,10 +15,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class PaymentHistoryController : BaseController
     {
         private readonly IPaymentHistoryService _iPaymentHistoryService;
-
-        public PaymentHistoryController(IUnitOfWork iUnitOfWork, IPaymentHistoryService iPaymentHistoryService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public PaymentHistoryController(IUnitOfWork iUnitOfWork, IPaymentHistoryService iPaymentHistoryService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iPaymentHistoryService = iPaymentHistoryService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -49,6 +51,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetRemitaPageListJson(PaymentHistoryListParam param, Pagination pagination)
         {
             TData<List<PaymentHistoryEntity>> obj = await _iPaymentHistoryService.GetPageList(param, pagination);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetRemitaPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.PaymentHistory.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 
@@ -58,6 +65,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetEtransactPageListJson(PaymentHistoryListParam param, Pagination pagination)
         {
             TData<List<PaymentHistoryEntity>> obj = await _iPaymentHistoryService.GetPageList(param, pagination);
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetEtransactPageListJson.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.PaymentHistory.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
 

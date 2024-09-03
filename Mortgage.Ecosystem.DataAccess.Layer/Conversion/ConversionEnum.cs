@@ -75,5 +75,35 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Conversion
             var description = tEnum.GetDescription();
             return description;
         }
+
+
+        public static string GetDescriptionbyNumber<TEnum>(int enumValue) where TEnum : Enum
+        {
+            if (Enum.IsDefined(typeof(TEnum), enumValue))
+            {
+                TEnum enumType = (TEnum)Enum.ToObject(typeof(TEnum), enumValue);
+                return enumType.GetDescription();
+            }
+
+            return enumValue.ToString();
+        }
+
+        public static string GetDescriptionbyNumber<TEnum>(this TEnum enumValue) where TEnum : Enum
+        {
+            Type type = enumValue.GetType();
+            var memberInfo = type.GetMember(enumValue.ToString());
+
+            if (memberInfo.Length > 0)
+            {
+                var attributes = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+                if (attributes.Length > 0)
+                {
+                    return ((DescriptionAttribute)attributes[0]).Description;
+                }
+            }
+
+            return enumValue.ToString();
+        }
+
     }
 }

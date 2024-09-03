@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
@@ -12,10 +13,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
     public class AgentTypeController : BaseController
     {
         private readonly IAgentTypeService _iAgentTypeService;
-
-        public AgentTypeController(IUnitOfWork iUnitOfWork, IAgentTypeService iAgentTypeService) : base(iUnitOfWork)
+        private readonly IAuditTrailService _iAuditTrailService;
+        public AgentTypeController(IUnitOfWork iUnitOfWork, IAgentTypeService iAgentTypeService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iAgentTypeService = iAgentTypeService;
+            _iAuditTrailService = iAuditTrailService;
         }
 
         #region View function
@@ -34,7 +36,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("agenttype:search,user:search")]
+        //[AuthorizeFilter("agenttype:search,user:search")]
         public async Task<IActionResult> GetListJson(AgentTypeListParam param)
         {
             TData<List<AgentTypeEntity>> obj = await _iAgentTypeService.GetList(param);
@@ -68,6 +70,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
                 obj.Data = string.Join(",", list.Data.Select(p => p.Name));
                 obj.Tag = 1;
             }
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.GetAgentTypeName.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.AgentType.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
             return Json(obj);
         }
         #endregion

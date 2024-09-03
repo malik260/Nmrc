@@ -395,7 +395,7 @@
         buttonsToolbar: undefined,
         buttonsAlign: 'right',
         checkboxHeader: true,
-        sortable: true,
+        sortable: false,
         silentSort: true,
         maintainSelected: false,
         searchTimeOut: 500,

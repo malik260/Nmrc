@@ -1,0 +1,183 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+    Layout = "~/Views/Shared/_Index.cshtml";
+
+}
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        //$("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        //laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd' });
+        //laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd' });
+    });
+
+    var id = cn.request("id");
+    console.log(id);
+
+
+    function initGrid() {
+        debugger
+        var queryUrl = '@Url.Content("~/Underwriting/GetBatchedLoans")' + '?id=' + id;
+
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'NHFNumber', title: 'NHF Number', sortable: false },
+                { field: 'ProductName', title: 'Product Name', sortable: false },
+                { field: 'LoanRefNo', title: 'Loan Ref No', sortable: false },
+                {
+                    field: 'Tenor', title: 'Tenor', sortable: false, formatter: function (value) {
+                        if (value <= 1) {
+                            return value + " year";
+                        } else {
+                            return value + " years";
+                        }
+
+                    }
+                },
+                {
+                    field: 'InterestRate', title: 'Interest Rate', sortable: false, formatter: function (value) {
+                        return value + "%";
+                    }
+                },
+                { field: 'LoanAmount', title: 'Loan Amount', sortable: false },
+                {
+                    field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                },
+
+                {
+                    title: 'Action',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-danger" href="#" onclick="UnBatchTransaction(\'' + row.Id + '\')"><i class="fa fa-close"></i>Unbatch</a>');
+                        return actions.join('');
+                    }
+                },
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(id);
+                return queryString;
+                console.log(queryString);
+            }
+        });
+    }
+
+
+    function UnBatchTransaction() {
+
+        SingleData = $('#gridTable').bootstrapTable('getAllSelections');
+        if (SingleData["length"] !== 0) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Loans(s) will be unbatched!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#ff9800",
+                confirmButtonText: "Yes, continue",
+                cancelButtonText: "No, stop!",
+                showLoaderOnConfirm: true,
+                preConfirm: function () {
+                    return new Promise(function (resolve) {
+                        setTimeout(function () {
+                            resolve();
+                        }, 4000);
+                    });
+                }
+            }).then(function (isConfirm) {
+                if (isConfirm.value) {
+                    swal({
+                        title: 'Unbatching Loans(s)...',
+                        html: 'Please wait...',
+                        showConfirmButton: false,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            swal.showLoading();
+                        }
+                    });
+
+                    if (SingleData["length"] !== 0) {
+
+                        $.ajax({
+                            url: '/Underwriting/UnBatchLoan',
+                            type: 'POST',
+                            data: { lists: JSON.stringify(SingleData) },
+                            dataType: 'json',
+                            success: function (result) {
+
+
+                                if (result.Tag == 1) {
+                                    debugger
+                                    swal({ title: 'Loan UnBatching ', text: result.Message.toString(), type: 'success' }).then(function () { window.location.reload(true); });
+                                    parent.layer.close(index);
+                                    parent.searchGrid();
+
+
+
+                                    $("#btnAdd").removeAttr("disabled", true);
+                                    location.reload();
+
+                                    return;
+
+                                }
+                                else {
+                                    swal({ title: 'Loan UnBatching', text: result.Messages.toString(), type: 'success' }).then(function () { window.location.reload(true); });
+
+                                    $('#gridTable').bootstrapTable('refresh', {
+                                        silent: true
+                                    });
+                                    $("#btnAdd").removeAttr("disabled", true);
+                                    return;
+                                }
+                            },
+                            error: function (e) {
+                                swal({ title: 'Loan UnBatching', text: 'Loan Batch encountered an error', type: 'error' }).then(function () { });
+
+                            }
+                        });
+
+                    }
+
+                } else {
+                    swal({ title: 'Loan Unbatching', text: 'You cancelled Transaction', type: 'info' }).then(function () { });
+
+                }
+
+            })
+
+
+        } else {
+            $("#btnAdd").removeAttr("disabled", true);
+
+            swal("You have not selected any transaction(s)");
+        }
+    }
+
+
+
+</script>
+

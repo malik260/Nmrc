@@ -9,33 +9,29 @@
             <div class="dialogblock-header" style="height: auto;">
                 <span class="dialogblockheader">Checklist Setup</span>
                 <div class="form-group">
-                    @* <div class="col-sm-4">
-                    <label class="productName control-label" style="margin-left: 100px;">Product Name</label>
-                    <input type="text" col="ProductName" style="margin-left: 100px; width: 550px;" class="form-control" id="Name">
-                    </div>  *@
+
                     <div class="col-sm-4">
-                        <label class="productName control-label" style="margin-left: 100px;">Product Name</label>
-                        @* <input type="text" col="CreditType" style="margin-left: 100px;" class="form-control" id="creditType">*@
-                        <div id="ProductName" col="ProductName" style="margin-left: 100px; width: 550px;"></div>
+                        <label class="productName control-label" style="margin-left: 100px;">Product Name  <font class="red"> *</font></label>
+                        <div id="productName" col="ProductName" style="margin-left: 100px; width: 550px;"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-4">
                         <label class="productCode control-label" style="margin-left: 100px;">Product Code</label>
-                        <input type="text" col="ProductCode" style="margin-left: 100px; width: 550px;" class="form-control" id="ProductCode" readonly>
+                        <input type="text" col="ProductCode" style="margin-left: 100px; width: 550px;" class="form-control" id="productCode" readonly>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-4">
-                        <label for="checklist" style="margin-left: 100px;" class="form-label">Checklist</label>
-                        <input type="text" style="margin-left: 100px; width: 550px;" col="Checklist" class="form-control" id="checklist">
+                        <label for="checklist" style="margin-left: 100px;" class="control-label">Checklist <font class="red">&nbsp;*</font> </label>
+                        <textarea type="text" style="margin-left: 100px; width: 550px; height:70px;" col="Checklist" class="form-control" id="checkList" required></textarea>
                     </div>
 
                 </div>
                 <div class="form-group">
                     <div class="col-sm-4">
-                        <label for="remark" style="margin-left: 100px;" class="form-label">Remark</label>
-                        <input type="text" style="margin-left: 100px; width: 550px; height:70px;" col="Remark" class="form-control" id="remark">
+                        <label for="remark" style="margin-left: 100px;" class="control-label">Remark</label>
+                        <textarea type="text" style="margin-left: 100px; width: 550px; height:70px;" col="Remark" class="form-control" id="remark"></textarea>
 
                     </div>
 
@@ -46,42 +42,116 @@
     </form>
 </div>
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
-    //debugger
+    // Get the ID from the query string or other source
     var id = cn.request("id");
 
-    $("#ProductName").cnComboBox({
-        url: '@Url.Content("~/CreditType/GetListJson")',
-        key: "Code",
-        value: "Name"
+
+    $(document).ready(function () {
+        // Initialize the product dropdown
+        $("#productName").cnComboBox({
+            url: '@Url.Content("~/CreditType/GetListJson")',
+            key: "Code",
+            value: "Name",
+
+        });
+
+        //Fetch and populate the form if we have an ID
+        if (id) {
+            getForm(id);
+        }
+        -
+        $("#productName").change(function () {
+            var selectedCredit = $("#productName").cnComboBox('getValue');
+            $("#productCode").val(selectedCredit);
+        });
     });
 
-    $("#ProductName").change(function () {
-        //debugger
-        var selectedCredit = $("#ProductName").cnComboBox('getValue');
-        //var id = selectedCredit;
-        $("#ProductCode").val(selectedCredit);
-    });
+    function getForm(id) {
+        debugger
+        cn.ajax({
+            url: '@Url.Content("~/Checklist/GetFormJson")',
+            type: "get",
+            data: { id: id },
+            success: function (response) {
+                if (response.Tag === 1) {
+                    // debugger
+                    $("#productName").cnComboBox('setValue', response.Data.ProductName);
+                    $("#productCode").val(response.Data.ProductCode);
+                    $("#remark").val(response.Data.Remark);
+                    $("#checkList").val(response.Data.Checklist);
+
+
+                    //alert(response.Message);
+                }
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
 
 
     function saveForm(index) {
         if ($("#form1").validate().form()) {
             var postData = $("#form1").getWebControls({ Id: id });
+            debugger
+            var PropertyType = $("#productName").cnComboBox('getValue');
+
+
+            if (PropertyType <= 0) {
+                Swal.fire({ 
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Please select a product!'
+                });
+                return false;
+            }
+
             cn.ajax({
                 url: '@Url.Content("~/Checklist/SaveFormJson")',
                 type: "post",
                 data: postData,
                 success: function (obj) {
                     if (obj.Tag == 1) {
-                        cn.msgSuccess(obj.Message);
-                        //parent.searchGrid();
-                        parent.layer.close(index);
-                    }
-                    else {
-                        cn.msgError(obj.Message);
+                        // Show success message with SweetAlert
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: obj.Message,
+
+                            timerProgressBar: true,
+                            onClose: () => {
+                                parent.layer.close(index);
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: obj.Message,
+
+                            timerProgressBar: true,
+
+                            onClose: () => {
+                                parent.layer.close(index);
+                            }
+                        });
                     }
                 }
             });
         }
     }
+
+
+
 </script>

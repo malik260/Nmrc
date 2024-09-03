@@ -40,13 +40,19 @@ body.login {
         margin-top: 15px
     }
 
+
     .login-panel .uname {
         background: #fff url(../../image/user.png) no-repeat 95% center;
         color: #333
     }
 
     .login-panel .pword {
-        background: #fff url(../../image/locked.png) no-repeat 95% center;
+        background: #fff;
+        color: #333
+    }
+
+
+    .login-panel .togglepassword {
         color: #333
     }
 
@@ -60,18 +66,30 @@ body.login {
         margin-top: 15px
     }
 
+    /* Adjust the color of the "User Authentication" text */
+    .login-panel form h4,
+    .login-panel form input[type="text"]::placeholder,
+    .login-panel form input[type="password"]::placeholder {
+        color: #333; /* Change to the desired color */
+    }
+
+
+
     .login-panel form {
-        background: rgba(255,255,255,.2);
-        /*border: 1px solid rgba(255,255,255,.3);*/
+        background: rgba(255, 255, 255, 0.9);
+        /* Change the opacity to your desired level */
         border: 1px solid #333;
-        -moz-box-shadow: 0 3px 0 rgba(12,12,12,.03);
-        -webkit-box-shadow: 0 3px 0 rgba(12,12,12,.03);
-        box-shadow: 0 3px 0 rgba(12,12,12,.03);
+        -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, .03);
+        -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, .03);
+        box-shadow: 0 3px 0 rgba(12, 12, 12, .03);
         -moz-border-radius: 3px;
         -webkit-border-radius: 3px;
         border-radius: 3px;
-        padding: 30px
+        padding: 30px;
     }
+
+
+
 
 .login-info ul {
     line-height: 25px;
@@ -80,13 +98,13 @@ body.login {
 }
 
 .login-footer {
-    /*border-top: solid 1px rgba(255,255,255,.3);*/
-    border-top: solid 1px #777;
+    /border-top: solid 1px rgba(255,255,255,.3);
+    / border-top: solid 1px #777;
     margin: 20px 0;
     padding-top: 15px
 }
 
-/*The color of the text in the pop-up box*/
+/The color of the text in the pop-up box/
 .layui-layer-content {
     color: #676a6c;
 }
@@ -180,5 +198,5 @@ body.login {
         line-height: 1.2;
         font-weight: normal;
         margin-bottom: 0;
-        text-align: left
+        text-align:  left     
     }

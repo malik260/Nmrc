@@ -11,6 +11,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
     {
 
         public string customerCode { get; set; }
+        public int loanApplicationSourceId { get; set; }
         public LoanApplicationViewModel2 loanApplicationDetail { get; set; }
         public AffordabilityDetails affordabilityDetails { get; set; }
     }
@@ -25,6 +26,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
         public string operatingAccountNo { get; set; }
         public decimal? requestedAmount { get; set; }
         public string repaymentDate { get; set; }
+        public decimal creditScore { get; set; }
+        public string creditRating { get; set; }
     }
 
     public class AffordabilityDetails

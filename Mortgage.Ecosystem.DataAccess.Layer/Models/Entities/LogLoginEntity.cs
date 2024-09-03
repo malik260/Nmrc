@@ -23,6 +23,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("IpLocation")]
         public string? IpLocation { get; set; }
 
+        [Column("FailureReason")]
+        public string? FailureReason { get; set; }
+
         // Browser
         [Column("Browser")]
         public string? Browser { get; set; }
@@ -42,5 +45,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // User name
         [NotMapped]
         public string? UserName { get; set; }
+         [NotMapped]
+        public string? CompanyName { get; set; }
+         [NotMapped]
+        public string? EmailAddress { get; set; }
+        
     }
 }

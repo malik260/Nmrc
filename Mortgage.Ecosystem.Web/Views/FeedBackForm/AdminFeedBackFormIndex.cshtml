@@ -1,0 +1,145 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="ibox-title">
+    <h5>FEEDBACK FORM</h5>
+</div>
+
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        Customer Name: <input id="name" col="Name" type="text" />
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/FeedBackForm/GetFeedBackFormPageListJson")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'Name', title: 'Customer Name', sortable: true },
+                { field: 'EmailAddress', title: 'Email Address', sortable: true },
+                {
+                    field: 'DateSent',
+                    title: 'Date Sent',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        if (value) {
+                            var date = new Date(value);
+                            var day = String(date.getDate()).padStart(2, '0');
+                            var month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                            var year = date.getFullYear();
+                            return `${day}-${month}-${year}`;
+                        }
+                        return '';
+                    }
+                },
+                { field: 'OverallRating', title: 'Rating', sortable: true },
+                //{
+                //    field: 'Status',
+                //    title: 'Status',
+                //    align: 'center',
+                //    formatter: function (value, row, index) {
+                //        if (value == "@ETicketStatusEnum.Pending.ToInt()") {
+                //            return '<span class="badge badge-warning">' + "@ETicketStatusEnum.Pending.GetDescription()" + '</span>';
+                //        } else if (value == "@ETicketStatusEnum.Closed.ToInt()") {
+                //            return '<span class="badge badge-primary">' + "@ETicketStatusEnum.Closed.GetDescription()" + '</span>';
+                //        } else {
+                //            return '<span class="badge badge-info">' + "@ETicketStatusEnum.InProgress.GetDescription()" + '</span>';
+                //        }
+                //    }
+                //},
+                {
+                    title: '',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return '<a class="btn btn-success btn-xs" href="#" onclick="ShowDetails(\'' + row.Id + '\')"><i class="fa fa-eye"></i>View</a>';
+                    }
+                },
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchGrid() {
+        var param = $("#searchDiv").getWebControls();
+        $('#gridTable').cnTable('search', param);
+    }
+
+    function ShowDetails(id) {
+        openCustomDialog({
+            title: "Feedback Form Details",
+            content: '@Url.Content("~/FeedBackForm/FeedBackFormDetails")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.loadForm(id);
+            }
+        });
+    }
+
+    //function openCustomDialog(options) {
+    //    layer.open({
+    //        type: 2,
+    //        title: options.title,
+    //        content: options.content,
+    //        area: [options.width, '90%'],
+    //        btn: ['Confirm', 'Close'],
+    //        yes: function (index, layero) {
+    //            var iframeWin = window[layero.find('iframe')[0]['name']];
+    //            iframeWin.saveForm(index);
+    //        },
+    //        btn2: function (index, layero) {
+    //            layer.close(index);
+    //        },
+    //        success: function (layero, index) {
+    //            options.callback(index, layero);
+    //        }
+    //    });
+    //}
+
+    function openCustomDialog(options) {
+        layer.open({
+            type: 2,
+            title: options.title,
+            content: options.content,
+            area: [options.width, '90%'],
+            //btn: ['Confirm', 'Close'],
+            yes: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                console.log('Confirm button clicked, attempting to call saveForm');
+                iframeWin.saveForm(index); // Call saveForm on the iframe window
+            },
+            btn2: function (index, layero) {
+                layer.close(index);
+            },
+            success: function (layero, index) {
+                options.callback(index, layero);
+            }
+        });
+    }
+
+</script>
