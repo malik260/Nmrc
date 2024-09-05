@@ -54,6 +54,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IFinanceTransactionRepository? _financeTransactions;
         private IGenderRepository? _genders;
         private IInternetBankingUsersRepository? _internetBankingUsers;
+        private ILenderRepository? _lenders;
+        private ILenderTypeRepository? _lenderTypes;
         private ILoanRepaymentRepository? _loanRepayments;
         private ILoanInitiationRepository? _loanInitiations;
         private ILoanInitiationUploadRepository? _loanInitiationUpload;
@@ -84,6 +86,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IRiskAssessmentProcedureRepository? _riskAssessmentProcedure;
 
         private IRoleRepository? _roles;
+        private ISchemeRepository? _schemes;
+        private ISchemeLenderRepository? _schemeLenders;
         private IStateRepository? _states;
         private IStatementOfAccountRepository? _statementOfAccounts;
         private ISectorRepository? _sectors;
@@ -240,6 +244,11 @@ _addDocumentsProcedure ??= new AddDocumentProcedureRepository();
         public ILoanRepaymentRepository LoanRepayments =>
            _loanRepayments ??= new LoanRepaymentRepository();
 
+        public ILenderRepository Lenders =>
+      _lenders ??= new LenderRepository();
+
+        public ILenderTypeRepository LenderTypes =>
+        _lenderTypes ??= new LenderTypeRepository();
         public ILoanInitiationRepository LoanInitiations =>
         _loanInitiations ??= new LoanInitiationRepository();
 
@@ -312,7 +321,11 @@ _addDocumentsProcedure ??= new AddDocumentProcedureRepository();
           _resetPasswordTokens ??= new ResetPasswordTokenRepository();
         public IRoleRepository Roles =>
             _roles ??= new RoleRepository();
+        public ISchemeRepository Schemes =>
+         _schemes ??= new SchemeRepository();
 
+        public ISchemeLenderRepository SchemeLenders =>
+  _schemeLenders ??= new SchemeLenderRepository();
         public IStateRepository States =>
             _states ??= new StateRepository();
         public IStatementOfAccountRepository StatementOfAccounts =>

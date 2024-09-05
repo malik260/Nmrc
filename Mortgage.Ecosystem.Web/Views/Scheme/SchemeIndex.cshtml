@@ -1,0 +1,151 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="ibox-title">
+    <h5>SCHEME SETUP</h5>
+</div>
+<div class="container-div">
+    <div class="row">
+        <div id="searchDiv" class="col-sm-12 search-collapse">
+           <div class="select-list">
+                <ul>
+                    <li>
+                        Scheme Name: <input id="name" col="SchemeName" type="text" />
+                    </li>                    
+                        <a id="btnsearch" class="btn btn-primary btn-sm" onclick="searchgrid()"><i class="fa fa-search"></i>&nbsp;search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="btn-group-sm" id="toolbar">
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm()"><i class="fa fa-plus"></i>Scheme Setup</a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        var queryUrl = '@Url.Content("~/Scheme/GetSchemePageListJson")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'LendersId', title: 'Lender', sortable: false },
+                { field: 'SchemeName', title: 'Scheme', sortable: false },
+
+                {
+                    title: 'Actions',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return [
+                            '<button class="btn btn-sm btn-primary edit-btn" onclick="showEditForm(' + row.Id + ')">Edit</button>',
+                            ' ',
+                            '<button class="btn btn-sm btn-danger delete-btn" onclick="deleteForm(' + row.Id + ')">Delete</button>'
+                        ].join('');
+                    }
+                },
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            }
+        });
+    }
+
+    function searchgrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+
+
+    function showSaveForm() {
+       
+        var id = 0;
+        var confirmButtonText = "Add";
+        cn.openDialog({
+            title: "Add Setup Lender",
+            content: '@Url.Content("~/Scheme/SchemeForm")' + '?id=' + id,
+            width: "780px",
+            btn: [confirmButtonText, 'Cancel'],
+
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showEditForm(id) {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (!cn.checkRowEdit(selectedRow)) {
+            return;
+        }
+        var id = selectedRow[0].Id;
+
+        cn.openDialog({
+            title: "Edit Lender Form",
+            content: '@Url.Content("~/Scheme/SchemeEditForm")' + '?id=' + id,
+            width: "780px",
+            btn: ['Update', 'Cancel'],
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+    function deleteForm(id) {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (cn.checkRowDelete(selectedRow)) {
+            var rowCount = selectedRow.length;
+            var ids = cn.getIds(selectedRow);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to delete the selected " + rowCount + " row(s)?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    cn.ajax({
+                        url: '@Url.Content("~/Scheme/DeleteFormJson")' + '?ids=' + ids,
+                        type: "post",
+                        success: function (obj) {
+                            if (obj.Tag == 1) {
+                                Swal.fire('Deleted!', obj.Message, 'success');
+                               
+                                searchGrid();
+                                location.reload(true);
+
+                            } else {
+                                Swal.fire('Error!', obj.Message, 'error');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+</script>
