@@ -56,6 +56,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IGenderRepository? _genders;
         private IInternetBankingUsersRepository? _internetBankingUsers;
         private ILoanReviewRepository? _loanReviews;
+        private ILenderRepository? _lenders;
+        private ILenderTypeRepository? _lenderTypes;
         private ILoanRepaymentRepository? _loanRepayments;
         private ILoanInitiationRepository? _loanInitiations;
         private ILoanInitiationUploadRepository? _loanInitiationUpload;
@@ -87,6 +89,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         private IRoleRepository? _roles;
         private ISecondaryLenderRepository? _secondaryLenders;
+        private ISchemeRepository? _schemes;
+        private ISchemeLenderRepository? _schemeLenders;
         private IStateRepository? _states;
         private IStatementOfAccountRepository? _statementOfAccounts;
         private ISectorRepository? _sectors;
@@ -247,6 +251,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public ILoanRepaymentRepository LoanRepayments =>
            _loanRepayments ??= new LoanRepaymentRepository();
 
+        public ILenderRepository Lenders =>
+      _lenders ??= new LenderRepository();
+
+        public ILenderTypeRepository LenderTypes =>
+        _lenderTypes ??= new LenderTypeRepository();
         public ILoanInitiationRepository LoanInitiations =>
         _loanInitiations ??= new LoanInitiationRepository();
 
@@ -321,10 +330,14 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
           _resetPasswordTokens ??= new ResetPasswordTokenRepository();
         public IRoleRepository Roles =>
             _roles ??= new RoleRepository();
+        public ISchemeRepository Schemes =>
+         _schemes ??= new SchemeRepository();
 
         public ISecondaryLenderRepository SecondaryLenders =>
      _secondaryLenders ??= new SecondaryLenderRepository();
 
+        public ISchemeLenderRepository SchemeLenders =>
+  _schemeLenders ??= new SchemeLenderRepository();
         public IStateRepository States =>
             _states ??= new StateRepository();
         public IStatementOfAccountRepository StatementOfAccounts =>

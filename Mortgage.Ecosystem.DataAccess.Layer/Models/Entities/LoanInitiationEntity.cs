@@ -56,6 +56,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("PMB")]
         public string? PMB { get; set; }
 
+        [Column("LoanScheme")]
+        public int?LoanScheme { get; set; }
+
         [Column("ApplicationReferenceNo")]
         public string? ApplicationReferenceNo { get; set; }
 

@@ -76,6 +76,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<FinanceTransactionEntity>? FinanceTransactionEntity { get; set; }
         public DbSet<GenderEntity>? GenderEntity { get; set; }
         public DbSet<InternetBankingUsersEntity>? InternetBankingUsersEntity { get; set; }
+        public DbSet<LenderTypeEntity>? LenderTypeEntity { get; set; }
+        public DbSet<LenderSetupEntity>? LenderSetupEntity { get; set; } // Lender Setup table     
         public DbSet<LogLoginEntity>? LogLoginEntity { get; set; } // Login log table        
         public DbSet<LogOperateEntity>? LogOperateEntity { get; set; } // Operation log table
         public DbSet<LoanReviewEntity>? LoanReviewEntity { get; set; }
@@ -109,6 +111,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<RiskAssessmentProcedureEntity>? RiskAssessmentProcedureEntity { get; set; }
 
         public DbSet<RoleEntity>? RoleEntity { get; set; } // Role table
+
+        public DbSet<SchemeSetupEntity>? SchemeSetupEntity { get; set; } // Scheme table     
+        public DbSet<SchemeLenderEntity>? SchemeLenderEntity { get; set; } // Scheme Lender table     
         public DbSet<SectorEntity>? SectorEntity { get; set; }
         public DbSet<SecondaryLenderEntity>? SecondaryLenderEntity { get; set; } // Secondary Lender table
         public DbSet<StateEntity>? StateEntity { get; set; }

@@ -1,0 +1,595 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="refundApplication" id="refundApplication">
+    <form id="form" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Initiate Loan</span>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Loan Product <font class="red"> *</font></label>
+                        <div id="loanProduct" col="Product" required>
+                        </div>
+                        <span class="field-validation-error" id="productError" style="display:none; color:red;">This is required</span>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="control-label">Lender <font class="red"> *</font></label>
+                        <div id="Lender" col="Lender" required>
+                        </div>
+                        <span class="field-validation-error" id="productError" style="display:none; color:red;">This is required</span>
+
+                    </div>
+                  
+
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="principal" class="control-label">Principal Amount<font class="red"> *</font></label>
+                        <input id="principalAmount" type="text" col="PrincipalAmount" class="form-control" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="netIncomeMonthly" class="control-label">Net&nbsp;Income&nbsp;Monthly <font class="red"> *</font></label>
+                        <input type="text" id="monthlyincome" readonly col="Amount" class="form-control" required>
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="rate" class="control-label">Rate</label>
+                        <input type="text" readonly id="rate" col="InterestRate" class="form-control">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="tenor" class="control-label">Tenor (Year(s))<font class="red"> *</font></label>
+                        <input id="tenor" type="text" col="Tenor" class="form-control" readonly>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="loanPurpose" class="form-label">Loan&nbsp;Purpose</label>
+                        <textarea type="text" col="Purpose" class="form-control" id="loanPurpose"></textarea>
+                        <span class="field-validation-error" id="purposeError" style="display:none; color:red;">This is required</span>
+
+
+                    </div>
+
+                     <div class="col-sm-6">
+
+                        <label for="repaymentPattern" class="form-label"> Repayment Pattern</label>
+                        <input type="text" readonly id="loanRepayment" col="LoanRepayment" class="form-control">
+                    </div>
+
+
+                </div>
+
+               
+                <div class="form-group">
+
+                    <div class="col-sm-6">
+                        <label for="documentTitle" class="form-label">Document Title</label>
+                        <input id="documentTitle" col="DocumentTitle" class="form-control" required>
+                    </div>
+
+                </div>
+                <div class="form-group">
+
+                    <div class="col-sm-6">
+                        <span class="message" style="display: inline-block;font-style: italic;border: none; background: none;">Only Upload Jpeg and pdf files</span>
+                        <input type="file" id="documentUpload" multiple style="display: none;" col="Files" accept=".pdf,.jpg" />
+                        <label for="documentUpload" class="custom-file-label" style="width: 140px; border: 0; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
+                            &nbsp; Add Document
+                        </label>
+                        <br />
+                        <div id="previewsContainer">
+                            <div>
+                                <ul id="file-list"></ul>
+                            </div>
+
+
+                            <style>
+
+
+                                #previewsContainer img {
+                                    max-width: 50%;
+                                    max-height: 100%;
+                                }
+
+                                .file-item {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    border: 1px solid #dcdcdc;
+                                    padding: 8px;
+                                    margin-bottom: 5px;
+                                }
+
+                                .file-name {
+                                    font-weight: bold;
+                                }
+
+                                .file-size {
+                                    color: #555;
+                                    font-weight: bold;
+                                }
+
+                                .remove-file {
+                                    cursor: pointer;
+                                    color: red;
+                                    margin-left: 20px;
+                                }
+                            </style>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div Class="form-group" style="display: flex; justify-content: left; align-items: center; margin-left: 2px">
+
+                    <button class="btn btn-success" type="submit" id="confirmButton">
+                        <i class="fa fa-save"></i>
+                        Request
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+   
+
+</div>
+@* <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+ *@<script src="~/bootstraptable/bootstrap-table.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+
+<script>
+    var id = cn.request("id");
+    var selectedFiles = [];
+
+
+    //$("#sector").cnComboBox({
+    //    url: '@Url.Content("~/Sector/GetListJson")',
+    //    key: "Id",
+    //    value: "Name"
+    //});
+    $("#loanProduct").cnComboBox({
+        url: '@Url.Content("~/CreditType/GetListJson")',
+        key: "Code",
+        value: "Name"
+    });
+
+    $("#loanProduct").change(function () {
+        //debugger
+        //var id = selectedCredit;
+        $("#rate").val('6');
+        $("#tenor").val('30');
+    });
+
+
+    $("#loanRepayment").cnComboBox({
+        data: cn.getJson(@Html.Raw(typeof
+            (LoanRepaymentPatternEnum).EnumToDictionaryString()))
+    });
+
+
+
+
+
+
+    $(document).ready(function () {
+        // Array to store selected files
+        var selectedFiles = [];
+
+        $('#documentUpload').on('change', function () {
+            var files = $(this)[0].files;
+            var totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                totalSize += file.size;
+
+                // Check if total size exceeds 3000KB (3MB)
+                if (totalSize > 3000000) {
+                    // Display SweetAlert notification
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File Size Exceeded',
+                        text: 'Total size of uploaded files cannot exceed 3000KB (3MB).',
+                    });
+                    return; // Exit the function without adding the files
+                }
+                var validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+                if (!validTypes.includes(file.type)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid File Type',
+                        text: 'Only JPEG, PNG and Pdf files are allowed.',
+                    });
+                    return; // Exit the function without adding the files
+                }
+
+                selectedFiles.push(file);
+
+                // Create a container for each file and its preview
+                var fileContainer = $('<li class="file-container"></li>');
+
+                // Display the selected file with a preview and delete option inside the container
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var fileType = file.type;
+                    var fileData = e.target.result;
+
+                    var previewHtml = '<div class="file-item">' +
+                        '<span class="file-name">' + file.name + '</span>' +
+                        '<span class="file-size">' + formatBytes(file.size) + '</span>' +
+                        '<button class="remove-file" data-index="' + (selectedFiles.length - 1) + '">Remove</button></div>';
+
+                    if (fileType === "application/pdf") {
+                        // For PDF files
+                        previewHtml += '<embed src="' + fileData + '" type="' + fileType + '" />';
+                    } else if (fileType === "application/vnd.ms-excel" || fileType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                        // For Excel files
+                        previewHtml += '<iframe src="https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent(fileData) + '" width="100%" height="500px" frameborder="0"></iframe>';
+                    } else if (fileType === "application/msword" || fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                        // For Word documents
+                        previewHtml += '<iframe src="https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent(fileData) + '" width="100%" height="500px" frameborder="0"></iframe>';
+                    } else if (fileType.match(/^image\//)) {
+                        // For image files
+                        previewHtml += '<img src="' + fileData + '" />';
+                    } else {
+                        // Unsupported file type
+                        previewHtml += '<p>Unsupported file type: ' + fileType + '</p>';
+                    }
+
+                    fileContainer.append(previewHtml);
+                    $('#file-list').append(fileContainer);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Clear the file input to allow re-selection of the same file(s)
+            $('#documentUpload').val('');
+        });
+
+        // Handle file removal
+        $('#file-list').on('click', '.remove-file', function () {
+            var index = $(this).data('index');
+            selectedFiles.splice(index, 1);
+            $(this).closest('.file-container').remove();
+
+            // Update the data-index attributes of the remaining files
+            $('#file-list .remove-file').each(function (idx) {
+                $(this).data('index', idx);
+            });
+
+            // Check if all files are removed
+            if (selectedFiles.length === 0) {
+                $('#documentUpload').val('');
+            }
+        });
+
+        // Format file size to a human-readable format
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm) + ' ' + sizes[i]);
+        }
+    });
+
+
+
+
+
+
+
+
+    function saveForm(index) {
+        swal.fire({
+            title: "Are you sure?",
+            text: "Proceed with loan application!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ff9800",
+            confirmButtonText: "Yes, continue",
+            cancelButtonText: "No, stop!",
+            showLoaderOnConfirm: true,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            preConfirm: function () {
+                return new Promise(function (resolve) {
+                    setTimeout(function () {
+                        resolve();
+                    }, 4000);
+                });
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                swal.fire({
+                    title: 'Processing...',
+                    html: 'Please wait...',
+                    showConfirmButton: false,
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        swal.showLoading()
+                    }
+                });
+                //var postData = $("#form").getWebControls({ Id: id });
+                var formData = new FormData();
+                var files = selectedFiles;
+                //var file = $("input[name='files']")[0].files;
+                for (var i = 0; i < files.length; i++) {
+                    formData.append("file", files[i]);
+                }
+
+                var loanType = $("#loanProduct").find(":selected").text();
+                //var loanType = $("#loanProduct").val();
+                var loanRepayment = $("#loanRepayment").val();
+                var principalAmount = $("#principalAmount").val();
+                var rate = $("#rate").val();
+                var tenor = $("#tenor").val();
+                var monthlyincome = $("#monthlyincome").val();
+                var loanPurpose = $("#loanPurpose").val();
+                var Lender = $("#pmb").val();
+                var documentTitle = $("#documentTitle").val();
+                formData.append("LoanProduct", loanType);
+                formData.append("LoanRepayment", loanRepayment);
+                formData.append("PrincipalAmount", principalAmount);
+                formData.append("InterestRate", rate);
+                formData.append("Tenor", tenor);
+                //formData.append("Amount", monthlyincome);
+                formData.append("Purpose", loanPurpose);
+                formData.append("PMB", pmb);
+                formData.append("DocumentTitle", documentTitle);
+
+                $.ajax({
+                    url: '@Url.Content("~/LoanInitiation/LoanInitiation")',
+                    type: "post",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (obj) {
+                        if (obj.Tag == @GlobalConstant.ONE) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: obj.Message
+                            }).then(() => {
+                                window.location.reload();
+                                parent.searchGrid();
+                                parent.layer.close(index);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Warning',
+                                text: obj.Message
+                            });
+                        }
+                    }
+                });
+            } else if (result.dismiss === swal.DismissReason.cancel) {
+                swal.fire('Affordability', 'You cancelled the loan Application check.', 'error');
+                $('#btnSingle').prop('disabled', false);
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+    // $('#principalAmount').on('input', function () {
+    //     // Remove any non-numeric characters except for dots
+    //     var value = $(this).val().replace(/[^0-9.]/g, '');
+
+    //     // Ensure there's only one dot present
+    //     var dotCount = (value.match(/\./g) || []).length;
+    //     if (dotCount > 1) {
+    //         // If there's more than one dot, remove the last one
+    //         value = value.substr(0, value.lastIndexOf('.'));
+    //     }
+
+    //     // Add commas every three digits
+    //     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    //     // Update the input field value
+    //     $(this).val(value);
+    // });
+
+    $('#monthlyincome').on('input', function () {
+        // Remove any non-numeric characters except for dots
+        var value = $(this).val().replace(/[^0-9.]/g, '');
+
+        // Ensure there's only one dot present
+        var dotCount = (value.match(/\./g) || []).length;
+        if (dotCount > 1) {
+            // If there's more than one dot, remove the last one
+            value = value.substr(0, value.lastIndexOf('.'));
+        }
+
+        // Add commas every three digits
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+        // Update the input field value
+        $(this).val(value);
+    });
+
+    $('#tenor').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Replace non-digits and spaces with empty strings, excluding dash (-).
+            this.value = this.value.replace(/[^0-9 ]/ig, '');
+        }
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Content("~/LoanInitiation/ViewInformation")', // The URL of your controller method
+            type: 'GET',
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    var data = obj.Data;
+
+                    $('#monthlyincome').val(data.MonthlyIncome);
+                    $('#pmb').val(data.PmbName);
+                    $('#loanRepayment').val(data.LoanRepayment);
+                } else {
+                    cn.msgError(obj.Message);
+
+                    setTimeout(function () {
+                        cn.closeDialog();
+                    }, 3000);
+                }
+            },
+            error: function () {
+                // Handle error, if any
+            }
+        });
+    });
+
+
+
+    $(document).ready(function ($) {
+
+
+        $('#btnSingle').on('click', function (e) {
+
+            e.preventDefault();
+            Affordabilitycheck();
+
+        });
+
+
+    });
+
+    $(document).ready(function ($) {
+
+
+        $('#confirmButton').on('click', function (e) {
+
+            e.preventDefault();
+            saveForm();
+
+        });
+
+
+    });
+
+
+   
+    $(document).ready(function () {
+        var amountWarning = $('#amountWarning');
+
+        function validateFields() {
+            var principalAmount = parseFloat($('#principalAmount').val());
+            var monthlyIncome = parseFloat($('#monthlyincome').val());
+
+            // Check if principalAmount is not a number or if it's less than or equal to monthlyIncome
+            if (isNaN(principalAmount) || principalAmount <= monthlyIncome) {
+                amountWarning.show(); // Show the warning message
+            } else {
+                amountWarning.hide(); // Hide the warning message
+            }
+        }
+
+        // Validate the fields whenever the input changes
+        $('#principalAmount').on('input', function () {
+            // Remove any non-numeric characters except for dots
+            var value = $(this).val().replace(/[^0-9.]/g, '');
+
+            // Ensure there's only one dot present
+            var dotCount = (value.match(/\./g) || []).length;
+            if (dotCount > 1) {
+                // If there's more than one dot, remove the last one
+                value = value.substr(0, value.lastIndexOf('.'));
+            }
+
+            // Limit the value to 8 characters
+            if (value.length > 8) {
+                value = value.substring(0, 8);
+            }
+
+
+            // Update the input field value
+            $(this).val(value);
+
+            // Trigger validation
+            validateFields();
+        });
+
+        // Initial validation on page load
+        validateFields();
+        // Initial validation on page load
+        amountWarning.hide();
+    });
+
+
+    
+
+    $(document).ready(function () {
+        function checkFormValidity() {
+
+
+            var loanType = $("#loanProduct").find(":selected").text();
+            //var loanType = $("#loanProduct").val();
+            var loanRepayment = $("#loanRepayment").val();
+            var principalAmount = $("#principalAmount").val();
+            var rate = $("#rate").val();
+            var tenor = $("#tenor").val();
+            var monthlyincome = $("#monthlyincome").val();
+            var loanPurpose = $("#loanPurpose").val();
+            var pmb = $("#pmb").val();
+            var documentTitle = $("#documentTitle").val();
+
+            if (loanType === '' || loanRepayment === '' || principalAmount === '' || rate === '' || monthlyincome === '' || loanPurpose === '' || pmb === '' || documentTitle === '') {
+                $('#btnSingle').prop('disabled', true);
+                $('#confirmButton').prop('disabled', true);
+            } else {
+                $('#btnSingle').prop('disabled', false);
+                $('#confirmButton').prop('disabled', false);
+            }
+
+            // var isTenorValid = tenor !== '' && parseInt(tenor) >= 1 && parseInt(tenor) <= 6;
+            // if (!isTenorValid) {
+            //     $('#TenorError').show();
+            //     $('#btnSingle').prop('disabled', true);
+            //     $('#confirmButton').prop('disabled', true);
+            // } else {
+            //     $('#TenorError').hide();
+            // }
+
+        }
+        checkFormValidity();
+
+
+        $('#loanProduct, #loanRepayment, #principalAmount, #rate, #tenor, #monthlyincome, #loanPurpose, #pmb, #documentTitle').on('input change', function () {
+            checkFormValidity();
+        });
+
+
+    });
+
+
+
+</script>
