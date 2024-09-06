@@ -35,6 +35,16 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
+        public IActionResult NonMortgageLoanInitiationForm()
+        {
+            return View();
+        }
+
+        public IActionResult NonMortgageLoanInitiationIndex()
+        {
+            return View();
+        }
+
 
         #endregion
 
