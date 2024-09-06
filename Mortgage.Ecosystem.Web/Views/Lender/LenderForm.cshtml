@@ -1,0 +1,106 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="creditType" id="creditType">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Lender Setup</span>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="Name control-label" style="margin-left: 100px;">Lender Name <font class="red"> *</font></label>
+                        <input type="text" col="LenderName" style="margin-left: 100px; width: 500px;" class="form-control" id="Name" required>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="lenderType" style="margin-left: 100px;" class="control-label">Lender Type <font class="red"> *</font></label>
+                        <div id="lenderType" style="margin-left: 100px;" col="LenderTypeId">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    var id = cn.request("id");
+
+    $("#lenderType").cnComboBox({
+        url: '@Url.Content("~/LenderType/GetListJson")',
+        key: "Id",
+        value: "LenderType",
+        class: "form-control"
+    });
+
+    // function saveForm(index) {
+    //     if ($("#form1").validate().form()) {
+    //         var postData = $("#form1").getWebControls({ Id: id });
+    //         cn.ajax({
+    //             url: '@Url.Content("~/Lender/SaveFormJson")',
+    //             type: "post",
+    //             data: postData,
+    //             success: function (obj) {
+    //                 if (obj.Tag == 1) {
+    //                     cn.msgSuccess(obj.Message);
+    //                     parent.searchGrid();
+    //                     parent.layer.close(index);
+    //                     parent.searchGrid();
+
+    //                 }
+    //                 else {
+    //                     cn.msgError(obj.Message);
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
+
+    function saveForm(index) {
+    if ($("#form1").validate().form()) {
+        var postData = $("#form1").getWebControls({ Id: id });
+        cn.ajax({
+            url: '@Url.Content("~/Lender/SaveFormJson")',
+            type: "post",
+            data: postData,
+            success: function (obj) {
+                if (obj.Tag == 1) {
+                    // Display SweetAlert success message
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: obj.Message,
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Close the layer and refresh the grid
+                            parent.layer.close(index);
+                            parent.searchGrid();
+                        }
+                    });
+                } else {
+                    // Display SweetAlert error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: obj.Message,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    }
+}
+
+</script>

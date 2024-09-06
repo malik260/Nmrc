@@ -79,6 +79,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         GetCreditTypePageListJson = 501,
         #endregion
 
+
+
         #region Customer Profile Update
         [Description("Get Customer Profile Update")]
         GetCustomerProfileUpdatePageListJson = 551,
@@ -132,6 +134,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         #region INTERNET BANKING
         [Description("Get Internet Banking User")]
         GetInternetBankingUsersPageListJson = 901,
+        #endregion
+
+        #region Lender
+        [Description("Get Lender")]
+        GetLenderPageListJson = 911,
         #endregion
 
         #region LOAN INITIATION
@@ -216,6 +223,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         GetRefundPageListJson = 1401,
         [Description("View Customer Information")]
         ViewCustomerInformation,
+        #endregion
+
+        #region Scheme
+        [Description("Get Scheme")]
+        GetSchemePageListJson = 1411,
         #endregion
 
         #region Reset Password
@@ -480,6 +492,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         FeedBack,
         [Description("INTERNET BANKING")]
         InternetBanking,
+        [Description("Lender")]
+        Lender,
         [Description("LOAN INITIATION")]
         LoanInitiationController,
         [Description("LOAN REPAYMENT")]
@@ -506,6 +520,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         RiskAssessmentSetup,
         [Description("Statement of Account")]
         StatementOfAccount,
+        [Description("Scheme")]
+        Scheme,
         [Description("Underwriting")]
         Underwriting,
         [Description("Unlock Admin User")]
