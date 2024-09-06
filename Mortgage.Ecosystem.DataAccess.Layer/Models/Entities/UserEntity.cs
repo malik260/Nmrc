@@ -19,8 +19,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         // Pmb
         [Column("Pmb")]
-        public long Pmb { get; set; } 
-        
+        public long Pmb { get; set; }
+
+        // Secondary Lender
+        [Column("SecondaryLender")]
+        public long SecondaryLender { get; set; }
+
         [Column("Developer")]
         public long Developer { get; set; }
 

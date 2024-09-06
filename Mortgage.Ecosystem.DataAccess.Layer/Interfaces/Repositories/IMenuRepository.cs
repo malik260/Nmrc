@@ -9,6 +9,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<List<MenuEntity>> GetEmployerMenuList();
         Task<List<MenuEntity>> GetPmbMenuList();
         Task<List<MenuEntity>> GetEmployeeMenuList();
+        Task<List<MenuEntity>> GetSecondaryLenderMenuList();
         Task<MenuEntity> GetEntity(long id);
         Task<int> GetMaxSort(long parent);
         bool ExistMenuName(MenuEntity entity);

@@ -392,6 +392,52 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                         .ToList();
         }
 
+        public async Task<IEnumerable<SecondaryLenderEntity>> GetSecondaryLendersApprovalItems()
+        {
+            var strSql = new StringBuilder();
+            strSql.Clear();
+            var user = await Operator.Instance.Current();
+
+            strSql.Append(@"SELECT DISTINCT a.BaseProcessMenu FROM tbl_SecondaryLender a 
+                    INNER JOIN tbl_Menu b ON a.BaseProcessMenu = b.Id");
+
+            var process = await BaseRepository().FindList<SecondaryLenderProcessParam>(strSql.ToString());
+
+            var approvalLogListParam = new ApprovalLogListParam()
+            {
+                Company = user.Company,
+                MenuId = process.FirstOrDefault()?.BaseProcessMenu,
+                Authority = user.Employee
+            };
+
+            var approvalLogRecords = await new ApprovalLogRepository().GetList(approvalLogListParam);
+            var approvalLogList = approvalLogRecords.Select(el => $"{el.Record},").Aggregate("", (el1, el2) => el1 + el2).TrimEnd(',');
+            var approvalLogBracketList = $"({approvalLogList})".Replace("\"", "");
+            strSql.Clear();
+            if (approvalLogRecords.Count <= 0)
+            {
+                strSql.Append(@"SELECT a.* FROM tbl_SecondaryLender a
+                        INNER JOIN tbl_Menu c ON a.BaseProcessMenu = c.Id
+                        INNER JOIN tbl_ApprovalSetup b ON c.Id = b.MenuId
+                        INNER JOIN tbl_Employee e ON a.Id = e.Company
+                        WHERE b.Authority  = " + user.Employee + "  AND b.Priority = 1 AND c.ApprovalLevel > 0 AND e.UserType = 1 AND a.Status != 1");
+            }
+            else
+            {
+                strSql.Append(@"SELECT a.* FROM tbl_SecondaryLender a
+                        INNER JOIN tbl_ApprovalSetup b ON a.Id > 0
+                        INNER JOIN tbl_ApprovalLog c ON b.Company = c.Company AND b.Authority = c.Authority AND b.MenuId = c.MenuId
+                        INNER JOIN tbl_Menu d ON a.BaseProcessMenu = d.Id AND b.MenuId = d.Id
+                        WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND a.Id NOT IN " + approvalLogBracketList + " AND b.Priority = c.ApprovalCount AND d.ApprovalLevel > 0 AND c.ApprovalCount <= d.ApprovalLevel AND a.Status != 1");
+            }
+            IEnumerable<SecondaryLenderEntity> SecondaryLenderList = await BaseRepository().FindList<SecondaryLenderEntity>(strSql.ToString());
+            return SecondaryLenderList.GroupBy(x => new { x.Id, x.Name })
+                        .SelectMany(x => x.OrderByDescending(y => y.BaseCreateTime).Take(1))
+                        .OrderByDescending(x => x.BaseModifyTime)
+                        .ToList();
+        }
+
+
 
         public async Task<IEnumerable<BrokerEntity>> GetBrokerApprovalItems()
         {
