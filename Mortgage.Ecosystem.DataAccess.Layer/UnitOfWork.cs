@@ -46,6 +46,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IDeveloperRepository? _developers;
         private IDesignationRepository? _designations;
         private IDiasporaUserRepository? _diasporaUsers;
+        private IDisbursementRepository? _disbursements;
         private IEmployeeRepository? _employees;
         private IErrorLogRepository? _errorLog;
         private IETicketRepository? _etickets;
@@ -54,6 +55,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IFinanceTransactionRepository? _financeTransactions;
         private IGenderRepository? _genders;
         private IInternetBankingUsersRepository? _internetBankingUsers;
+        private ILoanReviewRepository? _loanReviews;
         private ILenderRepository? _lenders;
         private ILenderTypeRepository? _lenderTypes;
         private ILoanRepaymentRepository? _loanRepayments;
@@ -76,7 +78,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IPropertyGalleryRepository? _propertyGalleries;
         private IPropertyUploadRepository? _propertyUploads;
         private IPmbRepository? _pmbs;
-
+        private IRefinancingRepository? _refinancings;
         private IRemitaPaymentDetailsRepository? _remitaPaymentDetails;
         private IRelationRepository? _relations;
         private IRefundRepository? _refunds;
@@ -86,6 +88,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IRiskAssessmentProcedureRepository? _riskAssessmentProcedure;
 
         private IRoleRepository? _roles;
+        private ISecondaryLenderRepository? _secondaryLenders;
         private ISchemeRepository? _schemes;
         private ISchemeLenderRepository? _schemeLenders;
         private IStateRepository? _states;
@@ -125,7 +128,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
             _approvalSetups ??= new ApprovalSetupRepository();
 
         public IAuditTrailRepository AuditTrails =>
-_AuditTrails ??= new AuditTrailRepository();
+           _AuditTrails ??= new AuditTrailRepository();
         public IAutoJobLogRepository AutoJobLogs =>
             _autoJobLogs ??= new AutoJobLogRepository();
 
@@ -138,7 +141,7 @@ _AuditTrails ??= new AuditTrailRepository();
           _approveEmployerAggregators ??= new ApproveEmployerAggregatorRepository();
 
         public IAddDocumentProcedureRepository AddDocumentsProcedure =>
-_addDocumentsProcedure ??= new AddDocumentProcedureRepository();
+         _addDocumentsProcedure ??= new AddDocumentProcedureRepository();
 
         public IBankRepository Banks =>
             _banks ??= new BankRepository();
@@ -208,7 +211,8 @@ _addDocumentsProcedure ??= new AddDocumentProcedureRepository();
       _customerProfileUpdates ??= new CustomerProfileUpdateRepository();
         public IDepartmentRepository Departments =>
             _departments ??= new DepartmentRepository();
-
+        public IDisbursementRepository Disbursements =>
+        _disbursements ??= new DisbursementRepository();
         public IPmbRepository Pmbs =>
           _pmbs ??= new PmbRepository();
 
@@ -240,6 +244,9 @@ _addDocumentsProcedure ??= new AddDocumentProcedureRepository();
 
         public IInternetBankingUsersRepository InternetBankingUsers =>
         _internetBankingUsers ??= new InternetBankingUsersRepository();
+
+        public ILoanReviewRepository LoanReviews =>
+         _loanReviews ??= new LoanReviewRepository();
 
         public ILoanRepaymentRepository LoanRepayments =>
            _loanRepayments ??= new LoanRepaymentRepository();
@@ -299,6 +306,8 @@ _addDocumentsProcedure ??= new AddDocumentProcedureRepository();
           _propertyRegistrations ??= new PropertyRegistrationRepository();
         public IPropertyUploadRepository PropertyUploads =>
           _propertyUploads ??= new PropertyUploadRepository();
+        public IRefinancingRepository Refinancings =>
+          _refinancings ??= new RefinancingRepository();
 
         public IRefundRepository Refunds =>
           _refunds ??= new RefundRepository();
@@ -323,6 +332,9 @@ _addDocumentsProcedure ??= new AddDocumentProcedureRepository();
             _roles ??= new RoleRepository();
         public ISchemeRepository Schemes =>
          _schemes ??= new SchemeRepository();
+
+        public ISecondaryLenderRepository SecondaryLenders =>
+     _secondaryLenders ??= new SecondaryLenderRepository();
 
         public ISchemeLenderRepository SchemeLenders =>
   _schemeLenders ??= new SchemeLenderRepository();

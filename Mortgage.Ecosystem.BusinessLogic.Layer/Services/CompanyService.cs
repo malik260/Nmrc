@@ -312,6 +312,13 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 return obj;
             }
 
+            var GetCompanyName3 = await _iUnitOfWork.SecondaryLenders.GetEntitybyName(entity.Name);
+            if (GetCompanyName3 != null)
+            {
+                obj.Message = "Company Name already exist!";
+                return obj;
+            }
+
 
 
             var mobileExist = await _iUnitOfWork.Employees.GetEmployeeByMobile(entity.MobileNumber);

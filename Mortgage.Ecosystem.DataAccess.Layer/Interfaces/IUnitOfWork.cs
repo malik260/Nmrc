@@ -42,6 +42,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         ICreditScoreRepository CreditScores { get; }
         ICreditTypeRepository CreditTypes { get; }
         ICustomerProfileUpdateRepository CustomerProfileUpdates { get; }
+        IDisbursementRepository Disbursements { get; }
         IDepartmentRepository Departments { get; }
         IDesignationRepository Designations { get; }
         IDiasporaUserRepository DiasporaUsers { get; }
@@ -58,7 +59,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
          ILenderTypeRepository LenderTypes { get; }
         ILoanInitiationRepository LoanInitiations { get; }
         ILoanInitiationUploadRepository? LoanInitiationUploads { get; }
-
+        ILoanReviewRepository LoanReviews { get; }
         ILoanRepaymentRepository LoanRepayments { get; }
         ILoanScheduleRepository LoanSchedules { get; }
         ILogLoginRepository LogLogins { get; }
@@ -84,10 +85,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IPropertyGalleryRepository PropertyGalleries { get; }
         IPropertyUploadRepository PropertyUploads { get; }
         IRemitaPaymentDetailsRepository RemitaPaymentDetails { get; }
+        IRefinancingRepository Refinancings { get; }
         IRelationRepository Relations { get; }
         IResetPasswordTokenRepository ResetPasswordTokens { get; }
 
         IRoleRepository Roles { get; }
+        ISecondaryLenderRepository SecondaryLenders { get; }
         IStateRepository States { get; }
         ISchemeLenderRepository SchemeLenders { get; }
         IStatementOfAccountRepository StatementOfAccounts { get; }
