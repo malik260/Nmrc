@@ -72,6 +72,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("Approved")]
         public int Approved { get; set; }
 
+        [Column("SchemeType")]
+        public int SchemeType { get; set; }
+
         [Column("LoanRefNo")]
         public string? LoanRefNo { get; set; }
 

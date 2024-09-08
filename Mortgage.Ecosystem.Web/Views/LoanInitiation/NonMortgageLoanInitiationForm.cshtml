@@ -360,7 +360,7 @@
                 formData.append("DocumentTitle", documentTitle);
 
                 $.ajax({
-                    url: '@Url.Content("~/LoanInitiation/LoanInitiation")',
+                    url: '@Url.Content("~/LoanInitiation/NonMortgageLoanInitiation")',
                     type: "post",
                     data: formData,
                     contentType: false,

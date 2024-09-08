@@ -181,6 +181,15 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
 
 
+        public async Task<IActionResult> NonMortgageLoanInitiation(InitiateLoanDto initiateLoanDto)
+        {
+
+            TData obj = await _iLoanInitiationService.LoanApplication(initiateLoanDto);
+           
+
+           
+            return Json(obj);
+        }
 
 
         [HttpGet]
