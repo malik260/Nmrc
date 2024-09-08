@@ -361,6 +361,21 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         GetGenderName = 2351,
         #endregion
 
+        #region Refinancing
+        [Description("Get Refinance Name")]
+        GetRefinanceName = 2551,
+        #endregion
+
+        #region LoanReview
+        [Description("Get Loan Review Name")]
+        GetLoanReviewName = 2552,
+        #endregion
+
+        #region Disbursement
+        [Description("Get Disbursement Name")]
+        GetDisbursementName = 2553,
+        #endregion
+
         //#region Log Login
         //[Description("Remove All Form Json")]
         //RemoveAllFormJson,
@@ -578,6 +593,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         File,
         [Description("HOME")]
         Home,
+        [Description("REFINANCING")]
+        Refinancing,
+        [Description("LOANREVIEW")]
+        LoanReview,
+        [Description("DISBURSEMENT")]
+        Disbursement,
         #endregion
     }
 }

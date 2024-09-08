@@ -61,7 +61,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
 
         public DbSet<CreditTypeEntity>? CreditTypeEntity { get; set; }
         public DbSet<CustomerProfileUpdateEntity>? CustomerProfileUpdateEntity { get; set; }
-
+        public DbSet<DisbursementEntity>? DisbursementEntity { get; set; }
         public DbSet<DepartmentEntity>? DepartmentEntity { get; set; } // Department table
         public DbSet<DesignationEntity>? DesignationEntity { get; set; }
         public DbSet<DiasporaUserEntity>? DiasporaUserEntity { get; set; }
@@ -80,6 +80,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<LenderSetupEntity>? LenderSetupEntity { get; set; } // Lender Setup table     
         public DbSet<LogLoginEntity>? LogLoginEntity { get; set; } // Login log table        
         public DbSet<LogOperateEntity>? LogOperateEntity { get; set; } // Operation log table
+        public DbSet<LoanReviewEntity>? LoanReviewEntity { get; set; }
         public DbSet<LoanRepaymentEntity>? LoanRepaymentEntity { get; set; }
         public DbSet<LoanInitiationEntity>? LoanInitiationEntity { get; set; }
         public DbSet<LoanInitiationUploadEntity>? loanInitiationUploadEntity { get; set; }
@@ -99,6 +100,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<PropertySubscriptionEntity>? PropertySubscriptionEntity { get; set; } // Property Subscription table     
         public DbSet<PropertyGalleryEntity>? PropertyGalleryEntity { get; set; } // Property Gallery table
         public DbSet<PropertyUploadEntity>? PropertyUploadEntity { get; set; } // Property Gallery table
+        public DbSet<RefinancingEntity>? RefinancingEntity { get; set; }
         public DbSet<RelationEntity>? RelationEntity { get; set; }
         public DbSet<RemitaPaymentDetailsEntity>? RemitaPaymentDetailsEntity { get; set; }
         public DbSet<RefundConditionEntity>? RefundConditionEntity { get; set; }
@@ -113,6 +115,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<SchemeSetupEntity>? SchemeSetupEntity { get; set; } // Scheme table     
         public DbSet<SchemeLenderEntity>? SchemeLenderEntity { get; set; } // Scheme Lender table     
         public DbSet<SectorEntity>? SectorEntity { get; set; }
+        public DbSet<SecondaryLenderEntity>? SecondaryLenderEntity { get; set; } // Secondary Lender table
         public DbSet<StateEntity>? StateEntity { get; set; }
         public DbSet<StatementOfAccountEntity>? StatementOfAccountEntity { get; set; }
         public DbSet<SubSectorEntity>? SubSectorEntity { get; set; }

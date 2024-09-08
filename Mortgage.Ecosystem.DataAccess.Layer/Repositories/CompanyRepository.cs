@@ -284,6 +284,30 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
                 }
 
+                if (entity.AgentType == GlobalConstant.SIX.ToString())
+                {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.SECONDARYLENDER_MENU_URL);
+                    SecondaryLenderEntity secondaryLenderEntity = new SecondaryLenderEntity();
+                    secondaryLenderEntity.Id = entity.Id;
+                    secondaryLenderEntity.RCNumber = entity.RCNumber;
+                    secondaryLenderEntity.Name = entity.Name;
+                    secondaryLenderEntity.Website = entity.Website;
+                    secondaryLenderEntity.MobileNumber = entity.MobileNumber;
+                    secondaryLenderEntity.Address = entity.Address;
+                    secondaryLenderEntity.DateOfIncorporation = entity.DateOfIncorporation;
+                    secondaryLenderEntity.EmailAddress = entity.EmailAddress;
+                    secondaryLenderEntity.Sector = entity.Sector;
+                    secondaryLenderEntity.ContributionFrequency = entity.ContributionFrequency;
+                    secondaryLenderEntity.Subsector = entity.Subsector;
+                    secondaryLenderEntity.BaseProcessMenu = currentMenu;
+                    secondaryLenderEntity.BaseCreateTime = DateTime.Now;
+                    secondaryLenderEntity.BaseCreatorId = entity.BaseCreatorId;
+                    secondaryLenderEntity.BaseModifierId = entity.BaseModifierId;
+                    secondaryLenderEntity.NHFNumber = Convert.ToString(entity.EmployerNhfNumber);
+                    await db.Insert(secondaryLenderEntity);
+
+                }
+
                 //if (entity.AgentType == GlobalConstant.FIVE.ToString())
                 //{
                 //    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.EMPLOYEE_MENU_URL);

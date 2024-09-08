@@ -48,6 +48,10 @@
 		<None Include="Views\PaymentHistory\PaymentHistoryForm.cshtml" />
 		<None Include="Views\PaymentHistory\PaymentHistoryIndex.cshtml" />
 		<None Include="Views\PropertyRegistration\PropertyRegistrationEditForm.cshtml" />
+		<None Include="Views\SecondaryLender\SecondaryLenderApprovalIndex.cshtml" />
+		<None Include="Views\SecondaryLender\SecondaryLenderEmployeeForm.cshtml" />
+		<None Include="Views\SecondaryLender\SecondaryLenderEmployeeIndex.cshtml" />
+		<None Include="Views\SecondaryLender\SecondaryLenderIndex.cshtml" />
 	</ItemGroup>
 
 	<ProjectExtensions>
