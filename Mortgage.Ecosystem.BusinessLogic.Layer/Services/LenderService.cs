@@ -163,6 +163,12 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 obj.Tag = 0;
                 return obj;
             }
+            if (string.IsNullOrEmpty(entity.LenderTypeId))
+            {
+                obj.Tag = 0;
+                obj.Message = "Please Select a Lender Name";
+                return obj;  // Return obj with the correct message
+            }
             bool isUpdate = entity.Id > 0;
             await _iUnitOfWork.Lenders.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();

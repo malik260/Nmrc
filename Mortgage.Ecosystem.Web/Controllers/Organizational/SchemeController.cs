@@ -106,7 +106,17 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         {
             var entity = new SchemeSetupEntity();
             entity.SchemeName = inputName;
+            if (string.IsNullOrEmpty(selectedIds))
+            {
+                TData<string> objError = new TData<string>
+                {
+                    Tag = 0,
+                    Message = "Please Select a Lender Name"
+                };
+                return Json(objError);
+            }
             entity.LendersId = selectedIds.Split(",").Select(int.Parse).ToList();
+
             TData<string> obj = await _iSchemeService.SaveForm(entity);
             return Json(obj);
         }
