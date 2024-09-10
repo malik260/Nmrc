@@ -54,6 +54,32 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+        
+        public async Task<TData<List<NonNhf>>> GetNonNhfList(PmbListParam param)
+        {
+            var context = new ApplicationDbContext();
+            TData<List<NonNhf>> obj = new TData<List<NonNhf>>();
+            var lenders = new LenderListParam();
+            var NonNhfLender =  _iUnitOfWork.Lenders.GetList(lenders);
+            var allPmbs = await _iUnitOfWork.Pmbs.GetList(param);
+            // Filter the list to include only approved companies
+            var approvedPmbs = allPmbs.Where(pmb => pmb.Status == (int)ApprovalEnum.Approved).ToList();
+            var result = from a in approvedPmbs 
+                         join b in context.LenderSetupEntity on a.Id equals b.Lender 
+                         join c in context.SchemeLenderEntity on a.Id equals c.LendersId 
+                         where b.LenderTypeId == 1 && c.SchemeId == 2
+                         select new NonNhf
+                         {Id =  a.Id,
+                          Name = a.Name 
+                         };
+
+
+            obj.Data = result.ToList();
+            obj.Total = approvedPmbs.Count;
+            obj.Tag = 1;
+            return obj;
+        }
+
 
         public async Task<TData<List<PmbEntity>>> GetPageList(PmbListParam param, Pagination pagination)
         {

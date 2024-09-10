@@ -21,5 +21,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         
         [Column("ProductId")]
         public int ProductId { get; set; }
+
+        [Column("ProductScheme")]
+        public int ProductScheme { get; set; }
     }
 }

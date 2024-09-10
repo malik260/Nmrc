@@ -45,4 +45,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels
         public int SN { get; set; }
         public string? Error { get; set; }
     }
+
+    public class NonNhf
+    {
+        public long Id { get; set; }
+        public string? Name { get; set; }
+    }
+
 }

@@ -45,6 +45,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
+        public async Task<IActionResult> GetNonNhfListJson(CreditTypeListParam param)
+        {
+            TData<List<CreditTypeEntity>> obj = await _iCreditTypeService.GetNonNhfList(param);
+            return Json(obj);
+        }
+
         [HttpGet]
         [AuthorizeFilter("credittype:search,user:search")]
         public async Task<IActionResult> GetCreditTypePageListJson(CreditTypeListParam param, Pagination pagination)

@@ -40,6 +40,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
+        [AuthorizeFilter("loaninitiation:view")]
         public IActionResult NonMortgageLoanInitiationIndex()
         {
             return View();

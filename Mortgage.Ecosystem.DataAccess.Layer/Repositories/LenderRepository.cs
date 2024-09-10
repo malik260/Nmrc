@@ -27,9 +27,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
-        public async Task<LenderSetupEntity> GetEntity(string name)
+        public async Task<LenderSetupEntity> GetEntity(long Id)
         {
-            return await BaseRepository().FindEntity<LenderSetupEntity>(x => x.LenderName == name );
+            return await BaseRepository().FindEntity<LenderSetupEntity>(x => x.Lender == Id);
         }
 
         //public async Task<CreditTypeEntity> GetEntityByProductCode(string code)
@@ -40,16 +40,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         {
             return await BaseRepository().FindEntity<LenderSetupEntity>(id);
         }
-        public async Task<LenderSetupEntity> GetEntitybyName(string name)
-        {
-            return await BaseRepository().FindEntity<LenderSetupEntity>(x =>  x.LenderName.Contains(name));
-        }
+
         public async Task<CreditTypeEntity> GetEntitybiId(int id)
         {
             return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Id == id);
         }
-        
-       
+
+
         #endregion
 
         #region Submit data
@@ -59,16 +56,15 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             try
             {
                 if (entity.Id.IsNullOrZero())
-            {
-                await entity.Create();
-                await BaseRepository().Insert<LenderSetupEntity>(entity);
-            }
-            else
-            {
-                await BaseRepository().Update<LenderSetupEntity>(entity);
-            }
+                {
+                    await entity.Create();
+                    await BaseRepository().Insert<LenderSetupEntity>(entity);
+                }
+                else
+                {
+                    await BaseRepository().Update<LenderSetupEntity>(entity);
+                }
 
-                await db.Insert(entity);
                 await db.CommitTrans();
             }
             catch (Exception ex)
@@ -78,20 +74,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             }
         }
 
-        public bool ExistLenderName(LenderSetupEntity entity)
-        {
-            var expression = ExtensionLinq.True<LenderSetupEntity>();
-            expression = expression.And(t => t.BaseIsDelete == 0);
-            if (entity.Id.IsNullOrZero())
-            {
-                expression = expression.And(t => t.LenderName == entity.LenderName);
-            }
-            else
-            {
-                expression = expression.And(t => t.LenderName == entity.LenderName && t.Id != entity.Id);
-            }
-            return BaseRepository().IQueryable(expression).Count() > 0 ? true : false;
-        }
+
 
         public async Task DeleteForm(string ids)
         {
@@ -106,9 +89,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var expression = ExtensionLinq.True<LenderSetupEntity>();
             if (param != null)
             {
-                if (!string.IsNullOrEmpty(param.LenderName))
+                if (param.LenderId != 0)
                 {
-                    expression = expression.And(second: t => t.LenderName.Contains(param.LenderName));
+                    expression = expression.And(second: t => t.LenderId == param.LenderId);
                 }
             }
             return expression;

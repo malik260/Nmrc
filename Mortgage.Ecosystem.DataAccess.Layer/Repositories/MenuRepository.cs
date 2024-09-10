@@ -170,7 +170,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         {
             var menu = new GlobalConstant();
             var expression = ExtensionLinq.True<MenuEntity>();
-            expression = expression.And(t => t.Category == GlobalConstant.SECONDARYLENDER_MENU_CATEGORY || t.Category == GlobalConstant.GLOBAL_MENU_CATEGORY || t.Category == GlobalConstant.PMBANDEMPLOYEE_MENU_CATEGORY || t.Category == GlobalConstant.ISAGENT_MENU_CATEGORY || t.Category == GlobalConstant.EMPLOYERANDPMB_MENU_CATEGORY);
+            expression = expression.And(t => t.Category == GlobalConstant.SECONDARYLENDER_MENU_CATEGORY);
 
             return expression;
         }

@@ -11,7 +11,10 @@
                 <div class="form-group">
                     <div class="col-sm-6">
                         <label class="Name control-label" style="margin-left: 100px;">Lender Name <font class="red"> *</font></label>
-                        <input type="text" col="LenderName" style="margin-left: 100px; width: 500px;" class="form-control" id="Name" required>
+                      @*  <input type="text" col="LenderName" style="margin-left: 100px; width: 500px;" class="form-control" id="Name" required>*@
+                        <div id="lender" col="Lender" style="margin-left: 100px;">
+                        </div>
+
                     </div>
 
                 </div>
@@ -44,29 +47,14 @@
         class: "form-control"
     });
 
-    // function saveForm(index) {
-    //     if ($("#form1").validate().form()) {
-    //         var postData = $("#form1").getWebControls({ Id: id });
-    //         cn.ajax({
-    //             url: '@Url.Content("~/Lender/SaveFormJson")',
-    //             type: "post",
-    //             data: postData,
-    //             success: function (obj) {
-    //                 if (obj.Tag == 1) {
-    //                     cn.msgSuccess(obj.Message);
-    //                     parent.searchGrid();
-    //                     parent.layer.close(index);
-    //                     parent.searchGrid();
+    $("#lender").cnComboBox({
+        url: '@Url.Content("~/PMB/GetListJson")',
+        key: "Id",
+        value: "Name",
+        class: "form-control"
+    });
 
-    //                 }
-    //                 else {
-    //                     cn.msgError(obj.Message);
-    //                 }
-    //             }
-    //         });
-    //     }
-    // }
-
+   
     function saveForm(index) {
     if ($("#form1").validate().form()) {
         var postData = $("#form1").getWebControls({ Id: id });

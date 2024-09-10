@@ -31,6 +31,16 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+        public async Task<TData<List<CreditTypeEntity>>> GetNonNhfList(CreditTypeListParam param)
+        {
+            TData<List<CreditTypeEntity>> obj = new TData<List<CreditTypeEntity>>();
+            obj.Data = await _iUnitOfWork.CreditTypes.GetList(param);
+            obj.Data = obj.Data.Where(i=> i.ProductScheme == 2).ToList();
+            obj.Total = obj.Data.Count;
+            obj.Tag = 1;
+            return obj;
+        }
+
         public async Task<TData<List<CreditTypeEntity>>> GetPageList(CreditTypeListParam param, Pagination pagination)
         {
             TData<List<CreditTypeEntity>> obj = new TData<List<CreditTypeEntity>>();

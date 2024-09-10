@@ -15,6 +15,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
 
        [NotMapped]
-        public List<int> LendersId { get; set; }
+        public List<long> LendersId { get; set; }
     }
 }

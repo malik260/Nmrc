@@ -164,16 +164,22 @@
     //    value: "Name"
     //});
     $("#loanProduct").cnComboBox({
-        url: '@Url.Content("~/CreditType/GetListJson")',
+        url: '@Url.Content("~/CreditType/GetNonNhfListJson")',
         key: "Code",
         value: "Name"
     });
 
+
+    $("#Lender").cnComboBox({
+        url: '@Url.Content("~/PMB/GetNonNhfListJson")',
+        key: "Id",
+        value: "Name"
+    });
+
     $("#loanProduct").change(function () {
-        //debugger
-        //var id = selectedCredit;
+        
         $("#rate").val('6');
-        $("#tenor").val('30');
+        $("#tenor").val('10');
     });
 
 
@@ -339,7 +345,7 @@
                     formData.append("file", files[i]);
                 }
 
-                var loanType = $("#loanProduct").find(":selected").text();
+                var loanType = $("#loanProduct").cnComboBox('getValue');
                 //var loanType = $("#loanProduct").val();
                 var loanRepayment = $("#loanRepayment").val();
                 var principalAmount = $("#principalAmount").val();
@@ -347,7 +353,7 @@
                 var tenor = $("#tenor").val();
                 var monthlyincome = $("#monthlyincome").val();
                 var loanPurpose = $("#loanPurpose").val();
-                var Lender = $("#pmb").val();
+                var Lender = $('#Lender').cnComboBox('getValue');
                 var documentTitle = $("#documentTitle").val();
                 formData.append("LoanProduct", loanType);
                 formData.append("LoanRepayment", loanRepayment);
@@ -356,7 +362,7 @@
                 formData.append("Tenor", tenor);
                 //formData.append("Amount", monthlyincome);
                 formData.append("Purpose", loanPurpose);
-                formData.append("PMB", pmb);
+                formData.append("PMB", Lender);
                 formData.append("DocumentTitle", documentTitle);
 
                 $.ajax({
@@ -452,7 +458,6 @@
                     var data = obj.Data;
 
                     $('#monthlyincome').val(data.MonthlyIncome);
-                    $('#pmb').val(data.PmbName);
                     $('#loanRepayment').val(data.LoanRepayment);
                 } else {
                     cn.msgError(obj.Message);

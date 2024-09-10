@@ -13,6 +13,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         public int SchemeId { get; set; }
         
      
-        public int LendersId { get; set; }
+        public long LendersId { get; set; }
     }
 }

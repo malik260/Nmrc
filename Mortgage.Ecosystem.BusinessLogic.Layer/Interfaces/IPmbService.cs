@@ -8,6 +8,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface IPmbService
     {
+        Task<TData<List<NonNhf>>> GetNonNhfList(PmbListParam param);
         Task<TData<List<EmployeeEntity>>> GetPmbEmployee(EmployeeListParam param);
         Task<TData<List<PmbEntity>>> GetList(PmbListParam param);
         Task<TData<List<PmbEntity>>> GetPageList(PmbListParam param, Pagination pagination);
