@@ -7,19 +7,22 @@
             <div class="select-list">
                 <ul>
                     <li>
-                        <label>Name: </label> <input id="name" col="Name" type="text" />
+                        <label>Name: </label>
+                        <input id="name" col="Name" type="text" />
                     </li>
-
                     <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchRefinancingGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchRefinancingGrid()">
+                            <i class="fa fa-search"></i>&nbsp;Search
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)">
+                <i class="fa fa-plus"></i> Add
+            </a>
         </div>
-
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
@@ -51,24 +54,7 @@
                     field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
                     }
-                },
-                //{
-                //    field: 'Status',
-                //    title: 'Status',
-                //    align: 'center',
-                //    formatter: function (value, row, index) {
-                //        if (value == "@ApprovalEnum.Pending.ToInt()") {
-                //            return '<span class="badge badge-warning">' + "@ApprovalEnum.Pending.GetDescription()" + '</span>';
-                //        } else if (value == "@ApprovalEnum.Approved.ToInt()") {
-                //            return '<span class="badge badge-primary">' + "@ApprovalEnum.Approved.GetDescription()" + '</span>';
-                //        } else if (value == "@ApprovalEnum.Rejected.ToInt()") {
-                //            return '<span class="badge badge-danger">' + "@ApprovalEnum.Rejected.GetDescription()" + '</span>';
-                //        }
-                //        else {
-                //            return '<span class="badge badge-danger">' + "@ApprovalEnum.Cancelled.GetDescription()" + '</span>';
-                //        }
-                //    }
-                //}
+                }
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);
@@ -89,8 +75,7 @@
             var selectedRow = $("#gridTable").bootstrapTable("getSelections");
             if (!cn.checkRowEdit(selectedRow)) {
                 return;
-            }
-            else {
+            } else {
                 id = selectedRow[0].Id;
             }
         }
@@ -108,7 +93,7 @@
     function deleteForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to delete the selected " + selectedRow.length + " row data?", function () {
+            cn.confirm("Confirm to delete the selected " + selectedRow.length + " row(s)?", function () {
                 var ids = cn.getIds(selectedRow);
                 cn.ajax({
                     url: '@Url.Content("~/Refinancing/DeleteFormJson")' + '?ids=' + ids,
@@ -116,9 +101,8 @@
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             cn.msgSuccess(obj.Message);
-                            searchRefinancingGrid(); ();
-                        }
-                        else {
+                            searchRefinancingGrid();
+                        } else {
                             cn.msgError(obj.Message);
                         }
                     }
