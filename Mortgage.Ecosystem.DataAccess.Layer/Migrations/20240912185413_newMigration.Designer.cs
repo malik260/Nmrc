@@ -12,7 +12,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Models;
 namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240904145308_newMigration")]
+    [Migration("20240912185413_newMigration")]
     partial class newMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -2743,6 +2743,76 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.ToTable("tbl_DiasporaUser", (string)null);
                 });
 
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.DisbursementEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<string>("Amount")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Amount");
+
+                    b.Property<string>("ApplicationDate")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ApplicationDate");
+
+                    b.Property<DateTime>("BaseCreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("BaseCreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseCreatorId");
+
+                    b.Property<int>("BaseIsDelete")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseIsDelete");
+
+                    b.Property<long>("BaseModifierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseModifierId");
+
+                    b.Property<DateTime>("BaseModifyTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
+                    b.Property<int>("BaseVersion")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseVersion");
+
+                    b.Property<string>("LenderID")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LenderID");
+
+                    b.Property<string>("Loan")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Loan");
+
+                    b.Property<string>("LoanReferenceNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LoanReferenceNumber");
+
+                    b.Property<string>("NHFNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NHFNumber");
+
+                    b.Property<string>("RefinanceNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RefinanceNumber");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_Disbursement", (string)null);
+                });
+
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.EmployeeEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -3787,6 +3857,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("LoanPurpose");
 
+                    b.Property<int?>("LoanScheme")
+                        .HasColumnType("int")
+                        .HasColumnName("LoanScheme");
+
                     b.Property<string>("NHFNumber")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("NHFNumber");
@@ -4006,6 +4080,76 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("tbl_LoanRepaymentEntity", (string)null);
+                });
+
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.LoanReviewEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<string>("Amount")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Amount");
+
+                    b.Property<string>("ApplicationDate")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ApplicationDate");
+
+                    b.Property<DateTime>("BaseCreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("BaseCreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseCreatorId");
+
+                    b.Property<int>("BaseIsDelete")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseIsDelete");
+
+                    b.Property<long>("BaseModifierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseModifierId");
+
+                    b.Property<DateTime>("BaseModifyTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
+                    b.Property<int>("BaseVersion")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseVersion");
+
+                    b.Property<string>("LenderID")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LenderID");
+
+                    b.Property<string>("Loan")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Loan");
+
+                    b.Property<string>("LoanReferenceNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LoanReferenceNumber");
+
+                    b.Property<string>("NHFNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NHFNumber");
+
+                    b.Property<string>("RefinanceNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RefinanceNumber");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_LoanReview", (string)null);
                 });
 
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.LoanScheduleEntity", b =>
@@ -5294,6 +5438,76 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.ToTable("tbl_PropertyUpload", (string)null);
                 });
 
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.RefinancingEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<string>("Amount")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Amount");
+
+                    b.Property<string>("ApplicationDate")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ApplicationDate");
+
+                    b.Property<DateTime>("BaseCreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("BaseCreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseCreatorId");
+
+                    b.Property<int>("BaseIsDelete")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseIsDelete");
+
+                    b.Property<long>("BaseModifierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseModifierId");
+
+                    b.Property<DateTime>("BaseModifyTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
+                    b.Property<int>("BaseVersion")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseVersion");
+
+                    b.Property<string>("LenderID")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LenderID");
+
+                    b.Property<string>("Loan")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Loan");
+
+                    b.Property<string>("LoanReferenceNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LoanReferenceNumber");
+
+                    b.Property<string>("NHFNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NHFNumber");
+
+                    b.Property<string>("RefinanceNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RefinanceNumber");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_Refinancing", (string)null);
+                });
+
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.RefundConditionEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -6137,6 +6351,165 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.ToTable("st_Scheme", (string)null);
                 });
 
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.SecondaryLenderChecklistEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool?>("Applicable")
+                        .HasColumnType("bit")
+                        .HasColumnName("Applicable");
+
+                    b.Property<DateTime>("BaseCreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("BaseCreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseCreatorId");
+
+                    b.Property<int>("BaseIsDelete")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseIsDelete");
+
+                    b.Property<long>("BaseModifierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseModifierId");
+
+                    b.Property<DateTime>("BaseModifyTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
+                    b.Property<int>("BaseVersion")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseVersion");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Description");
+
+                    b.Property<string>("EmployeeNhfNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Employee Nhf Number");
+
+                    b.Property<string>("Item")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Item");
+
+                    b.Property<string>("PmbId")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PmbId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_SecondaryLenderChecklist", (string)null);
+                });
+
+            modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.SecondaryLenderEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Address");
+
+                    b.Property<DateTime>("BaseCreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("BaseCreatorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseCreatorId");
+
+                    b.Property<int>("BaseIsDelete")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseIsDelete");
+
+                    b.Property<long>("BaseModifierId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseModifierId");
+
+                    b.Property<DateTime>("BaseModifyTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BaseModifyTime");
+
+                    b.Property<long>("BaseProcessMenu")
+                        .HasColumnType("bigint")
+                        .HasColumnName("BaseProcessMenu");
+
+                    b.Property<int>("BaseVersion")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseVersion");
+
+                    b.Property<int>("ContributionFrequency")
+                        .HasColumnType("int")
+                        .HasColumnName("ContributionFrequency");
+
+                    b.Property<DateTime?>("DateOfIncorporation")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateOfIncorporation");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EmailAddress");
+
+                    b.Property<string>("Fax")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Fax");
+
+                    b.Property<string>("MobileNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MobileNumber");
+
+                    b.Property<string>("NHFNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NHFNumber");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("RCNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RCNumber");
+
+                    b.Property<string>("SecondaryLenderCode")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SecondaryLenderCode");
+
+                    b.Property<int>("Sector")
+                        .HasColumnType("int")
+                        .HasColumnName("Sector");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
+
+                    b.Property<int>("Subsector")
+                        .HasColumnType("int")
+                        .HasColumnName("Subsector");
+
+                    b.Property<string>("Tin")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Tin");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Website");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_SecondaryLender", (string)null);
+                });
+
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.SectorEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -6762,6 +7135,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                     b.Property<string>("Salt")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Salt");
+
+                    b.Property<long>("SecondaryLender")
+                        .HasColumnType("bigint")
+                        .HasColumnName("SecondaryLender");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)")
