@@ -72,6 +72,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private INHFCustomerRequestRepository? _nhfcustomerrequests;
         private INHFRegCompanyRepository? _nhfregcompanies;
         private INHFRegUsersRepository? _nhfregusers;
+        private INmrcCategoryRepository? _nmrcCategories;
+        private INmrcEligibilityRepository? _nmrcEligibilities;
         private IPaymentHistoryRepository? _paymentHistories;
         private IPropertyRegistrationRepository? _propertyRegistrations;
         private IPropertySubscriptionRepository? _propertySubscriptions;
@@ -296,6 +298,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public INHFCustomerRequestRepository NHFCustomerRequests =>
             _nhfcustomerrequests ??= new NHFCustomerRequestRepository();
+
+        public INmrcCategoryRepository NmrcCategories =>
+           _nmrcCategories ??= new NmrcCategoryRepository();
+
+        public INmrcEligibilityRepository NmrcEligibilities =>
+          _nmrcEligibilities ??= new NmrcEligibilityRepository();
 
         public IPaymentHistoryRepository PaymentHistories =>
             _paymentHistories ??= new PaymentHistoryRepository();

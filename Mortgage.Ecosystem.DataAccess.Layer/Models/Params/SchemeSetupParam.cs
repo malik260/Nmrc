@@ -3,7 +3,7 @@
     public class SchemeListParam
     {
         public string SchemeName { get; set; }
-   
+
         public int LenderNameId { get; set; }
     }
 }
