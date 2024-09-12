@@ -93,7 +93,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
 
         IRoleRepository Roles { get; }
         ISecondaryLenderRepository SecondaryLenders { get; }
-        ISecondaryLenderChecklistRepository SecondaryLenderChecklist { get; }
         IStateRepository States { get; }
         ISchemeLenderRepository SchemeLenders { get; }
         IStatementOfAccountRepository StatementOfAccounts { get; }
