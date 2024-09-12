@@ -50,6 +50,19 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
+        public async Task<IActionResult> GetPmbEligibilityCriteria(NmrcEligibilityListParam param)
+        {
+            TData<List<NmrcEligibilityEntity>> obj = await _iNmrcEligibilityService.GetPmbList(param);
+            return Json(obj);
+        }
+
+         public async Task<IActionResult> GetObligorligibilityCriteria(NmrcEligibilityListParam param)
+        {
+            TData<List<NmrcEligibilityEntity>> obj = await _iNmrcEligibilityService.GetObligorList(param);
+            return Json(obj);
+        }
+
+
         public async Task<IActionResult> GetCategory(string categoryId)
         {
             var auditInstance = new AuditTrailEntity();

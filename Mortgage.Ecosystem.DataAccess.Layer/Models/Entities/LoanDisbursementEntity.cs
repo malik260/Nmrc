@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 {
     [Table("tbl_LoanDisbursement")]
-    public class LoanDisbursementEntity: BaseExtensionEntity
-    {     
+    public class LoanDisbursementEntity : BaseExtensionEntity
+    {
 
         [Column("ProductCode")]
         public string? ProductCode { get; set; }
@@ -36,11 +36,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("DisbursementDate")]
         public DateTime? DisbursementDate { get; set; }
 
-         [Column("PmbNhfNumber")]
+        [Column("PmbNhfNumber")]
         public long PmbId { get; set; }
 
-          [Column("LoanId")]
-        public string LoanId { get; set; }
+        [Column("LoanId")]
+        public string? LoanId { get; set; }
 
 
 

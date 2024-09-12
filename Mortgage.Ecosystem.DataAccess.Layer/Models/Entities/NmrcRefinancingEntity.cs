@@ -1,12 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Http;
-using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 {
-    // Refinance Information table
-    [Table("tbl_Refinancing")]
-    public class RefinancingEntity : BaseExtensionEntity
+    [Table("tbl_NmrcRefinancing")]
+
+    public class NmrcRefinancingEntity
     {
         // Lender
         [Column("LenderID")]
@@ -44,16 +47,19 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("PmbId")]
         public long PmbId { get; set; }
 
-          [Column("ProductCode")]
+        [Column("ProductCode")]
         public string? ProductCode { get; set; }
 
-        [NotMapped]
-        public string? CustomerName { get; set; }
-
-         [NotMapped]
-        public string? ProductName { get; set; }
-
-
-
+        [Column("ApplicationStatus")]
+        public int? ApplicationStatus { get; set; }
+        
+        [Column("Reviewed")]
+        public int? Reviewed { get; set; } 
+        
+        [Column("Checklisted")]
+        public int? Checklisted { get; set; }
+        
+        [Column("Disbursed")]
+        public int? Disbursed { get; set; }
     }
 }

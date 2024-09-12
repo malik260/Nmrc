@@ -8,6 +8,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface INmrcEligibilityService
     {
+        Task<TData<List<NmrcEligibilityEntity>>> GetPmbList(NmrcEligibilityListParam param);
+        Task<TData<List<NmrcEligibilityEntity>>> GetObligorList(NmrcEligibilityListParam param);
         Task<TData<List<NmrcEligibilityEntity>>> GetList(NmrcEligibilityListParam param);
         Task<TData<List<NmrcEligibilityEntity>>> GetCategory(string categoryId);
         Task<TData<List<NmrcEligibilityEntity>>> GetPageList(NmrcEligibilityListParam param, Pagination pagination);
