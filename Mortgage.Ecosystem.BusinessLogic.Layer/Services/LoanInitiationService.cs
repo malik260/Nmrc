@@ -51,6 +51,25 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
 
+
+        public async Task<TData<CustomerDetailsViewModel>> GetCustomerDetails2()
+        {
+            var _db = new ApplicationDbContext();
+            TData<CustomerDetailsViewModel> obj = new TData<CustomerDetailsViewModel>();
+            var cust = new CustomerDetailsViewModel();
+            decimal monthlysal = 0;
+            var user = await Operator.Instance.Current();
+            var employeeInfo = await _iUnitOfWork.Employees.GetEntity(user.Employee);
+            monthlysal = employeeInfo.MonthlySalary;
+            cust.MonthlyIncome = monthlysal;            
+            cust.LoanRepayment = "Monthly";
+            obj.Data = cust;
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+
         public async Task<TData<CustomerDetailsViewModel>> GetCustomerDetails()
         {
             var _db = new ApplicationDbContext();
@@ -587,6 +606,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             entity.PMB = pmbinfo.NHFNumber;
             entity.RepaymentPattern = "Monthly";
             entity.file = initiateLoanDto.file;
+            entity.LoanScheme = 1;
             var saveform = _iUnitOfWork.LoanInitiations.SaveForm(entity);
 
 
@@ -605,7 +625,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 CheckList = "0",
                 Reviewed = 0,
                 Company = pmbinfo.Id,
-                BaseProcessMenu = 563327185478225920
+                BaseProcessMenu = 563327185478225920,
+                SchemeType = 1
             };
             await _iUnitOfWork.Underwritings.SaveForm(underwriting);
 
@@ -665,14 +686,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             }
 
-            var productName = _iUnitOfWork.CreditTypes.GetEntitybyName(initiateLoanDto.LoanProduct).Result.ProductId;
-            var pmbinfo = await _iUnitOfWork.Pmbs.GetEntitybyNhf(initiateLoanDto.PMB);
+            var productDetails = await _iUnitOfWork.CreditTypes.GetEntityByProductCode(initiateLoanDto.LoanProduct);
+            var pmbinfo = await _iUnitOfWork.Pmbs.GetEntity(initiateLoanDto.Lender);
             LoanInitiationEntity entity = new LoanInitiationEntity();
 
             entity.Principal = initiateLoanDto.PrincipalAmount;
             entity.Rate = initiateLoanDto.InterestRate;
             entity.Tenor = initiateLoanDto.Tenor;
-            entity.LoanProduct = Convert.ToString(productName);
+            entity.LoanProduct = productDetails.Code;
             entity.LoanPurpose = initiateLoanDto.Purpose;
             entity.Status = "Undergoing Approval";
             entity.NHFNumber = employeedetails.NHFNumber.ToStr();
@@ -690,7 +711,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 InterestRate = initiateLoanDto.InterestRate,
                 Tenor = initiateLoanDto.Tenor.ToString(),
                 Name = employeedetails.FirstName + " " + employeedetails.LastName,
-                ProductName = Convert.ToString(productName),
+                ProductName = productDetails.Code,
                 NHFNumber = employeedetails.NHFNumber.ToStr(),
                 NextStafffLevel = pmbinfo.NHFNumber,
                 LoanId = Convert.ToString(entity.Id),
@@ -698,7 +719,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 CheckList = "0",
                 Reviewed = 0,
                 Company = pmbinfo.Id,
-                BaseProcessMenu = 563327185478225920
+                BaseProcessMenu = 563327185478225920,
+                SchemeType = 2
             };
             await _iUnitOfWork.Underwritings.SaveForm(underwriting);
 

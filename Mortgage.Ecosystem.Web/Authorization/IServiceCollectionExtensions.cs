@@ -86,6 +86,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<ILenderService, LenderService>();
             services.AddScoped<ILenderTypeService, LenderTypeService>();
             services.AddScoped<ILoanInitiationService, LoanInitiationService>();
+            services.AddScoped<ILoanDisbursementService, LoanDisbursementService>();
             services.AddScoped<ILoanInitiationUploadService, loanInitiationUploadService>();
             services.AddScoped<ILoanRepaymentService, LoanRepaymentService>();
             services.AddScoped<ILoanScheduleService, LoanScheduleService>();

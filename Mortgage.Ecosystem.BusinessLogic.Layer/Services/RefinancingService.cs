@@ -1,11 +1,15 @@
 ﻿using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
+using Mortgage.Ecosystem.DataAccess.Layer.Helpers;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
+using Mortgage.Ecosystem.DataAccess.Layer.Request;
+using Newtonsoft.Json;
+using static Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos.LoanApplicationDTO;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 {
@@ -77,5 +81,57 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
         #endregion Submit data
+
+        public async Task<TData<string>> RefinanceLoans(string lists, long SecondaryLender)
+        {
+            TData<string> obj = new TData<string>();
+            var batchData = new List<LoanDisbursementEntity>();
+            var batchNo = RandomHelper.RandomLongGenerator(2000005, 99999999);
+            batchData = JsonConvert.DeserializeObject<List<LoanDisbursementEntity>>(JsonConvert.DeserializeObject(lists).ToString());
+            var lender = await _iUnitOfWork.SecondaryLenders.GetEntity(SecondaryLender);
+            var pmb = await _iUnitOfWork.Pmbs.GetEntity(batchData.FirstOrDefault().PmbId);
+            var batchRef = lender.Name.ParseToString() + "-" + batchNo;
+            decimal total = batchData.Select(i => i.Amount).ToList().Sum();
+            foreach (LoanDisbursementEntity item in batchData)
+            {
+                total = total + item.Amount;
+                var refinance = new RefinancingEntity();
+                refinance.Amount = item.Amount;
+                refinance.NHFNumber = item.CustomerNhf;
+                refinance.PmbId = item.PmbId;
+                refinance.Tenor = item.Tenor;
+                refinance.Rate = item.Rate;
+                refinance.ApplicationDate = DateTime.Now;
+                refinance.RefinanceNumber = batchRef;
+                refinance.Status = 0;
+                refinance.TotalAmount = total;
+                refinance.LoanId = item.LoanId;
+                refinance.ProductCode = item.ProductCode;
+                refinance.LenderID = SecondaryLender;
+                await _iUnitOfWork.Refinancings.SaveForm(refinance);
+
+            }
+            string message;
+            MailParameter mailParameter = new()
+            {
+                SecondaryLenderEmail = lender.EmailAddress,
+                SecondaryLender = lender.Name,
+                PmbName = pmb.Name,
+                
+                UserCompany = "Federal Mortgage Bank of Nigeria"
+
+
+            };
+
+            var sendMail = EmailHelper.IsLoanRefinanceMailSent(mailParameter, out message);
+
+            obj.Message = "Loan(s) Submitted for refinancing sucessfully";
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+
+
     }
 }

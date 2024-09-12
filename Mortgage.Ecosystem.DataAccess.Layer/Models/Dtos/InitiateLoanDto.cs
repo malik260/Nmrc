@@ -23,6 +23,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
         public string? LoanProduct { get; set; }
         public string? RepaymentPattern { get; set; }
         public string? MonthlyIncome { get; set; }
+        public long Lender { get; set; }
 
         [NotMapped]
         [Column("file")]

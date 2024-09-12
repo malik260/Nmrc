@@ -120,7 +120,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 var companyinfo = await _iUnitOfWork.Pmbs.GetEntity(user.Company);
                 var query = (from t1 in context.UnderwritingEntity
                              join t2 in context.ApprovalSetupEntity on 664553002530508800 equals t2.MenuId
-                             where t1.CheckList == "1" && t1.Rated == 1 && t1.Reviewed == 1 && t2.Authority == user.Employee && t1.isBatched == false && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber)
+                             where t1.CheckList == "1" && t1.Rated == 1 && t1.Reviewed == 1 && t2.Authority == user.Employee && t1.isBatched == false && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber) && t1.SchemeType == 1
                              select t1).Distinct();
                 TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();
                 //obj.Data = await _iUnitOfWork.Underwritings.GetLoanForBatching();
@@ -146,6 +146,51 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 throw;
             }
         }
+
+
+
+        public async Task<TData<List<UnderwritingEntity>>> GetLoanForDisbursment()
+        {
+            try
+            {
+                var context = new ApplicationDbContext();
+                var user = await Operator.Instance.Current();
+                var userinfo = await _iUnitOfWork.Employees.GetEntity(user.Employee);
+                var companyinfo = await _iUnitOfWork.Pmbs.GetEntity(user.Company);
+                var query = (from t1 in context.UnderwritingEntity
+                             join t2 in context.ApprovalSetupEntity on 664553002530508800 equals t2.MenuId
+                             where t1.CheckList == "1" && t1.Rated == 1 && t1.Reviewed == 1 && t2.Authority == user.Employee && t1.isBatched == false && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber) && t1.SchemeType == 2
+                             select t1).Distinct();
+                TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();
+                //obj.Data = await _iUnitOfWork.Underwritings.GetLoanForBatching();
+                obj.Data = query.ToList();
+                foreach (var under in obj.Data)
+                {
+                    var productInfo = await _iUnitOfWork.CreditTypes.GetEntityByProductCode(under.ProductName);
+                    var customerinfo = await _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(under.NHFNumber));
+                    under.DateofEmployment = customerinfo.DateOfEmployment;
+                    under.DOB = customerinfo.DateOfBirth;
+                    under.MonthlyIncome = customerinfo.MonthlySalary;
+                    under.Bvn = customerinfo.BVN;
+                    under.Name = customerinfo.FirstName + " " + customerinfo.LastName;
+                    under.creditName = productInfo.Name;
+
+                }
+                obj.Total = obj.Data.Count;
+                obj.Tag = 1;
+                return obj;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+
+
+
         public async Task<TData<List<UnderwritingEntity>>> GetBatched()
         {
             decimal amount = 0;
@@ -197,6 +242,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Data = query.ToList();
             foreach (UnderwritingEntity under in obj.Data)
             {
+                var schemeInfo = await _iUnitOfWork.Schemes.GetEntity(under.Scheme);
+                under.Scheme = schemeInfo.SchemeName;
                 var customerinfo = await _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(under.NHFNumber));
                 var ChecklisInfo = await _iUnitOfWork.ChecklistsProcedure.GetEntity(under.NHFNumber);
                 if (ChecklisInfo != null)
@@ -1039,6 +1086,74 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
+
+
+        public async Task<TData<string>> DisburseNonNhfLoan(long Id)
+        {
+            var db = new ApplicationDbContext();
+            var user = await Operator.Instance.Current();
+            var obj = new TData<string>();
+            var underwriting = db.UnderwritingEntity.Where(i => i.Id == Id).DefaultIfEmpty().FirstOrDefault();
+            var pmbinfo = db.PmbEntity.Where(i => i.NHFNumber == underwriting.NextStafffLevel).DefaultIfEmpty().FirstOrDefault();
+
+            var employeeInfo = await _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(underwriting.NHFNumber));
+
+            //var underwriting = db.UnderwritingEntity.Where(i => i.Id == Id).DefaultIfEmpty().FirstOrDefault();
+            underwriting.Comments = "Approved";
+            underwriting.Approved = 1;
+            underwriting.Reviewed = 1;
+            underwriting.Disbursed = true;
+
+            var loaninfo = await _iUnitOfWork.LoanInitiations.GetEntityById(long.Parse(underwriting.LoanId));
+            loaninfo.Status = "Loan Disbursed";
+            var batchNo = RandomHelper.RandomLongGenerator(2000005, 99999999);
+
+            loaninfo.ApplicationReferenceNo = "Non-NHF-" + batchNo;
+
+            var Disbursement = new LoanDisbursementEntity
+            {
+                ProductCode = underwriting.ProductName,
+                Tenor = Convert.ToInt32(underwriting.Tenor),
+                Amount = underwriting.LoanAmount,
+                Rate = Convert.ToInt32(underwriting.InterestRate),
+                CustomerNhf = underwriting.NHFNumber,
+                CustomerName = employeeInfo.FirstName + " " + employeeInfo.LastName,
+                RepaymentStatus = 1,
+                DisbursementDate = DateTime.Now,
+                PmbId = pmbinfo.Id,
+                LoanId = underwriting.LoanId,
+
+            };
+            await _iUnitOfWork.LoanDisbursement.SaveForm(Disbursement);
+
+
+            if (employeeInfo != null)
+            {
+                string message;
+                MailParameter mailParameter = new()
+                {
+                    UserEmail = employeeInfo.EmailAddress,
+                    RealName = employeeInfo.LastName + " " + employeeInfo.FirstName,
+                    COmpanyMail = "fmbn@gov.ng",
+                    UserCompany = "Federal Mortgage Bank of Nigeria"
+
+
+                };
+
+                var sendMail = EmailHelper.IsLoanReviewApprovalMailSent(mailParameter, out message);
+
+            }
+
+           
+
+            db.SaveChanges();
+            obj.Message = "Loan Disbursed Successfully";
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+
 
 
         public async Task<TData<string>> ApproveLoanReview(long Id)

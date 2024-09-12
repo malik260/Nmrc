@@ -7,11 +7,11 @@
 
 <div class="container-div">
     <div class="row">
-       
-       @* <div class="btn-group-sm" id="toolbar">
-            
-            <a id="btnAddChecklist" class="btn btn-success" onclick="showSaveChecklistForm(true)"><i class="fa fa-list"></i> Checklist</a>
-            <a id="btnAddRiskAssesstment" class="btn btn-danger" onclick="showSaveRiskAssessmentForm(true)"><i class="fa fa-exclamation-triangle"></i> Risk Assessment</a>
+
+        @* <div class="btn-group-sm" id="toolbar">
+
+        <a id="btnAddChecklist" class="btn btn-success" onclick="showSaveChecklistForm(true)"><i class="fa fa-list"></i> Checklist</a>
+        <a id="btnAddRiskAssesstment" class="btn btn-danger" onclick="showSaveRiskAssessmentForm(true)"><i class="fa fa-exclamation-triangle"></i> Risk Assessment</a>
         </div>*@
 
         <div class="col-sm-12 select-table table-striped">
@@ -19,74 +19,6 @@
         </div>
     </div>
 </div>
-
-
-<div id="affordtab" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="departmentLabel" aria-hidden="true" data-backdrop="false" data-keyboard="false">
-    <div class="modal-dialog modal-lg">
-
-        <div class="modal-content">
-            <div class="modal-header" data-background-color="blue" style="background-color: deepskyblue;color:#FFF;">
-                <button type="button" class="close" data-dismiss="modal" id="btnafford" name="btnafford"><i class="fas fa-times"></i>X</button>
-                <h3 class="modal-title text-center"><strong class="text-white">Affordability Details</strong></h3>
-            </div>
-
-            <div class="card-content">
-                <div class="modal-body">
-
-                    <table id="affordtable" data-toggle="table" class="data-table"
-                           data-search="true"
-                           data-show-export="true"
-                           data-export-types="['csv','txt','excel','pdf']"
-                           data-export-options='{
-                               "fileName"
-                               "Statement of Account" ,
-                               "worksheetName"
-                               "Transaction List" ,
-                               "jspdf"
-                               {"orientation":"landscape",
-                               "autotable"
-                               {"theme" "grid" ,
-                               "styles"
-                               { "rowHeight"
-                               20, "fontSize"
-                               9},
-                               "headerStyles"
-                               { "fillColor"
-                               [40, 10, 255], "textColor"
-                               255 }
-                               }  }
-       }'
-                           data-minimum-count-columns="2"
-                           data-pagination="true"
-                           data-page-list="[10, 25, 50, 100, ALL]"
-                           @*data-url="@Url.Action("listBatch","BatchUpload")"*@
-                           data-search-align="right"
-                           data-toolbar="#Batch-toolbar"
-                           data-show-pagination-switch="false"
-                           data-mobile-responsive="true"
-                           data-show-refresh="true"
-                           data-show-toggle="true"
-                           data-show-columns="true"
-                           data-detail-formatter="detailFormatter"
-                           data-detail-view="false"
-                           data-unique-id="Contributionid"
-                           data-checkon-init="true"
-                           data-buttons-class="success">
-                        <thead>
-                            <tr>
-                            </tr>
-                        </thead>
-                    </table>
-
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
@@ -103,7 +35,7 @@
 
     function initGrid() {
         debugger
-        var queryUrl = '@Url.Content("~/Underwriting/GetLoanForUnderwriting")';
+        var queryUrl = '@Url.Content("~/Underwriting/GetLoanNonMortgageForDis")';
         $('#gridTable').cnTable({
             url: queryUrl,
             detailView: true,
@@ -113,7 +45,7 @@
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
                 { field: 'NHFNumber', title: 'NHF Number', sortable: false },
-                { field: 'ProductName', title: 'Product Name', sortable: false },
+                { field: 'creditName', title: 'Product Name', sortable: false },
                 { field: 'LoanRefNo', title: 'Loan Ref No', sortable: false },
                 {
                     field: 'Tenor', title: 'Tenor', sortable: false, formatter: function (value) {
@@ -132,45 +64,13 @@
                     }
                 },
                 { field: 'Scheme', title: 'Loan Scheme', sortable: false },
-
-                {
-                    title: 'Actions',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        debugger;
-                        var actions = [];
-                        var checklist = row.CheckList;
-                        var buttonName = (checklist == '1') ? 'CheckListed' : 'CheckList';
-
-                        var disabledAttribute = (checklist == '1') ? 'disabled' : '';
-                        //onclick = "showSaveChecklistForm(true)"
-                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showSaveChecklistForm(true)" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
-
-                        actions.push('&nbsp;');
-
-                        var Rating = row.Rated;
-                        var button = (Rating == 1) ? 'Rated' : 'Risk Assesment';
-
-                        var disabled = (Rating == 1) ? 'disabled' : '';
-                        //onclick = "showSaveChecklistForm(true)"
-                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showSaveRiskAssessmentForm(true)" ' + disabled + '><i class="fa-solid fa-house"></i>' + button + '</a>');
-
-
-                        //actions.push('&nbsp;');
-
-
-                        //actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="Reject(\'' + row.Id + '\')"><i class="fa fa-key"></i>Reject</a>');
-
-                        return actions.join('');
-                    }
-                },
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
             },
-            onExpandRow: function(index, row, $detail){
+            onExpandRow: function (index, row, $detail) {
                 initChildGrid(index, row, $detail);
             }
         });
@@ -295,7 +195,7 @@
             }
         });
     }
-        
+
 
 
     function deleteForm() {
@@ -366,63 +266,63 @@
     }
 
 
-//   function Affordability(id) {
-//    cn.confirm("Confirm the approval process?", function () {
-//        debugger;
-//        cn.ajax({
-//            url: '@Url.Content("~/Underwriting/Affordability")' + '?id=' + id,
-//            type: "post",
-//            success: function (obj) {
-//                if (obj.Tag == 1) {
-//                    debugger;
-//                    swal({
-//                        title: 'Affordability', text: "Affordability Check successful", type: 'success'
-//                    }).then(function () {
-//                        $('#affordtab').modal('show');
-//                    });
+    //   function Affordability(id) {
+    //    cn.confirm("Confirm the approval process?", function () {
+    //        debugger;
+    //        cn.ajax({
+    //            url: '@Url.Content("~/Underwriting/Affordability")' + '?id=' + id,
+    //            type: "post",
+    //            success: function (obj) {
+    //                if (obj.Tag == 1) {
+    //                    debugger;
+    //                    swal({
+    //                        title: 'Affordability', text: "Affordability Check successful", type: 'success'
+    //                    }).then(function () {
+    //                        $('#affordtab').modal('show');
+    //                    });
 
-//                    var $table = $('#affordtable');
-//                    $table.bootstrapTable("destroy");
+    //                    var $table = $('#affordtable');
+    //                    $table.bootstrapTable("destroy");
 
-//                    $table.bootstrapTable({
-//                        data: obj.Data,
-//                        columns: [
-//                            {
-//                                field: 'amountRequested',
-//                                title: 'Amount Requested'
-//                            },
-//                            {
-//                                field: 'affordableAmount',
-//                                title: 'Affordable Amount',
-//                            },
-//                            {
-//                                field: 'monthlyRepayment',
-//                                title: 'Monthly Repayment',
-//                            },
-//                            {
-//                                field: 'proposedTenor',
-//                                title: 'Proposed Tenor',
-//                            },
-//                            {
-//                                field: 'rate',
-//                                title: 'Rate',
-//                            }
-//                        ]
-//                    });
-//                } else {
-//                    cn.msgError(obj.Message);
-//                }
-//            }
-//        });
-//    });
-//}
+    //                    $table.bootstrapTable({
+    //                        data: obj.Data,
+    //                        columns: [
+    //                            {
+    //                                field: 'amountRequested',
+    //                                title: 'Amount Requested'
+    //                            },
+    //                            {
+    //                                field: 'affordableAmount',
+    //                                title: 'Affordable Amount',
+    //                            },
+    //                            {
+    //                                field: 'monthlyRepayment',
+    //                                title: 'Monthly Repayment',
+    //                            },
+    //                            {
+    //                                field: 'proposedTenor',
+    //                                title: 'Proposed Tenor',
+    //                            },
+    //                            {
+    //                                field: 'rate',
+    //                                title: 'Rate',
+    //                            }
+    //                        ]
+    //                    });
+    //                } else {
+    //                    cn.msgError(obj.Message);
+    //                }
+    //            }
+    //        });
+    //    });
+    //}
 
     function initChildGrid(index, row, $detail) {
         $detail.html('Loading data ...');
         var date = new Date(row.BaseCreateTime);
-        //var formattedDate = date.toLocaleDateString(); 
+        //var formattedDate = date.toLocaleDateString();
         var dateOfEmployment = new Date(row.DateofEmployment);
-        var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString(); 
+        var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString();
 
         var htmlData =
             '<div class="card">' +

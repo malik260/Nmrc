@@ -102,5 +102,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IUnlockNhfPortalRepository UnlockNhfPortals { get; }
         IUserBelongRepository UserBelongs { get; }
         IUserRepository Users { get; }
+        ILoanDisbursementRepository LoanDisbursement { get; }
     }
 }

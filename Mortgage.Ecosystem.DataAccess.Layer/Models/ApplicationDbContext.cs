@@ -127,6 +127,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<UserBelongEntity>? UserBelongEntity { get; set; } // User role table        
         public DbSet<UserEntity>? UserEntity { get; set; } // User table
         public DbSet<ResetPasswordTokenEntity>? ResetPasswordTokenEntity { get; set; }
+        public DbSet<LoanDisbursementEntity>? LoanDisbursement { get; set; }
 
 
     }
