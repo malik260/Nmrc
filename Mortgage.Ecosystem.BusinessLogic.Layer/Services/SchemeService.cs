@@ -164,8 +164,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 obj.Tag = 0;
                 return obj;
             }
-
-
             bool isUpdate = entity.Id > 0;
             await _iUnitOfWork.Schemes.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();

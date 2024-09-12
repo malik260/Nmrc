@@ -79,7 +79,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return await BaseRepository().FindEntity<SecondaryLenderEntity>(x => x.Name == SecondaryLenderName);
         }
 
-  
+        // Whether the company name exists
+        // <param name="entity"></param>
+        // <returns></returns>
         public bool ExistSecondaryLender(SecondaryLenderEntity entity)
         {
             var expression = ExtensionLinq.True<SecondaryLenderEntity>();
