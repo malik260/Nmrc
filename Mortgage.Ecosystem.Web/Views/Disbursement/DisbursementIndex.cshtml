@@ -7,20 +7,30 @@
             <div class="select-list">
                 <ul>
                     <li>
-                        <label>Name: </label> <input id="name" col="Name" type="text" />
+                        <label>Name: </label>
+                        <input id="name" col="Name" type="text" />
                     </li>
-
                     <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchDisbursementGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                        <label>Status: </label>
+                        <select id="status" col="Status">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </li>
+                    <li>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchDisbursementGrid()">
+                            <i class="fa fa-search"></i>&nbsp;Search
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="btn-group-sm" id="toolbar">
-            <div class="btn-group-sm" id="toolbar">
-                <a id="btnApprove" class="btn btn-primary disabled" onclick="approveEmployerForm()"><i class="fa fa-check"></i> Approve</a>
-                <a id="btnReject" class="btn btn-danger disabled" onclick="rejectEmployerForm()"><i class="fa fa-remove"></i> Reject</a>
-            </div>
+            <a id="btnApprove" class="btn btn-primary disabled" onclick="approveDisbursementForm()">
+                <i class="fa fa-check"></i> Approve
+            </a>
+            <a id="btnReject" class="btn btn-danger disabled" onclick="rejectDisbursementForm()">
+                <i class="fa fa-remove"></i> Reject
+            </a>
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -33,14 +43,16 @@
     $(function () {
         initGrid();
 
+        // Initialize status combo box
         $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
 
+        // Initialize date pickers
         laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', type: 'date', theme: 'molv' });
         laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', type: 'date', theme: 'molv' });
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/LoanReview/GetPageListJson")';
+        var queryUrl = '@Url.Action("GetPageListJson", "LoanReview")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
@@ -60,11 +72,11 @@
                     title: 'Status',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        if (value == "@ApprovalEnum.Pending.ToInt()") {
+                        if (value == @ApprovalEnum.Pending.ToInt()) {
                             return '<span class="badge badge-warning">' + "@ApprovalEnum.Pending.GetDescription()" + '</span>';
-                        } else if (value == "@ApprovalEnum.Approved.ToInt()") {
+                        } else if (value == @ApprovalEnum.Approved.ToInt()) {
                             return '<span class="badge badge-primary">' + "@ApprovalEnum.Approved.GetDescription()" + '</span>';
-                        } else if (value == "@ApprovalEnum.Rejected.ToInt()") {
+                        } else if (value == @ApprovalEnum.Rejected.ToInt()) {
                             return '<span class="badge badge-danger">' + "@ApprovalEnum.Rejected.GetDescription()" + '</span>';
                         }
                         else {
@@ -81,7 +93,7 @@
         });
     }
 
-    function searchRefinancingGrid() {
+    function searchDisbursementGrid() {
         $('#gridTable').cnTable('search');
         resetToolbarStatus();
     }
@@ -99,7 +111,7 @@
         }
         cn.openDialog({
             title: id > 0 ? "Edit Disbursement" : "Add Disbursement",
-            content: '@Url.Content("~/Disbursement/DisbursementForm")' + '?id=' + id,
+            content: '@Url.Action("DisbursementForm", "Disbursement")' + '?id=' + id,
             width: "780px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
@@ -114,12 +126,12 @@
             cn.confirm("Confirm to delete the selected " + selectedRow.length + " row data?", function () {
                 var ids = cn.getIds(selectedRow);
                 cn.ajax({
-                    url: '@Url.Content("~/Disbursement/DeleteFormJson")' + '?ids=' + ids,
+                    url: '@Url.Action("DeleteFormJson", "Disbursement")' + '?ids=' + ids,
                     type: "post",
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             cn.msgSuccess(obj.Message);
-                            searchDisbursementGrid(); ();
+                            searchDisbursementGrid();
                         }
                         else {
                             cn.msgError(obj.Message);
@@ -127,6 +139,67 @@
                     }
                 });
             });
+        }
+    }
+
+    function approveDisbursementForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (selectedRow.length === 0) {
+            cn.msgError("Please select at least one row to approve.");
+            return;
+        }
+        // Implement approval logic here
+        cn.confirm("Are you sure you want to approve the selected entries?", function () {
+            var ids = cn.getIds(selectedRow);
+            cn.ajax({
+                url: '@Url.Action("ApproveForms", "Disbursement")',
+                type: "post",
+                data: { ids: ids },
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchDisbursementGrid();
+                    } else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+    function rejectDisbursementForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (selectedRow.length === 0) {
+            cn.msgError("Please select at least one row to reject.");
+            return;
+        }
+        // Implement rejection logic here
+        cn.confirm("Are you sure you want to reject the selected entries?", function () {
+            var ids = cn.getIds(selectedRow);
+            cn.ajax({
+                url: '@Url.Action("RejectForms", "Disbursement")',
+                type: "post",
+                data: { ids: ids },
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchDisbursementGrid();
+                    } else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+    function resetToolbarStatus() {
+        var selected = $("#gridTable").bootstrapTable("getSelections").length;
+        if (selected > 0) {
+            $("#btnApprove").removeClass("disabled");
+            $("#btnReject").removeClass("disabled");
+        } else {
+            $("#btnApprove").addClass("disabled");
+            $("#btnReject").addClass("disabled");
         }
     }
 </script>

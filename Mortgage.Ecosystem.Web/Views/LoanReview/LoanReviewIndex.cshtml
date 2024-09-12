@@ -7,17 +7,22 @@
             <div class="select-list">
                 <ul>
                     <li>
-                        <label>Name: </label> <input id="name" col="Name" type="text" />
+                        <label>Name: </label>
+                        <input id="name" col="Name" type="text" />
                     </li>
-
                     <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchLoanReviewGrid()"><i class="fa fa-search"></i>&nbsp;Search</a>
+                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchLoanReviewGrid()">
+                            <i class="fa fa-search"></i>&nbsp;Search
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
+
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)"><i class="fa fa-plus"></i> Add</a>
+            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)">
+                <i class="fa fa-plus"></i> Add
+            </a>
         </div>
 
         <div class="col-sm-12 select-table table-striped">
@@ -48,27 +53,28 @@
                 { field: 'Loan', title: 'Loan', sortable: false },
                 { field: 'RefinanceNumber', title: 'Refinance Number', visible: true, sortable: false },
                 {
-                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
+                    field: 'BaseModifyTime',
+                    title: 'Create Time',
+                    formatter: function (value) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
                     }
                 },
-                //{
-                //    field: 'Status',
-                //    title: 'Status',
-                //    align: 'center',
-                //    formatter: function (value, row, index) {
-                //        if (value == "@ApprovalEnum.Pending.ToInt()") {
-                //            return '<span class="badge badge-warning">' + "@ApprovalEnum.Pending.GetDescription()" + '</span>';
-                //        } else if (value == "@ApprovalEnum.Approved.ToInt()") {
-                //            return '<span class="badge badge-primary">' + "@ApprovalEnum.Approved.GetDescription()" + '</span>';
-                //        } else if (value == "@ApprovalEnum.Rejected.ToInt()") {
-                //            return '<span class="badge badge-danger">' + "@ApprovalEnum.Rejected.GetDescription()" + '</span>';
-                //        }
-                //        else {
-                //            return '<span class="badge badge-danger">' + "@ApprovalEnum.Cancelled.GetDescription()" + '</span>';
-                //        }
-                //    }
-                //}
+                {
+                    field: 'Status',
+                    title: 'Status',
+                    align: 'center',
+                    formatter: function (value) {
+                        if (value == "@ApprovalEnum.Pending.ToInt()") {
+                            return '<span class="badge badge-warning">@ApprovalEnum.Pending.GetDescription()</span>';
+                        } else if (value == "@ApprovalEnum.Approved.ToInt()") {
+                            return '<span class="badge badge-primary">@ApprovalEnum.Approved.GetDescription()</span>';
+                        } else if (value == "@ApprovalEnum.Rejected.ToInt()") {
+                            return '<span class="badge badge-danger">@ApprovalEnum.Rejected.GetDescription()</span>';
+                        } else {
+                            return '<span class="badge badge-danger">@ApprovalEnum.Cancelled.GetDescription()</span>';
+                        }
+                    }
+                }
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);
@@ -78,7 +84,7 @@
         });
     }
 
-    function searchRefinancingGrid() {
+    function searchLoanReviewGrid() {
         $('#gridTable').cnTable('search');
         resetToolbarStatus();
     }
@@ -89,8 +95,7 @@
             var selectedRow = $("#gridTable").bootstrapTable("getSelections");
             if (!cn.checkRowEdit(selectedRow)) {
                 return;
-            }
-            else {
+            } else {
                 id = selectedRow[0].Id;
             }
         }
@@ -116,9 +121,8 @@
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             cn.msgSuccess(obj.Message);
-                            searchLoanReviewGrid(); ();
-                        }
-                        else {
+                            searchLoanReviewGrid();
+                        } else {
                             cn.msgError(obj.Message);
                         }
                     }
