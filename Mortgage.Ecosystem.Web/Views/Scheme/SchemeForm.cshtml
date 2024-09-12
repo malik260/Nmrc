@@ -38,9 +38,9 @@
     var id = cn.request("id");
 
     $("#lender").cnComboBox({
-        url: '@Url.Content("~/Lender/GetListJson")',
+        url: '@Url.Content("~/PMB/GetListJson")',
         key: "Id",
-        value: "LenderName",
+        value: "Name",
         class: "form-control",
         multiple: true,
         defaultValue: [],

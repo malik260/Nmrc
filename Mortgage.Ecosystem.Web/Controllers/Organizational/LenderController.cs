@@ -76,9 +76,9 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         [HttpGet]
         [AuthorizeFilter("lender:view")]
-        public async Task<IActionResult> GetFormJson(string code)
+        public async Task<IActionResult> GetFormJson(int id)
         {
-            TData<LenderSetupEntity> obj = await _iLenderService.GetEntity(code);
+            TData<LenderSetupEntity> obj = await _iLenderService.GetEntity(id);
             return Json(obj);
         }
 

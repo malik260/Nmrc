@@ -82,10 +82,10 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         //    return obj;
         //}       
 
-        public async Task<TData<LenderSetupEntity>> GetEntity(string name)
+        public async Task<TData<LenderSetupEntity>> GetEntity(long id)
         {
             TData<LenderSetupEntity> obj = new TData<LenderSetupEntity>();
-            obj.Data = await _iUnitOfWork.Lenders.GetEntity(name);
+            obj.Data = await _iUnitOfWork.Lenders.GetEntity(id);
             obj.Tag = 1;
             return obj;
         }
@@ -116,18 +116,18 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     }
 
                     // Retrieve and assign the ProductName based on ProductCode
-                    var lender = await _iUnitOfWork.Lenders.GetEntitybyName(entity.LenderName);
+                    var lender = await _iUnitOfWork.Lenders.GetEntity(entity.Lender);
                     //if (productEntity == null)
                     //{
                     //    entity.ProductName = productEntity.Name;
                     //}
                     if (lender != null)
                     {
-                        entity.LenderName = lender.LenderName;
+                        entity.Lender = lender.Lender;
                     }
                     else
                     {
-                        entity.LenderName = "Unknown Product"; // Default value if product entity is not found
+                        entity.Lender = 0; // Default value if product entity is not found
                     }
                 }
 
@@ -156,7 +156,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<TData<string>> SaveForm(LenderSetupEntity entity)
         {
             TData<string> obj = new TData<string>();
-            var ProductExist = await _iUnitOfWork.Lenders.GetEntitybyName(entity.LenderName);
+            var ProductExist = await _iUnitOfWork.Lenders.GetEntity(entity.Lender);
             if (ProductExist != null)
             {
                 obj.Message = "Lender already exists!";

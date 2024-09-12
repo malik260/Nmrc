@@ -1,0 +1,133 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">NMRC Eligibility Criteria Form</span>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="control-label">Category<font class="red"> *</font></label>
+                        <div id="category" col="Category"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="item" class="control-label"> Criteria <font class="red"> *</font></label>
+                        <input type="text" col="Item" class="form-control" id="item" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="weight" class="control-label">Description<font class="red"> *</font></label>
+                        <textarea id="description" col="Description" class="form-control" style="height:80px" required></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<script>
+    var id = cn.request("id");
+
+    $("#category").cnComboBox({
+        url: '@Url.Content("~/NmrcCategory/GetListJson")',
+        key: "Id",
+        value: "Name",
+        class: "form-control"
+    });
+
+    getForm();
+
+    function getForm() {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/NmrcEligibility/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var result = obj.Data;
+                        console.log(result);  // Log to inspect data structure
+                        $("#form").setWebControls(result);  // Make sure this method is working
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to load form data.'
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error while fetching form data.'
+                    });
+                }
+            });
+        } else {
+            var defaultData = { Category: "", Item: "", Description: "" };
+            $("#form").setWebControls(defaultData);  // Ensure this correctly sets the default data
+        }
+    }
+
+    function saveForm(index) {
+        if ($("#form").validate().form()) {
+            var postData = $("#form").getWebControls({ Id: id });
+            var Category = $("#category").cnComboBox('getValue');
+
+            if (Category <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Please select a category!',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+
+            cn.ajax({
+                url: '@Url.Content("~/NmrcEligibility/SaveFormJson")',
+                type: "post",
+                data: postData,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        // Success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: obj.Message,
+                            confirmButtonText: 'OK',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            willClose: () => {
+                                parent.layer.close(index);
+                                parent.searchGrid();
+                            }
+                        });
+                    } else {
+                        // Error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: obj.Message,
+                            confirmButtonText: 'OK',
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                        return false;
+                    }
+                }
+            });
+        }
+    }
+</script>

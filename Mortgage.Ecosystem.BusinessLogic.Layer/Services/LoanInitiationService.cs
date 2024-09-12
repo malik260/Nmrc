@@ -51,6 +51,25 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
 
+
+        public async Task<TData<CustomerDetailsViewModel>> GetCustomerDetails2()
+        {
+            var _db = new ApplicationDbContext();
+            TData<CustomerDetailsViewModel> obj = new TData<CustomerDetailsViewModel>();
+            var cust = new CustomerDetailsViewModel();
+            decimal monthlysal = 0;
+            var user = await Operator.Instance.Current();
+            var employeeInfo = await _iUnitOfWork.Employees.GetEntity(user.Employee);
+            monthlysal = employeeInfo.MonthlySalary;
+            cust.MonthlyIncome = monthlysal;            
+            cust.LoanRepayment = "Monthly";
+            obj.Data = cust;
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+
         public async Task<TData<CustomerDetailsViewModel>> GetCustomerDetails()
         {
             var _db = new ApplicationDbContext();
@@ -587,6 +606,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             entity.PMB = pmbinfo.NHFNumber;
             entity.RepaymentPattern = "Monthly";
             entity.file = initiateLoanDto.file;
+            entity.LoanScheme = 1;
             var saveform = _iUnitOfWork.LoanInitiations.SaveForm(entity);
 
 
@@ -605,7 +625,102 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 CheckList = "0",
                 Reviewed = 0,
                 Company = pmbinfo.Id,
-                BaseProcessMenu = 563327185478225920
+                BaseProcessMenu = 563327185478225920,
+                SchemeType = 1
+            };
+            await _iUnitOfWork.Underwritings.SaveForm(underwriting);
+
+            var customerInfo = await _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(underwriting.NHFNumber));
+            var pmbInfo = await _iUnitOfWork.Pmbs.GetEntitybyNhf(underwriting.NextStafffLevel.ToString());
+            employeeListParam.Company = pmbInfo.Id;
+            var contactPerson = _iUnitOfWork.Employees.GetListByCompany(employeeListParam).Result.Where(i => i.EmployerType == 0).FirstOrDefault();
+            var message = string.Empty;
+            MailParameter mailParameter = new()
+            {
+                ContactPerson = contactPerson.FirstName + ' ' + contactPerson.LastName,
+                ContactPersonEmail = pmbInfo.EmailAddress,
+                UserName = customerInfo.FirstName + ' ' + customerInfo.LastName,
+                PmbName = pmbinfo.Name,
+
+            };
+            bool sendemail = EmailHelper.IsContactPmbSent(mailParameter, out message);
+
+            MailParameter LoanmailParameter = new()
+            {
+                UserCompany = "Federal Mortgage Of Nigeria",
+                UserEmail = employeedetails.EmailAddress,
+                RealName = employeedetails.LastName + " " + employeedetails.FirstName,
+
+            };
+            bool sendLoanemail = EmailHelper.IsSuccessfulLoanEmail(LoanmailParameter, out message);
+
+
+            obj.Data = entity;
+            obj.Tag = 1;
+            obj.Message = "Loan Initiated Successfully, Passed to PMB Underwritting";
+            return obj;
+        }
+
+
+
+        public async Task<TData<LoanInitiationEntity>> NonMortgageLoanApplication(InitiateLoanDto initiateLoanDto)
+        {
+            var context = new ApplicationDbContext();
+            TData<LoanInitiationEntity> obj = new TData<LoanInitiationEntity>();
+            EmployeeListParam employeeListParam = new EmployeeListParam();
+            var user = await Operator.Instance.Current();
+            var employeedetails = await _iUnitOfWork.Employees.GetById(user.Employee);
+           
+            var noOfLoans = context.LoanInitiationEntity.Where(x => x.NHFNumber == employeedetails.NHFNumber.ToString()).ToList();
+
+            if (noOfLoans.Count >= 1)
+            {
+                var UnderApproved = noOfLoans.Where(i => i.Status == "0" || i.Status == null || i.Status == "").ToList();
+
+                if (UnderApproved.Count >= 1)
+                {
+                    obj.Message = "You currently have an ongoing loans process in progress.";
+                    obj.Tag = 0;
+                    return obj;
+                }
+
+            }
+
+            var productDetails = await _iUnitOfWork.CreditTypes.GetEntityByProductCode(initiateLoanDto.LoanProduct);
+            var pmbinfo = await _iUnitOfWork.Pmbs.GetEntity(initiateLoanDto.Lender);
+            LoanInitiationEntity entity = new LoanInitiationEntity();
+
+            entity.Principal = initiateLoanDto.PrincipalAmount;
+            entity.Rate = initiateLoanDto.InterestRate;
+            entity.Tenor = initiateLoanDto.Tenor;
+            entity.LoanProduct = productDetails.Code;
+            entity.LoanPurpose = initiateLoanDto.Purpose;
+            entity.Status = "Undergoing Approval";
+            entity.NHFNumber = employeedetails.NHFNumber.ToStr();
+            entity.PMB = pmbinfo.NHFNumber;
+            entity.RepaymentPattern = "Monthly";
+            entity.file = initiateLoanDto.file;
+            entity.LoanScheme = 2;
+            var saveform = _iUnitOfWork.LoanInitiations.SaveForm(entity);
+
+
+
+            var underwriting = new UnderwritingEntity
+            {
+                LoanAmount = initiateLoanDto.PrincipalAmount,
+                InterestRate = initiateLoanDto.InterestRate,
+                Tenor = initiateLoanDto.Tenor.ToString(),
+                Name = employeedetails.FirstName + " " + employeedetails.LastName,
+                ProductName = productDetails.Code,
+                NHFNumber = employeedetails.NHFNumber.ToStr(),
+                NextStafffLevel = pmbinfo.NHFNumber,
+                LoanId = Convert.ToString(entity.Id),
+                Rated = 0,
+                CheckList = "0",
+                Reviewed = 0,
+                Company = pmbinfo.Id,
+                BaseProcessMenu = 563327185478225920,
+                SchemeType = 2
             };
             await _iUnitOfWork.Underwritings.SaveForm(underwriting);
 

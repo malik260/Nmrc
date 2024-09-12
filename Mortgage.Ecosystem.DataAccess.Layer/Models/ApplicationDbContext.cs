@@ -89,6 +89,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<NHFRegCompanyEntity>? NHFRegCompanyEntity { get; set; }
 
         public DbSet<NHFRegUsersEntity>? NHFRegUsersEntity { get; set; }
+        public DbSet<NmrcCategoryEntity>? NmrcCategoryEntity { get; set; }
+        public DbSet<NmrcEligibilityEntity>? NmrcEligibilityEntity { get; set; }
         public DbSet<MaritalStatusEntity>? MaritalStatusEntity { get; set; }
         public DbSet<MenuAuthorizeEntity>? MenuAuthorizeEntity { get; set; } // Menu permission table        
         public DbSet<MenuEntity>? MenuEntity { get; set; } // Menu table
@@ -128,6 +130,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<UserBelongEntity>? UserBelongEntity { get; set; } // User role table        
         public DbSet<UserEntity>? UserEntity { get; set; } // User table
         public DbSet<ResetPasswordTokenEntity>? ResetPasswordTokenEntity { get; set; }
+        public DbSet<LoanDisbursementEntity>? LoanDisbursement { get; set; }
 
 
     }

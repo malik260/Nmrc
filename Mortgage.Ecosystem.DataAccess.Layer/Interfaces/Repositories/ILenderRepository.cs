@@ -10,12 +10,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<List<LenderSetupEntity>> GetPageList(LenderListParam param, Pagination pagination);
         //Task<CreditTypeEntity> GetEntity(string code);
         //Task<int> GetMaxSort();
-        Task<LenderSetupEntity> GetEntity(string name);
-        Task<LenderSetupEntity> GetEntitybyName(string name);
+        Task<LenderSetupEntity> GetEntity(long id);
+        //Task<LenderSetupEntity> GetEntitybyName(string name);
 
         Task SaveForm(LenderSetupEntity entity);
    
-        bool ExistLenderName(LenderSetupEntity entity);
+        //bool ExistLenderName(LenderSetupEntity entity);
         Task DeleteForm(string ids);
         Task<LenderSetupEntity> GetEntities(int id);
 

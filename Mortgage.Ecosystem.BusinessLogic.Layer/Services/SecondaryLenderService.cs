@@ -145,7 +145,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     id = secondaryLender.Id,
                     name = secondaryLender.Name
                 });
-                List<long> userIdList = userList.Where(t => t.SecondaryLender == secondaryLender.Id).Select(t => t.Employee).ToList();
+                List<long> userIdList = userList.Where(t => t.Company == secondaryLender.Id).Select(t => t.Employee).ToList();
                 foreach (UserEntity user in userList.Where(t => userIdList.Contains(t.Employee)))
                 {
                     obj.Data.Add(new ZtreeInfo
@@ -354,38 +354,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             };
             var approvalLogRecords = await _iUnitOfWork.ApprovalLogs.GetList(approvalLogListParam);
             menuRecord.ApprovalLogList = approvalLogRecords;
-            //NhfemployerVM employer = new NhfemployerVM();
-            //employer.Employername = entityRecord.Name;
-            //employer.Emailaddress = entityRecord.EmailAddress;
-            //employer.Mobilenumber = entityRecord.MobileNumber;
-            //employer.Rcnumber = entityRecord.RCNumber;
-            //employer.Addressline1 = entityRecord.Address;
-            //employer.Addressline2 = entityRecord.Address;
-            //employer.Contactperson = companyRecord.ContactPerson;
-            //employer.Contactpersondesignation = companyRecord.ContactPersonDesignation;
-            //employer.Contributionlocation = "101";
-            //employer.Datecreated = DateTime.Now;
-            //employer.Economicsector = entityRecord.Sector.ToString();
-            //employer.Postaladdress = entityRecord.Address;
-            //employer.Telephonenumber = entityRecord.MobileNumber;
-            //employer.Batchrefr = "4";
-            //var EmployerInfo = await IntegrateEmployerToCore(employer);
-            //if (EmployerInfo.responseCode != "200")
-            //{
-            //    obj.Message = "Employer Approval Failed: " + EmployerInfo.message + "on Core Banking";
-            //    obj.Data = entity.Id;
-            //    obj.Tag = 0;
-            //    return obj;
-
-            //}
-            //var EmployerRecord = db.CompanyEntity.Where(i => i.EmailAddress == employer.Emailaddress).DefaultIfEmpty().FirstOrDefault();
-            //EmployerRecord.EmployerNhfNumber = EmployerInfo.CustomerProfile.NhfNumber;
-            //EmployerRecord.EmployerCode = EmployerInfo.CustomerProfile.CustomerCode;
-            //db.SaveChanges();
-
-            //entityRecord.NHFNumber = EmployerInfo.CustomerProfile.NhfNumber;
-            //entityRecord.SecondaryLenderCode = EmployerInfo.CustomerProfile.CustomerCode;
-
+            
             await _iUnitOfWork.SecondaryLenders.ApproveForm(entityRecord, menuRecord, user);
             var menus = await _iUnitOfWork.Menus.GetSecondaryLenderMenuList();
             foreach (var menu in menus)
@@ -401,9 +370,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             employeeRecord.Status = 1;
             employeeRecord.NHFNumber = long.Parse(entityRecord.NHFNumber);
             employeeRecord.EmployeeCode = entityRecord.SecondaryLenderCode;
+
+            var CompanyRecord = db.CompanyEntity.Where(i => i.Id == entityRecord.Id).DefaultIfEmpty().FirstOrDefault();
+            employeeRecord.Status = 1;
             db.SaveChanges();
             obj.Message = "Lender Approved Successfully";
-            //obj.Message = string.Empty;
             obj.Data = entity.Id;
             obj.Tag = 1;
             return obj;

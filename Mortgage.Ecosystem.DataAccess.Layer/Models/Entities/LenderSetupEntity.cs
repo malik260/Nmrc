@@ -12,10 +12,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("LenderId")]
         public int LenderId { get; set; }
         // Name
-        [Column("LenderName")]
-        public string? LenderName { get; set; }
+        [Column("Lender")]
+        public long Lender { get; set; }
         
         [Column("LenderTypeId")]
-        public string? LenderTypeId { get; set; }
+        public int? LenderTypeId { get; set; }
     }
 }

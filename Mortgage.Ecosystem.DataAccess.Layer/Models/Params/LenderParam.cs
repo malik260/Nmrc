@@ -2,7 +2,7 @@
 {
     public class LenderListParam
     {
-        public string? LenderName { get; set; }
+        public int? LenderId { get; set; }
    
         public string? LenderTypeId { get; set; }
     }

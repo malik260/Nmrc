@@ -308,49 +308,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
                 }
 
-                //if (entity.AgentType == GlobalConstant.FIVE.ToString())
-                //{
-                //    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.EMPLOYEE_MENU_URL);
-                //    EmployeeEntity employeeEntity = new EmployeeEntity();
-                //    employeeEntity.Id = entity.Id;
-                //    employeeEntity.CoyRCNumber = entity.RCNumber;
-                //    employeeEntity.CompanyName = entity.Name;
-                //    employeeEntity.UserName = entity.EmailAddress;
-                //    //employeeEntity.DateOfEmployment = entity.date;
-                //    employeeEntity.EmailAddress = entity.EmailAddress;
-                //    employeeEntity.CoySector = entity.Sector;
-                //    employeeEntity.CoySubsector = entity.Subsector;
-                //    employeeEntity.CoyAddress = entity.Address;
-                //    employeeEntity.KinAddress = entity.KinAddress;
-                //    employeeEntity.KinFirstName = entity.KinFirstName;
-                //    employeeEntity.KinLastName = entity.KinLastName;
-                //    employeeEntity.KinRelationship = entity.KinRelationship;
-                //    employeeEntity.BaseProcessMenu = currentMenu;
-                //    employeeEntity.BaseCreateTime = DateTime.Now;
-                //    employeeEntity.BaseCreatorId = entity.BaseCreatorId;
-                //    employeeEntity.BaseModifierId = entity.BaseModifierId;
-                //    //employeeEntity.NHFNumber = Convert.ToString(entity.NHFNumber);
-                //    await db.Insert(employeeEntity);
-
-                //}
-
-                ////Next of kin record
-                //if (!string.IsNullOrEmpty(entity.KinFirstName) && !string.IsNullOrEmpty(entity.KinLastName) && !string.IsNullOrEmpty(entity.KinMobileNumber) && !entity.KinRelationship.IsNullOrZero())
-                //{
-                //    NextOfKinEntity nextOfKinEntity = new()
-                //    {
-                //        Company = entity.Id,
-                //        Employee = entity.Employee,
-                //        FirstName = entity.KinFirstName,
-                //        LastName = entity.KinLastName,
-                //        MobileNumber = entity.KinMobileNumber,
-                //        Relationship = entity.KinRelationship
-                //    };
-                //    await nextOfKinEntity.Create();
-                //    await db.Insert(nextOfKinEntity);
-                //}
-
-
+              
 
                 // Role
                 if (!entity.Role.IsNullOrZero())

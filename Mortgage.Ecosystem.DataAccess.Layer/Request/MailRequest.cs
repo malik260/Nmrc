@@ -36,7 +36,8 @@
         public string? UserPhoneNumber { get; set; }
         public string? DateSubmitted { get; set; }
         public string? CompanyName { get; set; }
-
+        public string? SecondaryLender { get; set; }
+        public string? SecondaryLenderEmail { get; set; }
         public string? EmployeeName { get; set; }
         public string? COmpanyMail { get; set; }
     }

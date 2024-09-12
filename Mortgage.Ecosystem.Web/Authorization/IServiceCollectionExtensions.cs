@@ -86,6 +86,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<ILenderService, LenderService>();
             services.AddScoped<ILenderTypeService, LenderTypeService>();
             services.AddScoped<ILoanInitiationService, LoanInitiationService>();
+            services.AddScoped<ILoanDisbursementService, LoanDisbursementService>();
             services.AddScoped<ILoanInitiationUploadService, loanInitiationUploadService>();
             services.AddScoped<ILoanRepaymentService, LoanRepaymentService>();
             services.AddScoped<ILoanScheduleService, LoanScheduleService>();
@@ -96,6 +97,8 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<INationalityService, NationalityService>();
             services.AddScoped<INextOfKinService, NextOfKinService>();
+            services.AddScoped<INmrcEligibilityService, NmrcEligibilityService>();
+            services.AddScoped<INmrcCategoryService, NmrcCategoryService>();
             services.AddScoped<INHFRegCompanyService, NHFRegCompanyService>();
             services.AddScoped<INHFRegUsersService, NHFRegUsersService>();
             services.AddScoped<INHFCustomerRequestService, NHFCustomerRequestService>();

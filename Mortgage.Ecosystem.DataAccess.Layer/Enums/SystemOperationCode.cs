@@ -361,6 +361,16 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         GetGenderName = 2351,
         #endregion
 
+        #region NmrcCategory
+        [Description("Get Category Name")]
+        GetNmrcCategoryName = 2361,
+        #endregion
+
+        #region NmrcEligibility
+        [Description("Get Eligibility Criteria")]
+        GetNmrcEligibilityCriteria = 2371,
+        #endregion
+
         #region Refinancing
         [Description("Get Refinance Name")]
         GetRefinanceName = 2551,
@@ -569,6 +579,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         Designation,
         [Description("Gender")]
         Gender,
+        [Description("Nmrc Category")]
+        NmrcCategory,
+        [Description("Nmrc Eligibility")]
+        NmrcEligibility,
         [Description("Marital Status")]
         MaritalStatus,
         [Description("Menu")]

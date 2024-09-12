@@ -10,7 +10,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
     {
         // Lender
         [Column("LenderID")]
-        public string? LenderID { get; set; }
+        public long LenderID { get; set; }
 
         // NHF Number
         [Column("NHFNumber")]
@@ -20,21 +20,32 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("RefinanceNumber")]
         public string? RefinanceNumber { get; set; }
 
-        // Reference Number
-        [Column("LoanReferenceNumber")]
-        public string? LoanReferenceNumber { get; set; }
-
         [Column("Amount")]
-        public string? Amount { get; set; }
+        public decimal? Amount { get; set; }
 
-        [Column("Loan")]
-        public string? Loan { get; set; }
+        [Column("TotalAmount")]
+        public decimal? TotalAmount { get; set; }
+
+        [Column("LoanId")]
+        public string? LoanId { get; set; }
 
         [Column("Status")]
-        public string? Status { get; set; }
+        public int? Status { get; set; }
 
         [Column("ApplicationDate")]
-        public string? ApplicationDate { get; set; }
+        public DateTime? ApplicationDate { get; set; }
+
+        [Column("Tenor")]
+        public int? Tenor { get; set; }
+
+        [Column("Rate")]
+        public int? Rate { get; set; }
+
+        [Column("PmbId")]
+        public long PmbId { get; set; }
+
+          [Column("ProductCode")]
+        public string? ProductCode { get; set; }
 
 
 

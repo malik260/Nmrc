@@ -12,5 +12,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<RefinancingEntity>> GetEntity();
         Task<TData<string>> SaveForm(RefinancingEntity entity);
         Task<TData> DeleteForm(string ids);
+        Task<TData<string>> RefinanceLoans(string lists, long SecondaryLender);
     }
 }

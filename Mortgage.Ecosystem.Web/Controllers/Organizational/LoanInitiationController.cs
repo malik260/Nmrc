@@ -40,6 +40,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
+        [AuthorizeFilter("loaninitiation:view")]
         public IActionResult NonMortgageLoanInitiationIndex()
         {
             return View();
@@ -181,6 +182,15 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
 
 
+        public async Task<IActionResult> NonMortgageLoanInitiation(InitiateLoanDto initiateLoanDto)
+        {
+
+            TData obj = await _iLoanInitiationService.NonMortgageLoanApplication(initiateLoanDto);
+           
+
+           
+            return Json(obj);
+        }
 
 
         [HttpGet]
@@ -192,6 +202,19 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
             var audit = await _iAuditTrailService.SaveForm(auditInstance);
             TData<CustomerDetailsViewModel> obj = await _iLoanInitiationService.GetCustomerDetails();
+            return Json(obj);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ViewInformation2()
+        {
+            var auditInstance = new AuditTrailEntity();
+            auditInstance.Action = SystemOperationCode.ViewInformation.ToString();
+            auditInstance.ActionRoute = SystemOperationCode.LoanInitiationController.ToString();
+
+            var audit = await _iAuditTrailService.SaveForm(auditInstance);
+            TData<CustomerDetailsViewModel> obj = await _iLoanInitiationService.GetCustomerDetails2();
             return Json(obj);
         }
         #endregion

@@ -8,6 +8,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface ICreditTypeService
     {
+        Task<TData<List<CreditTypeEntity>>> GetNonNhfList(CreditTypeListParam param);
         Task<TData<List<CreditTypeEntity>>> GetList(CreditTypeListParam param);
         Task<TData<List<CreditTypeEntity>>> GetPageList(CreditTypeListParam param, Pagination pagination);
         Task<TData<List<ZtreeInfo>>> GetZtreeCreditTypeList(CreditTypeListParam param);

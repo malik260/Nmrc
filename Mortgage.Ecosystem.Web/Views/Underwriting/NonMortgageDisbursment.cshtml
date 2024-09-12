@@ -1,0 +1,384 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="ibox-title">
+    <h5>UNDERWRITING</h5>
+</div>
+
+<div class="container-div">
+    <div class="row">
+
+        @* <div class="btn-group-sm" id="toolbar">
+
+        <a id="btnAddChecklist" class="btn btn-success" onclick="showSaveChecklistForm(true)"><i class="fa fa-list"></i> Checklist</a>
+        <a id="btnAddRiskAssesstment" class="btn btn-danger" onclick="showSaveRiskAssessmentForm(true)"><i class="fa fa-exclamation-triangle"></i> Risk Assessment</a>
+        </div>*@
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        debugger
+        var queryUrl = '@Url.Content("~/Underwriting/GetLoanNonMortgageForDis")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            detailView: true,
+            sortName: 'BaseModifyTime',
+            sortOrder: "Desc",
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'NHFNumber', title: 'NHF Number', sortable: false },
+                { field: 'creditName', title: 'Product Name', sortable: false },
+                { field: 'LoanRefNo', title: 'Loan Ref No', sortable: false },
+                {
+                    field: 'Tenor', title: 'Tenor', sortable: false, formatter: function (value) {
+                        return value + " years";
+                    }
+                },
+                {
+                    field: 'InterestRate', title: 'Interest Rate', sortable: false, formatter: function (value) {
+                        return value + "%";
+                    }
+                },
+                { field: 'LoanAmount', title: 'Loan Amount', sortable: false },
+                {
+                    field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd");
+                    }
+                },
+                { field: 'Scheme', title: 'Loan Scheme', sortable: false },
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            },
+            onExpandRow: function (index, row, $detail) {
+                initChildGrid(index, row, $detail);
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+
+
+    function openCustomDialog(options) {
+        layer.open({
+            type: 2,
+            title: options.title,
+            content: options.content,
+            area: [options.width, '90%'],
+            btn: [], // Remove the default confirm and close buttons
+            success: function (layero, index) {
+                options.callback(index, layero);
+            }
+        });
+    }
+
+
+
+    function showSaveForm(bAdd) {
+        var id = 0;
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            var loanId = selectedRow[0].LoanId;
+            localStorage.setItem('Data2', loanId);
+
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        openCustomDialog({
+            title: id > 0 ? "Edit Document" : "Add Document",
+            content: '@Url.Content("~/Underwriting/AddDocumentForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showSaveChecklistForm(bAdd) {
+        debugger
+        var id = 0;
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        console.log(selectedRow);
+        var NhfNumber = selectedRow[0].NHFNumber;
+        var ProductName = selectedRow[0].ProductName;
+        var loanId = selectedRow[0].LoanId;
+        id = selectedRow[0].CheckList;
+        console.log(id);
+
+        if (id == "1") {
+            $("#btnAddChecklist").prop("disabled", true);
+
+        }
+
+        console.log(ProductName);
+        localStorage.setItem('Data', NhfNumber);
+        localStorage.setItem('Data1', ProductName);
+        localStorage.setItem('Data2', loanId);
+        if (!bAdd) {
+
+
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        openCustomDialog({
+            title: id > 0 ? "Edit Checklist" : "Checklist Form",
+            content: '@Url.Content("~/Underwriting/ChecklistForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+    function showSaveRiskAssessmentForm(bAdd) {
+        var id = 0;
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        console.log(selectedRow);
+        var NhfNumber = selectedRow[0].NHFNumber;
+        var ProductName = selectedRow[0].ProductName;
+        var loanId = selectedRow[0].LoanId;
+
+        console.log(ProductName);
+        localStorage.setItem('Data', NhfNumber);
+        localStorage.setItem('Data1', ProductName);
+        localStorage.setItem('Data2', loanId);
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        openCustomDialog({
+            title: id > 0 ? "Edit Risk Assessment Form" : "Risk Assessment Form",
+            content: '@Url.Content("~/Underwriting/RiskAssessmentForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+
+
+    function deleteForm() {
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        if (cn.checkRowDelete(selectedRow)) {
+            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
+                var ids = cn.getIds(selectedRow);
+                cn.ajax({
+                    url: '@Url.Content("~/Underwriting/DeleteFormJson")' + '?ids=' + ids,
+                    type: "post",
+                    success: function (obj) {
+                        if (obj.Tag == 1) {
+                            cn.msgSuccess(obj.Message);
+                            searchGrid();
+                        }
+                        else {
+                            cn.msgError(obj.Message);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+
+    function approveUnderwriting(id) {
+        debugger
+        cn.confirm("Confirm the approval process？", function () {
+            debugger;
+            cn.ajax({
+                url: '@Url.Content("~/Underwriting/ApproveUnderwriting")' + '?id=' + id,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+    function DisapproveUnderwriting(id) {
+        debugger
+        if (id === 0) {
+            cn.msgError("Please select an item");
+            return;
+        }
+        var remark = $("#remark").val();
+
+        cn.confirm("Confirm the Disapproval process？", function () {
+            cn.ajax({
+                url: '@Url.Content("~/Underwriting/DisapproveUnderwriting")' + '?id=' + id + '&remark=' + remark,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    } else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+
+    //   function Affordability(id) {
+    //    cn.confirm("Confirm the approval process?", function () {
+    //        debugger;
+    //        cn.ajax({
+    //            url: '@Url.Content("~/Underwriting/Affordability")' + '?id=' + id,
+    //            type: "post",
+    //            success: function (obj) {
+    //                if (obj.Tag == 1) {
+    //                    debugger;
+    //                    swal({
+    //                        title: 'Affordability', text: "Affordability Check successful", type: 'success'
+    //                    }).then(function () {
+    //                        $('#affordtab').modal('show');
+    //                    });
+
+    //                    var $table = $('#affordtable');
+    //                    $table.bootstrapTable("destroy");
+
+    //                    $table.bootstrapTable({
+    //                        data: obj.Data,
+    //                        columns: [
+    //                            {
+    //                                field: 'amountRequested',
+    //                                title: 'Amount Requested'
+    //                            },
+    //                            {
+    //                                field: 'affordableAmount',
+    //                                title: 'Affordable Amount',
+    //                            },
+    //                            {
+    //                                field: 'monthlyRepayment',
+    //                                title: 'Monthly Repayment',
+    //                            },
+    //                            {
+    //                                field: 'proposedTenor',
+    //                                title: 'Proposed Tenor',
+    //                            },
+    //                            {
+    //                                field: 'rate',
+    //                                title: 'Rate',
+    //                            }
+    //                        ]
+    //                    });
+    //                } else {
+    //                    cn.msgError(obj.Message);
+    //                }
+    //            }
+    //        });
+    //    });
+    //}
+
+    function initChildGrid(index, row, $detail) {
+        $detail.html('Loading data ...');
+        var date = new Date(row.BaseCreateTime);
+        //var formattedDate = date.toLocaleDateString();
+        var dateOfEmployment = new Date(row.DateofEmployment);
+        var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString();
+
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center" > ' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Underwritting Process for ' + row.Name + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="nhfNumber">NHF Number:</label>' +
+            '<input type="text" id="nhfNumber" name="NHFNumber" placeholder="NHF Number" class="form-control text-left" readonly value="' + row.NHFNumber + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="monthlyIncome">Monthly Income:</label>' +
+            '<input type="text" id="monthlyIncome" name="MonthlyIncome" placeholder="Monthly Income" class="form-control text-left" readonly value="' + row.MonthlyIncome + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="phone">Date Of Employment:</label>' +
+            '<input type="text" id="dateOfEmployment" name="DateOfEmployment" placeholder="Date Of Employment" class="form-control text-left" readonly value="' + formattedDateOfEmployment + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="dateOfBirth">Date Of Birth:</label>' +
+            '<input type="text" id="dateOfBirth" name="DateOfBirth" placeholder="Date Of Birth" class="form-control text-left" readonly value="' + row.DOB + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bvn">BVN:</label>' +
+            '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.Bvn + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-group col-sm-12">' +
+            '<label for="remark">Remark:</label>' +
+            '<textarea id="remark" name="Remark" placeholder="Remark" class="form-control text-left" style="height:60px">' + row.Remark + '</textarea>' +
+            '</div>' +
+            '<div class="form-group col-sm-12 text-right">' +
+            '<button type="button" id="approve" onclick="approveUnderwriting(\'' + row.Id + '\');" class="btn btn-success btn-sm">Approve</button>' +
+            '<button type="button" id="disapprove" onclick="DisapproveUnderwriting(\'' + row.Id + '\');" class="btn btn-danger btn-sm">Disapprove</button>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        $detail.html(htmlData);
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            if ($cardBody.is(':visible')) {
+                $cardBody.hide();
+            } else {
+                $cardBody.show();
+            }
+        });
+    }
+
+
+
+</script>
