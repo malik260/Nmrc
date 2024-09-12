@@ -118,6 +118,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<ISchemeLenderService, SchemeLenderService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ISecondaryLenderService, SecondaryLenderService>();
+            services.AddScoped<ISecondaryLenderChecklistService, SecondaryLenderChecklistService>();
             services.AddScoped<ISectorService, SectorService>();
             services.AddScoped<IStateService, StateService>();
             services.AddScoped<IStatementOfAccountService, StatementOfAccountService>();
