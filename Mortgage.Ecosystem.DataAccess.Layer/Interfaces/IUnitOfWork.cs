@@ -72,6 +72,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         INHFCustomerRequestRepository NHFCustomerRequests { get; }
         INHFRegCompanyRepository NHFRegCompanies { get; }
         INmrcCategoryRepository NmrcCategories { get; }
+        INmrcActivityRepository NmrcActivity{ get; }
         INmrcEligibilityRepository NmrcEligibilities { get; }
         INHFRegUsersRepository NHFRegUsers { get; }
         IRefundRepository Refunds { get; }

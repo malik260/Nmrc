@@ -13,5 +13,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<List<RefinancingEntity>> GetList(RefinancingEntity param);
         Task<List<RefinancingEntity>> GetPageList(RefinancingEntity param, Pagination pagination);
         Task<RefinancingEntity> GetEntity(long lenderid);
+        Task SaveForm(RefinancingEntity entity);
     }
 }
