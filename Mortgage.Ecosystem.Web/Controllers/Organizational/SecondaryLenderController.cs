@@ -205,7 +205,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
                 TData<string> obj = await _iSecondaryLenderService.SaveNewEmployee(entity);
                 var auditInstance = new AuditTrailEntity();
                 auditInstance.Action = SystemOperationCode.SaveNewEmployee.ToString();
-                auditInstance.ActionRoute = SystemOperationCode.PMB.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.SecondaryLender.ToString();
 
                 var audit = await _iAuditTrailService.SaveForm(auditInstance);
                 return Json(obj);
