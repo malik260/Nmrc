@@ -91,6 +91,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         private IRoleRepository? _roles;
         private ISecondaryLenderRepository? _secondaryLenders;
+        private ISecondaryLenderChecklistProcedureRepository? _secondaryLenderChecklistsProcedures;
         private ISchemeRepository? _schemes;
         private ISchemeLenderRepository? _schemeLenders;
         private IStateRepository? _states;
@@ -346,6 +347,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public ISecondaryLenderRepository SecondaryLenders =>
      _secondaryLenders ??= new SecondaryLenderRepository();
+
+        public ISecondaryLenderChecklistProcedureRepository SecondaryLenderChecklistsProcedures =>
+       _secondaryLenderChecklistsProcedures ??= new SecondaryLenderChecklistProcedureRepository();
+
 
         public ISchemeLenderRepository SchemeLenders =>
   _schemeLenders ??= new SchemeLenderRepository();
