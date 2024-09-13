@@ -531,6 +531,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Enums
         PaymentHistory,
         [Description("PMB")]
         PMB,
+        [Description("Secondary Lender")]
+        SecondaryLender,
         [Description("Property Gallery")]
         PropertyGallery,
         [Description("Property Registration")]

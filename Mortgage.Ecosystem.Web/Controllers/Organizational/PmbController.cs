@@ -52,7 +52,6 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
-
         [AuthorizeFilter("pmbEmployee:view")]
         public IActionResult PmbEmployeeIndex()
         {
