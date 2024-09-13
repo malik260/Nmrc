@@ -118,6 +118,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<SchemeLenderEntity>? SchemeLenderEntity { get; set; } // Scheme Lender table     
         public DbSet<SectorEntity>? SectorEntity { get; set; }
         public DbSet<SecondaryLenderEntity>? SecondaryLenderEntity { get; set; } // Secondary Lender table
+        public DbSet<SecondaryLenderChecklistProcedureEntity>? SecondaryLenderChecklistProcedureEntity { get; set; }
         public DbSet<StateEntity>? StateEntity { get; set; }
         public DbSet<StatementOfAccountEntity>? StatementOfAccountEntity { get; set; }
         public DbSet<SubSectorEntity>? SubSectorEntity { get; set; }

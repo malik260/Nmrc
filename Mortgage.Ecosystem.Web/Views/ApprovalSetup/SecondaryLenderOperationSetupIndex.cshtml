@@ -89,7 +89,7 @@
         }
         cn.openDialog({
             title: id > 0 ? "Edit Approval Setup" : "Add Approval Setup",
-            content: '@Url.Content("~/ApprovalSetup/PmbOperationSetupForm")' + '?id=' + id,
+            content: '@Url.Content("~/ApprovalSetup/SecondaryLenderOperationSetupForm")' + '?id=' + id,
             width: "780px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
