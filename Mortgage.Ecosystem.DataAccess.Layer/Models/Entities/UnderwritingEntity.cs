@@ -84,6 +84,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("isBatched")]
         public bool? isBatched { get; set; }
 
+        [Column("Disbursed")]
+        public bool? Disbursed { get; set; }
+
         [NotMapped]
         public string? Branch { get; set; }
         [NotMapped]
@@ -102,6 +105,11 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         public string? Rating{ get; set; }
         [NotMapped]
         public string? RiskScore{ get; set; }
+
+        [NotMapped]
+        public string? Scheme { get; set; }
+        [NotMapped]
+        public string? creditName { get; set; }
 
     }
 }

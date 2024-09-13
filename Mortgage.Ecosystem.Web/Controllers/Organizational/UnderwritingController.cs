@@ -189,6 +189,29 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
                 throw;
             }
         }
+
+
+        public async Task<IActionResult> GetLoanNonMortgageForDis(EmployeeListParam param, Pagination pagination)
+        {
+            try
+            {
+                TData<List<UnderwritingEntity>> obj = await _iUnderwritingService.GetLoanForDisbursment();
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.GetLoanForBatching.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.Underwriting.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+
         public async Task<IActionResult> GetBatchedLoan(EmployeeListParam param, Pagination pagination)
         {
             try

@@ -92,6 +92,25 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
         }
 
         [HttpPost]
+        public async Task<IActionResult> RefinanceLoan(string lists, long SecondaryLender)
+        {
+
+            try
+            {
+                TData<String> obj = await _iRefinancingService.RefinanceLoans(lists, SecondaryLender);
+                
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+
+        [HttpPost]
         [AuthorizeFilter("refinancing:delete")]
         public async Task<IActionResult> DeleteFormJson(string ids)
         {

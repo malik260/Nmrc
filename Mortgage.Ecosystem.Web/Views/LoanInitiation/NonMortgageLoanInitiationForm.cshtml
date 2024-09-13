@@ -362,7 +362,7 @@
                 formData.append("Tenor", tenor);
                 //formData.append("Amount", monthlyincome);
                 formData.append("Purpose", loanPurpose);
-                formData.append("PMB", Lender);
+                formData.append("Lender", Lender);
                 formData.append("DocumentTitle", documentTitle);
 
                 $.ajax({
@@ -450,7 +450,7 @@
 
     $(document).ready(function () {
         $.ajax({
-            url: '@Url.Content("~/LoanInitiation/ViewInformation")', // The URL of your controller method
+            url: '@Url.Content("~/LoanInitiation/ViewInformation2")', // The URL of your controller method
             type: 'GET',
             dataType: 'json',
             success: function (obj) {

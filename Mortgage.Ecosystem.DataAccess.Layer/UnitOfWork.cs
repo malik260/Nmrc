@@ -104,6 +104,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IUserBelongRepository? _userBelongs;
         private IUserRepository? _users;
         private IResetPasswordTokenRepository? _resetPasswordTokens;
+        private ILoanDisbursementRepository? _loanDisbursements;
 
 
         public UnitOfWork()
@@ -266,6 +267,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public ILoanScheduleRepository LoanSchedules =>
           _loanSchedules ??= new LoanScheduleRepository();
+          public ILoanDisbursementRepository LoanDisbursement =>
+          _loanDisbursements ??= new LoanDisbursementRepository();
 
         public ILogLoginRepository LogLogins =>
             _logLogins ??= new LogLoginRepository();

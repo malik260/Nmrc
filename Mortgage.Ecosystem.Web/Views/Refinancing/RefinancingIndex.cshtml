@@ -6,23 +6,42 @@
         <div id="searchDiv" class="col-sm-12 search-collapse">
             <div class="select-list">
                 <ul>
-                    <li>
-                        <label>Name: </label>
-                        <input id="name" col="Name" type="text" />
+
+                    <li class="select-time">
+                        <label>Start Date: </label>
+                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                        <span>-</span>
+                        <label>End Date: </label>
+                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
                     </li>
-                    <li>
-                        <a id="btnSearch" class="btn btn-primary btn-sm" onclick="searchRefinancingGrid()">
-                            <i class="fa fa-search"></i>&nbsp;Search
-                        </a>
-                    </li>
+
                 </ul>
             </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="contributionHistoryTable" data-mobile-responsive="true"></table>
+            </div>
         </div>
+
+
         <div class="btn-group-sm" id="toolbar">
-            <a id="btnAdd" class="btn btn-success" onclick="showSaveForm(true)">
-                <i class="fa fa-plus"></i> Add
-            </a>
+            <div class="col-sm-6">
+                <label class="control-label">Secondary Lender <font class="red"> *</font></label>
+                <div id="SecondaryLender" col="SecondaryLender" required>
+                </div>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <button class="btn btn-success" type="submit" id="confirmButton">
+                    <i class="fa fa-save"></i>
+                    Submit Refinancing
+                </button>
+            </div>
+
         </div>
+
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
@@ -40,26 +59,29 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/Refinancing/GetPageListJson")';
+        var queryUrl = '@Url.Content("~/LoanDisbursement/GetLoanDisbursementPageListJson")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'LenderName', title: 'Lender Name', sortable: false },
-                { field: 'TotalAmount', title: 'Total Amount', sortable: false },
-                { field: 'Loan', title: 'Loan', sortable: false },
-                { field: 'RefinanceNumber', title: 'Refinance Number', visible: true, sortable: false },
-                {
-                    field: 'BaseModifyTime', title: 'Create Time', formatter: function (value, row, index) {
-                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
-                    }
-                }
+                { field: 'LoanProduct', title: 'Lender Product', sortable: false },
+                { field: 'Tenor', title: 'Loan Tenor', sortable: false },
+                { field: 'Amount', title: 'Loan Amount', sortable: false },
+                { field: 'Rate', title: 'Rate', visible: true, sortable: false },
+                { field: 'CustomerNhf', title: 'Nhf Number', visible: true, sortable: false },
+                { field: 'CustomerName', title: 'Customer Name', visible: true, sortable: false },
+                { field: 'RepaymentStatus', title: 'Repayment Status', visible: true, sortable: false },
+
+
             ],
             queryParams: function (params) {
                 var pagination = $('#gridTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
+            },
+            onExpandRow: function (index, row, $detail) {
+                initChildGrid(index, row, $detail);
             }
         });
     }
@@ -75,7 +97,8 @@
             var selectedRow = $("#gridTable").bootstrapTable("getSelections");
             if (!cn.checkRowEdit(selectedRow)) {
                 return;
-            } else {
+            }
+            else {
                 id = selectedRow[0].Id;
             }
         }
@@ -93,7 +116,7 @@
     function deleteForm() {
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to delete the selected " + selectedRow.length + " row(s)?", function () {
+            cn.confirm("Confirm to delete the selected " + selectedRow.length + " row data?", function () {
                 var ids = cn.getIds(selectedRow);
                 cn.ajax({
                     url: '@Url.Content("~/Refinancing/DeleteFormJson")' + '?ids=' + ids,
@@ -101,8 +124,9 @@
                     success: function (obj) {
                         if (obj.Tag == 1) {
                             cn.msgSuccess(obj.Message);
-                            searchRefinancingGrid();
-                        } else {
+                            searchRefinancingGrid(); ();
+                        }
+                        else {
                             cn.msgError(obj.Message);
                         }
                     }
@@ -110,4 +134,175 @@
             });
         }
     }
+
+
+
+    function initChildGrid(index, row, $detail) {
+        $detail.html('Loading data ...');
+        var date = new Date(row.BaseCreateTime);
+        //var formattedDate = date.toLocaleDateString();
+        var dateOfEmployment = new Date(row.DateofEmployment);
+        var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString();
+
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center" > ' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Underwritting Process for ' + row.Name + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="nhfNumber">NHF Number:</label>' +
+            '<input type="text" id="nhfNumber" name="NHFNumber" placeholder="NHF Number" class="form-control text-left" readonly value="' + row.NHFNumber + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="monthlyIncome">Monthly Income:</label>' +
+            '<input type="text" id="monthlyIncome" name="MonthlyIncome" placeholder="Monthly Income" class="form-control text-left" readonly value="' + row.MonthlyIncome + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="phone">Date Of Employment:</label>' +
+            '<input type="text" id="dateOfEmployment" name="DateOfEmployment" placeholder="Date Of Employment" class="form-control text-left" readonly value="' + formattedDateOfEmployment + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="dateOfBirth">Date Of Birth:</label>' +
+            '<input type="text" id="dateOfBirth" name="DateOfBirth" placeholder="Date Of Birth" class="form-control text-left" readonly value="' + row.DOB + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bvn">BVN:</label>' +
+            '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.Bvn + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-group col-sm-12">' +
+            '<label for="remark">Remark:</label>' +
+            '<textarea id="remark" name="Remark" placeholder="Remark" class="form-control text-left" style="height:60px">' + row.Remark + '</textarea>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        $detail.html(htmlData);
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            if ($cardBody.is(':visible')) {
+                $cardBody.hide();
+            } else {
+                $cardBody.show();
+            }
+        });
+    }
+
+    $("#SecondaryLender").cnComboBox({
+        url: '@Url.Content("~/SecondaryLender/GetListJson")',
+        key: "Id",
+        value: "Name"
+    });
+
+
+
+    $('#confirmButton').on('click', function () {
+
+        var allData = $('#gridTable').bootstrapTable('getAllSelections');
+        if (allData.length > 0) {
+            RefinanceLoans();
+
+        } else {
+            $("#confirmButton").removeAttr("disabled", false
+
+                    swal("You have not selected any loan(s)");
+        }
+
+    });
+
+    function RefinanceLoans() {
+
+        SingleData = $('#gridTable').bootstrapTable('getAllSelections');
+        if (SingleData["length"] != 0) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Loan(s) will be Refinanced!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#ff9800",
+                confirmButtonText: "Yes, continue",
+                cancelButtonText: "No, stop!",
+                showLoaderOnConfirm: true,
+                preConfirm: function () {
+                    return new Promise(function (resolve) {
+                        setTimeout(function () {
+                            resolve();
+                        }, 4000);
+                    });
+                }
+            }).then(function (isConfirm) {
+                if (isConfirm.value) {
+                    swal({
+                        title: 'Refinancing Loan(s)...',
+                        html: 'Please wait...',
+                        showConfirmButton: false,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            swal.showLoading();
+                        }
+                    });
+
+                    if (SingleData["length"] !== 0) {
+                        var secondarylender = $("#SecondaryLender").cnComboBox('getValue');
+
+
+                        $.ajax({
+                            url: '/Refinancing/RefinanceLoan',
+                            type: 'POST',
+                            data: { lists: JSON.stringify(SingleData), SecondaryLender: secondarylender },
+                            dataType: 'json',
+                            success: function (result) {
+
+                                debugger
+                                if (result.Tag == 1) {
+                                    swal({ title: 'Loan Refinance', text: result.Message.toString(), type: 'success' }).then(function () { window.location.reload(false); });
+
+                                    parent.searchGrid();
+
+                                    $("#confirmButton").removeAttr("disabled", true);
+                                    return;
+
+                                }
+                                else {
+                                    swal({ title: 'Loan Refinance', text: result.Messages.toString(), type: 'success' }).then(function () { window.location.reload(true); });
+
+                                    $('#gridTable').bootstrapTable('refresh', {
+                                        silent: true
+                                    });
+                                    $("#confirmButton").removeAttr("disabled", true);
+                                    return;
+                                }
+                            },
+                            error: function (e) {
+                                swal({ title: 'Loan Refinance', text: 'Loan Refinance encountered an error', type: 'error' }).then(function () { });
+
+                            }
+                        });
+
+                    }
+
+                } else {
+                    swal({ title: 'Loan Refinance', text: 'You cancelled Loan Refinancing', type: 'info' }).then(function () { });
+
+                }
+
+            })
+
+
+        } else {
+            $("#btnAdd").removeAttr("disabled", true);
+
+            swal("You have not selected any loan");
+        }
+    }
+
 </script>

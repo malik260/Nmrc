@@ -213,6 +213,79 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Helpers
         }
 
 
+        // loan refinance
+        public static bool IsLoanRefinanceMailSent(MailParameter user, out string message)
+        {
+            message = string.Empty;
+
+            var builder = new StringBuilder();
+            using (StreamReader reader = new StreamReader(@"Views/Shared/_LenderRefinanceApplicationTemplate.cshtml"))
+            {
+                builder.Append(reader.ReadToEnd());
+            }
+
+            builder.Replace("[realname]", user.RealName);
+            builder.Replace("[username]", user.UserName);
+            builder.Replace("[secondarylendername]", user.SecondaryLender);
+            builder.Replace("[pmbname]", user.PmbName);
+            builder.Replace("[registrationapprover]", user.RegistrationApprover);
+            builder.Replace("[link]", $"");
+            builder.Replace("[usercompany]", user.UserCompany);
+            builder.Replace("[companyMail]", user.COmpanyMail);
+            builder.Replace("[company]", GlobalConstant.COMPANY_NAME);
+            builder.Replace("[year]", DateTime.Now.Year.ToString());
+            builder.Replace("[reserved]", GlobalConstant.RESERVED);
+
+            NetworkCredential credential = new NetworkCredential
+            {
+                UserName = GlobalConstant.CREDENTIAL_USERNAME,
+                Password = GlobalConstant.CREDENTIAL_PASSWORD
+            };
+
+            MailMessage mail = new MailMessage
+            {
+                IsBodyHtml = true,
+                From = new MailAddress(GlobalConstant.MAIL_FROM)
+            };
+            mail.To.Add(user.SecondaryLenderEmail);
+            mail.Subject = "Loan Refinance Notification";
+            mail.Body = builder.ToString();
+
+            SmtpClient smtp = new SmtpClient
+            {
+                Host = GlobalConstant.SMTP_HOST,
+                UseDefaultCredentials = false,
+                Credentials = credential,
+                Port = GlobalConstant.SMTP_PORT,
+                EnableSsl = GlobalConstant.SMTP_SSL
+            };
+
+            try
+            {
+                smtp.Send(mail);
+                return true;
+            }
+            catch (Exception e)
+            {
+                if (e.InnerException != null)
+                {
+                    if (!string.IsNullOrEmpty(e.InnerException.Message))
+                    {
+                        message = e.InnerException.Message;
+                    }
+                }
+                else
+                {
+                    message = e.Message;
+                }
+                return false;
+            }
+        }
+
+        
+
+
+
         // Send Loan To credit
 
         public static bool IsLoanpprovalToCreditMailSent(MailParameter user, out string message)
