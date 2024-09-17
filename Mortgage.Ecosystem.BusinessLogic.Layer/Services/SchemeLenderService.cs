@@ -157,18 +157,16 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<TData<string>> SaveForm(SchemeLenderEntity entity)
         {
             TData<string> obj = new TData<string>();
-            var SchemeExist = await _iUnitOfWork.SchemeLenders.GetEntitybiId(entity.SchemeId);
-            if (SchemeExist != null)
+            foreach (var item in entity.Lenders)
             {
-                obj.Message = "Name already exists!";
-                obj.Tag = 0;
-                return obj;
+                var scheme = new SchemeLenderEntity();
+                scheme.LendersId = item;
+                scheme.SchemeId = entity.SchemeId;
+                await _iUnitOfWork.SchemeLenders.SaveForm(entity);
+
             }
-            bool isUpdate = entity.Id > 0;
-            await _iUnitOfWork.SchemeLenders.SaveForm(entity);
-            obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
-            obj.Message = isUpdate ? "Scheme Updated successfully" : "Scheme added successfully";
+            obj.Message = "Scheme mapped to lender institution successfully";
             return obj;
         }
 

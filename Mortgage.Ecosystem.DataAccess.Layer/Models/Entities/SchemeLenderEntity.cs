@@ -8,11 +8,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
     [Table("st_SchemeLender")]
     public class SchemeLenderEntity : IdentityExtensionEntity
     {
-
-       
         public int SchemeId { get; set; }
-        
-     
-        public long LendersId { get; set; }
+        public int LendersId { get; set; }
+
+        [NotMapped]
+        public List<int>? Lenders { get; set; }
     }
 }

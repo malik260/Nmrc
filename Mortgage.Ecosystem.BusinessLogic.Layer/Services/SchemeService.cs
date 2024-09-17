@@ -160,15 +160,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             var NameExist = await _iUnitOfWork.Schemes.GetEntitybyName(entity.SchemeName);
             if (NameExist != null)
             {
-                obj.Message = "Name already exists!";
+                obj.Message = "Scheme already exists!";
                 obj.Tag = 0;
                 return obj;
             }
-            bool isUpdate = entity.Id > 0;
             await _iUnitOfWork.Schemes.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
-            obj.Message = isUpdate ? "Scheme Updated successfully" : "Scheme added successfully";
+            obj.Message = "Scheme Updated successfully";
             return obj;
         }
 

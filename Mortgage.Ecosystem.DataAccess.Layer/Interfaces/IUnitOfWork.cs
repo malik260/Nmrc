@@ -57,6 +57,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IInternetBankingUsersRepository InternetBankingUsers { get; }
          ILenderRepository Lenders { get; }
          ILenderTypeRepository LenderTypes { get; }
+         ILenderCategoryRepository LenderCategory { get; }
         ILoanInitiationRepository LoanInitiations { get; }
         ILoanInitiationUploadRepository? LoanInitiationUploads { get; }
         ILoanReviewRepository LoanReviews { get; }

@@ -65,7 +65,6 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("secondarylender:search,user:search")]
         public async Task<IActionResult> GetListJson(SecondaryLenderListParam param)
         {
             TData<List<SecondaryLenderEntity>> obj = await _iSecondaryLenderService.GetList(param);

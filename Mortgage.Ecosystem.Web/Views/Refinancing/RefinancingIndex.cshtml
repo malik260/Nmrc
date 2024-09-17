@@ -9,23 +9,25 @@
 
                     <li class="select-time">
                         <label>Start Date: </label>
-                        <input id="startTime" col="StartTime" type="text" class="time-input" placeholder="start time" />
+                        <input id="startTime" col="StartDate" type="text" class="time-input" placeholder="start time" />
                         <span>-</span>
                         <label>End Date: </label>
-                        <input id="endTime" col="EndTime" type="text" class="time-input" placeholder="end time" />
+                        <input id="endTime" col="EndDate" type="text" class="time-input" placeholder="end time" />
                     </li>
 
                 </ul>
             </div>
 
-            <div class="col-sm-12 select-table table-striped">
-                <table id="contributionHistoryTable" data-mobile-responsive="true"></table>
+            <div class="btn-group-sm" id="toolbar">
+                <a id="btnViewStatement" class="btn btn-success" onclick="searchRefinancingGrid()">Generate Loan</a>
+
             </div>
         </div>
 
 
-        <div class="btn-group-sm" id="toolbar">
-            <div class="col-sm-6">
+
+    <div class="form-group">
+        <div class="col-sm-6">
                 <label class="control-label">Secondary Lender <font class="red"> *</font></label>
                 <div id="SecondaryLender" col="SecondaryLender" required>
                 </div>
@@ -40,12 +42,16 @@
                 </button>
             </div>
 
-        </div>
+    </div>
 
+     
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
     </div>
+
+
+    
 </div>
 
 <script type="text/javascript">
@@ -72,6 +78,7 @@
                 { field: 'CustomerNhf', title: 'Nhf Number', visible: true, sortable: false },
                 { field: 'CustomerName', title: 'Customer Name', visible: true, sortable: false },
                 { field: 'RepaymentStatus', title: 'Repayment Status', visible: true, sortable: false },
+                { field: 'LoanId', title: 'Loan Id', visible: true, sortable: false },
 
 
             ],

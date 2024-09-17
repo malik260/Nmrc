@@ -8,6 +8,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface IUnderwritingService
     {
+        Task<TData<string>> DisburseNonNhfLoan(long Id);
         Task<TData<List<UnderwritingEntity>>> GetLoanForDisbursment();
         Task<TData<string>> RejectLoanUnderwriting(long Id, string remark);
         Task<TData<string>> DisapproveUnderwriting(long id);

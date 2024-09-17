@@ -68,16 +68,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 {
                     await BaseRepository().Update<SchemeSetupEntity>(entity);
                 }
-                foreach (var item in entity.LendersId)
-                {
-                    var schemeLender = new SchemeLenderEntity();
-                    schemeLender.LendersId = item;
-                    schemeLender.SchemeId = entity.Id;
-
-                    await schemeLender.Create();
-
-                    await db.Insert(schemeLender);
-                }
+              
 
                 await db.CommitTrans();
             }

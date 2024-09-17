@@ -1,0 +1,92 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+
+<div class="creditType" id="creditType">
+    <form id="form1" class="form-horizontal m">
+        <div class="dialogblockborder dialogblockborderheadline">
+            <div class="dialogblock-header" style="height: auto;">
+                <span class="dialogblockheader">Scheme Setup</span>
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        <label for="SchemeId" style="margin-left: 100px;" class="control-label">Scheme Name<font class="red"> *</font></label>
+                        <div id="Scheme" style="margin-left: 100px;" col="SchemeId">
+                        </div>
+                       
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10">
+                        <label for="lender" style="margin-left: 100px;" class="control-label">Lender Category <font class="red"> *</font></label>
+                        <div id="lender" style="margin-left: 100px;" col="LendersId">
+                        </div>
+                        <span style="margin-left: 100px; font-size: 12px; color: red;">Multiple Institution can be selected</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    var id = cn.request("id");
+
+    $("#Scheme").cnComboBox({
+        url: '@Url.Content("~/Scheme/GetListJson")',
+        key: "Id",
+        value: "SchemeName",
+        class: "form-control"
+    });
+
+
+    $("#lender").cnComboBox({
+        url: '@Url.Content("~/LenderCategory/GetListJson")',
+        key: "Id",
+        value: "LenderInstitution",
+        class: "form-control",
+        multiple: true,
+        defaultValue: [],
+        search: true
+    });
+    $("#lender").prepend('<option value="" disabled selected>Please Select Lender(s)</option>');
+
+    function saveForm(index) {
+        debugger
+        if ($("#form1").validate().form()) {
+
+            // Get the value of the input field
+
+            debugger
+            var scheme = $('#Scheme').cnComboBox('getValue');
+            var Lender = $('#lender').cnComboBox('getValue');
+
+            cn.ajax({
+                url: '@Url.Content("~/SchemeLender/SaveFormJson")',
+                type: "post",
+                data: { Lenders: Lender, SchemeId: scheme },
+                traditional: true,
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        //parent.searchGrid();
+                        parent.layer.close(index);
+                        parent.searchGrid();
+
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        }
+    }
+
+
+
+
+</script>  

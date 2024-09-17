@@ -42,6 +42,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [Column("LoanId")]
         public string? LoanId { get; set; }
 
+         [NotMapped]
+        public string? ProductName { get; set; }
+
 
 
     }

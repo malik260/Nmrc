@@ -116,18 +116,18 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     }
 
                     // Retrieve and assign the ProductName based on ProductCode
-                    var lender = await _iUnitOfWork.Lenders.GetEntity(entity.Lender);
+                    var lender = await _iUnitOfWork.Lenders.GetEntity(entity.LenderCategory);
                     //if (productEntity == null)
                     //{
                     //    entity.ProductName = productEntity.Name;
                     //}
                     if (lender != null)
                     {
-                        entity.Lender = lender.Lender;
+                        entity.LenderCategory = lender.LenderCategory;
                     }
                     else
                     {
-                        entity.Lender = 0; // Default value if product entity is not found
+                        entity.LenderCategory = 0; // Default value if product entity is not found
                     }
                 }
 
@@ -156,22 +156,18 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<TData<string>> SaveForm(LenderSetupEntity entity)
         {
             TData<string> obj = new TData<string>();
-            var ProductExist = await _iUnitOfWork.Lenders.GetEntity(entity.Lender);
-            if (ProductExist != null)
+            foreach (var item in entity.Lender)
             {
-                obj.Message = "Lender already exists!";
-                obj.Tag = 0;
-                return obj;
-            }
-<<<<<<< HEAD
+                var lendersetup = new LenderSetupEntity();
+                lendersetup.LenderTypeId = entity.LenderTypeId;
+                lendersetup.LenderCategory = item;
+                await _iUnitOfWork.Lenders.SaveForm(lendersetup);
 
-=======
->>>>>>> 3a8b23030f309960c839d5b12636bddcf5122dd1
-            bool isUpdate = entity.Id > 0;
-            await _iUnitOfWork.Lenders.SaveForm(entity);
+            }
+
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
-            obj.Message = isUpdate ? "Lender Updated successfully" : "Lender added successfully";
+            obj.Message = "Lender added successfully";
             return obj;
         }
 

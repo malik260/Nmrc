@@ -58,6 +58,12 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
+        [AuthorizeFilter("LoanDisbursement:view")]
+        public IActionResult NonMortgageDisbursment()
+        {
+            return View();
+        }
+
 
         public IActionResult AddDocumentForm()
         {
@@ -373,6 +379,27 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
                 throw;
             }
         }
+
+
+
+
+        public async Task<IActionResult> DisburseNonNhfLoan(long id)
+        {
+
+            try
+            {
+                TData<String> obj = await _iUnderwritingService.DisburseNonNhfLoan(id);
+
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> DisApproveReview(long id, string remark)

@@ -57,6 +57,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IInternetBankingUsersRepository? _internetBankingUsers;
         private ILoanReviewRepository? _loanReviews;
         private ILenderRepository? _lenders;
+        private ILenderCategoryRepository? _lenderCategory;
         private ILenderTypeRepository? _lenderTypes;
         private ILoanRepaymentRepository? _loanRepayments;
         private ILoanInitiationRepository? _loanInitiations;
@@ -257,6 +258,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public ILenderRepository Lenders =>
       _lenders ??= new LenderRepository();
+          public ILenderCategoryRepository LenderCategory =>
+      _lenderCategory ??= new LenderCategoryRepository();
 
         public ILenderTypeRepository LenderTypes =>
         _lenderTypes ??= new LenderTypeRepository();

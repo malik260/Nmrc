@@ -65,7 +65,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             // Filter the list to include only approved companies
             var approvedPmbs = allPmbs.Where(pmb => pmb.Status == (int)ApprovalEnum.Approved).ToList();
             var result = from a in approvedPmbs 
-                         join b in context.LenderSetupEntity on a.Id equals b.Lender 
+                         join b in context.LenderSetupEntity on a.Id equals b.LenderCategory 
                          join c in context.SchemeLenderEntity on a.Id equals c.LendersId 
                          where b.LenderTypeId == 1 && c.SchemeId == 2
                          select new NonNhf

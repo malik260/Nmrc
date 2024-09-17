@@ -77,6 +77,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<GenderEntity>? GenderEntity { get; set; }
         public DbSet<InternetBankingUsersEntity>? InternetBankingUsersEntity { get; set; }
         public DbSet<LenderTypeEntity>? LenderTypeEntity { get; set; }
+        public DbSet<LenderCategoryEntity>? LenderCategory { get; set; }
         public DbSet<LenderSetupEntity>? LenderSetupEntity { get; set; } // Lender Setup table     
         public DbSet<LogLoginEntity>? LogLoginEntity { get; set; } // Login log table        
         public DbSet<LogOperateEntity>? LogOperateEntity { get; set; } // Operation log table
