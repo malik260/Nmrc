@@ -163,10 +163,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 obj.Tag = 0;
                 return obj;
             }
-<<<<<<< HEAD
-
-=======
->>>>>>> 3a8b23030f309960c839d5b12636bddcf5122dd1
             bool isUpdate = entity.Id > 0;
             await _iUnitOfWork.Lenders.SaveForm(entity);
             obj.Data = entity.Id.ParseToString();
