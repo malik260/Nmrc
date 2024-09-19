@@ -1,49 +1,46 @@
 ﻿@{
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+
 <div class="container-div">
     <div class="row">
-        <!-- Start Date, End Date, and Generate Loan Button -->
         <div id="searchDiv" class="col-sm-12 search-collapse">
-            <div class="select-list">
-                <ul>
-                    <li class="select-time">
-                        <div class="form-row">
-                            <div class="col-md-3">
-                                <label>Start Date:</label>
-                                <input id="startTime" col="StartDate" type="text" class="form-control" placeholder="start time" />
-                            </div>
-                            <div class="col-md-3">
-                                <label>End Date:</label>
-                                <input id="endTime" col="EndDate" type="text" class="form-control" placeholder="end time" />
-                            </div>
-                            <div class="col-md-3 ">
-                                <a id="btnViewStatement" class="btn btn-success w-100" onclick="searchRefinancingGrid()">Generate Loan</a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="form-row mt-3">
-                <div class="col-md-6">
-                    <label>Secondary Lender:</label>
-                    <div id="SecondaryLender" col="SecondaryLender" class="form-control" required></div>
+            <div class="form-row align-items-end mb-3">
+                <div class="form-group col-md-4">
+                    <label for="startTime">Start Date:</label>
+                    <input id="startTime" col="StartDate" type="text" class="form-control" placeholder="Start Date" />
                 </div>
-                <div class="col-md-6 d-flex align-items-end">
-                    <button class="btn btn-success w-100" type="submit" id="confirmButton">
-                        <i class="fa fa-save"></i> Submit Refinancing
-                    </button>
+                <div class="form-group col-md-4">
+                    <label for="endTime">End Date:</label>
+                    <input id="endTime" col="EndDate" type="text" class="form-control" placeholder="End Date" />
+                </div>
+                <div class="form-group col-md-4">
+                    <button id="btnViewStatement" class="btn btn-success w-100" style="margin-top:20px;" onclick="searchRefinancingGrid()">Generate Loan</button>
+                </div>
+            </div>
+            <div class="form-row align-items-end mb-3">
+                <div class="form-group col-md-6">
+                    <div class="row">
+                        <div class="form-group col-md-5">
+                            <label for="SecondaryLender">Secondary Lender:</label>
+                            <div id="SecondaryLender" col="SecondaryLender"></div>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <button class="btn btn-success w-100" type="submit" id="confirmButton" style="margin-top: 20px;">
+                                <i class="fa fa-save"></i> Submit Refinancing
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-      
         <div class="col-sm-12 select-table table-striped mt-4">
             <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
     </div>
 </div>
+
 
 <script type="text/javascript">
 $(function () {
@@ -88,13 +85,11 @@ function initGrid() {
     });
 }
 
-// Search and update the refinancing grid
 function searchRefinancingGrid() {
     $('#gridTable').cnTable('search');
     resetToolbarStatus();
 }
 
-// Refinance Loan Form Submission
 function handleRefinancingSubmit() {
     var selectedLoans = $('#gridTable').bootstrapTable('getSelections');
     if (selectedLoans.length === 0) {
@@ -125,7 +120,6 @@ function handleRefinancingSubmit() {
     });
 }
 
-// Execute Loan Refinancing
 function executeLoanRefinancing(selectedLoans) {
     var secondaryLender = $("#SecondaryLender").cnComboBox('getValue');
     $.ajax({
@@ -151,7 +145,7 @@ function executeLoanRefinancing(selectedLoans) {
     });
 }
 
-// Initialize Child Grid (Detailed Information)
+
 function initChildGrid(index, row, $detail) {
     var formattedDateOfEmployment = new Date(row.DateOfEmployment).toLocaleDateString();
 
@@ -174,6 +168,16 @@ function initChildGrid(index, row, $detail) {
                             <input type="text" id="monthlyIncome" class="form-control" readonly value="${row.MonthlyIncome}" />
                         </div>
                     </div>
+                          <div class="form-row">
+                            <div class="form-group col-sm-6">
+                                <label for="dateOfBirth">Date Of Birth:</label>
+                                    <input type="text" id="dateOfBirth" class="form-control" readonly value="${row.DOB}" />
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="bvn">BVN:</label>
+                                <input type="text" id="bvn" class="form-control" readonly value="${row.Bvn}" />
+                            </div>
+                        </div>
                     <div class="form-row">
                         <div class="form-group col-sm-6">
                             <label for="dateOfEmployment">Date Of Employment:</label>
