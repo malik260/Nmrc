@@ -13,11 +13,11 @@ using Mortgage.Ecosystem.Web.Filter;
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 {
     [ExceptionFilter]
-    public class PmbController : BaseController
+    public class LenderInstitutionsController : BaseController
     {
-        private readonly IPmbService _iPmbService;
+        private readonly ILenderInstitutionsService _iPmbService;
         private readonly IAuditTrailService _iAuditTrailService;
-        public PmbController(IUnitOfWork iUnitOfWork, IPmbService iPmbService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
+        public LenderInstitutionsController(IUnitOfWork iUnitOfWork, ILenderInstitutionsService iPmbService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
         {
             _iPmbService = iPmbService;
             _iAuditTrailService = iAuditTrailService;
@@ -25,7 +25,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         #region View function
         [AuthorizeFilter("pmbapproval:view")]
-        public IActionResult PmbApprovalIndex()
+        public IActionResult LenderInstitutionApprovalIndex()
         {
             return View();
         }
@@ -36,8 +36,8 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         
-        [AuthorizeFilter("pmb:view")]
-        public IActionResult PmbIndex()
+        [AuthorizeFilter("lender:view")]
+        public IActionResult LenderInstitutionIndex()
         {
             return View();
         }
@@ -47,13 +47,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
-         public IActionResult PmbEmployeeForm()
+         public IActionResult LenderInstitutionEmployeeForm()
         {
             return View();
         }
 
-        [AuthorizeFilter("pmbEmployee:view")]
-        public IActionResult PmbEmployeeIndex()
+        [AuthorizeFilter("lenderEmployee:view")]
+        public IActionResult LenderInstitutionEmployeeIndex()
         {
             return View();
         }
@@ -67,7 +67,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("pmb:search,user:search")]
         public async Task<IActionResult> GetListJson(PmbListParam param)
         {
-            TData<List<PmbEntity>> obj = await _iPmbService.GetList(param);
+            TData<List<LenderInstitutionsEntity>> obj = await _iPmbService.GetList(param);
             return Json(obj);
         }
         public async Task<IActionResult> GetNonNhfListJson(PmbListParam param)
@@ -88,7 +88,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
        //[AuthorizeFilter("pmb:search,user:search")]
         public async Task<IActionResult> GetPageListJson(PmbListParam param, Pagination pagination)
         {
-            TData<List<PmbEntity>> obj = await _iPmbService.GetPageList(param, pagination);
+            TData<List<LenderInstitutionsEntity>> obj = await _iPmbService.GetPageList(param, pagination);
             return Json(obj);
         }
 
@@ -111,7 +111,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         //[AuthorizeFilter("company:search,user:search")]
         public async Task<IActionResult> GetApprovalPageListJson(PmbListParam param, Pagination pagination)
         {
-            TData<List<PmbEntity>> obj = await _iPmbService.GetApprovalPageList(param, pagination);
+            TData<List<LenderInstitutionsEntity>> obj = await _iPmbService.GetApprovalPageList(param, pagination);
             return Json(obj);
         }
 
@@ -135,7 +135,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         [AuthorizeFilter("pmb:view")]
         public async Task<IActionResult> GetFormJson(int id)
         {
-            TData<PmbEntity> obj = await _iPmbService.GetEntity(id);
+            TData<LenderInstitutionsEntity> obj = await _iPmbService.GetEntity(id);
             return Json(obj);
         }
         #endregion
@@ -145,7 +145,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         [HttpPost]
        [AuthorizeFilter("pmb:add,pmb:edit")]
-        public async Task<IActionResult> SaveFormsJson(PmbEntity entity)
+        public async Task<IActionResult> SaveFormsJson(LenderInstitutionsEntity entity)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         [HttpPost]
         //[AuthorizeFilter("pmb:add,pmb:edit")]
-        public async Task<IActionResult> ApproveFormJson(PmbEntity entity)
+        public async Task<IActionResult> ApproveFormJson(LenderInstitutionsEntity entity)
         {
             try
             {
@@ -186,7 +186,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         [HttpPost]
         [AuthorizeFilter("pmb:add,pmb:edit")]
-        public async Task<IActionResult> DisApproveFormJson(PmbEntity entity, string Remark)
+        public async Task<IActionResult> DisApproveFormJson(LenderInstitutionsEntity entity, string Remark)
         {
             try
             {

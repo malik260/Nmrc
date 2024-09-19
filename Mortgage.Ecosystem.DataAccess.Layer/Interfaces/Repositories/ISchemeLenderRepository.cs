@@ -15,6 +15,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<SchemeLenderEntity> GetEntitybiId(int id);
         Task SaveForm(SchemeLenderEntity entity);
         Task DeleteForm(string ids);
+        Task<SchemeLenderEntity> GetEntityByLenderId(int id);
        // bool ExistSchemeName(SchemeSetupEntity entity);
        // Task<SchemeSetupEntity> GetEntitybyName(string name)
 

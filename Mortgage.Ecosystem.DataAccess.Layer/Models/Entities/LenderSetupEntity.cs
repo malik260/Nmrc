@@ -17,7 +17,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [NotMapped]
         [Column("Lender")]
-
         public List<int>? Lender { get; set; }
     }
 }

@@ -121,7 +121,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Data = await _iUnitOfWork.LoanInitiations.GetList(param);
             foreach (var item in obj.Data)
             {
-                item.LoanProduct = _iUnitOfWork.CreditTypes.GetEntitybiId(Convert.ToInt32(item.LoanProduct)).Result.Name;
+                item.Scheme =  _iUnitOfWork.Schemes.GetEntitybiId(Convert.ToInt32(item.LoanScheme)).Result.SchemeName;
+                item.LoanProduct = _iUnitOfWork.CreditTypes.GetEntityByProductCode(item.LoanProduct).Result.Name;
 
             }
             obj.Total = obj.Data.Count;
@@ -751,7 +752,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             obj.Data = entity;
             obj.Tag = 1;
-            obj.Message = "Loan Initiated Successfully, Passed to PMB Underwritting";
+            obj.Message = "Loan Initiated Successfully, Passed to Lender Underwritting";
             return obj;
         }
 

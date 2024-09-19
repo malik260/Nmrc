@@ -109,7 +109,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IPropertyRegistrationService, PropertyRegistrationService>();
             services.AddScoped<IPropertyGalleryService, PropertyGalleryService>();
             services.AddScoped<IPropertyUploadService, PropertyUploadService>();
-            services.AddScoped<IPmbService, PmbService>();
+            services.AddScoped<ILenderInstitutionsService, LenderInstitutionsService>();
             services.AddScoped<IRefinancingService, RefinancingService>();
             services.AddScoped<IRefundService, RefundService>();
             services.AddScoped<IRefundConditionService, RefundConditionService>();

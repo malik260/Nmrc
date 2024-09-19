@@ -5,17 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 {
     // Company Information table
-    [Table("tbl_Pmb")]
-    public class PmbEntity : BaseExtensionEntity
+    [Table("tbl_LenderInstitutions")]
+    public class LenderInstitutionsEntity : BaseExtensionEntity
     {
         // Company name
         [Column("Name")]
         public string? Name { get; set; }
 
-        // Company name
-        //[Column("PmbNhfNumber")]
-        //public string? PmbNhfNumber { get; set; }
-
+      
         // Company Sector
         [Column("Sector")]
         public int Sector { get; set; }
@@ -75,6 +72,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         // Individual NHF Number
         [Column("NHFNumber")]
         public string? NHFNumber { get; set; }
+
+        //
+        [Column("Category")]
+        public int? Category { get; set; }
 
         // Individual BVN
         [NotMapped]

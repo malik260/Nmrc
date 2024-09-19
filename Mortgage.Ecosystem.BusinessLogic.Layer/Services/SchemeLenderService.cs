@@ -2,6 +2,7 @@
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
@@ -156,15 +157,18 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #region Submit data
         public async Task<TData<string>> SaveForm(SchemeLenderEntity entity)
         {
+            var context = new ApplicationDbContext();
+            var SchemeList = new List<SchemeLenderEntity>();
             TData<string> obj = new TData<string>();
             foreach (var item in entity.Lenders)
             {
                 var scheme = new SchemeLenderEntity();
                 scheme.LendersId = item;
                 scheme.SchemeId = entity.SchemeId;
-                await _iUnitOfWork.SchemeLenders.SaveForm(entity);
-
+                SchemeList.Add(scheme);
+                context.SchemeLenderEntity.AddRange(SchemeList);
             }
+            context.SaveChanges();
             obj.Tag = 1;
             obj.Message = "Scheme mapped to lender institution successfully";
             return obj;

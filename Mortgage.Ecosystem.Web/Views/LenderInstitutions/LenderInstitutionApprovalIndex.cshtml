@@ -60,7 +60,7 @@
     });
 
     function initGrid() {
-        var queryEmployeeUrl = '@Url.Content("~/Pmb/GetApprovalPageListJson")';
+        var queryEmployeeUrl = '@Url.Content("~/LenderInstitutions/GetApprovalPageListJson")';
         $('#gridTable').cnTable({
             url: queryEmployeeUrl,
             detailView: true,
@@ -217,7 +217,7 @@
                 if (result.isConfirmed) {
                     var id = cn.getIds(selectedRow);
                     cn.ajax({
-                        url: '@Url.Content("~/Pmb/ApproveFormJson")' + '?id=' + id,
+                        url: '@Url.Content("~/LenderInstitutions/ApproveFormJson")' + '?id=' + id,
                         type: "post",
                         success: function (obj) {
                             if (obj.Tag == 1) {

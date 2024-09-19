@@ -98,7 +98,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<NationalityEntity>? NationalityEntity { get; set; }
         public DbSet<NextOfKinEntity>? NextOfKinEntity { get; set; }
         public DbSet<PaymentHistoryEntity>? PaymentHistoryEntity { get; set; }
-        public DbSet<PmbEntity>? PmbEntity { get; set; }
+        public DbSet<LenderInstitutionsEntity>? PmbEntity { get; set; }
         public DbSet<PropertyRegistrationEntity>? PropertyRegistrationEntity { get; set; } // Property Registration table       
         public DbSet<PropertySubscriptionEntity>? PropertySubscriptionEntity { get; set; } // Property Subscription table     
         public DbSet<PropertyGalleryEntity>? PropertyGalleryEntity { get; set; } // Property Gallery table

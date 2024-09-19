@@ -29,7 +29,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task<SchemeLenderEntity> GetEntity(int id)
         {
-            return await BaseRepository().FindEntity<SchemeLenderEntity>(x => x.SchemeId == id || x.LendersId == id);
+            return await BaseRepository().FindEntity<SchemeLenderEntity>(x => x.SchemeId == id);
+        }
+
+        public async Task<SchemeLenderEntity> GetEntityByLenderId(int id)
+        {
+            return await BaseRepository().FindEntity<SchemeLenderEntity>(x => x.LendersId == id);
         }
 
         public async Task<SchemeLenderEntity> GetEntities(int id)
@@ -53,6 +58,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #region Submit data
         public async Task SaveForm(SchemeLenderEntity entity)
         {
+            var db = await BaseRepository().BeginTrans();
+
             if (entity.Id.IsNullOrZero())
             {
                 await entity.Create();
@@ -62,8 +69,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             {
                 await BaseRepository().Update<SchemeLenderEntity>(entity);
             }
+            await db.CommitTrans();
+
         }
-      
+
 
         public async Task DeleteForm(string ids)
         {

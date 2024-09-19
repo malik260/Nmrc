@@ -81,7 +81,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IPropertySubscriptionRepository? _propertySubscriptions;
         private IPropertyGalleryRepository? _propertyGalleries;
         private IPropertyUploadRepository? _propertyUploads;
-        private IPmbRepository? _pmbs;
+        private ILenderInstitutionsRepository? _pmbs;
         private IRefinancingRepository? _refinancings;
         private IRemitaPaymentDetailsRepository? _remitaPaymentDetails;
         private IRelationRepository? _relations;
@@ -219,8 +219,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
             _departments ??= new DepartmentRepository();
         public IDisbursementRepository Disbursements =>
         _disbursements ??= new DisbursementRepository();
-        public IPmbRepository Pmbs =>
-          _pmbs ??= new PmbRepository();
+        public ILenderInstitutionsRepository Pmbs =>
+          _pmbs ??= new LenderInstitutionsRepository();
 
         public IDesignationRepository Designations =>
             _designations ??= new DesignationRepository();

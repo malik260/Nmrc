@@ -5,6 +5,7 @@ using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.Web.Filter;
 
 namespace Mortgage.Ecosystem.Web.Controllers.Organizational
@@ -44,6 +45,16 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             TData<string> obj = await _iSchemeLenderService.SaveForm(schemelender);
             return Json(obj);
         }
+
+        public async Task<IActionResult> GetListJson(SchemeLenderListParam param)
+        {
+            TData<List<SchemeLenderEntity>> obj = await _iSchemeLenderService.GetList(param);
+            return Json(obj);
+        }
+
+
+
+
         #endregion
     }
 }

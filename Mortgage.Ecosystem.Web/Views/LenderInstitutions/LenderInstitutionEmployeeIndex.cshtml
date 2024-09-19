@@ -42,7 +42,7 @@
     });
 
     function initGrid() {
-        var queryUrl = '@Url.Content("~/Pmb/GetPmbEmployee")';
+        var queryUrl = '@Url.Content("~/LenderInstitutions/GetPmbEmployee")';
         $('#gridTable').cnTable({
             url: queryUrl,
             columns: [
@@ -136,8 +136,8 @@
             }
         }
         cn.openDialog({
-            title: id > 0 ? "Edit Employee" : "Add Pmb Employee",
-            content: '@Url.Content("~/Pmb/PmbEmployeeForm")' + '?id=' + id,
+            title: id > 0 ? "Edit Employee" : "Add Lenders Employee",
+            content: '@Url.Content("~/LenderInstitutions/LenderInstitutionEmployeeForm")' + '?id=' + id,
             width: "780px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];

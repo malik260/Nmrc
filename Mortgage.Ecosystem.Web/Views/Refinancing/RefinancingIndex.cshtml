@@ -3,313 +3,191 @@
 }
 <div class="container-div">
     <div class="row">
+        <!-- Start Date, End Date, and Generate Loan Button -->
         <div id="searchDiv" class="col-sm-12 search-collapse">
             <div class="select-list">
                 <ul>
-
                     <li class="select-time">
-                        <label>Start Date: </label>
-                        <input id="startTime" col="StartDate" type="text" class="time-input" placeholder="start time" />
-                        <span>-</span>
-                        <label>End Date: </label>
-                        <input id="endTime" col="EndDate" type="text" class="time-input" placeholder="end time" />
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <label>Start Date:</label>
+                                <input id="startTime" col="StartDate" type="text" class="form-control" placeholder="start time" />
+                            </div>
+                            <div class="col-md-3">
+                                <label>End Date:</label>
+                                <input id="endTime" col="EndDate" type="text" class="form-control" placeholder="end time" />
+                            </div>
+                            <div class="col-md-3 ">
+                                <a id="btnViewStatement" class="btn btn-success w-100" onclick="searchRefinancingGrid()">Generate Loan</a>
+                            </div>
+                        </div>
                     </li>
-
                 </ul>
             </div>
 
-            <div class="btn-group-sm" id="toolbar">
-                <a id="btnViewStatement" class="btn btn-success" onclick="searchRefinancingGrid()">Generate Loan</a>
-
+            <div class="form-row mt-3">
+                <div class="col-md-6">
+                    <label>Secondary Lender:</label>
+                    <div id="SecondaryLender" col="SecondaryLender" class="form-control" required></div>
+                </div>
+                <div class="col-md-6 d-flex align-items-end">
+                    <button class="btn btn-success w-100" type="submit" id="confirmButton">
+                        <i class="fa fa-save"></i> Submit Refinancing
+                    </button>
+                </div>
             </div>
         </div>
 
-
-
-    <div class="form-group">
-        <div class="col-sm-6">
-                <label class="control-label">Secondary Lender <font class="red"> *</font></label>
-                <div id="SecondaryLender" col="SecondaryLender" required>
-                </div>
-
-            </div>
-
-            <div class="col-sm-6">
-
-                <button class="btn btn-success" type="submit" id="confirmButton">
-                    <i class="fa fa-save"></i>
-                    Submit Refinancing
-                </button>
-            </div>
-
-    </div>
-
-     
-        <div class="col-sm-12 select-table table-striped">
+      
+        <div class="col-sm-12 select-table table-striped mt-4">
             <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
     </div>
-
-
-    
 </div>
 
 <script type="text/javascript">
-    $(function () {
-        initGrid();
-
-        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
-
-        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', type: 'date', theme: 'molv' });
-        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', type: 'date', theme: 'molv' });
-    });
-
-    function initGrid() {
-        var queryUrl = '@Url.Content("~/LoanDisbursement/GetLoanDisbursementPageListJson")';
-        $('#gridTable').cnTable({
-            url: queryUrl,
-            columns: [
-                { checkbox: true, visible: true },
-                { field: 'Id', title: 'Id', visible: false },
-                { field: 'LoanProduct', title: 'Lender Product', sortable: false },
-                { field: 'Tenor', title: 'Loan Tenor', sortable: false },
-                { field: 'Amount', title: 'Loan Amount', sortable: false },
-                { field: 'Rate', title: 'Rate', visible: true, sortable: false },
-                { field: 'CustomerNhf', title: 'Nhf Number', visible: true, sortable: false },
-                { field: 'CustomerName', title: 'Customer Name', visible: true, sortable: false },
-                { field: 'RepaymentStatus', title: 'Repayment Status', visible: true, sortable: false },
-                { field: 'LoanId', title: 'Loan Id', visible: true, sortable: false },
-
-
-            ],
-            queryParams: function (params) {
-                var pagination = $('#gridTable').cnTable('getPagination', params);
-                var queryString = $("#searchDiv").getWebControls(pagination);
-                return queryString;
-            },
-            onExpandRow: function (index, row, $detail) {
-                initChildGrid(index, row, $detail);
-            }
-        });
-    }
-
-    function searchRefinancingGrid() {
-        $('#gridTable').cnTable('search');
-        resetToolbarStatus();
-    }
-
-    function showSaveForm(bAdd) {
-        var id = 0;
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        cn.openDialog({
-            title: id > 0 ? "Edit Refinance" : "Add Refinance",
-            content: '@Url.Content("~/Refinancing/RefinancingForm")' + '?id=' + id,
-            width: "780px",
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.saveForm(index);
-            }
-        });
-    }
-
-    function deleteForm() {
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to delete the selected " + selectedRow.length + " row data?", function () {
-                var ids = cn.getIds(selectedRow);
-                cn.ajax({
-                    url: '@Url.Content("~/Refinancing/DeleteFormJson")' + '?ids=' + ids,
-                    type: "post",
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            searchRefinancingGrid(); ();
-                        }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
-            });
-        }
-    }
-
-
-
-    function initChildGrid(index, row, $detail) {
-        $detail.html('Loading data ...');
-        var date = new Date(row.BaseCreateTime);
-        //var formattedDate = date.toLocaleDateString();
-        var dateOfEmployment = new Date(row.DateofEmployment);
-        var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString();
-
-        var htmlData =
-            '<div class="card">' +
-            '<div class="card-header text-center" > ' +
-            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Underwritting Process for ' + row.Name + '</h6>' +
-            '</div>' +
-            '<div class="card-body">' +
-            '<form>' +
-            '<div class="form-row">' +
-            '<div class="form-group col-sm-6">' +
-            '<label for="nhfNumber">NHF Number:</label>' +
-            '<input type="text" id="nhfNumber" name="NHFNumber" placeholder="NHF Number" class="form-control text-left" readonly value="' + row.NHFNumber + '" /> ' +
-            '</div>' +
-            '<div class="form-group col-sm-6">' +
-            '<label for="monthlyIncome">Monthly Income:</label>' +
-            '<input type="text" id="monthlyIncome" name="MonthlyIncome" placeholder="Monthly Income" class="form-control text-left" readonly value="' + row.MonthlyIncome + '"/>' +
-            '</div>' +
-            '</div>' +
-            '<div class="form-row">' +
-            '<div class="form-group col-sm-6">' +
-            '<label for="phone">Date Of Employment:</label>' +
-            '<input type="text" id="dateOfEmployment" name="DateOfEmployment" placeholder="Date Of Employment" class="form-control text-left" readonly value="' + formattedDateOfEmployment + '"/>' +
-            '</div>' +
-            '</div>' +
-            '<div class="form-row">' +
-            '<div class="form-group col-sm-6">' +
-            '<label for="dateOfBirth">Date Of Birth:</label>' +
-            '<input type="text" id="dateOfBirth" name="DateOfBirth" placeholder="Date Of Birth" class="form-control text-left" readonly value="' + row.DOB + '"/>' +
-            '</div>' +
-            '<div class="form-group col-sm-6">' +
-            '<label for="bvn">BVN:</label>' +
-            '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.Bvn + '"/>' +
-            '</div>' +
-            '</div>' +
-            '<div class="form-group col-sm-12">' +
-            '<label for="remark">Remark:</label>' +
-            '<textarea id="remark" name="Remark" placeholder="Remark" class="form-control text-left" style="height:60px">' + row.Remark + '</textarea>' +
-            '</div>' +
-            '</div>' +
-            '</form>' +
-            '</div>';
-        $detail.html(htmlData);
-        $detail.find('.card-header').click(function () {
-            var $cardBody = $(this).siblings('.card-body');
-            if ($cardBody.is(':visible')) {
-                $cardBody.hide();
-            } else {
-                $cardBody.show();
-            }
-        });
-    }
-
+$(function () {
+    initGrid();
+    
+    laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', type: 'date', theme: 'molv' });
+    laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', type: 'date', theme: 'molv' });
+    
     $("#SecondaryLender").cnComboBox({
         url: '@Url.Content("~/SecondaryLender/GetListJson")',
         key: "Id",
         value: "Name"
     });
 
+    $('#confirmButton').on('click', handleRefinancingSubmit);
+});
 
-
-    $('#confirmButton').on('click', function () {
-
-        var allData = $('#gridTable').bootstrapTable('getAllSelections');
-        if (allData.length > 0) {
-            RefinanceLoans();
-
-        } else {
-            $("#confirmButton").removeAttr("disabled", false
-
-                    swal("You have not selected any loan(s)");
+function initGrid() {
+    var queryUrl = '@Url.Content("~/LoanDisbursement/GetLoanDisbursementPageListJson")';
+    $('#gridTable').cnTable({
+        url: queryUrl,
+        columns: [
+            { checkbox: true, visible: true },
+            { field: 'Id', title: 'Id', visible: false },
+            { field: 'LoanProduct', title: 'Lender Product' },
+            { field: 'Tenor', title: 'Loan Tenor' },
+            { field: 'Amount', title: 'Loan Amount' },
+            { field: 'Rate', title: 'Rate' },
+            { field: 'CustomerNhf', title: 'NHF Number' },
+            { field: 'CustomerName', title: 'Customer Name' },
+            { field: 'RepaymentStatus', title: 'Repayment Status' },
+            { field: 'LoanId', title: 'Loan Id' },
+        ],
+        queryParams: function (params) {
+            var pagination = $('#gridTable').cnTable('getPagination', params);
+            var queryString = $("#searchDiv").getWebControls(pagination);
+            return queryString;
+        },
+        onExpandRow: function (index, row, $detail) {
+            initChildGrid(index, row, $detail);
         }
-
     });
+}
 
-    function RefinanceLoans() {
+// Search and update the refinancing grid
+function searchRefinancingGrid() {
+    $('#gridTable').cnTable('search');
+    resetToolbarStatus();
+}
 
-        SingleData = $('#gridTable').bootstrapTable('getAllSelections');
-        if (SingleData["length"] != 0) {
-
-            swal({
-                title: "Are you sure?",
-                text: "Loan(s) will be Refinanced!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#ff9800",
-                confirmButtonText: "Yes, continue",
-                cancelButtonText: "No, stop!",
-                showLoaderOnConfirm: true,
-                preConfirm: function () {
-                    return new Promise(function (resolve) {
-                        setTimeout(function () {
-                            resolve();
-                        }, 4000);
-                    });
-                }
-            }).then(function (isConfirm) {
-                if (isConfirm.value) {
-                    swal({
-                        title: 'Refinancing Loan(s)...',
-                        html: 'Please wait...',
-                        showConfirmButton: false,
-                        allowEscapeKey: false,
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            swal.showLoading();
-                        }
-                    });
-
-                    if (SingleData["length"] !== 0) {
-                        var secondarylender = $("#SecondaryLender").cnComboBox('getValue');
-
-
-                        $.ajax({
-                            url: '/Refinancing/RefinanceLoan',
-                            type: 'POST',
-                            data: { lists: JSON.stringify(SingleData), SecondaryLender: secondarylender },
-                            dataType: 'json',
-                            success: function (result) {
-
-                                debugger
-                                if (result.Tag == 1) {
-                                    swal({ title: 'Loan Refinance', text: result.Message.toString(), type: 'success' }).then(function () { window.location.reload(false); });
-
-                                    parent.searchGrid();
-
-                                    $("#confirmButton").removeAttr("disabled", true);
-                                    return;
-
-                                }
-                                else {
-                                    swal({ title: 'Loan Refinance', text: result.Messages.toString(), type: 'success' }).then(function () { window.location.reload(true); });
-
-                                    $('#gridTable').bootstrapTable('refresh', {
-                                        silent: true
-                                    });
-                                    $("#confirmButton").removeAttr("disabled", true);
-                                    return;
-                                }
-                            },
-                            error: function (e) {
-                                swal({ title: 'Loan Refinance', text: 'Loan Refinance encountered an error', type: 'error' }).then(function () { });
-
-                            }
-                        });
-
-                    }
-
-                } else {
-                    swal({ title: 'Loan Refinance', text: 'You cancelled Loan Refinancing', type: 'info' }).then(function () { });
-
-                }
-
-            })
-
-
-        } else {
-            $("#btnAdd").removeAttr("disabled", true);
-
-            swal("You have not selected any loan");
-        }
+// Refinance Loan Form Submission
+function handleRefinancingSubmit() {
+    var selectedLoans = $('#gridTable').bootstrapTable('getSelections');
+    if (selectedLoans.length === 0) {
+        swal("You have not selected any loan(s)");
+        return;
     }
 
+    swal({
+        title: "Are you sure?",
+        text: "Loan(s) will be refinanced!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ff9800",
+        confirmButtonText: "Yes, continue",
+        cancelButtonText: "No, stop!",
+        showLoaderOnConfirm: true,
+        preConfirm: function () {
+            return new Promise(function (resolve) {
+                setTimeout(resolve, 2000);
+            });
+        }
+    }).then(function (isConfirm) {
+        if (isConfirm.value) {
+            executeLoanRefinancing(selectedLoans);
+        } else {
+            swal("You cancelled Loan Refinancing", "", "info");
+        }
+    });
+}
+
+// Execute Loan Refinancing
+function executeLoanRefinancing(selectedLoans) {
+    var secondaryLender = $("#SecondaryLender").cnComboBox('getValue');
+    $.ajax({
+        url: '/Refinancing/RefinanceLoan',
+        type: 'POST',
+        data: {
+            lists: JSON.stringify(selectedLoans),
+            SecondaryLender: secondaryLender
+        },
+        dataType: 'json',
+        success: function (result) {
+            if (result.Tag === 1) {
+                swal("Loan Refinance", result.Message, "success").then(() => {
+                    window.location.reload();
+                });
+            } else {
+                swal("Loan Refinance", result.Message, "error");
+            }
+        },
+        error: function () {
+            swal("Loan Refinance", "Loan Refinance encountered an error", "error");
+        }
+    });
+}
+
+// Initialize Child Grid (Detailed Information)
+function initChildGrid(index, row, $detail) {
+    var formattedDateOfEmployment = new Date(row.DateOfEmployment).toLocaleDateString();
+
+    var htmlData = `
+        <div class="card">
+            <div class="card-header text-center">
+                <h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">
+                    Underwriting Process for ${row.Name}
+                </h6>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label for="nhfNumber">NHF Number:</label>
+                            <input type="text" id="nhfNumber" class="form-control" readonly value="${row.NHFNumber}" />
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="monthlyIncome">Monthly Income:</label>
+                            <input type="text" id="monthlyIncome" class="form-control" readonly value="${row.MonthlyIncome}" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <label for="dateOfEmployment">Date Of Employment:</label>
+                            <input type="text" id="dateOfEmployment" class="form-control" readonly value="${formattedDateOfEmployment}" />
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="remark">Remark:</label>
+                        <textarea id="remark" class="form-control" style="height: 60px">${row.Remark}</textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+    $detail.html(htmlData);
+}
 </script>

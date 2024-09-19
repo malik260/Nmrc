@@ -61,7 +61,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             Pagination pagination = new Pagination();
             TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();
             var batchRef = _iUnitOfWork.Underwritings.GetEntity(id).Result.BatchRefNo;
-            obj.Data = _iUnitOfWork.Underwritings.GetLoanBatches(batchRef, pagination).Result.Where(i => i.isBatched == true).ToList();
+            obj.Data = _iUnitOfWork.Underwritings.GetLoanBatches(batchRef, pagination).Result.Where(i => i.isBatched == 1).ToList();
             foreach (UnderwritingEntity under in obj.Data)
             {
                 under.ProductName = _iUnitOfWork.CreditTypes.GetEntitybiId(Convert.ToInt32(under.ProductName)).Result.Name;
@@ -83,7 +83,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             var query = from t1 in context.UnderwritingEntity
                         join t2 in context.ApprovalSetupEntity on 660881219264712704 equals t2.MenuId
-                        where t1.CheckList == "1" && t1.Rated == 1 && t2.Authority == user.Employee && t1.isBatched == false
+                        where t1.CheckList == "1" && t1.Rated == 1 && t2.Authority == user.Employee && t1.isBatched == 0
                         && t1.LoanAmount > 0 && t1.Reviewed != 1 && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber)
                         select t1;
             //obj.Data = await _iUnitOfWork.Underwritings.GetLoanForUnderwriting();
@@ -103,6 +103,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 under.RiskScore = riskRating.AverageScore;
                 under.Rating = riskRating.Rating;
                 under.CheckList = checklist.Checklist;
+                under.Scheme = _iUnitOfWork.Schemes.GetEntitybiId(under.SchemeType).Result.SchemeName;
 
             }
             obj.Total = obj.Data.Count;
@@ -120,7 +121,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 var companyinfo = await _iUnitOfWork.Pmbs.GetEntity(user.Company);
                 var query = (from t1 in context.UnderwritingEntity
                              join t2 in context.ApprovalSetupEntity on 664553002530508800 equals t2.MenuId
-                             where t1.CheckList == "1" && t1.Rated == 1 && t1.Reviewed == 1 && t2.Authority == user.Employee && t1.isBatched == false && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber) && t1.SchemeType == 1
+                             where t1.CheckList == "1" && t1.Rated == 1 && t1.Reviewed == 1 && t2.Authority == user.Employee && t1.isBatched == 0 && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber) && t1.SchemeType == 1
                              select t1).Distinct();
                 TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();
                 //obj.Data = await _iUnitOfWork.Underwritings.GetLoanForBatching();
@@ -158,8 +159,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 var userinfo = await _iUnitOfWork.Employees.GetEntity(user.Employee);
                 var companyinfo = await _iUnitOfWork.Pmbs.GetEntity(user.Company);
                 var query = (from t1 in context.UnderwritingEntity
-                             join t2 in context.ApprovalSetupEntity on 664553002530508800 equals t2.MenuId
-                             where t1.CheckList == "1" && t1.Rated == 1 && t1.Reviewed == 1 && t2.Authority == user.Employee && t1.isBatched == false && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber) && t1.SchemeType == 2
+                             join t2 in context.ApprovalSetupEntity on 5898777445214440000 equals t2.MenuId
+                             where t1.CheckList == "1" && t1.Rated == 1 && t1.Reviewed == 1 && t2.Authority == user.Employee && t1.isBatched == 0 && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber) && t1.SchemeType == 2
                              select t1).Distinct();
                 TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();
                 //obj.Data = await _iUnitOfWork.Underwritings.GetLoanForBatching();
@@ -174,6 +175,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     under.Bvn = customerinfo.BVN;
                     under.Name = customerinfo.FirstName + " " + customerinfo.LastName;
                     under.creditName = productInfo.Name;
+                    under.Scheme = _iUnitOfWork.Schemes.GetEntitybiId(under.SchemeType).Result.SchemeName;
 
                 }
                 obj.Total = obj.Data.Count;
@@ -202,7 +204,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             var companyinfo = await _iUnitOfWork.Pmbs.GetEntity(user.Company);
             var query = from t1 in context.UnderwritingEntity
                         join t2 in context.ApprovalSetupEntity on 664553002530508800 equals t2.MenuId
-                        where t1.CheckList == "1" && t1.Rated == 1 && t1.Reviewed == 1 && t2.Authority == user.Employee && t1.isBatched == true && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber)
+                        where t1.CheckList == "1" && t1.Rated == 1 && t1.Reviewed == 1 && t2.Authority == user.Employee && t1.isBatched == 1 && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber)
                         select t1;
             //obj.Data = await _iUnitOfWork.Underwritings.GetLoanForBatching();
             obj.Data = query.ToList().DistinctBy(i => i.BatchRefNo).ToList();
@@ -228,44 +230,61 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
         public async Task<TData<List<UnderwritingEntity>>> GetLoanForUnderwriting()
         {
-            var context = new ApplicationDbContext();
-            TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();
-            var user = await Operator.Instance.Current();
-            var userinfo = await _iUnitOfWork.Employees.GetEntity(user.Employee);
-            var companyinfo = await _iUnitOfWork.Pmbs.GetEntity(user.Company);
-            var query = from t1 in context.UnderwritingEntity
-                        join t2 in context.ApprovalSetupEntity on 563327185478225920 equals t2.MenuId
-                        where t1.CheckList != "1" && t1.Rated != 1 && t2.Authority == user.Employee && t1.isBatched == false
-                        && t1.LoanAmount > 0 && t1.Reviewed != 1 && t1.Approved != 1 && t1.Approved != 2 && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber)
-                        select t1;
-            //obj.Data = await _iUnitOfWork.Underwritings.GetLoanForUnderwriting();
-            obj.Data = query.ToList();
-            foreach (UnderwritingEntity under in obj.Data)
+            try
             {
-                var schemeInfo = await _iUnitOfWork.Schemes.GetEntity(under.Scheme);
-                under.Scheme = schemeInfo.SchemeName;
-                var customerinfo = await _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(under.NHFNumber));
-                var ChecklisInfo = await _iUnitOfWork.ChecklistsProcedure.GetEntity(under.NHFNumber);
-                if (ChecklisInfo != null)
+                var context = new ApplicationDbContext();
+                TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();
+                var user = await Operator.Instance.Current();
+                var userinfo = await _iUnitOfWork.Employees.GetEntity(user.Employee);
+                var companyinfo = await _iUnitOfWork.Pmbs.GetEntity(user.Company);
+                var query = from t1 in context.UnderwritingEntity
+                            join t2 in context.ApprovalSetupEntity on 563327185478225920 equals t2.MenuId
+                            where t1.CheckList != "1"
+                                  && t1.Rated != 1
+                                  && t2.Authority == user.Employee
+                                  && t1.isBatched == 0 
+                                  && t1.LoanAmount > 0
+                                  && t1.Reviewed != 1
+                                  && t1.Approved != 1
+                                  && t1.Approved != 2
+                                  && (t1.NextStafffLevel == userinfo.NHFNumber.ToString() || t1.NextStafffLevel == companyinfo.NHFNumber)
+                            select t1;
+
+                //obj.Data = await _iUnitOfWork.Underwritings.GetLoanForUnderwriting();
+                obj.Data = query.ToList();
+                foreach (UnderwritingEntity under in obj.Data)
                 {
-                    under.CheckList = "1";
+                    var schemeInfo = await _iUnitOfWork.Schemes.GetEntitybiId(under.SchemeType);
+                    under.Scheme = schemeInfo.SchemeName;
+                    var customerinfo = await _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(under.NHFNumber));
+                    var ChecklisInfo = await _iUnitOfWork.ChecklistsProcedure.GetEntity(under.NHFNumber);
+                    if (ChecklisInfo != null)
+                    {
+                        under.CheckList = "1";
+                    }
+                    var ChecklisIn = await _iUnitOfWork.RiskAssessmentProcedure.GetEntity(under.NHFNumber);
+                    if (ChecklisIn != null)
+                    {
+                        under.Rated = 1;
+                    }
+                    under.DateofEmployment = customerinfo.DateOfEmployment;
+                    under.DOB = customerinfo.DateOfBirth;
+                    under.MonthlyIncome = customerinfo.MonthlySalary;
+                    under.Bvn = customerinfo.BVN;
+                    under.Name = customerinfo.FirstName + " " + customerinfo.LastName;
+                    under.ProductName = _iUnitOfWork.CreditTypes.GetEntityByProductCode(under.ProductName).Result.Name;
+
                 }
-                var ChecklisIn = await _iUnitOfWork.RiskAssessmentProcedure.GetEntity(under.NHFNumber);
-                if (ChecklisIn != null)
-                {
-                    under.Rated = 1;
-                }
-                under.DateofEmployment = customerinfo.DateOfEmployment;
-                under.DOB = customerinfo.DateOfBirth;
-                under.MonthlyIncome = customerinfo.MonthlySalary;
-                under.Bvn = customerinfo.BVN;
-                under.Name = customerinfo.FirstName + " " + customerinfo.LastName;
-                under.ProductName = _iUnitOfWork.CreditTypes.GetEntitybiId(Convert.ToInt32(under.ProductName)).Result.Name;
+                obj.Total = obj.Data.Count;
+                obj.Tag = 1;
+                return obj;
 
             }
-            obj.Total = obj.Data.Count;
-            obj.Tag = 1;
-            return obj;
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
 
@@ -597,7 +616,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
         }
 
-        private async Task<TData> IndividualExisting(PmbEntity customercreateRequest)
+        private async Task<TData> IndividualExisting(LenderInstitutionsEntity customercreateRequest)
         {
             TData<string> obj = new TData<string>();
             try
@@ -828,7 +847,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 try
                 {
                     var loanid = await _iUnitOfWork.CreditTypes.GetEntitybyName(item.ProductName);
-                    item.isBatched = true;
+                    item.isBatched = 1;
                     item.BatchRefNo = batchRef;
                     item.ProductName = loanid.Code;
 
@@ -859,7 +878,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             foreach (UnderwritingEntity item in batchData)
             {
                 var loanid = await _iUnitOfWork.CreditTypes.GetEntitybyName(item.ProductName);
-                item.isBatched = false;
+                item.isBatched = 0;
                 item.BatchRefNo = string.Empty;
                 item.ProductName = loanid.Code;
 
@@ -1102,9 +1121,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             underwriting.Comments = "Approved";
             underwriting.Approved = 1;
             underwriting.Reviewed = 1;
-            underwriting.Disbursed = true;
+            underwriting.Disbursed = 1;
 
-            var loaninfo = await _iUnitOfWork.LoanInitiations.GetEntityById(long.Parse(underwriting.LoanId));
+            var loaninfo =  db.LoanInitiationEntity.Where(i=> i.Id == long.Parse(underwriting.LoanId)).DefaultIfEmpty().FirstOrDefault();
             loaninfo.Status = "Loan Disbursed";
             var batchNo = RandomHelper.RandomLongGenerator(2000005, 99999999);
 
@@ -1144,7 +1163,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             }
 
-           
+
 
             db.SaveChanges();
             obj.Message = "Loan Disbursed Successfully";

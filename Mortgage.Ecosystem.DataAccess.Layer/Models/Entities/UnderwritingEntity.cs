@@ -82,10 +82,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         public string? BatchRefNo { get; set; }
 
         [Column("isBatched")]
-        public bool? isBatched { get; set; }
+        public int? isBatched { get; set; }
 
         [Column("Disbursed")]
-        public bool? Disbursed { get; set; }
+        public int? Disbursed { get; set; }
 
         [NotMapped]
         public string? Branch { get; set; }

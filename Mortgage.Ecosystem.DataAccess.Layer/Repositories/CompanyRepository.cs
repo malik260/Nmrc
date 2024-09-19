@@ -235,10 +235,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await db.Insert(userEntity);
                 }
 
-                if (entity.AgentType == GlobalConstant.ZERO.ToString() && entity.LenderType != null)
+                if (entity.AgentType == GlobalConstant.SIX.ToString() && entity.LenderType != null)
                 {
-                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.PMB_MENU_URL);
-                    PmbEntity pmbEntity = new PmbEntity();
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.LENDERS_INSTITUTION_MENU_URL);
+                    LenderInstitutionsEntity pmbEntity = new LenderInstitutionsEntity();
                     pmbEntity.Id = entity.Id;
                     pmbEntity.RCNumber = entity.RCNumber;
                     pmbEntity.Name = entity.Name;
@@ -248,7 +248,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     pmbEntity.DateOfIncorporation = entity.DateOfIncorporation;
                     pmbEntity.EmailAddress = entity.EmailAddress;
                     pmbEntity.Sector = entity.Sector;
-                    //pmbEntity.PmbNhfNumber = entity.EmployerNhfNumber;
                     pmbEntity.ContributionFrequency = entity.ContributionFrequency;
                     pmbEntity.Subsector = entity.Subsector;
                     pmbEntity.BaseProcessMenu = currentMenu;
@@ -256,6 +255,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     pmbEntity.BaseCreatorId = entity.BaseCreatorId;
                     pmbEntity.BaseModifierId = entity.BaseModifierId;
                     pmbEntity.NHFNumber = Convert.ToString(entity.EmployerNhfNumber);
+                    pmbEntity.Category = Convert.ToInt32(entity.LenderType);
+
                     await db.Insert(pmbEntity);
 
                 }

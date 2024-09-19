@@ -82,7 +82,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IRiskAssessmentSetupRepository RiskAssessmentSetups { get; }
         IRiskAssessmentProcedureRepository RiskAssessmentProcedure { get; }
         ISchemeRepository Schemes { get; }
-        IPmbRepository Pmbs { get; }
+        ILenderInstitutionsRepository Pmbs { get; }
         IPaymentHistoryRepository PaymentHistories { get; }
         IPropertySubscriptionRepository PropertySubscriptions { get; }
         IPropertyRegistrationRepository PropertyRegistrations { get; }

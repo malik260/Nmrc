@@ -2,6 +2,7 @@
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
@@ -155,16 +156,19 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #region Submit data
         public async Task<TData<string>> SaveForm(LenderSetupEntity entity)
         {
+            var context = new ApplicationDbContext();
             TData<string> obj = new TData<string>();
+            var lenderList = new List<LenderSetupEntity>(); 
             foreach (var item in entity.Lender)
             {
                 var lendersetup = new LenderSetupEntity();
                 lendersetup.LenderTypeId = entity.LenderTypeId;
                 lendersetup.LenderCategory = item;
-                await _iUnitOfWork.Lenders.SaveForm(lendersetup);
-
+                lenderList.Add(lendersetup);    
+                await context.LenderSetupEntity.AddRangeAsync(lendersetup);
             }
 
+            await context.SaveChangesAsync();
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             obj.Message = "Lender added successfully";
