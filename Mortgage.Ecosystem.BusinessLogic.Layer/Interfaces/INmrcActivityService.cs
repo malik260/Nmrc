@@ -11,6 +11,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface INmrcActivityService
     {
+        Task<TData<List<RefinancingEntity>>> GetListByBatchId(RefinancingEntity param);
         Task<TData<List<RefinancingEntity>>> GetList(RefinancingEntity param);
         Task<TData<List<RefinancingEntity>>> GetPageList(RefinancingEntity param, Pagination pagination);
         Task<TData<RefinancingEntity>> GetEntity(long Id);

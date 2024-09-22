@@ -76,6 +76,15 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
+
+        public async Task<IActionResult> GetNonNhfSecondaryLender(PmbListParam param)
+        {
+            TData<List<NonNhf>> obj = await _iPmbService.GetNonNhfSecondaryLenders(param);
+            return Json(obj);
+        }
+
+
+
         //[HttpGet]
         //[AuthorizeFilter("company:search,user:search")]
         //public async Task<IActionResult> GetApproveCompanyListJson(CompanyListParam param)

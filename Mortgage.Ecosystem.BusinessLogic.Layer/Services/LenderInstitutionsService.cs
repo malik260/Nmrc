@@ -81,6 +81,35 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
 
+        public async Task<TData<List<NonNhf>>> GetNonNhfSecondaryLenders(PmbListParam param)
+        {
+            var context = new ApplicationDbContext();
+            TData<List<NonNhf>> obj = new TData<List<NonNhf>>();
+            var lenders = new LenderListParam();
+            var NonNhfLender = _iUnitOfWork.Lenders.GetList(lenders);
+            var allPmbs = await _iUnitOfWork.Pmbs.GetList(param);
+            // Filter the list to include only approved companies
+            var approvedPmbs = allPmbs.Where(pmb => pmb.Status == (int)ApprovalEnum.Approved).ToList();
+            var result = from a in approvedPmbs
+                         join b in context.LenderSetupEntity on a.Category equals b.LenderCategory
+                         join c in context.SchemeLenderEntity on a.Category equals c.LendersId
+                         where b.LenderTypeId == 2 && c.SchemeId == 2
+                         select new NonNhf
+                         {
+                             Id = a.Id,
+                             Name = a.Name
+                         };
+
+
+            obj.Data = result.ToList();
+            obj.Total = approvedPmbs.Count;
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+
+
         public async Task<TData<List<LenderInstitutionsEntity>>> GetPageList(PmbListParam param, Pagination pagination)
         {
             TData<List<LenderInstitutionsEntity>> obj = new TData<List<LenderInstitutionsEntity>>();
@@ -381,10 +410,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             var approvalLogRecords = await _iUnitOfWork.ApprovalLogs.GetList(approvalLogListParam);
             menuRecord.ApprovalLogList = approvalLogRecords;
             var GetLenderScheme = await _iUnitOfWork.SchemeLenders.GetEntityByLenderId(Convert.ToInt32( entityRecord.Category));
+            var LenderCategory = await _iUnitOfWork.Lenders.GetEntitybyLendercategory(Convert.ToInt32(entityRecord.Category));
             string NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber().ToString();
             string CustomerCode = NHFNumber + 00;
 
-            if (GetLenderScheme.SchemeId == GlobalConstant.ONE)
+            if (GetLenderScheme.SchemeId == GlobalConstant.ONE && LenderCategory.LenderTypeId == GlobalConstant.ONE)
             {
                 NhfemployerVM employer = new NhfemployerVM();
                 employer.Employername = entityRecord.Name;
@@ -418,22 +448,43 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             var EmployerRecord = db.CompanyEntity.Where(i => i.EmailAddress == entityRecord.EmailAddress).DefaultIfEmpty().FirstOrDefault();
             EmployerRecord.EmployerNhfNumber = NHFNumber;
             EmployerRecord.EmployerCode = CustomerCode;
+            EmployerRecord.Status = 1;
             db.SaveChanges();
 
             entityRecord.NHFNumber = NHFNumber;
             entityRecord.PmbCode = CustomerCode;
 
             await _iUnitOfWork.Pmbs.ApproveForm(entityRecord, menuRecord, user);
-            var menus = await _iUnitOfWork.Menus.GetPmbMenuList();
-            foreach (var menu in menus)
+            if (entityRecord.Category == GlobalConstant.ONE)
             {
-                var menuAuth = new MenuAuthorizeEntity();
-                menuAuth.AuthorizeId = entity.Id;
-                menuAuth.MenuId = menu.Id;
-                menuAuth.AuthorizeType = AuthorizeTypeEnum.User.ToInt();
-                await _iUnitOfWork.MenuAuthorizes.SaveForm(menuAuth);
+                var menus = await _iUnitOfWork.Menus.GetPmbMenuList();
+                foreach (var menu in menus)
+                {
+                    var menuAuth = new MenuAuthorizeEntity();
+                    menuAuth.AuthorizeId = entity.Id;
+                    menuAuth.MenuId = menu.Id;
+                    menuAuth.AuthorizeType = AuthorizeTypeEnum.User.ToInt();
+                    await _iUnitOfWork.MenuAuthorizes.SaveForm(menuAuth);
 
-            };
+                }
+
+            }
+            if (entityRecord.Category == GlobalConstant.FOUR)
+            {
+
+                var menus = await _iUnitOfWork.Menus.GetNMRCList();
+                foreach (var menu in menus)
+                {
+                    var menuAuth = new MenuAuthorizeEntity();
+                    menuAuth.AuthorizeId = entity.Id;
+                    menuAuth.MenuId = menu.Id;
+                    menuAuth.AuthorizeType = AuthorizeTypeEnum.User.ToInt();
+                    await _iUnitOfWork.MenuAuthorizes.SaveForm(menuAuth);
+
+                }
+
+            }
+           
             var employeeRecord = db.EmployeeEntity.Where(i => i.EmailAddress == entityRecord.EmailAddress).DefaultIfEmpty().FirstOrDefault();
             employeeRecord.Status = 1;
             employeeRecord.NHFNumber = long.Parse(NHFNumber);

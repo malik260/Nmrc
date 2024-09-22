@@ -20,13 +20,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         #region View function
-        [AuthorizeFilter("nmrcactivity:view")]
+        [AuthorizeFilter("nmrcunderwriting:view")]
         public IActionResult NmrcUnderwritingIndex()
         {
             return View();
         }
 
-        [AuthorizeFilter("nmrcactivity:view")]
+        [AuthorizeFilter("nmrcdisbursement:view")]
         public IActionResult NmrcLoanDisbursement()
         {
             return View();
@@ -42,7 +42,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
-        [AuthorizeFilter("nmrcactivity:view")]
+        [AuthorizeFilter("nmrcreview:view")]
         public IActionResult NmrcLoanReviewIndex()
         {
             return View();
@@ -55,6 +55,15 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         public async Task<IActionResult> GetListJson(RefinancingEntity param)
         {
             TData<List<RefinancingEntity>> obj = await _nmrcActivityService.GetList(param);
+            return Json(obj);
+        }
+
+
+        public async Task<IActionResult> GetListById(string id)
+        {
+            var param = new RefinancingEntity();
+            param.RefinanceNumber = id;
+            TData<List<RefinancingEntity>> obj = await _nmrcActivityService.GetListByBatchId(param);
             return Json(obj);
         }
 

@@ -2,6 +2,7 @@
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
+using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Params;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.ViewModels;
 using System;
@@ -32,11 +33,33 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             obj.Tag = 1;
             return obj;
         }
+          public async Task<TData<List<RefinancingEntity>>> GetListByBatchId(RefinancingEntity param)
+        {
+            TData<List<RefinancingEntity>> obj = new TData<List<RefinancingEntity>>();
+            obj.Data = await _iUnitOfWork.NmrcActivity.GetList(param);
+            foreach (var item in obj.Data)
+            {
+                var obligorinfo =await _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(item.NHFNumber));
+                item.CustomerName = obligorinfo.FirstName + " " + obligorinfo.LastName;
+                item.ProductName = _iUnitOfWork.CreditTypes.GetEntityByProductCode(item.ProductCode).Result.Name;
+            }
+            obj.Total = obj.Data.Count;
+            obj.Tag = 1;
+            return obj;
+        }
 
         public async Task<TData<List<RefinancingEntity>>> GetPageList(RefinancingEntity param, Pagination pagination)
         {
+            var user = await Operator.Instance.Current();
             TData<List<RefinancingEntity>> obj = new TData<List<RefinancingEntity>>();
+            param.LenderID = user.Company;
             obj.Data = await _iUnitOfWork.NmrcActivity.GetPageList(param, pagination);
+            foreach (var item in obj.Data)
+            {
+                item.ProductName =  _iUnitOfWork.CreditTypes.GetEntityByProductCode(item.ProductCode).Result.Name;
+                item.MortgageBank = _iUnitOfWork.Pmbs.GetEntity(item.PmbId).Result.Name;
+                item.CustomerName = _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(item.NHFNumber)).Result.FirstName;    
+            }
             obj.Total = pagination.TotalCount;
             obj.Tag = 1;
             return obj;

@@ -7,8 +7,12 @@
 
 <div class="container-div">
     <div class="row">
+         <div class="btn-group-sm" id="toolbar">
 
-       
+        <a id="Send" class="btn btn-success" onclick="SendForReview()"><i class="fa fa-list"></i> Proceed to Review</a>
+        
+        </div>
+
 
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
@@ -32,7 +36,7 @@
 
     function initGrid() {
         debugger
-        var queryUrl = '@Url.Content("~/NmrcActivity/GetLoanForUnderwriting")';
+        var queryUrl = '@Url.Content("~/NmrcActivity/GetPageListJson")';
         $('#gridTable').cnTable({
             url: queryUrl,
             detailView: true,
@@ -41,19 +45,9 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'PMBName', title: 'Primary Mortgage Bank', sortable: false },
+                { field: 'MortgageBank', title: 'Primary Mortgage Bank', sortable: false },
                 { field: 'ProductName', title: 'Product Name', sortable: false },
-                { field: 'LoanRefNo', title: 'Loan Ref No', sortable: false },
-                {
-                    field: 'Tenor', title: 'Tenor', sortable: false, formatter: function (value) {
-                        return value + " years";
-                    }
-                },
-                {
-                    field: 'InterestRate', title: 'Interest Rate', sortable: false, formatter: function (value) {
-                        return value + "%";
-                    }
-                },
+                { field: 'RefinanceNumber', title: 'Batch Ref', sortable: false },
                 { field: 'TotalAmount', title: 'Total Amount', sortable: false },
 
                 {
@@ -76,7 +70,7 @@
 
                         actions.push('&nbsp;');
 
-                      
+
                         return actions.join('');
                     }
                 },
@@ -99,6 +93,57 @@
 
 
 
+    //function initGrid2() {
+    //    debugger
+    //    var queryUrl = '@Url.Content("~/NmrcActivity/GetListById")';
+    //    $('#gridTable2').cnTable({
+    //        url: queryUrl,
+    //        detailView: true,
+    //        sortName: 'BaseModifyTime',
+    //        sortOrder: "Desc",
+    //        columns: [
+    //            { checkbox: true, visible: true },
+    //            { field: 'Id', title: 'Id', visible: false },
+    //            { field: 'MortgageBank', title: 'Primary Mortgage Bank', sortable: false },
+    //            { field: 'ProductName', title: 'Product Name', sortable: false },
+    //            { field: 'RefinanceNumber', title: 'Batch Ref', sortable: false },
+    //            { field: 'TotalAmount', title: 'Total Amount', sortable: false },
+
+    //            {
+    //                field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+    //                    return cn.formatDate(value, "yyyy-MM-dd");
+    //                }
+    //            },
+
+    //            {
+    //                title: 'Actions',
+    //                align: 'center',
+    //                formatter: function (value, row, index) {
+    //                    debugger;
+    //                    var actions = [];
+    //                    var checklist = row.CheckList;
+    //                    var buttonName = (checklist == '1') ? 'CheckListed' : 'CheckList';
+
+    //                    var disabledAttribute = (checklist == '1') ? 'disabled' : '';
+    //                    actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showPmbChecklistForm(true)" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
+
+    //                    actions.push('&nbsp;');
+
+
+    //                    return actions.join('');
+    //                }
+    //            },
+    //        ],
+    //        queryParams: function (params) {
+    //            return {
+    //                Id: row.RefinanceNumber,
+    //            };
+    //        }
+    //    });
+    //}
+
+
+
     function openCustomDialog(options) {
         layer.open({
             type: 2,
@@ -113,43 +158,91 @@
     }
 
 
+    function initChildGrid(index, row, $detail) {
+        debugger;
+        $detail.html('Loading data ...');
 
-    function showSaveForm(bAdd) {
-        var id = 0;
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            var loanId = selectedRow[0].LoanId;
-            localStorage.setItem('Data2', loanId);
+        // Format dates (if necessary)
+        var date = new Date(row.BaseCreateTime);
 
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        openCustomDialog({
-            title: id > 0 ? "Edit Document" : "Add Document",
-            content: '@Url.Content("~/Underwriting/AddDocumentForm")' + '?id=' + id,
-            width: "780px",
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.saveForm(index);
-            }
+        // Create HTML structure
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center">' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Loan Review for ' + row.Name + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            // Add form controls here if needed
+            '</form>' +
+            '<table id="gridTable2" data-mobile-responsive="true"></table>' + // Table inside card-body
+            '</div>' +
+            '</div>';
+
+        // Render the HTML
+        $detail.html(htmlData);
+
+        // Initialize the child table (pass row.Id as parameter)
+        $('#gridTable2').cnTable({
+            url: '/NmrcActivity/GetListById',
+            queryParams: function (params) {
+               return {
+                    Id: row.RefinanceNumber,  
+                };
+            },
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'CustomerName', title: 'Obligor', sortable: false },
+                { field: 'ProductName', title: 'Product Name', sortable: false },
+                { field: 'Tenor', title: 'Loan Tenor', sortable: false },
+                { field: 'Rate', title: 'Rate', sortable: false },
+                { field: 'Amount', title: 'Amount', sortable: false },
+
+                {
+                    field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd");
+                    }
+                },
+
+                {
+                    title: 'Actions',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        debugger;
+                        var actions = [];
+                        var checklist = row.CheckList;
+                        var buttonName = (checklist == '1') ? 'CheckListed' : 'CheckList';
+
+                        var disabledAttribute = (checklist == '1') ? 'disabled' : '';
+                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showObligorChecklistForm(true)" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
+
+                        actions.push('&nbsp;');
+
+
+                        return actions.join('');
+                    }
+                },
+            ],
+        });
+
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            $cardBody.toggle(); 
         });
     }
 
-    
 
 
- 
+   
 
-    function approveUnderwriting(id) {
+
+    function SendForReview(id) {
         debugger
-        cn.confirm("Confirm the approval process？", function () {
+        cn.confirm("Send Transactions？", function () {
             debugger;
             cn.ajax({
-                url: '@Url.Content("~/Underwriting/ApproveUnderwriting")' + '?id=' + id,
+                url: '@Url.Content("~/NmrcActivity/ApproveUnderwriting")' + '?id=' + id,
                 type: "post",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -189,80 +282,6 @@
     }
 
 
-    function initChildGrid(index, row, $detail) {
-        $detail.html('Loading data ...');
-
-        $.ajax({
-            url: '/Refinancing/GetListById',
-            type: 'GET',
-            data: { id: row.Id }, 
-            success: function (response) {
-                if (response.success == true) { 
-                    var data = response.data;
-
-                    var dateOfEmployment = new Date(data.DateofEmployment);
-                    var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString();
-
-                    // Create the HTML for the table
-                    var htmlData = `
-                        <div class="card">
-                            <div class="card-header text-center">
-                                <h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">
-                                    Underwriting Process for ${data.Name}
-                                </h6>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-bordered">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>Customer Name</th>
-                                            <th>Loan Id</th>
-                                            <th>Loan Amount</th>
-                                            <th>Tenor</th>
-                                            <th>Rate</th>
-                                            <th>Status</th>
-                                            <th>Application Date</th>
-                                            <th>Product Name</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                                <td>${data.CustomerName}</td>
-                                                <td>${data.LoanId}</td>
-                                                <td>${data.Amount}</td>
-                                                <td>${data.Tenor}</td>
-                                                <td>${data.Rate}</td>
-                                                <td>${data.Status}</td>
-                                                    <td>${data.ApplicationDate}</td>
-                                                <td>${data.ProductName}</td>
-                                            
-                                            <td>
-                                                <button type="button" class="btn btn-info btn-sm" onclick="checkEligibility('${data.Id}');">Check Eligibility</button>
-                                                <button type="button" id="approve_${data.Id}" onclick="CheckInfo('${data.Id}');" class="btn btn-success btn-sm">Get Information</button>
-                                              
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>`;
-
-                    $detail.html(htmlData);
-
-                    $detail.find('.card-header').click(function () {
-                        var $cardBody = $(this).siblings('.card-body');
-                        $cardBody.toggle();
-                    });
-                } else {
-                    $detail.html('<div class="alert alert-danger">Failed to load data. Please try again.</div>');
-                }
-            },
-            error: function () {
-                $detail.html('<div class="alert alert-danger">Error fetching data from the server.</div>');
-            }
-        });
-    }
 
 
     function showPmbChecklistForm(bAdd) {
@@ -290,7 +309,7 @@
             }
         }
         openCustomDialog({
-            title: id > 0 ? "Edit Checklist" : "Checklist Form",
+            title: "Checklist Form",
             content: '@Url.Content("~/NmrcActivity/NmrcPmbChecklistForm")',
             width: "780px",
             callback: function (index, layero) {
@@ -304,7 +323,7 @@
     function showObligorChecklistForm(bAdd) {
         debugger
         var id = 0;
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        var selectedRow = $("#gridTable2").bootstrapTable("getSelections");
         id = selectedRow[0].Id;
         var NHFNumber = selectedRow[0].NHFNumber;
 
@@ -326,7 +345,7 @@
             }
         }
         openCustomDialog({
-            title: id > 0 ? "Edit Checklist" : "Checklist Form",
+            title: "Checklist Form",
             content: '@Url.Content("~/NmrcActivity/NmrcObligorChecklistForm")',
             width: "780px",
             callback: function (index, layero) {

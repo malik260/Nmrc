@@ -35,22 +35,34 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task SaveForms(List<SecondaryLenderChecklistProcedureEntity> entity)
         {
-            foreach (var item in entity)
+            try
             {
-                if (item.Id.IsNullOrZero())
+                var db = await BaseRepository().BeginTrans();
+
+                foreach (var item in entity)
                 {
-                    await item.Create();
-                    await BaseRepository().Insert<SecondaryLenderChecklistProcedureEntity>(item);
+                    if (item.Id.IsNullOrZero())
+                    {
+                        await item.Create();
+                        await BaseRepository().Insert<SecondaryLenderChecklistProcedureEntity>(item);
+                    }
+                    else
+                    {
+                        await item.Modify();
+                        await BaseRepository().Update<SecondaryLenderChecklistProcedureEntity>(item);
+                    }
+
                 }
-                else
-                {
-                    await item.Modify();
-                    await BaseRepository().Update<SecondaryLenderChecklistProcedureEntity>(item);
-                }
+
+                await db.CommitTrans();
+
 
             }
+            catch (Exception ex)
+            {
 
-
+                throw;
+            }
         }
         public async Task DeleteForm(string ids)
         {

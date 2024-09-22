@@ -88,7 +88,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             var batchData = new List<LoanDisbursementEntity>();
             var batchNo = RandomHelper.RandomLongGenerator(2000005, 99999999);
             batchData = JsonConvert.DeserializeObject<List<LoanDisbursementEntity>>(JsonConvert.DeserializeObject(lists).ToString());
-            var lender = await _iUnitOfWork.SecondaryLenders.GetEntity(SecondaryLender);
+            var lender = await _iUnitOfWork.Pmbs.GetEntity(SecondaryLender);
             var pmb = await _iUnitOfWork.Pmbs.GetEntity(batchData.FirstOrDefault().PmbId);
             var batchRef = lender.Name.ParseToString() + "-" + batchNo;
             decimal total = batchData.Select(i => i.Amount).ToList().Sum();

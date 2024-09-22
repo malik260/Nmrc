@@ -32,7 +32,7 @@
                 border-collapse: collapse;
             }
 
-
+               
                 #data-table th {
                     background-color: #f2f2f2;
                     text-align: left;
@@ -57,7 +57,7 @@
 
             </div>
 
-
+            
             <div class="form-group">
                 <div class="col-sm-6">
                     <label class="control-label">Remark <font class="red"> *</font></label>
@@ -93,12 +93,13 @@
 
 
     function checkListGrid() {
-        var queryUrl = '@Url.Content("~/NmrcChecklist/GetObligorligibilityCriteria")';
+        var queryUrl = '@Url.Content("~/NmrcEligibility/GetPmbEligibilityCriteria")';
         $('#checklistTable').cnTable({
             url: queryUrl,
             columns: [
                 { checkbox: true, visible: true },
-                { field: 'Checklist', title: 'Checklist', visible: true },
+                { field: 'Item', title: 'Item', visible: true },
+                { field: 'Description', title: 'Description', visible: true },
                 //{ checkbox: true, title: 'AppCheckbox', visible: true },
                 //{ checkbox: true, title: 'NotAppCheckbox', visible: true },
 
@@ -160,31 +161,25 @@
                         }
                     });
                     var selectedItems = $('#checklistTable').bootstrapTable('getSelections');
-                    var selectedRow = $("#gridTable").bootstrapTable('getSelections');
-                    var NhfNumber = localStorage.getItem("Data");
-                    var ProductCode = localStorage.getItem("Data1");
-                    var LoanId = localStorage.getItem("Data2");
-                    console.log(NhfNumber);
-                    console.log(selectedRow);
+                    var Pmbid = localStorage.getItem("lenderid");
+                    
                     debugger;
                     var selectedItemsCombined = [];
                     var remark = $('#remark').val();
 
                     for (var i = 0; i < selectedItems.length; i++) {
                         selectedItemsCombined.push({
-                            Checklist: selectedItems[i].Checklist,
-                            AppCheckbox: selectedItems[i].AppCheckbox,
+                            Item: selectedItems[i].Item,
+                            Description: selectedItems[i].Description,
                             Remark: remark,
-                            ProductCode: ProductCode,
-                            NhfNumber: NhfNumber,
-                            LoanId: LoanId
+                            PmbId: Pmbid,
                         });
                     }
 
 
                     if (SingleData.length !== 0) { // Corrected the length property usage
                         $.ajax({
-                            url: '/ChecklistProcedure/SaveFormJson',
+                            url: '/SecondaryLenderChecklistProcedure/SaveFormJson',
                             type: 'POST',
                             data: { selectedData: selectedItemsCombined },
                             success: function (obj) {
@@ -194,13 +189,9 @@
                                         text: obj.Message.toString(),
                                         type: 'success'
                                     }).then(function () {
-                                        // Hide the form after successful submission
                                         window.location.reload(true);
 
-                                        //$('#checklistForm').hide();
-                                        // location.href = '@Url.Content("~/Underwriting/UnderwritingIndex")';
-
-                                        // window.location.reload();
+                                        
                                         parent.layer.close(index);
                                         parent.searchGrid();
 

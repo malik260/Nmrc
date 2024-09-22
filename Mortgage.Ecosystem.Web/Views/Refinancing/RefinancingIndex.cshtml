@@ -41,6 +41,8 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 
 <script type="text/javascript">
 $(function () {
@@ -50,7 +52,7 @@ $(function () {
     laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', type: 'date', theme: 'molv' });
     
     $("#SecondaryLender").cnComboBox({
-        url: '@Url.Content("~/SecondaryLender/GetListJson")',
+        url: '@Url.Content("~/LenderInstitutions/GetNonNhfSecondaryLender")',
         key: "Id",
         value: "Name"
     });
@@ -65,7 +67,7 @@ function initGrid() {
         columns: [
             { checkbox: true, visible: true },
             { field: 'Id', title: 'Id', visible: false },
-            { field: 'LoanProduct', title: 'Lender Product' },
+                { field: 'ProductName', title: 'Loan Product' },
             { field: 'Tenor', title: 'Loan Tenor' },
             { field: 'Amount', title: 'Loan Amount' },
             { field: 'Rate', title: 'Rate' },
@@ -93,11 +95,11 @@ function searchRefinancingGrid() {
 function handleRefinancingSubmit() {
     var selectedLoans = $('#gridTable').bootstrapTable('getSelections');
     if (selectedLoans.length === 0) {
-        swal("You have not selected any loan(s)");
+        swal.fire("You have not selected any loan(s)");
         return;
     }
 
-    swal({
+    swal.fire({
         title: "Are you sure?",
         text: "Loan(s) will be refinanced!",
         type: "warning",
@@ -115,13 +117,20 @@ function handleRefinancingSubmit() {
         if (isConfirm.value) {
             executeLoanRefinancing(selectedLoans);
         } else {
-            swal("You cancelled Loan Refinancing", "", "info");
+            swal.fire("You cancelled Loan Refinancing", "", "info");
         }
     });
 }
 
 function executeLoanRefinancing(selectedLoans) {
-    var secondaryLender = $("#SecondaryLender").cnComboBox('getValue');
+        var selectedLoans = $('#gridTable').bootstrapTable('getSelections');
+        var secondaryLender = $('#SecondaryLender').cnComboBox('getValue');
+
+        if (selectedLoans.length === 0) {
+            swal.fire("You have not selected any loan(s)");
+            return;
+        }
+
     $.ajax({
         url: '/Refinancing/RefinanceLoan',
         type: 'POST',
@@ -132,15 +141,15 @@ function executeLoanRefinancing(selectedLoans) {
         dataType: 'json',
         success: function (result) {
             if (result.Tag === 1) {
-                swal("Loan Refinance", result.Message, "success").then(() => {
+                swal.fire("Loan Refinance", result.Message, "success").then(() => {
                     window.location.reload();
                 });
             } else {
-                swal("Loan Refinance", result.Message, "error");
+                swal.fire("Loan Refinance", result.Message, "error");
             }
         },
         error: function () {
-            swal("Loan Refinance", "Loan Refinance encountered an error", "error");
+            swal.fire("Loan Refinance", "Loan Refinance encountered an error", "error");
         }
     });
 }
