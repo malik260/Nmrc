@@ -32,7 +32,7 @@
 
     function initGrid() {
         debugger
-        var queryUrl = '@Url.Content("~/NmrcActivity/GetLoanForUnderwriting")';
+        var queryUrl = '@Url.Content("~/NmrcActivity/GetLoanForReview")';
         $('#gridTable').cnTable({
             url: queryUrl,
             detailView: true,
@@ -41,19 +41,9 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'PMBName', title: 'Primary Mortgage Bank', sortable: false },
-                { field: 'ProductName', title: 'Product Name', sortable: false },
-                { field: 'LoanRefNo', title: 'Loan Ref No', sortable: false },
-                {
-                    field: 'Tenor', title: 'Tenor', sortable: false, formatter: function (value) {
-                        return value + " years";
-                    }
-                },
-                {
-                    field: 'InterestRate', title: 'Interest Rate', sortable: false, formatter: function (value) {
-                        return value + "%";
-                    }
-                },
+                { field: 'PmbName', title: 'Primary Mortgage Bank', sortable: false },
+                { field: 'RefinanceNumber', title: 'Loan Batch No', sortable: false },
+
                 { field: 'TotalAmount', title: 'Total Amount', sortable: false },
 
                 {
@@ -62,17 +52,29 @@
                     }
                 },
 
+
                 {
                     title: 'Actions',
                     align: 'center',
                     formatter: function (value, row, index) {
+                        debugger;
                         var actions = [];
+                        var buttonName = 'Show CheckList';
 
-                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="ShowPmbReviewDetails(\'' + row.PmbId + '\')"><i class="fa-solid fa-house"></i>Review</a>');
+                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="ShowSaveForm(\'' + row.PmbId + '\')" ' + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
 
                         actions.push('&nbsp;');
 
-                       
+
+                        var button = 'Approve';
+
+                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="Approve(\'' + row.Id + '\')"><i class="fa-solid fa-house"></i>Approve</a>');
+
+                        actions.push('&nbsp;');
+
+
+                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="Reject(\'' + row.Id + '\')"><i class="fa fa-key"></i>Reject</a>');
+
                         return actions.join('');
                     }
                 },
@@ -81,10 +83,11 @@
                 var pagination = $('#gridTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
-            },
-            onExpandRow: function (index, row, $detail) {
-                initChildGrid(index, row, $detail);
             }
+            //,
+            //onExpandRow: function (index, row, $detail) {
+            //    initChildGrid(index, row, $detail);
+            //}
         });
     }
 
@@ -110,23 +113,10 @@
 
 
 
-    function showSaveForm(bAdd) {
-        var id = 0;
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            var loanId = selectedRow[0].LoanId;
-            localStorage.setItem('Data2', loanId);
-
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
+    function ShowSaveForm(id) {
         openCustomDialog({
-            title: id > 0 ? "Edit Document" : "Add Document",
-            content: '@Url.Content("~/Underwriting/AddDocumentForm")' + '?id=' + id,
+            title: "CheckList Details",
+            content: '@Url.Content("~/NmrcActivity/GetPMBChecklists")' + '?id=' + id,
             width: "780px",
             callback: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
@@ -134,10 +124,6 @@
             }
         });
     }
-
-
-
-
 
 
     function approveUnderwriting(id) {
@@ -201,48 +187,48 @@
 
                     // Create the HTML for the table
                     var htmlData = `
-                            <div class="card">
-                                <div class="card-header text-center">
-                                    <h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">
-                                        Underwriting Process for ${data.Name}
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-bordered">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th>Customer Name</th>
-                                                <th>Loan Id</th>
-                                                <th>Loan Amount</th>
-                                                <th>Tenor</th>
-                                                <th>Rate</th>
-                                                <th>Status</th>
-                                                <th>Application Date</th>
-                                                <th>Product Name</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                    <td>${data.CustomerName}</td>
-                                                    <td>${data.LoanId}</td>
-                                                    <td>${data.Amount}</td>
-                                                    <td>${data.Tenor}</td>
-                                                    <td>${data.Rate}</td>
-                                                    <td>${data.Status}</td>
-                                                        <td>${data.ApplicationDate}</td>
-                                                    <td>${data.ProductName}</td>
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        <h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">
+                                            Underwriting Process for ${data.Name}
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-bordered">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>Customer Name</th>
+                                                    <th>Loan Id</th>
+                                                    <th>Loan Amount</th>
+                                                    <th>Tenor</th>
+                                                    <th>Rate</th>
+                                                    <th>Status</th>
+                                                    <th>Application Date</th>
+                                                    <th>Product Name</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                        <td>${data.CustomerName}</td>
+                                                        <td>${data.LoanId}</td>
+                                                        <td>${data.Amount}</td>
+                                                        <td>${data.Tenor}</td>
+                                                        <td>${data.Rate}</td>
+                                                        <td>${data.Status}</td>
+                                                            <td>${data.ApplicationDate}</td>
+                                                        <td>${data.ProductName}</td>
 
-                                                <td>
-                                                            <button type="button" class="btn btn-info btn-sm" onclick="ShowObligorReviewDetails('${data.NHFNumber}');">Review</button>
-                                                        <button type="button" onclick="CheckInfo('${data.NHFNumber}');" class="btn btn-success btn-sm">Get Information</button>
+                                                    <td>
+                                                                <button type="button" class="btn btn-info btn-sm" onclick="ShowObligorReviewDetails('${data.NHFNumber}');">Review</button>
+                                                            <button type="button" onclick="CheckInfo('${data.NHFNumber}');" class="btn btn-success btn-sm">Get Information</button>
 
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>`;
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>`;
 
                     $detail.html(htmlData);
 
@@ -261,7 +247,7 @@
     }
 
 
-     function ShowPmbReviewDetails(id) {
+    function ShowPmbReviewDetails(id) {
         openCustomDialog({
             title: "Property Details",
             content: '@Url.Content("~/PropertySubscription/Details")' + '?id=' + id,
@@ -285,5 +271,54 @@
         });
     }
 
-    
+
+    function Approve(id) {
+        if (id < 1) {
+            cn.msgError("Please selet an item");
+        }
+        cn.confirm("Confirm the approval process？", function () {
+            debugger;
+            cn.ajax({
+                url: '@Url.Content("~/NmrcActivity/ApproveReview")' + '?id=' + id,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+    function Reject(id) {
+        if (id < 1) {
+            cn.msgError("Please selet an item");
+        }
+        var remark = $("#remark").val();
+
+        cn.confirm("Confirm Disapproval？", function () {
+            debugger;
+            cn.ajax({
+                url: '@Url.Content("~/NmrcActivity/DisApproveReview")' + '?id=' + id + '&remark=' + remark,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+
+
+
 </script>

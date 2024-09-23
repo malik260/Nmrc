@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 {
     [Table("tbl_NmrcRefinancing")]
 
-    public class NmrcRefinancingEntity
+    public class NmrcRefinancingEntity :  BaseExtensionEntity
     {
         // Lender
         [Column("LenderID")]
@@ -61,5 +62,19 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         
         [Column("Disbursed")]
         public int? Disbursed { get; set; }
+
+        [NotMapped]
+        [Column("PmbName")]
+        public string? PmbName { get; set; }
+        
+        [NotMapped]
+        [Column("ProductName")]
+        public string? ProductName { get; set; }
+
+        [NotMapped]
+        [Column("CustomerName")]
+        public string? CustomerName { get; set; }
+
+
     }
 }

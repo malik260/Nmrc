@@ -7,6 +7,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
 {
     public interface ILenderInstitutionsRepository
     {
+        Task SaveNmrcEmployee(EmployeeEntity entity);
         Task<LenderInstitutionsEntity> GetEntitybyName(string PMBName);
         Task<List<LenderInstitutionsEntity>> GetList(PmbListParam param);
         Task<List<LenderInstitutionsEntity>> GetPageList(PmbListParam param, Pagination pagination);

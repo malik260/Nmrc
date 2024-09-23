@@ -45,7 +45,7 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'MortgageBank', title: 'Primary Mortgage Bank', sortable: false },
+                { field: 'PmbName', title: 'Primary Mortgage Bank', sortable: false },
                 { field: 'ProductName', title: 'Product Name', sortable: false },
                 { field: 'RefinanceNumber', title: 'Batch Ref', sortable: false },
                 { field: 'TotalAmount', title: 'Total Amount', sortable: false },
@@ -239,6 +239,8 @@
 
     function SendForReview(id) {
         debugger
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        id = selectedRow[0].Id;
         cn.confirm("Send Transactions？", function () {
             debugger;
             cn.ajax({
@@ -289,7 +291,7 @@
         var id = 0;
         var selectedRow = $("#gridTable").bootstrapTable("getSelections");
         id = selectedRow[0].Id;
-        var lenderid = selectedRow[0].LenderID;
+        var lenderid = selectedRow[0].PmbId;
 
         console.log(id);
 

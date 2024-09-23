@@ -94,7 +94,6 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             decimal total = batchData.Select(i => i.Amount).ToList().Sum();
             foreach (LoanDisbursementEntity item in batchData)
             {
-                total = total + item.Amount;
                 var refinance = new RefinancingEntity();
                 refinance.Amount = item.Amount;
                 refinance.NHFNumber = item.CustomerNhf;
@@ -112,7 +111,28 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
             }
 
-            
+            foreach (LoanDisbursementEntity item in batchData)
+            {
+                var refinance = new NmrcRefinancingEntity();
+                refinance.Amount = item.Amount;
+                refinance.NHFNumber = item.CustomerNhf;
+                refinance.PmbId = item.PmbId;
+                refinance.Tenor = item.Tenor;
+                refinance.Rate = item.Rate;
+                refinance.ApplicationDate = DateTime.Now;
+                refinance.RefinanceNumber = batchRef;
+                refinance.Status = 0;
+                refinance.TotalAmount = total;
+                refinance.LoanId = item.LoanId;
+                refinance.ProductCode = item.ProductCode;
+                refinance.LenderID = SecondaryLender;
+                refinance.Reviewed = 0;
+                refinance.Checklisted = 0;
+                refinance.Disbursed = 0;
+                await _iUnitOfWork.NmrcRefinance.SaveForm(refinance);
+
+            }
+
             string message;
             MailParameter mailParameter = new()
             {

@@ -667,6 +667,130 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
 
+          public async Task<TData<string>> SaveNmrcEmployee(EmployeeEntity entity)
+        {
+            TData<string> obj = new TData<string>();
+            entity.EmploymentType = EmploymentTypeEnum.Employed.ToInt();
+            entity.CompanyName = _iUnitOfWork.Companies.GetEntity(entity.Company).Result.Name;
+            //entity.DateOfEmployment = DateTime.Now.ToDate();
+            entity.DateOfEmployment = DateTime.Now.Date;
+            var checkusername = await _iUnitOfWork.Users.GetEntity(entity.EmailAddress);
+
+            if (checkusername != null)
+            {
+                obj.Message = "Employee email address already exists!";
+                return obj;
+            }
+
+            if (string.IsNullOrEmpty(entity.MobileNumber))
+            {
+                obj.Message = "Mobile Number must be provided!";
+                return obj;
+            }
+            else if (entity.MobileNumber.Length != 11)
+            {
+                obj.Message = "Mobile Number must be 11 digits long!";
+                return obj;
+            }
+
+            if (entity.BVN.IsNotNull() && !ValidationHelper.ValidateBvn(entity.BVN))
+            {
+                obj.Message = "BVN must be digit and 11 in length!";
+                return obj;
+            }
+            else if (_iUnitOfWork.Employees.ExistEmployeeBVN(entity))
+            {
+                obj.Message = "Employee BVN already exists!";
+                return obj;
+            }
+
+            var mobileExist = await _iUnitOfWork.Employees.GetEmployeeByMobile(entity.MobileNumber);
+            if (mobileExist != null)
+            {
+                obj.Message = "Mobile Number already exist!";
+                return obj;
+            }
+
+            var EmailExist = await _iUnitOfWork.Employees.GetEmployeeByEmail(entity?.EmailAddress);
+            if (EmailExist != null)
+            {
+                obj.Message = "Email Address already exist!";
+                return obj;
+            }
+
+            var BvnExist = await _iUnitOfWork.Employees.GetEmployeeByBVN(entity?.BVN);
+            if (EmailExist != null)
+            {
+                obj.Message = "BVN already exist!";
+                return obj;
+            }
+            //if (entity.BVN.IsNotNull() && !ValidationHelper.ValidateBvn(entity.BVN))
+            //{
+            //    obj.Message = "BVN must be digit and 11 in length!";
+            //    return obj;
+            //}
+            //else if (_iUnitOfWork.Employees.ExistEmployeeBVN(entity))
+            //{
+            //    obj.Message = "Employee BVN already exists!";
+            //    return obj;
+            //}
+
+            if (entity.BankAccountNumber.IsNotNull() && !ValidationHelper.ValidateAccountNumber(entity.BankAccountNumber))
+            {
+                obj.Message = "Bank account number must be digit and 10 in length!";
+                return obj;
+            }
+            //else if (_iUnitOfWork.Employees.ExistEmployeeAccountNumber(entity))
+            //{
+            //    obj.Message = "Employee Account Number already exists!";
+            //    return obj;
+            //}
+
+            if (string.IsNullOrEmpty(entity.FirstName))
+            {
+                obj.Message = "First name must be provided!";
+                return obj;
+            }
+
+            if (string.IsNullOrEmpty(entity.LastName))
+            {
+                obj.Message = "Last name must be provided!";
+                return obj;
+            }
+
+            if (string.IsNullOrEmpty(entity.DateOfBirth))
+            {
+                obj.Message = "Date of birth must not be empty!";
+                return obj;
+            }
+
+            if (entity.DateOfEmployment == null || entity.DateOfEmployment == DateTime.MinValue)
+            {
+                obj.Message = "Please Provide Date Of Employment!";
+                return obj;
+            }
+            //if (!string.IsNullOrEmpty(entity.MenuIds) || string.IsNullOrEmpty(entity.MenuIds))
+            //{
+            entity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
+            entity.DecryptedPassword = new UserService(_iUnitOfWork).GenerateDefaultPassword();
+            //entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+            entity.Password = EncryptionHelper.Encrypt(entity.DecryptedPassword, entity.Salt);
+            //}
+
+            entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
+            entity.EmployerType = 3;
+            entity.BaseProcessMenu = 563322288309538816;
+            await _iUnitOfWork.Pmbs.SaveNmrcEmployee(entity);
+            // Clear the permission data in the cache
+            new MenuAuthorizeCache(_iUnitOfWork).Remove();
+
+            obj.Data = entity.Id.ParseToString();
+            obj.Tag = 1;
+            obj.Message = "Employee Added Successfully";
+            return obj;
+        }
+
+
 
 
         [HttpGet]

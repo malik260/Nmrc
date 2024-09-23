@@ -98,6 +98,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
             return Json(obj);
         }
 
+         public async Task<IActionResult> GetMenuTreeListJson3(MenuListParam param)
+        {
+            TData<List<ZtreeInfo>> obj = await _iMenuService.GetZtreeList3(param);
+           
+            return Json(obj);
+        }
+
         //[HttpPost]
         //[AuthorizeFilter("menu:view")]
         //public async Task<IActionResult> GetFormJson(long id)

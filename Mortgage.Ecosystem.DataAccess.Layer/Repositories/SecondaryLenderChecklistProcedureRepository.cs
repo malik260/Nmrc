@@ -13,9 +13,23 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
     public class SecondaryLenderChecklistProcedureRepository : DataRepository, ISecondaryLenderChecklistProcedureRepository
     {
         #region Get data
+
+        public async Task<List<SecondaryLenderChecklistProcedureEntity>> GetList(SecondaryLenderChecklistProcedureEntity param)
+        {
+            var expression = ListFilter(param);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
+
+
         public async Task<SecondaryLenderChecklistProcedureEntity> GetEntity(string Nhf)
         {
             return await BaseRepository().FindEntity<SecondaryLenderChecklistProcedureEntity>(x => x.EmployeeNhfNumber == Nhf);
+        }
+
+        public async Task<SecondaryLenderChecklistProcedureEntity> GetEntityForPmb(long pmbid)
+        {
+            return await BaseRepository().FindEntity<SecondaryLenderChecklistProcedureEntity>(x => x.PmbId == pmbid);
         }
         #endregion
 
@@ -64,6 +78,24 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 throw;
             }
         }
+
+        private Expression<Func<SecondaryLenderChecklistProcedureEntity, bool>> ListFilter(SecondaryLenderChecklistProcedureEntity param)
+        {
+            var expression = ExtensionLinq.True<SecondaryLenderChecklistProcedureEntity>();
+            if (param != null)
+            {
+                if (!string.IsNullOrEmpty(param.EmployeeNhfNumber))
+                {
+                    expression = expression.And(t => t.EmployeeNhfNumber  == param.EmployeeNhfNumber);
+                }
+                if (param.PmbId != 0)
+                {
+                    expression = expression.And(t => t.PmbId == param.PmbId);
+                }
+            }
+            return expression;
+        }
+
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');

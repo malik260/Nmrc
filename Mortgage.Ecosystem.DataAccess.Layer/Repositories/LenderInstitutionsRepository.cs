@@ -203,6 +203,91 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         }
 
 
+         public async Task SaveNmrcEmployee(EmployeeEntity entity)
+        {
+            var message = string.Empty;
+            var db = await BaseRepository().BeginTrans();
+            try
+            {
+                if (entity.Id.IsNullOrZero())
+                {
+                    entity.Status = 1;
+                    await entity.Create();
+                    await db.Insert(entity);
+                }
+                else
+                {
+                    await db.Delete<MenuAuthorizeEntity>(t => t.AuthorizeId == entity.Id);
+                    await entity.Modify();
+                    await db.Update(entity);
+                }
+
+                if (string.IsNullOrEmpty(entity.MenuIds))
+                {
+                    var xx = new LoginDto();
+                    var MenuIds = xx.GetNMRCEmployeeMenus();
+                    //foreach (long menuId in TextHelper.SplitToArray<long>(entity.MenuIds, ','))
+                    foreach (var menuId in MenuIds)
+                    {
+                        MenuAuthorizeEntity menuAuthorizeEntity = new()
+                        {
+                            AuthorizeId = entity.Id,
+                            MenuId = menuId,
+                            AuthorizeType = AuthorizeTypeEnum.User.ToInt()
+                        };
+                        await menuAuthorizeEntity.Create();
+                        await db.Insert(menuAuthorizeEntity);
+                    }
+                }
+
+
+                // User login record
+                if (!string.IsNullOrEmpty(entity.EmailAddress))
+                {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.USER_MENU_URL);
+                    UserEntity userEntity = new()
+                    {
+                        Company = entity.Company,
+                        Employee = entity.Id,
+                        UserName = entity.EmailAddress,
+                        Salt = entity.Salt,
+                        Password = entity.Password,
+                        RealName = entity.FirstName,
+                        LoginCount = GlobalConstant.ZERO,
+                        UserStatus = GlobalConstant.ONE,
+                        IsSystem = GlobalConstant.ZERO,
+                        IsOnline = GlobalConstant.ZERO,
+                        WebToken = SecurityHelper.GetGuid(true),
+                        ApiToken = string.Empty,
+                        BaseProcessMenu = currentMenu
+                    };
+                    await userEntity.Create();
+                    await db.Insert(userEntity);
+                }
+
+                MailParameter mailParameter = new()
+                {
+                    RealName = entity.FirstName,
+                    UserName = entity.EmailAddress,
+                    UserEmail = entity.EmailAddress,
+                    UserPassword = entity.DecryptedPassword,
+                    UserCompany = entity.CompanyName
+                };
+
+                var sendEmail = EmailHelper.IsPasswordEmailSent(mailParameter, out message);
+                
+
+                await db.CommitTrans();
+                // return true;
+            }
+            catch (Exception ex)
+            {
+                await db.RollbackTrans();
+                throw;
+            }
+        }
+
+
 
         public bool ExistRCNumber(LenderInstitutionsEntity entity)
         {

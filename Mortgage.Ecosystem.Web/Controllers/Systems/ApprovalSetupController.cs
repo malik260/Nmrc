@@ -47,6 +47,18 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
             return View();
         }
 
+        [AuthorizeFilter("secondarylenderoperationsetup:view")]
+        public IActionResult SecondaryLenderOperationSetupIndex()
+        {
+            return View();
+        }
+
+         public IActionResult SecondaryLenderOperationSetupForm()
+        {
+            return View();
+        }
+
+
         #endregion
 
         #region Get data
@@ -117,6 +129,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Systems
         public async Task<IActionResult> SaveFormJson2(ApprovalSetupEntity entity)
         {
             TData<string> obj = await _iApprovalSetupService.SaveForm2(entity);
+            return Json(obj);
+        }
+          public async Task<IActionResult> SaveFormJson3(ApprovalSetupEntity entity)
+        {
+            TData<string> obj = await _iApprovalSetupService.SaveForm3(entity);
             return Json(obj);
         }
 

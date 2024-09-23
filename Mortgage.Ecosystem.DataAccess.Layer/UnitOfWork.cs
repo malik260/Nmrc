@@ -76,6 +76,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private INmrcCategoryRepository? _nmrcCategories;
         private INmrcActivityRepository? _nmrcActivity;
         private INmrcEligibilityRepository? _nmrcEligibilities;
+        private INmrcRefinanceRepository? _nmrcRefinances;
         private IPaymentHistoryRepository? _paymentHistories;
         private IPropertyRegistrationRepository? _propertyRegistrations;
         private IPropertySubscriptionRepository? _propertySubscriptions;
@@ -308,6 +309,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public INmrcCategoryRepository NmrcCategories =>
            _nmrcCategories ??= new NmrcCategoryRepository();
+        public INmrcRefinanceRepository NmrcRefinance =>
+           _nmrcRefinances ??= new NmrcRefinanceRepository();
 
         public INmrcEligibilityRepository NmrcEligibilities =>
           _nmrcEligibilities ??= new NmrcEligibilityRepository();
