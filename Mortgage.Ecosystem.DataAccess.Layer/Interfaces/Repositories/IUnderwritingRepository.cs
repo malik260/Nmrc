@@ -20,5 +20,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task<List<UnderwritingEntity>> GetLoanForBatching();
         Task<List<UnderwritingEntity>> GetBatchedLoan();
         Task<List<UnderwritingEntity>> GetLoanBatches(string id, Pagination pagination);
+        Task<List<UnderwritingEntity>> GetLists(long id);
     }
 }

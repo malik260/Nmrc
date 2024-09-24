@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+}
+
+<div class="wrapper animated fadeInRight">
+    <form id="form" class="form-horizontal m">
+        <div id="carousel-container"></div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+<style type="text/css">
+    #carousel-container {
+        width: 80%;
+        margin: 0 auto;
+        height: 50%;
+    }
+
+    .slick-item {
+        margin: 0 10px;
+    }
+
+    .pdtimgclnt {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+<script type="text/javascript">
+    var id = cn.request("id");
+
+    $(document).ready(function () {
+        if (id > 0) {
+            cn.ajax({
+                url: '@Url.Content("~/Underwriting/GetImagesJson")' + '?id=' + id,
+                type: "get",
+                contentType: "application/json; charset=utf-8",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        var slickContainer = $("#carousel-container");
+                        var result = obj.Data;
+
+                        for (var i = 0; i < result.length; i++) {
+                            var label = result[i].Label;
+                            var prodimage = "data:image/jpg;base64," + result[i].filedata;
+
+                            slickContainer.append(
+                                "<div class='slick-item'>" +
+                                "   <a data-fancybox='gallery' href='" + prodimage + "'>" +
+                                "       <img class='pdtimgclnt' src='" + prodimage + "' alt='" + label + "' loading='lazy' />" +
+                                "   </a>" +
+                                "</div>"
+                            );
+                        }
+
+                        // Initialize Slick Carousel
+                        slickContainer.slick({
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                            infinite: true,
+                            arrows: true,
+                            dots: true,
+                            autoplay: true,
+                            autoplaySpeed: 2000
+                        });
+                    }
+                }
+            });
+        }
+    });
+</script>

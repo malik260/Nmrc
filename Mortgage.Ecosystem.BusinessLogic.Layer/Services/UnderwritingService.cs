@@ -43,6 +43,14 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+        public async Task<TData<List<UnderwritingEntity>>> GetLists(long id)
+        {
+            TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();
+            obj.Data = await _iUnitOfWork.Underwritings.GetLists(id);
+            obj.Total = obj.Data.Count;
+            obj.Tag = 1;
+            return obj;
+        }
         public async Task<TData<List<UnderwritingEntity>>> GetApprovalPageList()
         {
             TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();

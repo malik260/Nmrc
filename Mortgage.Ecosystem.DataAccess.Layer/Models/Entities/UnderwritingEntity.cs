@@ -111,5 +111,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
         [NotMapped]
         public string? creditName { get; set; }
 
+        [NotMapped]
+        public string? View { get; set; }
+
     }
 }

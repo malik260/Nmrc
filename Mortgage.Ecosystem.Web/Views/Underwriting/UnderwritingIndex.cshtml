@@ -155,6 +155,17 @@
                         //onclick = "showSaveChecklistForm(true)"
                         actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showSaveRiskAssessmentForm(true)" ' + disabled + '><i class="fa-solid fa-house"></i>' + button + '</a>');
 
+                        actions.push('&nbsp;');
+
+
+
+                        var View = row.View;
+                        var button = (View == 1) ? 'View' : 'View Supporting Document';
+
+
+
+                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showSaveSupportingDocument(true)" ><i class="fa-solid fa-house"></i>' + button + '</a>');
+
 
                         //actions.push('&nbsp;');
 
@@ -295,7 +306,38 @@
             }
         });
     }
-        
+
+    function showSaveSupportingDocument(bAdd) {
+        var id = 0;
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        console.log(selectedRow);
+        var NhfNumber = selectedRow[0].NHFNumber;
+        var ProductName = selectedRow[0].ProductName;
+        var loanId = selectedRow[0].LoanId;
+
+        console.log(ProductName);
+        localStorage.setItem('Data', NhfNumber);
+        localStorage.setItem('Data1', ProductName);
+        localStorage.setItem('Data2', loanId);
+        if (!bAdd) {
+            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        openCustomDialog({
+            title: id > 0 ? "Edit Show Supporting Document" : "Supporting Document",
+            content: '@Url.Content("~/Underwriting/SupportingDocumentForm")' + '?id=' + id,
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
 
 
     function deleteForm() {

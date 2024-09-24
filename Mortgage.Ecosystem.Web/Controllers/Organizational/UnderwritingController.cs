@@ -64,6 +64,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
+        public IActionResult SupportingDocumentForm()
+        {
+            return View();
+        }
+
         public IActionResult ChecklistForm()
         {
             return View();
@@ -124,6 +129,16 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             }
         }
 
+        public async Task<IActionResult> GetImagesJson(long id)
+        {
+            TData<List<UnderwritingEntity>> obj = await _iUnderwritingService.GetLists(id);
+            //var auditInstance = new AuditTrailEntity();
+            //auditInstance.Action = SystemOperationCode.GetImagesJson.ToString();
+            //auditInstance.ActionRoute = SystemOperationCode.Underwriting.ToString();
+
+            //var audit = await _iAuditTrailService.SaveForm(auditInstance);
+            return Json(obj);
+        }
 
         [HttpGet]
         //[AuthorizeFilter("propertyregistration:view")]

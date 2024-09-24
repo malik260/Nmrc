@@ -33,5 +33,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
         Task<TData<List<UnderwritingEntity>>> GetBatched();
         Task<TData<List<UnderwritingEntity>>> GetBatchedLoans(long id);
         Task<TData<string>> ApproveBatchedLoan(string lists);
+        Task<TData<List<UnderwritingEntity>>> GetLists(long id);
+
     }
 }

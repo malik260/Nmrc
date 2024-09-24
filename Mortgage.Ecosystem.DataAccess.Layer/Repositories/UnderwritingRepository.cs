@@ -13,6 +13,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
     public class UnderwritingRepository : DataRepository, IUnderwritingRepository
     {
         #region Retrieve data
+
+        public async Task<List<UnderwritingEntity>> GetLists(long id)
+        {
+            var expression = ListFilter4(id);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
         public async Task<List<UnderwritingEntity>> GetList(UnderwritingListParam param)
         {
             var expression = ListFilter(param);
@@ -165,6 +172,19 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             }
             return expression;
         }
+
+        private Expression<Func<UnderwritingEntity, bool>> ListFilter4(long id)
+        {
+            var expression = ExtensionLinq.True<UnderwritingEntity>();
+            if (id != 0)
+            {
+
+                expression = expression.And(second: t => t.LoanId.Contains(id.ToString()));
+            }
+            return expression;
+        }
         #endregion
+
+
     }
 }
