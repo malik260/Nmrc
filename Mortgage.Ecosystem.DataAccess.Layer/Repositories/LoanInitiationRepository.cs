@@ -84,33 +84,33 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await db.Update(entity);
                 }
 
-                //if (entity != null && entity.file != null)
-                //{
-                //    for (int i = 0; i < entity.file.Count(); i++)
-                //    {
-                //        using (var stream = new MemoryStream())
-                //        {
+                if (entity != null && entity.file != null)
+                {
+                    for (int i = 0; i < entity.file.Count(); i++)
+                    {
+                        using (var stream = new MemoryStream())
+                        {
 
 
-                //            entity.file[i].CopyTo(stream);
+                            entity.file[i].CopyTo(stream);
 
-                //            LoanInitiationUploadEntity loanInitiationUpload = new()
-                //            {
-                //                // FileId = entity.Id,
-                //                LoanId = entity.Id,
-                //                NHFNo = entity.NHFNumber,
-                //                Type = "",
-                //                Label = entity.file[i].FileName,
-                //                Images = entity.file[i].ContentType,
-                //                Size = entity.file[i].Length,
-                //                filedata = stream.ToArray(),
-                //            };
-                //            await loanInitiationUpload.Create();
-                //            await db.Insert(loanInitiationUpload);
+                            LoanInitiationUploadEntity loanInitiationUpload = new()
+                            {
+                                // FileId = entity.Id,
+                                LoanId = entity.Id,
+                                NHFNo = entity.NHFNumber,
+                                Type = "",
+                                Label = entity.file[i].FileName,
+                                Images = entity.file[i].ContentType,
+                                Size = entity.file[i].Length,
+                                filedata = stream.ToArray(),
+                            };
+                            await loanInitiationUpload.Create();
+                            await db.Insert(loanInitiationUpload);
 
-                //        }
-                //    }
-                //}
+                        }
+                    }
+                }
                 await db.CommitTrans();
             }
             catch

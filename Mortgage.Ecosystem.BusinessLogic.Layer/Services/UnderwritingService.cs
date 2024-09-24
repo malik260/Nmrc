@@ -43,14 +43,32 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
-        public async Task<TData<List<UnderwritingEntity>>> GetLists(long id)
+        //public async Task<TData<List<LoanInitiationUploadEntity>>> GetLists(long id)
+        //{
+        //    TData<List<LoanInitiationUploadEntity>> obj = new TData<List<LoanInitiationUploadEntity>>();
+        //    obj.Data = await _iUnitOfWork.LoanInitiationUploads.GetList(id);
+        //    obj.Total = obj.Data.Count;
+        //    obj.Tag = 1;
+        //    return obj;
+        //}
+
+        public async Task<TData<List<LoanInitiationUploadEntity>>> GetList(long id)
         {
-            TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();
-            obj.Data = await _iUnitOfWork.Underwritings.GetLists(id);
+            TData<List<LoanInitiationUploadEntity>> obj = new TData<List<LoanInitiationUploadEntity>>();
+            var files = await _iUnitOfWork.LoanInitiationUploads.GetList(id);
+
+            obj.Data = files.Select(file => new LoanInitiationUploadEntity
+            {
+                Label = file.Label,
+                filedata = file.filedata, // Assuming FileData is byte[]
+                Type = file.Type // If you're storing the mime type
+            }).ToList();
+
             obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
         }
+
         public async Task<TData<List<UnderwritingEntity>>> GetApprovalPageList()
         {
             TData<List<UnderwritingEntity>> obj = new TData<List<UnderwritingEntity>>();

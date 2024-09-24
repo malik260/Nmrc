@@ -8,8 +8,8 @@
     </form>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+@* <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+ *@<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
@@ -36,6 +36,7 @@
     var id = cn.request("id");
 
     $(document).ready(function () {
+        debugger
         if (id > 0) {
             cn.ajax({
                 url: '@Url.Content("~/Underwriting/GetImagesJson")' + '?id=' + id,
@@ -48,7 +49,7 @@
 
                         for (var i = 0; i < result.length; i++) {
                             var label = result[i].Label;
-                            var prodimage = "data:image/jpg;base64," + result[i].filedata;
+                            var prodimage = "data:image/jpeg;base64," + result[i].filedata;
 
                             slickContainer.append(
                                 "<div class='slick-item'>" +

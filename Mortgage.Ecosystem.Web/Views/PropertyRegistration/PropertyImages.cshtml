@@ -36,6 +36,7 @@
     var id = cn.request("id");
 
     $(document).ready(function () {
+        debugger
         if (id > 0) {
             cn.ajax({
                 url: '@Url.Content("~/PropertyRegistration/GetImagesJson")' + '?id=' + id,

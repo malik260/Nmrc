@@ -14,7 +14,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
     {
         #region Retrieve data
 
-        public async Task<List<UnderwritingEntity>> GetLists(long id)
+        public async Task<List<LoanInitiationUploadEntity>> GetLists(long id)
         {
             var expression = ListFilter4(id);
             var list = await BaseRepository().FindList(expression);
@@ -173,13 +173,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return expression;
         }
 
-        private Expression<Func<UnderwritingEntity, bool>> ListFilter4(long id)
+        private Expression<Func<LoanInitiationUploadEntity, bool>> ListFilter4(long id)
         {
-            var expression = ExtensionLinq.True<UnderwritingEntity>();
+            var expression = ExtensionLinq.True<LoanInitiationUploadEntity>();
             if (id != 0)
             {
 
-                expression = expression.And(second: t => t.LoanId.Contains(id.ToString()));
+                expression = expression.And(second: t => t.FileId==id);
             }
             return expression;
         }
