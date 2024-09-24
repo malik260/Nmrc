@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 {
     [Table("tbl_NmrcRefinancing")]
 
-    public class NmrcRefinancingEntity
+    public class NmrcRefinancingEntity : BaseExtensionEntity
     {
         // Lender
         [Column("LenderID")]
