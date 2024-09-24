@@ -65,6 +65,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public const int PMBANDEMPLOYEE_MENU_CATEGORY = 205;
         public const int EMPLOYERANDEMPLOYEE_MENU_CATEGORY = 206;
         public const int EMPLOYERANDPMB_MENU_CATEGORY = 207;
+        public const int NMRC_MENU_CATEGORY = 105;
 
 
 

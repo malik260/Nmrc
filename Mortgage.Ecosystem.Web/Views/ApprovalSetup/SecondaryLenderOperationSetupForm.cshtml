@@ -94,7 +94,7 @@
             class: "form-control"
         });
 
-        $('#menuId').cnComboBoxTree({ url: '@Url.Content("~/Menu/GetMenuTreeListJson2")' });
+        $('#menuId').cnComboBoxTree({ url: '@Url.Content("~/Menu/GetMenuTreeListJson3")' });
 
         $('#authority').cnComboBox({
             url: '@Url.Content("~/Employee/GetListJson")',
@@ -354,7 +354,7 @@
             postData.Authorities = authorities.join(",").toString();
             //console.dir(postData);
             cn.ajax({
-                url: '@Url.Content("~/ApprovalSetup/SaveFormJson2")',
+                url: '@Url.Content("~/ApprovalSetup/SaveFormJson3")',
                 type: "post",
                 data: postData,
                 success: function (obj) {

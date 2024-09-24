@@ -35,7 +35,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
-        
+
         [AuthorizeFilter("lender:view")]
         public IActionResult LenderInstitutionIndex()
         {
@@ -47,13 +47,24 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
-         public IActionResult LenderInstitutionEmployeeForm()
+        public IActionResult LenderInstitutionEmployeeForm()
         {
             return View();
         }
 
         [AuthorizeFilter("lenderEmployee:view")]
         public IActionResult LenderInstitutionEmployeeIndex()
+        {
+            return View();
+        }
+
+        [AuthorizeFilter("lendernmrcEmployee:view")]
+        public IActionResult NmrcEmployeeIndex()
+        {
+            return View();
+        }
+
+        public IActionResult NmrcEmployeeForm()
         {
             return View();
         }
@@ -76,6 +87,15 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
+
+        public async Task<IActionResult> GetNonNhfSecondaryLender(PmbListParam param)
+        {
+            TData<List<NonNhf>> obj = await _iPmbService.GetNonNhfSecondaryLenders(param);
+            return Json(obj);
+        }
+
+
+
         //[HttpGet]
         //[AuthorizeFilter("company:search,user:search")]
         //public async Task<IActionResult> GetApproveCompanyListJson(CompanyListParam param)
@@ -85,7 +105,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         //}
 
         [HttpGet]
-       //[AuthorizeFilter("pmb:search,user:search")]
+        //[AuthorizeFilter("pmb:search,user:search")]
         public async Task<IActionResult> GetPageListJson(PmbListParam param, Pagination pagination)
         {
             TData<List<LenderInstitutionsEntity>> obj = await _iPmbService.GetPageList(param, pagination);
@@ -141,10 +161,10 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #endregion
 
         #region Submit data
-        
+
 
         [HttpPost]
-       [AuthorizeFilter("pmb:add,pmb:edit")]
+        [AuthorizeFilter("pmb:add,pmb:edit")]
         public async Task<IActionResult> SaveFormsJson(LenderInstitutionsEntity entity)
         {
             try
@@ -228,6 +248,29 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
                 throw;
             }
         }
+
+
+
+        public async Task<IActionResult> SaveNmrcEmployee(EmployeeEntity entity)
+        {
+            try
+            {
+                TData<string> obj = await _iPmbService.SaveNmrcEmployee(entity);
+                var auditInstance = new AuditTrailEntity();
+                auditInstance.Action = SystemOperationCode.SaveNewEmployee.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.PMB.ToString();
+
+                var audit = await _iAuditTrailService.SaveForm(auditInstance);
+                return Json(obj);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+
+
         #endregion
     }
 }

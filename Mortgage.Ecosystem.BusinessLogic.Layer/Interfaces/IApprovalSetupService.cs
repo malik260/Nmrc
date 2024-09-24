@@ -7,6 +7,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface IApprovalSetupService
     {
+        Task<TData<string>> SaveForm3(ApprovalSetupEntity entity);
         Task<TData<List<ApprovalSetupEntity>>> GetList(ApprovalSetupListParam param);
         Task<TData<List<ApprovalSetupEntity>>> GetPageList(ApprovalSetupListParam param, Pagination pagination);
         Task<TData<ApprovalSetupEntity>> GetEntity(long id);

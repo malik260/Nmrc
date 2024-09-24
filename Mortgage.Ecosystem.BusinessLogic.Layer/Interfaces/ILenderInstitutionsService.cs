@@ -8,6 +8,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface ILenderInstitutionsService
     {
+        Task<TData<string>> SaveNmrcEmployee(EmployeeEntity entity);
+        Task<TData<List<NonNhf>>> GetNonNhfSecondaryLenders(PmbListParam param);
         Task<TData<List<NonNhf>>> GetNonNhfList(PmbListParam param);
         Task<TData<List<EmployeeEntity>>> GetPmbEmployee(EmployeeListParam param);
         Task<TData<List<LenderInstitutionsEntity>>> GetList(PmbListParam param);

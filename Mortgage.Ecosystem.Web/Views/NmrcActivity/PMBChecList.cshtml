@@ -1,0 +1,74 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header {
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
+}
+
+
+<script src="https://cdn.tiny.cloud/1/97ihdj4pizrgnyrwd26euodeyfufnv6r4f4r656es9h2jdj5/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.min.css" rel="stylesheet" />
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+
+
+
+<div class="Underwriting" id="underwriting">
+    <div class="ChecklistForm" id="checklistForm">
+
+       
+
+
+        <div id="form3" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="col-sm-9 select-table table-striped">
+                    <table id="checklistTable" data-mobile-responsive="true"></table>
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script type="text/javascript">
+
+
+    $(function () {
+        checkListGrid();
+    });
+
+
+
+    function checkListGrid() {
+        var queryUrl = '@Url.Content("~/NmrcActivity/GetPMBChecklists")';
+        $('#checklistTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: false },
+                { field: 'Item', title: 'Item', visible: true },
+                { field: 'Description', title: 'Description', visible: true },
+               
+            ],
+        });
+
+        var headerCells = $('#checklistTable thead th');
+        $(headerCells[0]).text('App');
+
+    }
+
+
+   
+
+</script>
+
+
+

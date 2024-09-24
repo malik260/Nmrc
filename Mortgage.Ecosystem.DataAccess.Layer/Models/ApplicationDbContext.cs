@@ -96,6 +96,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<MenuAuthorizeEntity>? MenuAuthorizeEntity { get; set; } // Menu permission table        
         public DbSet<MenuEntity>? MenuEntity { get; set; } // Menu table
         public DbSet<NationalityEntity>? NationalityEntity { get; set; }
+        public DbSet<NmrcRefinancingEntity>? NmrcRefinancingEntity { get; set; }
         public DbSet<NextOfKinEntity>? NextOfKinEntity { get; set; }
         public DbSet<PaymentHistoryEntity>? PaymentHistoryEntity { get; set; }
         public DbSet<LenderInstitutionsEntity>? PmbEntity { get; set; }

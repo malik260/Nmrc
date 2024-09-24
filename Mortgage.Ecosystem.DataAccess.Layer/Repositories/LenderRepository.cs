@@ -40,9 +40,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return await BaseRepository().FindEntity<LenderSetupEntity>(id);
         }
 
-        public async Task<CreditTypeEntity> GetEntitybiId(int id)
+        public async Task<LenderSetupEntity> GetEntitybyLendercategory(int id)
         {
-            return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Id == id);
+            return await BaseRepository().FindEntity<LenderSetupEntity>(x => x.LenderCategory == id);
         }
 
 

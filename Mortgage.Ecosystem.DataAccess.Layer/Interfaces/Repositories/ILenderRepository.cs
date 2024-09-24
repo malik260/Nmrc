@@ -12,7 +12,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         //Task<int> GetMaxSort();
         Task<LenderSetupEntity> GetEntity(long id);
         //Task<LenderSetupEntity> GetEntitybyName(string name);
-
+        Task<LenderSetupEntity> GetEntitybyLendercategory(int id);
         Task SaveForm(LenderSetupEntity entity);
    
         //bool ExistLenderName(LenderSetupEntity entity);

@@ -45,7 +45,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             {
                 var customerInfo = await _iUnitOfWork.Employees.GetEntityByNhfNumber(long.Parse(item.CustomerNhf));
                 item.ProductName = _iUnitOfWork.CreditTypes.GetEntityByProductCode(item.ProductCode).Result.Name;
-                item.CustomerName = customerInfo.FirstName + " " + customerInfo.LastName;                       
+                item.CustomerName = customerInfo.FirstName + " " + customerInfo.LastName;         
+                
             }
             obj.Total = pagination.TotalCount;
             obj.Tag = 1;

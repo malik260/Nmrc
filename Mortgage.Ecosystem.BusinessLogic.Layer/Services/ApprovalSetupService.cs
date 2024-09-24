@@ -149,6 +149,32 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
 
+
+        public async Task<TData<string>> SaveForm3(ApprovalSetupEntity entity)
+        {
+            var context = new ApplicationDbContext();
+            var user = await Operator.Instance.Current();
+            TData<string> obj = new TData<string>();
+            var approvalsetuplist = new ApprovalSetupListParam();
+            approvalsetuplist.Authority = entity.Authority1;
+            var GetUserAssignedRole = await _iUnitOfWork.ApprovalSetups.GetList(approvalsetuplist);
+            var checkDuplicate = GetUserAssignedRole.Where(i => i.MenuId == 563327185478225920 || i.MenuId == 660881219264712704 || i.MenuId == 664553002530508800).ToList();
+            foreach (var item in checkDuplicate)
+            {
+                obj.Data = entity.Id.ParseToString();
+                obj.Tag = 0;
+                obj.Message = "Permission Already Assigned to user";
+                return obj;
+
+            }
+            await _iUnitOfWork.ApprovalSetups.SaveForm(entity);
+            obj.Data = entity.Id.ParseToString();
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+
         private string GetMAC()
         {
             string macAddresses = "";

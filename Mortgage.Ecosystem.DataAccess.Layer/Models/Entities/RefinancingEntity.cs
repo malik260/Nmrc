@@ -49,6 +49,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [NotMapped]
         public string? CustomerName { get; set; }
+        [NotMapped]
+        public string? MortgageBank { get; set; }
 
          [NotMapped]
         public string? ProductName { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.BusinessLogic.Layer.Services;
 using Mortgage.Ecosystem.DataAccess.Layer.Enums;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
@@ -20,13 +21,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         }
 
         #region View function
-        [AuthorizeFilter("nmrcactivity:view")]
+        [AuthorizeFilter("nmrcunderwriting:view")]
         public IActionResult NmrcUnderwritingIndex()
         {
             return View();
         }
 
-        [AuthorizeFilter("nmrcactivity:view")]
+        [AuthorizeFilter("nmrcdisbursement:view")]
         public IActionResult NmrcLoanDisbursement()
         {
             return View();
@@ -42,7 +43,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return View();
         }
 
-        [AuthorizeFilter("nmrcactivity:view")]
+        [AuthorizeFilter("nmrcreview:view")]
         public IActionResult NmrcLoanReviewIndex()
         {
             return View();
@@ -58,11 +59,144 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             return Json(obj);
         }
 
+
+
+        public async Task<IActionResult> ApproveUnderwriting(long id)
+        {
+
+            try
+            {
+                TData<String> obj = await _nmrcActivityService.ApproveUnderwriting(id);
+                
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        public async Task<IActionResult> ApproveReview(long id)
+        {
+
+            try
+            {
+                TData<String> obj = await _nmrcActivityService.ApproveLoanReview(id);
+                
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        public async Task<IActionResult> DisApproveReview(long id)
+        {
+
+            try
+            {
+                TData<String> obj = await _nmrcActivityService.RejectLoanReview(id);
+
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+
+        public async Task<IActionResult> GetLoanForDis(EmployeeListParam param, Pagination pagination)
+        {
+            try
+            {
+                TData<List<NmrcRefinancingEntity>> obj = await _nmrcActivityService.GetLoanForDisbursment();
+
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        public async Task<IActionResult> DisburseNonNhfLoan(long id)
+        {
+
+            try
+            {
+                TData<String> obj = await _nmrcActivityService.DisburseNonNhfLoan(id);
+
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        public async Task<IActionResult> GetPMBChecklists(long Id)
+        {
+            try
+            {
+                TData<List<SecondaryLenderChecklistProcedureEntity>> obj = await _nmrcActivityService.GetPmbChecklist(Id);
+
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+
+
+
+        public async Task<IActionResult> GetLoanForReview(EmployeeListParam param, Pagination pagination)
+        {
+            try
+            {
+                TData<List<NmrcRefinancingEntity>> obj = await _nmrcActivityService.GetLoanForReview();
+                
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+
+
+
+        public async Task<IActionResult> GetListById(string id)
+        {
+            var param = new RefinancingEntity();
+            param.RefinanceNumber = id;
+            TData<List<RefinancingEntity>> obj = await _nmrcActivityService.GetListByBatchId(param);
+            return Json(obj);
+        }
+
         [HttpGet]
         [AuthorizeFilter("refinancing:search,user:search")]
-        public async Task<IActionResult> GetPageListJson(RefinancingEntity param, Pagination pagination)
+        public async Task<IActionResult> GetPageListJson(NmrcRefinancingEntity param, Pagination pagination)
         {
-            TData<List<RefinancingEntity>> obj = await _nmrcActivityService.GetPageList(param, pagination);
+            TData<List<NmrcRefinancingEntity>> obj = await _nmrcActivityService.GetPageList(param, pagination);
             return Json(obj);
         }
 

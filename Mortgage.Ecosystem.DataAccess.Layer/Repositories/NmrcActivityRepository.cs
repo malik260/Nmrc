@@ -24,6 +24,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             var list = await BaseRepository().FindList(expression);
             return list.ToList();
         }
+          public async Task<List<RefinancingEntity>> GetListByBatch(RefinancingEntity param)
+        {
+            var expression = ListFilter(param);
+            var list = await BaseRepository().FindList(expression);
+            return list.ToList();
+        }
 
         public async Task<List<RefinancingEntity>> GetPageList(RefinancingEntity param, Pagination pagination)
         {
@@ -92,6 +98,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                 if (param.LenderID != 0)
                 {
                     expression = expression.And(second: t => t.LenderID == param.LenderID);
+                }
+                if (!string.IsNullOrEmpty(param.RefinanceNumber))
+                {
+                    expression = expression.And(second: t => t.RefinanceNumber == param.RefinanceNumber);
                 }
             }
             return expression;

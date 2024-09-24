@@ -2,17 +2,20 @@
     Layout = "~/Views/Shared/_Index.cshtml";
 }
 <div class="ibox-title">
-    <h5>LOAN REVIEW</h5>
+    <h5>Loan Disbursement</h5>
 </div>
 
 <div class="container-div">
     <div class="row">
-        
+
+
+
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
         </div>
     </div>
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
@@ -28,7 +31,7 @@
 
     function initGrid() {
         debugger
-        var queryUrl = '@Url.Content("~/Underwriting/GetLoanForReview")';
+        var queryUrl = '@Url.Content("~/NmrcActivity/GetLoanForDis")';
         $('#gridTable').cnTable({
             url: queryUrl,
             detailView: true,
@@ -37,21 +40,10 @@
             columns: [
                 { checkbox: true, visible: true },
                 { field: 'Id', title: 'Id', visible: false },
-                { field: 'NHFNumber', title: 'NHF Number', sortable: false },
-                { field: 'ProductName', title: 'Product Name', sortable: false },
-                { field: 'LoanRefNo', title: 'Loan Ref No', sortable: false },
-                { field: 'Scheme', title: 'Loan Scheme', sortable: false },
-                {
-                    field: 'Tenor', title: 'Tenor', sortable: false, formatter: function (value) {
-                        return value + " years";
-                    }
-                },
-                {
-                    field: 'InterestRate', title: 'Interest Rate', sortable: false, formatter: function (value) {
-                        return value + "%";
-                    }
-                },
-                { field: 'LoanAmount', title: 'Loan Amount', sortable: false },
+                { field: 'PmbName', title: 'Mortgage Bank', sortable: false },
+                { field: 'RefinanceNumber', title: 'Batch No', sortable: false },
+                
+                { field: 'TotalAmount', title: 'Loan Total', sortable: false },
                 {
                     field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
                         return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
@@ -59,27 +51,11 @@
                 },
 
                 {
-                    title: 'Actions',
+                    title: 'Action',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        debugger;
                         var actions = [];
-
-                        var remark = row.Remark;
-                        var buttonName = (remark == 1) ? 'Approved' : 'Approve';
-
-                        var disabledAttribute = (remark == 1) ? 'disabled' : '';
-
-                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="Approve(\'' + row.Id + '\')" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
-
-                      
-
-                        actions.push('&nbsp;');
-
-
-                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="Reject(\'' + row.Id + '\')"><i class="fa fa-key"></i>Reject</a>');
-                        
-                      
+                        actions.push('<a class="btn btn-info btn-danger" href="#" onclick="Disburse(\'' + row.Id + '\')"><i class="fa fa-close"></i>Disburse</a>');
                         return actions.join('');
                     }
                 },
@@ -88,9 +64,8 @@
                 var pagination = $('#gridTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
-            }
-            ,
-            onExpandRow: function(index, row, $detail){
+            },
+            onExpandRow: function (index, row, $detail) {
                 initChildGrid(index, row, $detail);
             }
         });
@@ -101,39 +76,28 @@
         resetToolbarStatus();
     }
 
-   
 
-    function deleteForm() {
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
-                var ids = cn.getIds(selectedRow);
-                cn.ajax({
-                    url: '@Url.Content("~/Underwriting/DeleteFormJson")' + '?ids=' + ids,
-                    type: "post",
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            searchGrid();
-                        }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
-            });
-        }
+
+    function openCustomDialog(options) {
+        layer.open({
+            type: 2,
+            title: options.title,
+            content: options.content,
+            area: [options.width, '90%'],
+            btn: [], // Remove the default confirm and close buttons
+            success: function (layero, index) {
+                options.callback(index, layero);
+            }
+        });
     }
 
 
-    function Approve(id) {
-        if (id < 1) {
-            cn.msgError("Please selet an item");
-        }
-        cn.confirm("Confirm the approval process？", function () {
+    function Disburse(id) {
+        debugger
+        cn.confirm("Confirm the Disbursement process？", function () {
             debugger;
             cn.ajax({
-                url: '@Url.Content("~/Underwriting/ApproveReview")' + '?id=' + id,
+                url: '@Url.Content("~/NmrcActivity/DisburseNonNhfLoan")' + '?id=' + id,
                 type: "post",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -148,23 +112,23 @@
         });
     }
 
-    function Reject(id) {
-        if (id < 1) {
-            cn.msgError("Please selet an item");
+    function DisapproveUnderwriting(id) {
+        debugger
+        if (id === 0) {
+            cn.msgError("Please select an item");
+            return;
         }
         var remark = $("#remark").val();
 
-        cn.confirm("Confirm Disapproval？", function () {
-            debugger;
+        cn.confirm("Confirm the Disapproval process？", function () {
             cn.ajax({
-                url: '@Url.Content("~/Underwriting/DisApproveReview")' + '?id=' + id + '&remark=' + remark,
+                url: '@Url.Content("~/Underwriting/DisapproveUnderwriting")' + '?id=' + id + '&remark=' + remark,
                 type: "post",
                 success: function (obj) {
                     if (obj.Tag == 1) {
                         cn.msgSuccess(obj.Message);
                         searchGrid();
-                    }
-                    else {
+                    } else {
                         cn.msgError(obj.Message);
                     }
                 }
@@ -173,17 +137,18 @@
     }
 
 
+
     function initChildGrid(index, row, $detail) {
-        debugger
         $detail.html('Loading data ...');
         var date = new Date(row.BaseCreateTime);
+        //var formattedDate = date.toLocaleDateString();
         var dateOfEmployment = new Date(row.DateofEmployment);
         var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString();
 
         var htmlData =
             '<div class="card">' +
             '<div class="card-header text-center" > ' +
-            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Loan Review for' + " " + row.Name + '</h6>' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Disbursement for ' + row.Name + '</h6>' +
             '</div>' +
             '<div class="card-body">' +
             '<form>' +
@@ -195,16 +160,6 @@
             '<div class="form-group col-sm-6">' +
             '<label for="monthlyIncome">Monthly Income:</label>' +
             '<input type="text" id="monthlyIncome" name="MonthlyIncome" placeholder="Monthly Income" class="form-control text-left" readonly value="' + row.MonthlyIncome + '"/>' +
-            '</div>' +
-            '</div>' +
-            '<div class="form-row">' +
-            '<div class="form-group col-sm-6">' +
-            '<label for="RiskScore">Risk Score:</label>' +
-            '<input type="text" id="RiskScore" name="RiskScore" placeholder="Risk Score" class="form-control text-left" readonly value="' + row.RiskScore + '" /> ' +
-            '</div>' +
-            '<div class="form-group col-sm-6">' +
-            '<label for="Rating">Risk Rating:</label>' +
-            '<input type="text" id="Rating" name="Rating" placeholder="Risk Rating" class="form-control text-left" readonly value="' + row.Rating + '"/>' +
             '</div>' +
             '</div>' +
             '<div class="form-row">' +
@@ -223,15 +178,17 @@
             '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.Bvn + '"/>' +
             '</div>' +
             '</div>' +
-            '<div class="form-group col-sm-6">' +
+            '<div class="form-group col-sm-12">' +
             '<label for="remark">Remark:</label>' +
-            '<textarea id="remark" name="Remark" placeholder="Remark" class="form-control text-left" style="height:60px" value="' + row.Remark + '" />' +
+            '<textarea id="remark" name="Remark" placeholder="Remark" class="form-control text-left" style="height:60px">' + row.Remark + '</textarea>' +
+            '</div>' +
+            '<div class="form-group col-sm-12 text-right">' +
+            '<button type="button" id="approve" onclick="Disburse(\'' + row.Id + '\');" class="btn btn-success btn-sm">Approve</button>' +
             '</div>' +
             '</div>' +
             '</form>' +
             '</div>';
         $detail.html(htmlData);
-        // Attach click event to the plus icon
         $detail.find('.card-header').click(function () {
             var $cardBody = $(this).siblings('.card-body');
             if ($cardBody.is(':visible')) {
@@ -241,6 +198,7 @@
             }
         });
     }
+
 
 
 </script>
