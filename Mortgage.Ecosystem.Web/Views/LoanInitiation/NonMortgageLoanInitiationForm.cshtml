@@ -82,7 +82,7 @@
 
                     <div class="col-sm-6">
                         <span class="message" style="display: inline-block;font-style: italic;border: none; background: none;">Only Upload Jpeg and pdf files</span>
-                        <input type="file" id="documentUpload" multiple style="display: none;" col="Files" accept=".pdf,.jpg" />
+                        <input type="file" id="documentUpload" multiple style="display: none;" col="Files" accept=".pdf,.jpg,.png" />
                         <label for="documentUpload" class="custom-file-label" style="width: 140px; border: 0; padding: 12px 10px; outline: none; color: white; font-weight: bold; font-size: 13px; background: darkblue; border-radius: 4px; cursor: pointer;">
                             &nbsp; Add Document
                         </label>
@@ -156,7 +156,7 @@
 <script>
     var id = cn.request("id");
     var selectedFiles = [];
-
+    var fileCounter = 0;
 
     //$("#sector").cnComboBox({
     //    url: '@Url.Content("~/Sector/GetListJson")',
@@ -195,7 +195,7 @@
 
     $(document).ready(function () {
         // Array to store selected files
-        var selectedFiles = [];
+       // var selectedFiles = [];
 
         $('#documentUpload').on('change', function () {
             var files = $(this)[0].files;

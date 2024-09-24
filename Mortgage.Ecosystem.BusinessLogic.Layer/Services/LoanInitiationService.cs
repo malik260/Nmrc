@@ -696,7 +696,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             entity.Tenor = initiateLoanDto.Tenor;
             entity.LoanProduct = productDetails.Code;
             entity.LoanPurpose = initiateLoanDto.Purpose;
-            entity.Status = "Undergoing Approval";
+            //entity.Status = "Undergoing Approval";
             entity.NHFNumber = employeedetails.NHFNumber.ToStr();
             entity.PMB = pmbinfo.NHFNumber;
             entity.RepaymentPattern = "Monthly";

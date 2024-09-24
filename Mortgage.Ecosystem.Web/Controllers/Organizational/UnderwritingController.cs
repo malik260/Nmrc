@@ -16,12 +16,14 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
     public class UnderwritingController : BaseController
     {
         private readonly IUnderwritingService _iUnderwritingService;
+        private readonly ILoanInitiationUploadService _iLoanInitiationUploadService;
         private readonly IAuditTrailService _iAuditTrailService;
 
-        public UnderwritingController(IUnitOfWork iUnitOfWork, IUnderwritingService iUnderwritingService, IAuditTrailService iAuditTrailService) : base(iUnitOfWork)
+        public UnderwritingController(IUnitOfWork iUnitOfWork, IUnderwritingService iUnderwritingService, IAuditTrailService iAuditTrailService, ILoanInitiationUploadService loanInitiationUploadService) : base(iUnitOfWork)
         {
             _iUnderwritingService = iUnderwritingService;
             _iAuditTrailService = iAuditTrailService;
+            _iLoanInitiationUploadService = loanInitiationUploadService;
         }
 
         #region View function
@@ -66,6 +68,11 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
 
         public IActionResult AddDocumentForm()
+        {
+            return View();
+        }
+
+        public IActionResult SupportingDocumentForm()
         {
             return View();
         }
@@ -130,6 +137,17 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetImagesJson(long id)
+        {
+            TData<List<LoanInitiationUploadEntity>> obj = await _iLoanInitiationUploadService.GetList(id);
+            //var auditInstance = new AuditTrailEntity();
+            //auditInstance.Action = SystemOperationCode.GetImagesJson.ToString();
+            //auditInstance.ActionRoute = SystemOperationCode.Underwriting.ToString();
+
+            //var audit = await _iAuditTrailService.SaveForm(auditInstance);
+            return Json(obj);
+        }
 
         [HttpGet]
         //[AuthorizeFilter("propertyregistration:view")]
