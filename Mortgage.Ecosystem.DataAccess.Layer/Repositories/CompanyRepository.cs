@@ -235,10 +235,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     await db.Insert(userEntity);
                 }
 
-                if (entity.AgentType == GlobalConstant.THREE.ToString())
+                if (entity.AgentType == GlobalConstant.SIX.ToString() && entity.LenderType != null)
                 {
-                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.PMB_MENU_URL);
-                    PmbEntity pmbEntity = new PmbEntity();
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.LENDERS_INSTITUTION_MENU_URL);
+                    LenderInstitutionsEntity pmbEntity = new LenderInstitutionsEntity();
                     pmbEntity.Id = entity.Id;
                     pmbEntity.RCNumber = entity.RCNumber;
                     pmbEntity.Name = entity.Name;
@@ -248,7 +248,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     pmbEntity.DateOfIncorporation = entity.DateOfIncorporation;
                     pmbEntity.EmailAddress = entity.EmailAddress;
                     pmbEntity.Sector = entity.Sector;
-                    //pmbEntity.PmbNhfNumber = entity.EmployerNhfNumber;
                     pmbEntity.ContributionFrequency = entity.ContributionFrequency;
                     pmbEntity.Subsector = entity.Subsector;
                     pmbEntity.BaseProcessMenu = currentMenu;
@@ -256,60 +255,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
                     pmbEntity.BaseCreatorId = entity.BaseCreatorId;
                     pmbEntity.BaseModifierId = entity.BaseModifierId;
                     pmbEntity.NHFNumber = Convert.ToString(entity.EmployerNhfNumber);
+                    pmbEntity.Category = Convert.ToInt32(entity.LenderType);
+
                     await db.Insert(pmbEntity);
 
                 }
 
-
-                if (entity.AgentType == GlobalConstant.TWO.ToString())
-                {
-                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.BROKER_MENU_URL);
-                    BrokerEntity brokerEntity = new BrokerEntity();
-                    brokerEntity.Id = entity.Id;
-                    brokerEntity.RCNumber = entity.RCNumber;
-                    brokerEntity.Name = entity.Name;
-                    brokerEntity.Website = entity.Website;
-                    brokerEntity.MobileNumber = entity.MobileNumber;
-                    brokerEntity.Address = entity.Address;
-                    brokerEntity.DateOfIncorporation = entity.DateOfIncorporation;
-                    brokerEntity.EmailAddress = entity.EmailAddress;
-                    brokerEntity.Sector = entity.Sector;
-                    brokerEntity.Subsector = entity.Subsector;
-                    brokerEntity.BaseProcessMenu = currentMenu;
-                    brokerEntity.BaseCreateTime = DateTime.Now;
-                    brokerEntity.BaseCreatorId = entity.BaseCreatorId;
-                    brokerEntity.BaseModifierId = entity.BaseModifierId;
-                    brokerEntity.NHFNumber = Convert.ToString(entity.NHFNumber);
-                    await db.Insert(brokerEntity);
-
-                }
-
-                if (entity.AgentType == GlobalConstant.SIX.ToString())
-                {
-                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.SECONDARYLENDER_MENU_URL);
-                    SecondaryLenderEntity secondaryLenderEntity = new SecondaryLenderEntity();
-                    secondaryLenderEntity.Id = entity.Id;
-                    secondaryLenderEntity.RCNumber = entity.RCNumber;
-                    secondaryLenderEntity.Name = entity.Name;
-                    secondaryLenderEntity.Website = entity.Website;
-                    secondaryLenderEntity.MobileNumber = entity.MobileNumber;
-                    secondaryLenderEntity.Address = entity.Address;
-                    secondaryLenderEntity.DateOfIncorporation = entity.DateOfIncorporation;
-                    secondaryLenderEntity.EmailAddress = entity.EmailAddress;
-                    secondaryLenderEntity.Sector = entity.Sector;
-                    secondaryLenderEntity.ContributionFrequency = entity.ContributionFrequency;
-                    secondaryLenderEntity.Subsector = entity.Subsector;
-                    secondaryLenderEntity.BaseProcessMenu = currentMenu;
-                    secondaryLenderEntity.BaseCreateTime = DateTime.Now;
-                    secondaryLenderEntity.BaseCreatorId = entity.BaseCreatorId;
-                    secondaryLenderEntity.BaseModifierId = entity.BaseModifierId;
-                    secondaryLenderEntity.NHFNumber = Convert.ToString(entity.EmployerNhfNumber);
-                    await db.Insert(secondaryLenderEntity);
-
-                }
-
               
-
                 // Role
                 if (!entity.Role.IsNullOrZero())
                 {

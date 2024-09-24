@@ -2,6 +2,7 @@
 using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer.Models;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator;
@@ -116,18 +117,18 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                     }
 
                     // Retrieve and assign the ProductName based on ProductCode
-                    var lender = await _iUnitOfWork.Lenders.GetEntity(entity.Lender);
+                    var lender = await _iUnitOfWork.Lenders.GetEntity(entity.LenderCategory);
                     //if (productEntity == null)
                     //{
                     //    entity.ProductName = productEntity.Name;
                     //}
                     if (lender != null)
                     {
-                        entity.Lender = lender.Lender;
+                        entity.LenderCategory = lender.LenderCategory;
                     }
                     else
                     {
-                        entity.Lender = 0; // Default value if product entity is not found
+                        entity.LenderCategory = 0; // Default value if product entity is not found
                     }
                 }
 
@@ -155,20 +156,27 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #region Submit data
         public async Task<TData<string>> SaveForm(LenderSetupEntity entity)
         {
+            var context = new ApplicationDbContext();
             TData<string> obj = new TData<string>();
-            var ProductExist = await _iUnitOfWork.Lenders.GetEntity(entity.Lender);
-            if (ProductExist != null)
+            var lenderList = new List<LenderSetupEntity>(); 
+            foreach (var item in entity.Lender)
             {
-                obj.Message = "Lender already exists!";
-                obj.Tag = 0;
-                return obj;
+                var lendersetup = new LenderSetupEntity();
+                lendersetup.LenderTypeId = entity.LenderTypeId;
+                lendersetup.LenderCategory = item;
+                lenderList.Add(lendersetup);    
+                await context.LenderSetupEntity.AddRangeAsync(lendersetup);
             }
 
+<<<<<<< HEAD
             bool isUpdate = entity.Id > 0;
             await _iUnitOfWork.Lenders.SaveForm(entity);
+=======
+            await context.SaveChangesAsync();
+>>>>>>> 582dc07cedb5466adfe3cfbdf5ed12e5278f65e7
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
-            obj.Message = isUpdate ? "Lender Updated successfully" : "Lender added successfully";
+            obj.Message = "Lender added successfully";
             return obj;
         }
 

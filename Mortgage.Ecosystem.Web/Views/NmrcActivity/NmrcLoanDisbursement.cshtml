@@ -1,0 +1,204 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="ibox-title">
+    <h5>Loan Disbursement</h5>
+</div>
+
+<div class="container-div">
+    <div class="row">
+
+
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        debugger
+        var queryUrl = '@Url.Content("~/NmrcActivity/GetLoanForDis")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            detailView: true,
+            sortName: 'BaseModifyTime',
+            sortOrder: "Desc",
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'PmbName', title: 'Mortgage Bank', sortable: false },
+                { field: 'RefinanceNumber', title: 'Batch No', sortable: false },
+                
+                { field: 'TotalAmount', title: 'Loan Total', sortable: false },
+                {
+                    field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd HH:mm:ss");
+                    }
+                },
+
+                {
+                    title: 'Action',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-danger" href="#" onclick="Disburse(\'' + row.Id + '\')"><i class="fa fa-close"></i>Disburse</a>');
+                        return actions.join('');
+                    }
+                },
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            },
+            onExpandRow: function (index, row, $detail) {
+                initChildGrid(index, row, $detail);
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+
+
+    function openCustomDialog(options) {
+        layer.open({
+            type: 2,
+            title: options.title,
+            content: options.content,
+            area: [options.width, '90%'],
+            btn: [], // Remove the default confirm and close buttons
+            success: function (layero, index) {
+                options.callback(index, layero);
+            }
+        });
+    }
+
+
+    function Disburse(id) {
+        debugger
+        cn.confirm("Confirm the Disbursement process？", function () {
+            debugger;
+            cn.ajax({
+                url: '@Url.Content("~/NmrcActivity/DisburseNonNhfLoan")' + '?id=' + id,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+    function DisapproveUnderwriting(id) {
+        debugger
+        if (id === 0) {
+            cn.msgError("Please select an item");
+            return;
+        }
+        var remark = $("#remark").val();
+
+        cn.confirm("Confirm the Disapproval process？", function () {
+            cn.ajax({
+                url: '@Url.Content("~/Underwriting/DisapproveUnderwriting")' + '?id=' + id + '&remark=' + remark,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    } else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+
+
+    function initChildGrid(index, row, $detail) {
+        $detail.html('Loading data ...');
+        var date = new Date(row.BaseCreateTime);
+        //var formattedDate = date.toLocaleDateString();
+        var dateOfEmployment = new Date(row.DateofEmployment);
+        var formattedDateOfEmployment = dateOfEmployment.toLocaleDateString();
+
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center" > ' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Disbursement for ' + row.Name + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="nhfNumber">NHF Number:</label>' +
+            '<input type="text" id="nhfNumber" name="NHFNumber" placeholder="NHF Number" class="form-control text-left" readonly value="' + row.NHFNumber + '" /> ' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="monthlyIncome">Monthly Income:</label>' +
+            '<input type="text" id="monthlyIncome" name="MonthlyIncome" placeholder="Monthly Income" class="form-control text-left" readonly value="' + row.MonthlyIncome + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="phone">Date Of Employment:</label>' +
+            '<input type="text" id="dateOfEmployment" name="DateOfEmployment" placeholder="Date Of Employment" class="form-control text-left" readonly value="' + formattedDateOfEmployment + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-row">' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="dateOfBirth">Date Of Birth:</label>' +
+            '<input type="text" id="dateOfBirth" name="DateOfBirth" placeholder="Date Of Birth" class="form-control text-left" readonly value="' + row.DOB + '"/>' +
+            '</div>' +
+            '<div class="form-group col-sm-6">' +
+            '<label for="bvn">BVN:</label>' +
+            '<input type="text" id="bvn" name="bvn" placeholder="BVN" class="form-control text-left" readonly value="' + row.Bvn + '"/>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-group col-sm-12">' +
+            '<label for="remark">Remark:</label>' +
+            '<textarea id="remark" name="Remark" placeholder="Remark" class="form-control text-left" style="height:60px">' + row.Remark + '</textarea>' +
+            '</div>' +
+            '<div class="form-group col-sm-12 text-right">' +
+            '<button type="button" id="approve" onclick="Disburse(\'' + row.Id + '\');" class="btn btn-success btn-sm">Approve</button>' +
+            '</div>' +
+            '</div>' +
+            '</form>' +
+            '</div>';
+        $detail.html(htmlData);
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            if ($cardBody.is(':visible')) {
+                $cardBody.hide();
+            } else {
+                $cardBody.show();
+            }
+        });
+    }
+
+
+
+</script>

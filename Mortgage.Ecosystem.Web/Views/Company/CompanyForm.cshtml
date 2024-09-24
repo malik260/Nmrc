@@ -7,9 +7,9 @@
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
     @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
 }
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <div class="wrapper animated fadeInRight">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@*    <div class="wrapper animated fadeInRight">
         <form id="form" class="form-horizontal m">
             <div class="dialogblockborder dialogblockborderheadline">
                 <div class="dialogblock-header" style="height: auto;">
@@ -91,16 +91,6 @@
                                 <input id="contactPersonDesignation" col="ContactPersonDesignation" type="text" class="form-control" />
                             </div>
                         </div>
-                        @*  <div class="form-group">
-                    <div class="col-sm-6">
-                    <label class="control-label">Company Class</label>
-                    <div id="companyClass" col="CompanyClass"></div>
-                    </div>
-                    <div class="col-sm-6">
-                    <label class="control-label">Company Type</label>
-                    <div id="companyType" col="CompanyType"></div>
-                    </div>
-                    </div>*@
                         <div class="form-group">
                             <div class="col-sm-6">
                                 <label class="control-label">Contribution Frequency<font class="red"> *</font></label>
@@ -216,8 +206,6 @@
                             <div class="col-sm-6">
                                 <label class="control-label">Company Name<font class="red"> *</font></label>
                                 <div id="coyName" col="Company"></div>
-                                @*                             <input id="coyName" col="CoyName" type="text" class="form-control" />
-                            *@
                             </div>
                         </div>
                         <div class="form-group">
@@ -313,21 +301,6 @@
                                         <input id="indLastName" col="IndLastName" type="text" class="form-control" />
                                     </div>
                                 </div>
-                                @*<div class="form-group">
-                            <div class="col-sm-10">
-                            <label class="control-label">Date of Birth</label>
-                            <div class="input-group date">
-                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                            <input type="text" class="form-control" id="indDob" col="IndDOB" placeholder="yyyy-MM-dd">
-                            </div>
-                            </div>
-                            </div>*@
-                                @* <div class="form-group">
-                            <div class="col-sm-10">
-                            <label class="control-label">Default Role<font class="red"> *</font></label>
-                            <div id="role" col="Role"></div>
-                            </div>
-                            </div>*@
                             </div>
                             <div class="col-sm-6">
                                 <div style="padding: 15px 0px 5px 0px;">
@@ -336,8 +309,6 @@
                                     </font>
                                     <ul style="padding-left: 15px; padding-top: 20px; text-shadow: 1px 0px 1px #9E9E9E;">
                                         <li id="lUserName" style="list-style-type: square; margin-bottom: 5px;">Provide the <strong>USERNAME</strong> - <font style="color: #5555b7;">the name that will be used to login to the application, which is essentially an <strong>Email Address</strong>.</font></li>
-                                        @*                                     <li id="lBvn" style="list-style-type: square; margin-bottom: 5px;">Enter the <strong>BVN</strong> - <font style="color: #5555b7;">Bank Verification Number (11 digit numbers)</font></li>
-                                    *@
                                         <li id="lFirstName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>First Name</strong></li>
                                         <li id="lLastName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>Last Name</strong></li>
 
@@ -350,821 +321,2155 @@
             </div>
         </form>
     </div>
+*@
+<!-- Tab Navigation -->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" href="#customer" role="tab" data-toggle="tab">Customer</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#lender" role="tab" data-toggle="tab">Lender</a>
+    </li>
+</ul>
 
-    <!-- SweetAlert2 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Tab Content -->
+<div class="tab-content">
+    <!-- Customer Tab -->
+    <div class="tab-pane active" id="customer" role="tabpanel">
+        <div class="wrapper animated fadeInRight">
+            <form id="form" class="form-horizontal m">
+                <!-- Customer form content goes here -->
+                <!-- Use the customer form code you provided above -->
+                <!-- For example, paste the form fields related to the customer record here -->
+                <div class="dialogblockborder dialogblockborderheadline">
+                    <div class="dialogblock-header" style="height: auto;">
+                        <span class="dialogblockheader">New Customer Record</span>
+                        <div class="form-group" style="margin-top: 15px;">
+                            <div class="col-sm-6">
+                                <label class="control-label">Choose Customer Type<font class="red"> *</font></label>
+                                <div id="agentType" col="AgentType"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label class="control-label">Email<font class="red"> *</font></label>
+                                <input id="emailAddress" col="EmailAddress" type="text" class="form-control" />
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label">Mobile/Telephone<font class="red"> *</font></label>
+                                <input id="mobileNumber" col="MobileNumber" type="text" class="form-control" />
+                                <span id="error-message" class="text-danger" style="display:none; font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+                <div id="empPmbDevCoop" style="margin-top: 10px;">
+                    <div class="dialogblockborder dialogblockborderheadline">
+                        <div class="dialogblock-body" style="height: auto;">
+                            <span id="empPmbDevCoopTitle" class="dialogblockheader">Employer</span>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Name<font class="red"> *</font></label>
+                                    <input id="name" col="Name" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Address<font class="red"> *</font></label>
+                                    <textarea id="address" col="Address" class="form-control" style="height:60px"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Sector<font class="red"> *</font></label>
+                                    <div id="sector" col="Sector"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Sub-Sector<font class="red"> *</font></label>
+                                    <div id="subSector" col="SubSector"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">RC Number<font class="red"> *</font></label>
+                                    <input id="rcNumber" col="RCNumber" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Date Of Incorporation<font class="red"> *</font></label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="date" class="form-control" id="dateOfIncorporation" col="DateOfIncorporation" placeholder="yyyy-MM-dd" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Nature Of Business<font class="red"> *</font></label>
+                                    <input id="natureOfBusiness" col="NatureOfBusiness" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Name Of Registrar<font class="red"> *</font></label>
+                                    <input id="nameOfRegistrar" col="NameOfRegistrar" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Contact Person<font class="red"> *</font></label>
+                                    <input id="contactPerson" col="ContactPerson" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Contact Person Designation<font class="red"> *</font></label>
+                                    <input id="contactPersonDesignation" col="ContactPersonDesignation" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Contribution Frequency<font class="red"> *</font></label>
+                                    <div id="contributionFrequency" col="ContributionFrequency"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Website</label>
+                                    <input id="website" col="Website" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Tin <font class="red"> *</font></label>
+                                    <input id="tin" col="Tin" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="individual" style="margin-top: 10px;">
+                    <div class="dialogblockborder dialogblockborderheadline">
+                        <div class="dialogblock-body" style="height: auto;">
+                            <span class="dialogblockheader">Individual Contributor</span>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Employment Type<font class="red"> *</font></label>
+                                    <div id="employmentType" col="EmploymentType"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">NIN <font class="red"> *</font></label>
+                                    <input id="nin" required col="NIN" type="number" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Title<font class="red"> *</font></label>
+                                    <div id="title" col="Title"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">First Name<font class="red"> *</font></label>
+                                    <input id="firstName" col="FirstName" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Other Name(s)</label>
+                                    <input id="otherName" col="OtherName" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Last Name<font class="red"> *</font></label>
+                                    <input id="lastName" col="LastName" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Gender<font class="red"> *</font></label>
+                                    <div id="gender" col="Gender"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Date of Birth<font class="red"> *</font></label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input id="dateOfBirth" col="DateOfBirth" type="date" class="form-control" placeholder="yyyy-MM-dd" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Postal Address<font class="red"> *</font></label>
+                                    <textarea id="postalAddress" col="PostalAddress" class="form-control" style="height:60px"></textarea>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Marital Status<font class="red"> *</font></label>
+                                    <div id="marital" col="MaritalStatus"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Kin's Last Name<font class="red"> *</font></label>
+                                    <input id="kinLastName" col="KinLastName" required type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Kin's FIrst Name<font class="red"> *</font></label>
+                                    <input id="kinFirstName" col="KinFirstName" type="text" required class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Kin's Mobile/Telephone<font class="red"> *</font></label>
+                                    <input id="kinMobileNumber" col="KinMobileNumber" required type="number" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Kin's Relationship<font class="red"> *</font></label>
+                                    <div id="kinRelationship" col="KinRelationship"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Kin's Address<font class="red"> *</font></label>
+                                    <input id="kinAddress" col="KinAddress" type="text" required class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Kin's Email Address<font class="red"> *</font></label>
+                                    <input id="kinEmailAddress" col="KinEmailAddress" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">BVN<font class="red"> *</font></label>
+                                    <input id="bvn" col="BVN" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Company Name<font class="red"> *</font></label>
+                                    <div id="coyName" col="Company"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Company Address<font class="red"> *</font></label>
+                                    <textarea id="coyAddress" col="CoyAddress" class="form-control" style="height:60px"></textarea>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Company RC Number<font class="red"> *</font></label>
+                                    <input id="coyRcNumber" col="CoyRCNumber" type="text" class="form-control" />
+                                </div>
 
-    <script type="text/javascript">
-        var id = cn.request("id");
-        var selectedRole = '';
-        var roleMode = @RoleEnum.General.ToInt();
-        var selectedType = @GlobalConstant.ZERO;
-        $(function () {
-            $('#indDob').hide();
-            $('#emailAddress').attr('readonly', true);
-            $('#mobileNumber').attr('readonly', true);
-            $("#generateOTP").attr("disabled", "disabled");
-            //$('#generateOTP').hide();
-            $("#generateOTP").parents(".form-group").hide();
-            $('#empPmbDevCoop').show();
-            $('#individual').hide();
-            $('#manageLogin').hide();
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Company Sector<font class="red"> *</font></label>
+                                    <div id="coySector" col="CoySector"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Company Sub-Sector</label>
+                                    <div id="coySubSector" col="CoySubSector"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Contribution Branch<font class="red"> *</font></label>
+                                    <div id="branch" col="ContributionBranch"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Date of Employment<font class="red"> *</font></label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="date" class="form-control" id="employmentDate" col="DateOfEmployment" placeholder="yyyy-MM-dd">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Account Type<font class="red"> *</font></label>
+                                    <div id="accountType" col="AccountType"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Bank Name<font class="red"> *</font></label>
+                                    <div id="bankName" col="CustomerBank"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Account Number<font class="red"> *</font></label>
+                                    <input id="accountNumber" col="BankAccountNumber" type="number" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Monthly Salary (Net Pay)<font class="red"> *</font></label>
+                                    <input id="monthlySalary" col="MonthlySalary" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Alert Type<font class="red"> *</font></label>
+                                    <div id="alertType" col="AlertType"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Statement</label>
+                                    <input id="statement" col="Statement" type="text" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="manageLogin" style="margin-top: 10px;">
+                    <div class="dialogblockborder dialogblockborderheadline">
+                        <div class="dialogblock-body" style="height: auto;">
+                            <span id="manageLoginTitle" class="dialogblockheader">Login Info</span>
+                            <div class="row" style="display: block !important;">
+                                <div class="col-sm-6" style="height: auto; border-right: 1px solid #bbb9b9; margin-bottom: 5px;">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <label class="control-label">User Name<font class="red"> *</font></label>
+                                            <input id="userName" col="UserName" type="email" class="form-control" />
+                                        </div>
+                                    </div>
 
-            $("#agentType").cnComboBox({
-                url: '@Url.Content("~/AgentType/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <label class="control-label">First Name<font class="red"> *</font></label>
+                                            <input id="indFirstName" col="IndFirstName" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <label class="control-label">Last Name<font class="red"> *</font></label>
+                                            <input id="indLastName" col="IndLastName" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div style="padding: 15px 0px 5px 0px;">
+                                        <font style="font-weight: bold; color: #e70e0e;">
+                                            The applicant is required to submit the following information in order to complete this registration <font style="color: black">(All fields marked <font style="color: red">*</font> are required)</font>:
+                                        </font>
+                                        <ul style="padding-left: 15px; padding-top: 20px; text-shadow: 1px 0px 1px #9E9E9E;">
+                                            <li id="lUserName" style="list-style-type: square; margin-bottom: 5px;">Provide the <strong>USERNAME</strong> - <font style="color: #5555b7;">the name that will be used to login to the application, which is essentially an <strong>Email Address</strong>.</font></li>
+                                            @*                                     <li id="lBvn" style="list-style-type: square; margin-bottom: 5px;">Enter the <strong>BVN</strong> - <font style="color: #5555b7;">Bank Verification Number (11 digit numbers)</font></li>
+                                            *@
+                                            <li id="lFirstName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>First Name</strong></li>
+                                            <li id="lLastName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>Last Name</strong></li>
 
-            $("#sector").cnComboBox({
-                url: '@Url.Content("~/Sector/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
-            $("#bankName").cnComboBox({
-                url: '@Url.Content("~/Bank/GetListJson")',
-                key: "Name",
-                value: "Name"
-            });
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
-            $("#subSector").cnComboBox({
-                url: '@Url.Content("~/SubSector/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+    <!-- Lender Tab -->
+    <div class="tab-pane" id="lender" role="tabpanel">
+        <div class="wrapper animated fadeInRight">
+            <form id="form1" class="form-horizontal m">
+                <div class="dialogblockborder dialogblockborderheadline">
+                    <div class="dialogblock-header" style="height: auto;">
+                        <span class="dialogblockheader">New Lender Record</span>
+                        <div class="form-group" style="margin-top: 15px;">
+                            <div class="col-sm-6">
+                                <label class="control-label">Choose Lender Category<font class="red"> *</font></label>
+                                <div id="lenderAgentType" col="LenderType"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label class="control-label">Email<font class="red"> *</font></label>
+                                <input id="lenderEmailAddress" col="EmailAddress" type="text" class="form-control" />
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label">Mobile/Telephone<font class="red"> *</font></label>
+                                <input id="lenderMobileNumber" col="MobileNumber" type="text" class="form-control" />
+                                <span id="error-message" class="text-danger" style="display:none; font-weight: bold;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            $("#coySector").cnComboBox({
-                url: '@Url.Content("~/Sector/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+                <div id="lenderEmpPmbDevCoop" style="margin-top: 10px;">
+                    <div class="dialogblockborder dialogblockborderheadline">
+                        <div class="dialogblock-body" style="height: auto;">
+                            <span id="lenderEmpPmbDevCoopTitle" class="dialogblockheader">Lender</span>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Name<font class="red"> *</font></label>
+                                    <input id="lenderName" col="Name" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Address<font class="red"> *</font></label>
+                                    <textarea id="lenderAddress" col="Address" class="form-control" style="height:60px"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Sector<font class="red"> *</font></label>
+                                    <div id="lenderSector" col="Sector"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Sub-Sector<font class="red"> *</font></label>
+                                    <div id="lenderSubSector" col="SubSector"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">RC Number<font class="red"> *</font></label>
+                                    <input id="lenderRcNumber" col="RCNumber" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Date Of Incorporation<font class="red"> *</font></label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="date" class="form-control" id="lenderDateOfIncorporation" col="DateOfIncorporation" placeholder="yyyy-MM-dd" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Nature Of Business<font class="red"> *</font></label>
+                                    <input id="lenderNatureOfBusiness" col="NatureOfBusiness" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Name Of Registrar<font class="red"> *</font></label>
+                                    <input id="lenderNameOfRegistrar" col="NameOfRegistrar" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Contact Person<font class="red"> *</font></label>
+                                    <input id="lenderContactPerson" col="ContactPerson" type="text" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Contact Person Designation<font class="red"> *</font></label>
+                                    <input id="lenderContactPersonDesignation" col="ContactPersonDesignation" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Contribution Frequency<font class="red"> *</font></label>
+                                    <div id="lenderContributionFrequency" col="ContributionFrequency"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Website</label>
+                                    <input id="lenderWebsite" col="Website" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Tin <font class="red"> *</font></label>
+                                    <input id="lenderTin" col="Tin" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="lenderManageLogin" style="margin-top: 10px;">
+                    <div class="dialogblockborder dialogblockborderheadline">
+                        <div class="dialogblock-body" style="height: auto;">
+                            <span id="lenderManageLoginTitle" class="dialogblockheader">Login Info</span>
+                            <div class="row" style="display: block !important;">
+                                <div class="col-sm-6" style="height: auto; border-right: 1px solid #bbb9b9; margin-bottom: 5px;">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <label class="control-label">User Name<font class="red"> *</font></label>
+                                            <input id="userName" col="UserName" type="email" class="form-control" />
+                                        </div>
+                                    </div>
 
-            $("#coySubSector").cnComboBox({
-                url: '@Url.Content("~/SubSector/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <label class="control-label">First Name<font class="red"> *</font></label>
+                                            <input id="indFirstName" col="IndFirstName" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <label class="control-label">Last Name<font class="red"> *</font></label>
+                                            <input id="indLastName" col="IndLastName" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div style="padding: 15px 0px 5px 0px;">
+                                        <font style="font-weight: bold; color: #e70e0e;">
+                                            The applicant is required to submit the following information in order to complete this registration <font style="color: black">(All fields marked <font style="color: red">*</font> are required)</font>:
+                                        </font>
+                                        <ul style="padding-left: 15px; padding-top: 20px; text-shadow: 1px 0px 1px #9E9E9E;">
+                                            <li id="lUserName" style="list-style-type: square; margin-bottom: 5px;">Provide the <strong>USERNAME</strong> - <font style="color: #5555b7;">the name that will be used to login to the application, which is essentially an <strong>Email Address</strong>.</font></li>
+                                            @*                                     <li id="lBvn" style="list-style-type: square; margin-bottom: 5px;">Enter the <strong>BVN</strong> - <font style="color: #5555b7;">Bank Verification Number (11 digit numbers)</font></li>
+                                            *@
+                                            <li id="lFirstName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>First Name</strong></li>
+                                            <li id="lLastName" style="list-style-type: square; margin-bottom: 5px;">Enter <strong>Last Name</strong></li>
 
-            //laydate.render({ elem: '#dateOfIncorporation', type: 'date', theme: 'molv' });
-
-            $("#companyClass").cnComboBox({
-                url: '@Url.Content("~/CompanyClass/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
-
-            $("#companyType").cnComboBox({
-                url: '@Url.Content("~/CompanyType/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
-
-            $("#contributionFrequency").cnComboBox({
-                url: '@Url.Content("~/ContributionFrequency/GetListJson")',
-                key: "Id",
-                value: "Name"
-            });
-
-            laydate.render({ elem: '#indDob', type: 'date', theme: 'molv' });
-
-            $("#title").cnComboBox({
-                url: '@Url.Content("~/Title/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
-
-            $("#gender").cnComboBox({
-                url: '@Url.Content("~/Gender/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
-
-            //laydate.render({ elem: '#dateOfBirth', type: 'date', theme: 'molv' });
-
-            $("#marital").cnComboBox({
-                url: '@Url.Content("~/MaritalStatus/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
-
-            $("#kinRelationship").cnComboBox({
-                url: '@Url.Content("~/Relation/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
-
-            $("#employmentType").cnComboBox({
-                data: cn.getJson(@Html.Raw(typeof(EmploymentTypeEnum).EnumToDictionaryString()))
-            });
-
-            $("#branch").cnComboBox({
-                url: '@Url.Content("~/State/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
-
-
-            // laydate.render({ elem: '#employmentDate', type: 'date', theme: 'molv' });
-
-            $("#accountType").cnComboBox({
-                url: '@Url.Content("~/AccountType/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
-
-            $("#alertType").cnComboBox({
-                url: '@Url.Content("~/AlertType/GetListJson")',
-                key: "Id",
-                value: "Name",
-                class: "form-control"
-            });
-
-            $("#name").attr("disabled", "disabled");
-            $("#address").attr("disabled", "disabled");
-            $("#sector_select").attr("disabled", "disabled");
-            $("#subSector_select").attr("disabled", "disabled");
-            $("#rcNumber").attr("disabled", "disabled");
-            $("#dateOfIncorporation").attr("disabled", "disabled");
-            $("#natureOfBusiness").attr("disabled", "disabled");
-            $("#nameOfRegistrar").attr("disabled", "disabled");
-            $("#companyClass_select").attr("disabled", "disabled");
-            $("#contactPerson").attr("disabled", "disabled");
-            $("#contactPersonDesignation").attr("disabled", "disabled");
-            $("#companyType_select").attr("disabled", "disabled");
-            $("#contributionFrequency_select").attr("disabled", "disabled");
-            $("#website").attr("disabled", "disabled");
-            $("#logo").attr("disabled", "disabled");
-
-            $('#agentType').change(function () {
-                selectedType = $("#agentType").cnComboBox('getValue');
-                if (selectedType == @GlobalConstant.ZERO) {
-                    $('#emailAddress').val('');
-                    $('#emailAddress').attr('readonly', true);
-                    $('#mobileNumber').val('');
-                    $('#mobileNumber').attr('readonly', true);
-                    $("#generateOTP").attr("disabled", "disabled");
-                    $('indDob').hide();
-                    //$('#generateOTP').hide();
-                    $("#generateOTP").parents(".form-group").hide();
-                    $("#name").attr("disabled", "disabled");
-                    $("#address").attr("disabled", "disabled");
-                    $("#sector_select").attr("disabled", "disabled");
-                    $("#subSector_select").attr("disabled", "disabled");
-                    $("#rcNumber").attr("disabled", "disabled");
-                    $("#dateOfIncorporation").attr("disabled", "disabled");
-                    $("#natureOfBusiness").attr("disabled", "disabled");
-                    $("#nameOfRegistrar").attr("disabled", "disabled");
-                    $("#companyClass_select").attr("disabled", "disabled");
-                    $("#companyType_select").attr("disabled", "disabled");
-                    $("#contactPerson").attr("disabled", "disabled");
-                    $("#contactPersonDesignation").attr("disabled", "disabled");
-                    $("#contributionFrequency_select").attr("disabled", "disabled");
-                    $("#website").attr("disabled", "disabled");
-                    $("#logo").attr("disabled", "disabled");
-                    $('#empPmbDevCoop').show();
-                    $('#individual').hide();
-                    $('#manageLogin').hide();
-                }
-                if (selectedType == @GlobalConstant.ONE) {
-                    selectedRole = 'admin';
-                    $('#emailAddress').val('');
-                    $('#emailAddress').attr('readonly', false);
-                    $('#mobileNumber').val('');
-                    $('#mobileNumber').attr('readonly', false);
-                    //$('#generateOTP').hide();
-                    $('#indDob').parents(".form-group").hide();
-                    $("#generateOTP").parents(".form-group").hide();
-                    $("#name").removeAttr("disabled").prop("required", true).attr("title", "Please enter company name");;
-                    $("#address").removeAttr("disabled");
-                    $("#sector_select").removeAttr("disabled");
-                    $("#subSector_select").attr("disabled", "disabled");
-                    $("#rcNumber").removeAttr("disabled");
-                    $("#dateOfIncorporation").removeAttr("disabled");
-                    $("#natureOfBusiness").removeAttr("disabled");
-                    $("#nameOfRegistrar").removeAttr("disabled");
-                    $("#companyClass_select").removeAttr("disabled");
-                    $("#companyType_select").removeAttr("disabled");
-                    $("#contributionFrequency_select").removeAttr("disabled");
-                    $("#website").removeAttr("disabled");
-                    $("#logo").removeAttr("disabled");
-                    $('#empPmbDevCoop').show();
-                    $('#individual').hide();
-                    $('#manageLogin').show();
-                    $('#contactPerson').removeAttr("disabled");
-                    $('#contactPersonDesignation').removeAttr("disabled");
-                    $("#sector").parents(".form-group").show();
-                    $("#natureOfBusiness").parents(".form-group").show();
-                    $("#companyClass").parents(".form-group").show();
-                    $("#contributionFrequency").parents(".form-group").show();
-                    document.getElementById("empPmbDevCoopTitle").innerHTML = "Employer";
-                    document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
-                }
-                if (selectedType == @GlobalConstant.TWO || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR || selectedType == @GlobalConstant.SIX) {
-                    selectedRole = 'admin';
-                    $('#emailAddress').val('');
-                    $('#emailAddress').attr('readonly', false);
-                    $('#mobileNumber').val('');
-                    $('#mobileNumber').attr('readonly', false);
-                    $("#generateOTP").parents(".form-group").hide();
-                    $("#sector_select").removeAttr("disabled");
-                    $("#subSector_select").attr("disabled", "disabled");
-                    $("#sector").parents(".form-group").show();
-                    $("#contributionFrequency_select").removeAttr("disabled");
-                    $("#contributionFrequency").parents(".form-group").show();
-                    $("#indBvn").parents(".form-group").hide();
-                    $("#name").removeAttr("disabled");
-                    $("#address").removeAttr("disabled");
-                    $("#rcNumber").removeAttr("disabled");
-                    $("#contactPerson").parents(".form-group").hide();
-                    $("#contactPersonDesignation").parents(".form-group").hide();
-                    $("#dateOfIncorporation").removeAttr("disabled");
-                    $('#empPmbDevCoop').show();
-                    $('#individual').hide();
-                    $('#manageLogin').show();
-                    $("#website").removeAttr("disabled");
-
-                    //$("#sector").parents(".form-group").hide();
-                    $("#natureOfBusiness").parents(".form-group").hide();
-                    $("#companyClass").parents(".form-group").hide();
-                    //$("#contributionFrequency").parents(".form-group").hide();
-                    document.getElementById("empPmbDevCoopTitle").innerHTML = "PMB/Developer/Cooperative Society";
-                    document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
-                }
-                if (selectedType == @GlobalConstant.FIVE) {
-                    selectedRole = 'user';
-                    $('#emailAddress').val('');
-                    $('#emailAddress').attr('readonly', false);
-                    $('#mobileNumber').val('');
-                    $('#mobileNumber').attr('readonly', false);
-                    $("#generateOTP").removeAttr("disabled");
-                    //$('#generateOTP').show();
-                    $("#generateOTP").parents(".form-group").hide();
-                    $('#empPmbDevCoop').hide();
-                    $('#individual').show();
-                    $('#manageLogin').hide();
-                    $("#coyName").removeAttr("disabled");
-                    $("#subSector_select").attr("disabled", "disabled");
-                    $("#coyAddress").parents(".form-group").hide();
-                    $("#coySector").parents(".form-group").hide();
-                    $("#coySubSector_select").attr("disabled", "disabled");
-                    $("#manageLogin").removeAttr("disabled");
-                    document.getElementById("manageLoginTitle").innerHTML = "Individual";
-                    document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
-                    $('#generateOTP').on('click', function () {
 
-                        if ($('#emailAddress').val() == "") {
-                            cn.msgError("Please enter email!");
-                            return false;
-                        }
-                        else if ($('#mobileNumber').val() == "") {
-                            cn.msgError("Please enter mobile/telephone!");
-                            return false;
-                        }
-                        else if ($('#coyName').val() == "") {
-                            cn.msgError("Please select a company!");
-                            return false;
-                        }
+            </form>
+        </div>
+    </div>
+</div>
 
+
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<script type="text/javascript">
+    var id = cn.request("id");
+    var selectedRole = '';
+    var roleMode = @RoleEnum.General.ToInt();
+    var selectedType = @GlobalConstant.ZERO;
+    var LenderAgentType = @GlobalConstant.ZERO;
+
+
+    //var selectedType = @GlobalConstant.ZERO;
+    //$(function () {
+    //    $('#indDob').hide();
+    //    $('#emailAddress').attr('readonly', true);
+    //    $('#mobileNumber').attr('readonly', true);
+    //    $("#generateOTP").attr("disabled", "disabled");
+    //    //$('#generateOTP').hide();
+    //    $("#generateOTP").parents(".form-group").hide();
+    //    $('#empPmbDevCoop').show();
+    //    $('#individual').hide();
+    //    $('#manageLogin').hide();
+
+    //    $("#agentType").cnComboBox({
+    //        url: '@Url.Content("~/AgentType/GetListJson")',
+    //        key: "Id",
+    //        value: "Name",
+    //        class: "form-control"
+    //    });
+
+    //    $("#sector").cnComboBox({
+    //        url: '@Url.Content("~/Sector/GetListJson")',
+    //        key: "Id",
+    //        value: "Name"
+    //    });
+    //    $("#bankName").cnComboBox({
+    //        url: '@Url.Content("~/Bank/GetListJson")',
+    //        key: "Name",
+    //        value: "Name"
+    //    });
+
+    //    $("#subSector").cnComboBox({
+    //        url: '@Url.Content("~/SubSector/GetListJson")',
+    //        key: "Id",
+    //        value: "Name"
+    //    });
+
+    //    $("#coySector").cnComboBox({
+    //        url: '@Url.Content("~/Sector/GetListJson")',
+    //        key: "Id",
+    //        value: "Name"
+    //    });
+
+    //    $("#coySubSector").cnComboBox({
+    //        url: '@Url.Content("~/SubSector/GetListJson")',
+    //        key: "Id",
+    //        value: "Name"
+    //    });
+
+    //    $("#companyClass").cnComboBox({
+    //        url: '@Url.Content("~/CompanyClass/GetListJson")',
+    //        key: "Id",
+    //        value: "Name"
+    //    });
+
+    //    $("#companyType").cnComboBox({
+    //        url: '@Url.Content("~/CompanyType/GetListJson")',
+    //        key: "Id",
+    //        value: "Name"
+    //    });
+
+    //    $("#contributionFrequency").cnComboBox({
+    //        url: '@Url.Content("~/ContributionFrequency/GetListJson")',
+    //        key: "Id",
+    //        value: "Name"
+    //    });
+
+    //    laydate.render({ elem: '#indDob', type: 'date', theme: 'molv' });
+
+    //    $("#title").cnComboBox({
+    //        url: '@Url.Content("~/Title/GetListJson")',
+    //        key: "Id",
+    //        value: "Name",
+    //        class: "form-control"
+    //    });
+
+    //    $("#gender").cnComboBox({
+    //        url: '@Url.Content("~/Gender/GetListJson")',
+    //        key: "Id",
+    //        value: "Name",
+    //        class: "form-control"
+    //    });
+    //    $("#marital").cnComboBox({
+    //        url: '@Url.Content("~/MaritalStatus/GetListJson")',
+    //        key: "Id",
+    //        value: "Name",
+    //        class: "form-control"
+    //    });
+
+    //    $("#kinRelationship").cnComboBox({
+    //        url: '@Url.Content("~/Relation/GetListJson")',
+    //        key: "Id",
+    //        value: "Name",
+    //        class: "form-control"
+    //    });
+
+    //    $("#employmentType").cnComboBox({
+    //        data: cn.getJson(@Html.Raw(typeof(EmploymentTypeEnum).EnumToDictionaryString()))
+    //    });
+
+    //    $("#branch").cnComboBox({
+    //        url: '@Url.Content("~/State/GetListJson")',
+    //        key: "Id",
+    //        value: "Name",
+    //        class: "form-control"
+    //    });
+
+    //    $("#accountType").cnComboBox({
+    //        url: '@Url.Content("~/AccountType/GetListJson")',
+    //        key: "Id",
+    //        value: "Name",
+    //        class: "form-control"
+    //    });
+
+    //    $("#alertType").cnComboBox({
+    //        url: '@Url.Content("~/AlertType/GetListJson")',
+    //        key: "Id",
+    //        value: "Name",
+    //        class: "form-control"
+    //    });
+
+    //    $("#name").attr("disabled", "disabled");
+    //    $("#address").attr("disabled", "disabled");
+    //    $("#sector_select").attr("disabled", "disabled");
+    //    $("#subSector_select").attr("disabled", "disabled");
+    //    $("#rcNumber").attr("disabled", "disabled");
+    //    $("#dateOfIncorporation").attr("disabled", "disabled");
+    //    $("#natureOfBusiness").attr("disabled", "disabled");
+    //    $("#nameOfRegistrar").attr("disabled", "disabled");
+    //    $("#companyClass_select").attr("disabled", "disabled");
+    //    $("#contactPerson").attr("disabled", "disabled");
+    //    $("#contactPersonDesignation").attr("disabled", "disabled");
+    //    $("#companyType_select").attr("disabled", "disabled");
+    //    $("#contributionFrequency_select").attr("disabled", "disabled");
+    //    $("#website").attr("disabled", "disabled");
+    //    $("#logo").attr("disabled", "disabled");
+
+    //    $('#agentType').change(function () {
+    //        selectedType = $("#agentType").cnComboBox('getValue');
+    //        if (selectedType == @GlobalConstant.ZERO) {
+    //            $('#emailAddress').val('');
+    //            $('#emailAddress').attr('readonly', true);
+    //            $('#mobileNumber').val('');
+    //            $('#mobileNumber').attr('readonly', true);
+    //            $("#generateOTP").attr("disabled", "disabled");
+    //            $('indDob').hide();
+    //            //$('#generateOTP').hide();
+    //            $("#generateOTP").parents(".form-group").hide();
+    //            $("#name").attr("disabled", "disabled");
+    //            $("#address").attr("disabled", "disabled");
+    //            $("#sector_select").attr("disabled", "disabled");
+    //            $("#subSector_select").attr("disabled", "disabled");
+    //            $("#rcNumber").attr("disabled", "disabled");
+    //            $("#dateOfIncorporation").attr("disabled", "disabled");
+    //            $("#natureOfBusiness").attr("disabled", "disabled");
+    //            $("#nameOfRegistrar").attr("disabled", "disabled");
+    //            $("#companyClass_select").attr("disabled", "disabled");
+    //            $("#companyType_select").attr("disabled", "disabled");
+    //            $("#contactPerson").attr("disabled", "disabled");
+    //            $("#contactPersonDesignation").attr("disabled", "disabled");
+    //            $("#contributionFrequency_select").attr("disabled", "disabled");
+    //            $("#website").attr("disabled", "disabled");
+    //            $("#logo").attr("disabled", "disabled");
+    //            $('#empPmbDevCoop').show();
+    //            $('#individual').hide();
+    //            $('#manageLogin').hide();
+    //        }
+    //        if (selectedType == @GlobalConstant.ONE) {
+    //            selectedRole = 'admin';
+    //            $('#emailAddress').val('');
+    //            $('#emailAddress').attr('readonly', false);
+    //            $('#mobileNumber').val('');
+    //            $('#mobileNumber').attr('readonly', false);
+    //            //$('#generateOTP').hide();
+    //            $('#indDob').parents(".form-group").hide();
+    //            $("#generateOTP").parents(".form-group").hide();
+    //            $("#name").removeAttr("disabled").prop("required", true).attr("title", "Please enter company name");;
+    //            $("#address").removeAttr("disabled");
+    //            $("#sector_select").removeAttr("disabled");
+    //            $("#subSector_select").attr("disabled", "disabled");
+    //            $("#rcNumber").removeAttr("disabled");
+    //            $("#dateOfIncorporation").removeAttr("disabled");
+    //            $("#natureOfBusiness").removeAttr("disabled");
+    //            $("#nameOfRegistrar").removeAttr("disabled");
+    //            $("#companyClass_select").removeAttr("disabled");
+    //            $("#companyType_select").removeAttr("disabled");
+    //            $("#contributionFrequency_select").removeAttr("disabled");
+    //            $("#website").removeAttr("disabled");
+    //            $("#logo").removeAttr("disabled");
+    //            $('#empPmbDevCoop').show();
+    //            $('#individual').hide();
+    //            $('#manageLogin').show();
+    //            $('#contactPerson').removeAttr("disabled");
+    //            $('#contactPersonDesignation').removeAttr("disabled");
+    //            $("#sector").parents(".form-group").show();
+    //            $("#natureOfBusiness").parents(".form-group").show();
+    //            $("#companyClass").parents(".form-group").show();
+    //            $("#contributionFrequency").parents(".form-group").show();
+    //            document.getElementById("empPmbDevCoopTitle").innerHTML = "Employer";
+    //            document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+    //        }
+    //        if (selectedType == @GlobalConstant.TWO || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR || selectedType == @GlobalConstant.SIX) {
+    //            selectedRole = 'admin';
+    //            $('#emailAddress').val('');
+    //            $('#emailAddress').attr('readonly', false);
+    //            $('#mobileNumber').val('');
+    //            $('#mobileNumber').attr('readonly', false);
+    //            $("#generateOTP").parents(".form-group").hide();
+    //            $("#sector_select").removeAttr("disabled");
+    //            $("#subSector_select").attr("disabled", "disabled");
+    //            $("#sector").parents(".form-group").show();
+    //            $("#contributionFrequency_select").removeAttr("disabled");
+    //            $("#contributionFrequency").parents(".form-group").show();
+    //            $("#indBvn").parents(".form-group").hide();
+    //            $("#name").removeAttr("disabled");
+    //            $("#address").removeAttr("disabled");
+    //            $("#rcNumber").removeAttr("disabled");
+    //            $("#contactPerson").parents(".form-group").hide();
+    //            $("#contactPersonDesignation").parents(".form-group").hide();
+    //            $("#dateOfIncorporation").removeAttr("disabled");
+    //            $('#empPmbDevCoop').show();
+    //            $('#individual').hide();
+    //            $('#manageLogin').show();
+    //            $("#website").removeAttr("disabled");
+
+    //            //$("#sector").parents(".form-group").hide();
+    //            $("#natureOfBusiness").parents(".form-group").hide();
+    //            $("#companyClass").parents(".form-group").hide();
+    //            //$("#contributionFrequency").parents(".form-group").hide();
+    //            document.getElementById("empPmbDevCoopTitle").innerHTML = "PMB/Developer/Cooperative Society";
+    //            document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+    //        }
+    //        if (selectedType == @GlobalConstant.FIVE) {
+    //            selectedRole = 'user';
+    //            $('#emailAddress').val('');
+    //            $('#emailAddress').attr('readonly', false);
+    //            $('#mobileNumber').val('');
+    //            $('#mobileNumber').attr('readonly', false);
+    //            $("#generateOTP").removeAttr("disabled");
+    //            //$('#generateOTP').show();
+    //            $("#generateOTP").parents(".form-group").hide();
+    //            $('#empPmbDevCoop').hide();
+    //            $('#individual').show();
+    //            $('#manageLogin').hide();
+    //            $("#coyName").removeAttr("disabled");
+    //            $("#subSector_select").attr("disabled", "disabled");
+    //            $("#coyAddress").parents(".form-group").hide();
+    //            $("#coySector").parents(".form-group").hide();
+    //            $("#coySubSector_select").attr("disabled", "disabled");
+    //            $("#manageLogin").removeAttr("disabled");
+    //            document.getElementById("manageLoginTitle").innerHTML = "Individual";
+    //            document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+
+
+    //            $('#generateOTP').on('click', function () {
+
+    //                if ($('#emailAddress').val() == "") {
+    //                    cn.msgError("Please enter email!");
+    //                    return false;
+    //                }
+    //                else if ($('#mobileNumber').val() == "") {
+    //                    cn.msgError("Please enter mobile/telephone!");
+    //                    return false;
+    //                }
+    //                else if ($('#coyName').val() == "") {
+    //                    cn.msgError("Please select a company!");
+    //                    return false;
+    //                }
+
+    //                //$('#generateOTP').hide();
+    //                $("#generateOTP").parents(".form-group").hide();
+    //                $('#empPmbDevCoop').hide();
+    //                $('#individual').show();
+    //                $('#manageLogin').show();
+    //                document.getElementById("manageLoginTitle").innerHTML = "Login Profile";
+    //                $("#indBvn").parents(".form-group").hide();
+    //                $("#indFirstName").parents(".form-group").hide();
+    //                $("#indLastName").parents(".form-group").hide();
+    //                $("#indDob").parents(".form-group").hide();
+    //                $("#lBvn").hide();
+    //                $("#lFirstName").hide();
+    //                $("#lLastName").hide();
+    //                $("#lDateOfBirth").hide();
+
+    //                $("#subSector_select").attr("disabled", "disabled");
+    //                $("#coyName").parents(".col-sm-6").hide();
+    //                $("#coyAddress").parents(".form-group").hide();
+    //                $("#coySector").parents(".form-group").hide();
+    //                $("#branch").parents(".form-group").show();
+    //                $("#coySubSector_select").attr("disabled", "disabled");
+
+    //            });
+    //        }
+
+    //        $("#role").cnComboBox({
+    //            url: '@Url.Content("~/Role/GetListJson")' + '?mode=' + roleMode + '&rolename=' + selectedRole,
+    //            key: "Id",
+    //            value: "RoleName",
+    //            class: "form-control"
+    //        });
+    //    });
+
+    //    $("#coyName").cnComboBox({
+    //        url: '@Url.Content("~/Company/GetCompanyTreeListJson")',
+    //        key: "id",
+    //        value: "name",
+    //        class: "form-control"
+    //    });
+
+    //    $("#logo").fileinput({
+    //        language: 'en',
+    //        showPreview: false,
+    //        allowedFileExtensions: ['jpeg', 'jpg', 'png', 'gif', 'tiff']
+    //    }).on("fileuploaded", function (event, data) {
+    //        var obj = data.response;
+    //        if (obj.Tag == @GlobalConstant.ONE) {
+    //            filePath = obj.Data;
+    //        }
+    //        else {
+    //            filePath = '';
+    //        }
+    //    });
+
+    //    $('#sector').change(function () {
+    //        sector = $("#sector").cnComboBox('getValue');
+    //        $("#subSector").cnComboBox({
+    //            url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + sector,
+    //            key: "Id",
+    //            value: "Name"
+    //        });
+    //        if (sector > @GlobalConstant.ZERO) {
+    //            $("#subSector_select").removeAttr("disabled");
+    //        }
+    //        else {
+    //            $("#subSector_select").attr("disabled", "disabled");
+    //        }
+    //    });
+
+    //    $('#employmentType').change(function () {
+    //        employmentType = $("#employmentType").cnComboBox('getValue');
+    //        if (employmentType == @GlobalConstant.ONE) {
+    //            $("#coyName").attr("required", true);
+    //            $("#coyName").parents(".col-sm-6").show();
+    //            $("#coyAddress").parents(".form-group").hide();
+    //            $("#coySector").parents(".form-group").hide();
+    //            $("#branch").parents(".form-group").show();
+    //        }
+    //        else {
+    //            $("#coyName").parents(".col-sm-6").hide();
+    //            $("#coyAddress").parents(".form-group").hide();
+    //            $("#coySector").parents(".form-group").hide();
+    //            $("#branch").parents(".form-group").show();
+    //        }
+    //    });
+
+    //    $('#coySector').change(function () {
+    //        coySector = $("#coySector").cnComboBox('getValue');
+    //        $("#coySubSector").cnComboBox({
+    //            url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + coySector,
+    //            key: "Id",
+    //            value: "Name"
+    //        });
+    //        if (coySector > @GlobalConstant.ZERO) {
+    //            $("#coySubSector_select").removeAttr("disabled");
+    //        }
+    //        else {
+    //            $("#coySubSector_select").attr("disabled", "disabled");
+    //        }
+    //    });
+
+    //    getForm();
+
+    //    $("#form").validate({
+    //        rules: {
+    //            firstName: {
+    //                required: true,
+    //            },
+    //            lastName: {
+    //                required: true,
+    //            },
+    //            emailAddress: {
+    //                required: true,
+    //            },
+    //            kinAddress: {
+    //                required: true,
+    //            },
+    //            kinMobileNumber: {
+    //                required: true,
+    //            },
+    //            kinFirstName: {
+    //                required: true,
+    //            },
+    //            kinLastName: {
+    //                required: true,
+    //            },
+    //            kinEmailAddress: {
+    //                required: true,
+    //            },
+    //            monthlySalary: {
+    //                required: true,
+    //            },
+    //            postalAddress: {
+    //                required: true,
+    //            },
+    //            bvn: {
+    //                required: true,
+    //            },
+    //            name: {
+    //                required: true,
+    //            },
+    //            rcNumber: {
+    //                required: true,
+    //            },
+    //            natureOfBusiness: {
+    //                required: true,
+    //            },
+    //            tin: {
+    //                required: true,
+    //            },
+    //            nameOfRegistrar: {
+    //                required: true,
+    //            },
+    //            contactPerson: {
+    //                required: true,
+    //            },
+    //            contactPersonDesignation: {
+    //                required: true,
+    //            },
+    //        },
+    //        messages: {
+    //            firstName: { required: "First Name is required" },
+    //            lastName: { required: "Last Name is required" },
+    //            kinAddress: { required: "Next of Kin Address is required" },
+    //            kinMobileNumber: { required: "Next of Kin Mobile Number is required" },
+    //            kinFirstName: { required: "Next of Kin First Name is required" },
+    //            kinLastName: { required: "Next of Kin Last Name is required" },
+    //            kinEmailAddress: { required: "Next of Kin Email Address is required" },
+    //            emailAddress: { required: "Email Address must be provided" },
+    //            monthlySalary: { required: "Monthly Income is required" },
+    //            postalAddress: { required: "Home Address is required" },
+    //            bvn: { required: "Bank Verification Number is required" },
+    //            name: { required: "Name is required" },
+    //            rcNumber: { required: "Company RC Number is required" },
+    //            natureOfBusiness: { required: "Nature Of Business is required" },
+    //            tin: { required: "Tax Identification Number is required" },
+    //            nameOfRegistrar: { required: "Name Of Registrar is required" },
+    //            contactPerson: { required: "Contact Person is required" },
+    //            contactPersonDesignation: { required: "Contact Person Designation is required" },
+    //        },
+    //        showErrors: function (errorMap, errorList) {
+    //            if (errorList.length) {
+    //                let errorMessage = errorList[0].message;
+    //                Swal.fire({
+    //                    icon: 'warning',
+    //                    title: 'Validation Error',
+    //                    text: errorMessage,
+    //                });
+    //            }
+    //        }
+    //    });
+    //});
+
+    $(document).ready(function () {
+        function initializeCustomerTab() {
+            // Customer form initialization logic goes here
+            console.log("Customer Tab Initialized");
+
+
+
+
+            $(function () {
+                $('#indDob').hide();
+                $('#emailAddress').attr('readonly', true);
+                $('#mobileNumber').attr('readonly', true);
+                $("#generateOTP").attr("disabled", "disabled");
+                //$('#generateOTP').hide();
+                $("#generateOTP").parents(".form-group").hide();
+                $('#empPmbDevCoop').show();
+                $('#individual').hide();
+                $('#manageLogin').hide();
+
+                $("#agentType").cnComboBox({
+                    url: '@Url.Content("~/AgentType/GetListJson")',
+                    key: "Id",
+                    value: "Name",
+                    class: "form-control"
+                });
+
+                $("#sector").cnComboBox({
+                    url: '@Url.Content("~/Sector/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
+                $("#bankName").cnComboBox({
+                    url: '@Url.Content("~/Bank/GetListJson")',
+                    key: "Name",
+                    value: "Name"
+                });
+
+                $("#subSector").cnComboBox({
+                    url: '@Url.Content("~/SubSector/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
+
+                $("#coySector").cnComboBox({
+                    url: '@Url.Content("~/Sector/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
+
+                $("#coySubSector").cnComboBox({
+                    url: '@Url.Content("~/SubSector/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
+
+                $("#companyClass").cnComboBox({
+                    url: '@Url.Content("~/CompanyClass/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
+
+                $("#companyType").cnComboBox({
+                    url: '@Url.Content("~/CompanyType/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
+
+                $("#contributionFrequency").cnComboBox({
+                    url: '@Url.Content("~/ContributionFrequency/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
+
+                laydate.render({ elem: '#indDob', type: 'date', theme: 'molv' });
+
+                $("#title").cnComboBox({
+                    url: '@Url.Content("~/Title/GetListJson")',
+                    key: "Id",
+                    value: "Name",
+                    class: "form-control"
+                });
+
+                $("#gender").cnComboBox({
+                    url: '@Url.Content("~/Gender/GetListJson")',
+                    key: "Id",
+                    value: "Name",
+                    class: "form-control"
+                });
+                $("#marital").cnComboBox({
+                    url: '@Url.Content("~/MaritalStatus/GetListJson")',
+                    key: "Id",
+                    value: "Name",
+                    class: "form-control"
+                });
+
+                $("#kinRelationship").cnComboBox({
+                    url: '@Url.Content("~/Relation/GetListJson")',
+                    key: "Id",
+                    value: "Name",
+                    class: "form-control"
+                });
+
+                $("#employmentType").cnComboBox({
+                    data: cn.getJson(@Html.Raw(typeof(EmploymentTypeEnum).EnumToDictionaryString()))
+                });
+
+                $("#branch").cnComboBox({
+                    url: '@Url.Content("~/State/GetListJson")',
+                    key: "Id",
+                    value: "Name",
+                    class: "form-control"
+                });
+
+                $("#accountType").cnComboBox({
+                    url: '@Url.Content("~/AccountType/GetListJson")',
+                    key: "Id",
+                    value: "Name",
+                    class: "form-control"
+                });
+
+                $("#alertType").cnComboBox({
+                    url: '@Url.Content("~/AlertType/GetListJson")',
+                    key: "Id",
+                    value: "Name",
+                    class: "form-control"
+                });
+
+                $("#name").attr("disabled", "disabled");
+                $("#address").attr("disabled", "disabled");
+                $("#sector_select").attr("disabled", "disabled");
+                $("#subSector_select").attr("disabled", "disabled");
+                $("#rcNumber").attr("disabled", "disabled");
+                $("#dateOfIncorporation").attr("disabled", "disabled");
+                $("#natureOfBusiness").attr("disabled", "disabled");
+                $("#nameOfRegistrar").attr("disabled", "disabled");
+                $("#companyClass_select").attr("disabled", "disabled");
+                $("#contactPerson").attr("disabled", "disabled");
+                $("#contactPersonDesignation").attr("disabled", "disabled");
+                $("#companyType_select").attr("disabled", "disabled");
+                $("#contributionFrequency_select").attr("disabled", "disabled");
+                $("#website").attr("disabled", "disabled");
+                $("#logo").attr("disabled", "disabled");
+                $("#tin").attr("disabled", "disabled");
+
+                $('#agentType').change(function () {
+                    selectedType = $("#agentType").cnComboBox('getValue');
+                    if (selectedType == @GlobalConstant.ZERO) {
+                        $('#emailAddress').val('');
+                        $('#emailAddress').attr('readonly', true);
+                        $('#mobileNumber').val('');
+                        $('#mobileNumber').attr('readonly', true);
+                        $("#generateOTP").attr("disabled", "disabled");
+                        $('indDob').hide();
                         //$('#generateOTP').hide();
+                        $("#generateOTP").parents(".form-group").hide();
+                        $("#name").attr("disabled", "disabled");
+                        $("#address").attr("disabled", "disabled");
+                        $("#sector_select").attr("disabled", "disabled");
+                        $("#subSector_select").attr("disabled", "disabled");
+                        $("#rcNumber").attr("disabled", "disabled");
+                        $("#tin").attr("disabled", "disabled");
+                        $("#dateOfIncorporation").attr("disabled", "disabled");
+                        $("#natureOfBusiness").attr("disabled", "disabled");
+                        $("#nameOfRegistrar").attr("disabled", "disabled");
+                        $("#companyClass_select").attr("disabled", "disabled");
+                        $("#companyType_select").attr("disabled", "disabled");
+                        $("#contactPerson").attr("disabled", "disabled");
+                        $("#contactPersonDesignation").attr("disabled", "disabled");
+                        $("#contributionFrequency_select").attr("disabled", "disabled");
+                        $("#website").attr("disabled", "disabled");
+                        $("#logo").attr("disabled", "disabled");
+                        $('#empPmbDevCoop').show();
+                        $('#individual').hide();
+                        $('#manageLogin').hide();
+                    }
+                    if (selectedType == @GlobalConstant.ONE) {
+                        selectedRole = 'admin';
+                        $('#emailAddress').val('');
+                        $('#emailAddress').attr('readonly', false);
+                        $('#mobileNumber').val('');
+                        $('#mobileNumber').attr('readonly', false);
+                        //$('#generateOTP').hide();
+                        $('#indDob').parents(".form-group").hide();
+                        $("#generateOTP").parents(".form-group").hide();
+                        $("#name").removeAttr("disabled").prop("required", true).attr("title", "Please enter company name");;
+                        $("#address").removeAttr("disabled");
+                        $("#sector_select").removeAttr("disabled");
+                        $("#subSector_select").attr("disabled", "disabled");
+                        $("#rcNumber").removeAttr("disabled");
+                        $("#dateOfIncorporation").removeAttr("disabled");
+                        $("#natureOfBusiness").removeAttr("disabled");
+                        $("#nameOfRegistrar").removeAttr("disabled");
+                        $("#tin").removeAttr("disabled");
+                        $("#companyClass_select").removeAttr("disabled");
+                        $("#companyType_select").removeAttr("disabled");
+                        $("#contributionFrequency_select").removeAttr("disabled");
+                        $("#website").removeAttr("disabled");
+                        $("#logo").removeAttr("disabled");
+                        $('#empPmbDevCoop').show();
+                        $('#individual').hide();
+                        $('#manageLogin').show();
+                        $('#contactPerson').removeAttr("disabled");
+                        $('#contactPersonDesignation').removeAttr("disabled");
+                        $("#sector").parents(".form-group").show();
+                        $("#natureOfBusiness").parents(".form-group").show();
+                        $("#companyClass").parents(".form-group").show();
+                        $("#contributionFrequency").parents(".form-group").show();
+                        document.getElementById("empPmbDevCoopTitle").innerHTML = "Employer";
+                        document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+                    }
+                    if (selectedType == @GlobalConstant.TWO || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR || selectedType == @GlobalConstant.SIX) {
+                        selectedRole = 'admin';
+                        $('#emailAddress').val('');
+                        $('#emailAddress').attr('readonly', false);
+                        $('#mobileNumber').val('');
+                        $('#mobileNumber').attr('readonly', false);
+                        $("#generateOTP").parents(".form-group").hide();
+                        $("#sector_select").removeAttr("disabled");
+                        $("#subSector_select").attr("disabled", "disabled");
+                        $("#sector").parents(".form-group").show();
+                        $("#contributionFrequency_select").removeAttr("disabled");
+                        $("#contributionFrequency").parents(".form-group").show();
+                        $("#indBvn").parents(".form-group").hide();
+                        $("#name").removeAttr("disabled");
+                        $("#address").removeAttr("disabled");
+                        $("#rcNumber").removeAttr("disabled");
+                        $("#tin").removeAttr("disabled");
+                        $("#contactPerson").parents(".form-group").hide();
+                        $("#contactPersonDesignation").parents(".form-group").hide();
+                        $("#dateOfIncorporation").removeAttr("disabled");
+                        $('#empPmbDevCoop').show();
+                        $('#individual').hide();
+                        $('#manageLogin').show();
+                        $("#website").removeAttr("disabled");
+
+                        //$("#sector").parents(".form-group").hide();
+                        $("#natureOfBusiness").parents(".form-group").hide();
+                        $("#companyClass").parents(".form-group").hide();
+                        //$("#contributionFrequency").parents(".form-group").hide();
+                        document.getElementById("empPmbDevCoopTitle").innerHTML = "PMB/Developer/Cooperative Society";
+                        document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+                    }
+                    if (selectedType == @GlobalConstant.FIVE) {
+                        selectedRole = 'user';
+                        $('#emailAddress').val('');
+                        $('#emailAddress').attr('readonly', false);
+                        $('#mobileNumber').val('');
+                        $('#mobileNumber').attr('readonly', false);
+                        $("#generateOTP").removeAttr("disabled");
+                        //$('#generateOTP').show();
                         $("#generateOTP").parents(".form-group").hide();
                         $('#empPmbDevCoop').hide();
                         $('#individual').show();
-                        $('#manageLogin').show();
-                        document.getElementById("manageLoginTitle").innerHTML = "Login Profile";
-                        $("#indBvn").parents(".form-group").hide();
-                        $("#indFirstName").parents(".form-group").hide();
-                        $("#indLastName").parents(".form-group").hide();
-                        $("#indDob").parents(".form-group").hide();
-                        $("#lBvn").hide();
-                        $("#lFirstName").hide();
-                        $("#lLastName").hide();
-                        $("#lDateOfBirth").hide();
-
+                        $('#manageLogin').hide();
+                        $("#coyName").removeAttr("disabled");
                         $("#subSector_select").attr("disabled", "disabled");
+                        $("#coyAddress").parents(".form-group").hide();
+                        $("#coySector").parents(".form-group").hide();
+                        $("#coySubSector_select").attr("disabled", "disabled");
+                        $("#manageLogin").removeAttr("disabled");
+                        document.getElementById("manageLoginTitle").innerHTML = "Individual";
+                        document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
+
+
+                        $('#generateOTP').on('click', function () {
+
+                            if ($('#emailAddress').val() == "") {
+                                cn.msgError("Please enter email!");
+                                return false;
+                            }
+                            else if ($('#mobileNumber').val() == "") {
+                                cn.msgError("Please enter mobile/telephone!");
+                                return false;
+                            }
+                            else if ($('#coyName').val() == "") {
+                                cn.msgError("Please select a company!");
+                                return false;
+                            }
+
+                            //$('#generateOTP').hide();
+                            $("#generateOTP").parents(".form-group").hide();
+                            $('#empPmbDevCoop').hide();
+                            $('#individual').show();
+                            $('#manageLogin').show();
+                            document.getElementById("manageLoginTitle").innerHTML = "Login Profile";
+                            $("#indBvn").parents(".form-group").hide();
+                            $("#indFirstName").parents(".form-group").hide();
+                            $("#indLastName").parents(".form-group").hide();
+                            $("#indDob").parents(".form-group").hide();
+                            $("#lBvn").hide();
+                            $("#lFirstName").hide();
+                            $("#lLastName").hide();
+                            $("#lDateOfBirth").hide();
+
+                            $("#subSector_select").attr("disabled", "disabled");
+                            $("#coyName").parents(".col-sm-6").hide();
+                            $("#coyAddress").parents(".form-group").hide();
+                            $("#coySector").parents(".form-group").hide();
+                            $("#branch").parents(".form-group").show();
+                            $("#coySubSector_select").attr("disabled", "disabled");
+
+                        });
+                    }
+
+                    $("#role").cnComboBox({
+                        url: '@Url.Content("~/Role/GetListJson")' + '?mode=' + roleMode + '&rolename=' + selectedRole,
+                        key: "Id",
+                        value: "RoleName",
+                        class: "form-control"
+                    });
+                });
+
+                $("#coyName").cnComboBox({
+                    url: '@Url.Content("~/Company/GetCompanyTreeListJson")',
+                    key: "id",
+                    value: "name",
+                    class: "form-control"
+                });
+
+                $("#logo").fileinput({
+                    language: 'en',
+                    showPreview: false,
+                    allowedFileExtensions: ['jpeg', 'jpg', 'png', 'gif', 'tiff']
+                }).on("fileuploaded", function (event, data) {
+                    var obj = data.response;
+                    if (obj.Tag == @GlobalConstant.ONE) {
+                        filePath = obj.Data;
+                    }
+                    else {
+                        filePath = '';
+                    }
+                });
+
+                $('#sector').change(function () {
+                    sector = $("#sector").cnComboBox('getValue');
+                    $("#subSector").cnComboBox({
+                        url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + sector,
+                        key: "Id",
+                        value: "Name"
+                    });
+                    if (sector > @GlobalConstant.ZERO) {
+                        $("#subSector_select").removeAttr("disabled");
+                    }
+                    else {
+                        $("#subSector_select").attr("disabled", "disabled");
+                    }
+                });
+
+                $('#employmentType').change(function () {
+                    employmentType = $("#employmentType").cnComboBox('getValue');
+                    if (employmentType == @GlobalConstant.ONE) {
+                        $("#coyName").attr("required", true);
+                        $("#coyName").parents(".col-sm-6").show();
+                        $("#coyAddress").parents(".form-group").hide();
+                        $("#coySector").parents(".form-group").hide();
+                        $("#branch").parents(".form-group").show();
+                    }
+                    else {
                         $("#coyName").parents(".col-sm-6").hide();
                         $("#coyAddress").parents(".form-group").hide();
                         $("#coySector").parents(".form-group").hide();
                         $("#branch").parents(".form-group").show();
-                        $("#coySubSector_select").attr("disabled", "disabled");
-
-                    });
-                }
-
-                $("#role").cnComboBox({
-                    url: '@Url.Content("~/Role/GetListJson")' + '?mode=' + roleMode + '&rolename=' + selectedRole,
-                    key: "Id",
-                    value: "RoleName",
-                    class: "form-control"
-                });
-            });
-
-            $("#coyName").cnComboBox({
-                url: '@Url.Content("~/Company/GetCompanyTreeListJson")',
-                key: "id",
-                value: "name",
-                class: "form-control"
-            });
-
-            $("#logo").fileinput({
-                language: 'en',
-                showPreview: false,
-                allowedFileExtensions: ['jpeg', 'jpg', 'png', 'gif', 'tiff']
-            }).on("fileuploaded", function (event, data) {
-                var obj = data.response;
-                if (obj.Tag == @GlobalConstant.ONE) {
-                    filePath = obj.Data;
-                }
-                else {
-                    filePath = '';
-                }
-            });
-
-            $('#sector').change(function () {
-                sector = $("#sector").cnComboBox('getValue');
-                $("#subSector").cnComboBox({
-                    url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + sector,
-                    key: "Id",
-                    value: "Name"
-                });
-                if (sector > @GlobalConstant.ZERO) {
-                    $("#subSector_select").removeAttr("disabled");
-                }
-                else {
-                    $("#subSector_select").attr("disabled", "disabled");
-                }
-            });
-
-            $('#employmentType').change(function () {
-                employmentType = $("#employmentType").cnComboBox('getValue');
-                if (employmentType == @GlobalConstant.ONE) {
-                    $("#coyName").attr("required", true);
-                    $("#coyName").parents(".col-sm-6").show();
-                    $("#coyAddress").parents(".form-group").hide();
-                    $("#coySector").parents(".form-group").hide();
-                    $("#branch").parents(".form-group").show();
-                }
-                else {
-                    $("#coyName").parents(".col-sm-6").hide();
-                    $("#coyAddress").parents(".form-group").hide();
-                    $("#coySector").parents(".form-group").hide();
-                    $("#branch").parents(".form-group").show();
-                }
-            });
-
-            $('#coySector').change(function () {
-                coySector = $("#coySector").cnComboBox('getValue');
-                $("#coySubSector").cnComboBox({
-                    url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + coySector,
-                    key: "Id",
-                    value: "Name"
-                });
-                if (coySector > @GlobalConstant.ZERO) {
-                    $("#coySubSector_select").removeAttr("disabled");
-                }
-                else {
-                    $("#coySubSector_select").attr("disabled", "disabled");
-                }
-            });
-
-            getForm();
-
-            $("#form").validate({
-                rules: {
-                    firstName: {
-                        required: true,
-                    },
-                    lastName: {
-                        required: true,
-                    },
-                    emailAddress: {
-                        required: true,
-                    },
-                    kinAddress: {
-                        required: true,
-                    },
-                    kinMobileNumber: {
-                        required: true,
-                    },
-                    kinFirstName: {
-                        required: true,
-                    },
-                    kinLastName: {
-                        required: true,
-                    },
-                    kinEmailAddress: {
-                        required: true,
-                    },
-                    //employmentDate: {
-                    //    required: true,
-                    //},
-                    monthlySalary: {
-                        required: true,
-                    },
-                    postalAddress: {
-                        required: true,
-                    },
-                    bvn: {
-                        required: true,
-                    },
-                    name: {
-                        required: true,
-                    },
-                    rcNumber: {
-                        required: true,
-                    },
-                    natureOfBusiness: {
-                        required: true,
-                    },
-                    tin: {
-                        required: true,
-                    },
-                    nameOfRegistrar: {
-                        required: true,
-                    },
-                    contactPerson: {
-                        required: true,
-                    },
-                    contactPersonDesignation: {
-                        required: true,
-                    },
-                    //dateOfBirth: {
-                    //   required: true,
-                    //}
-                },
-                messages: {
-                    firstName: { required: "First Name is required" },
-                    lastName: { required: "Last Name is required" },
-                    kinAddress: { required: "Next of Kin Address is required" },
-                    kinMobileNumber: { required: "Next of Kin Mobile Number is required" },
-                    kinFirstName: { required: "Next of Kin First Name is required" },
-                    kinLastName: { required: "Next of Kin Last Name is required" },
-                    kinEmailAddress: { required: "Next of Kin Email Address is required" },
-                    emailAddress: { required: "Email Address must be provided" },
-                    //employmentDate: { required: "Employment Date is required" },
-                    monthlySalary: { required: "Monthly Income is required" },
-                    postalAddress: { required: "Home Address is required" },
-                    bvn: { required: "Bank Verification Number is required" },
-                    //dateOfBirth: { required: "Date of Birth is required" },
-                    name: { required: "Name is required" },
-                    rcNumber: { required: "Company RC Number is required" },
-                    natureOfBusiness: { required: "Nature Of Business is required" },
-                    tin: { required: "Tax Identification Number is required" },
-                    nameOfRegistrar: { required: "Name Of Registrar is required" },
-                    contactPerson: { required: "Contact Person is required" },
-                    contactPersonDesignation: { required: "Contact Person Designation is required" },
-                },
-                showErrors: function (errorMap, errorList) {
-                    if (errorList.length) {
-                        let errorMessage = errorList[0].message;
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Validation Error',
-                            text: errorMessage,
-                        });
                     }
-                }
-            });
-        });
+                });
 
-        $('#tin').on('input', function () {
-            // Get the current value of the TIN input
-            var tinValue = $(this).val();
+                $('#coySector').change(function () {
+                    coySector = $("#coySector").cnComboBox('getValue');
+                    $("#coySubSector").cnComboBox({
+                        url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + coySector,
+                        key: "Id",
+                        value: "Name"
+                    });
+                    if (coySector > @GlobalConstant.ZERO) {
+                        $("#coySubSector_select").removeAttr("disabled");
+                    }
+                    else {
+                        $("#coySubSector_select").attr("disabled", "disabled");
+                    }
+                });
 
-            // Remove non-digit characters
-            var cleanedTIN = tinValue.replace(/\D/g, '');
+                getForm();
 
-            // Limit the TIN to 9 digits
-            var limitedTIN = cleanedTIN.substring(0, 9);
-
-            // Update the input value
-            $(this).val(limitedTIN);
-
-            // Display an error message if the input exceeds 9 digits
-            if (cleanedTIN.length > 9) {
-                $('#tinError').text('TIN must be 9 digits.');
-            } else {
-                $('#tinError').text('');
-            }
-        });
-
-
-        function getForm() {
-            if (id > @GlobalConstant.ZERO) {
-                cn.ajax({
-                    url: '@Url.Content("~/Company/GetFormJson")' + '?id=' + id,
-                    type: "get",
-                    success: function (obj) {
-                        if (obj.Tag == @GlobalConstant.ONE) {
-                            var result = obj.Data;
-                            $("#form").setWebControls(result);
+                $("#form").validate({
+                    rules: {
+                        firstName: {
+                            required: true,
+                        },
+                        lastName: {
+                            required: true,
+                        },
+                        emailAddress: {
+                            required: true,
+                        },
+                        kinAddress: {
+                            required: true,
+                        },
+                        kinMobileNumber: {
+                            required: true,
+                        },
+                        kinFirstName: {
+                            required: true,
+                        },
+                        kinLastName: {
+                            required: true,
+                        },
+                        kinEmailAddress: {
+                            required: true,
+                        },
+                        monthlySalary: {
+                            required: true,
+                        },
+                        postalAddress: {
+                            required: true,
+                        },
+                        bvn: {
+                            required: true,
+                        },
+                        name: {
+                            required: true,
+                        },
+                        rcNumber: {
+                            required: true,
+                        },
+                        natureOfBusiness: {
+                            required: true,
+                        },
+                        tin: {
+                            required: true,
+                        },
+                        nameOfRegistrar: {
+                            required: true,
+                        },
+                        contactPerson: {
+                            required: true,
+                        },
+                        contactPersonDesignation: {
+                            required: true,
+                        },
+                    },
+                    messages: {
+                        firstName: { required: "First Name is required" },
+                        lastName: { required: "Last Name is required" },
+                        kinAddress: { required: "Next of Kin Address is required" },
+                        kinMobileNumber: { required: "Next of Kin Mobile Number is required" },
+                        kinFirstName: { required: "Next of Kin First Name is required" },
+                        kinLastName: { required: "Next of Kin Last Name is required" },
+                        kinEmailAddress: { required: "Next of Kin Email Address is required" },
+                        emailAddress: { required: "Email Address must be provided" },
+                        monthlySalary: { required: "Monthly Income is required" },
+                        postalAddress: { required: "Home Address is required" },
+                        bvn: { required: "Bank Verification Number is required" },
+                        name: { required: "Name is required" },
+                        rcNumber: { required: "Company RC Number is required" },
+                        natureOfBusiness: { required: "Nature Of Business is required" },
+                        tin: { required: "Tax Identification Number is required" },
+                        nameOfRegistrar: { required: "Name Of Registrar is required" },
+                        contactPerson: { required: "Contact Person is required" },
+                        contactPersonDesignation: { required: "Contact Person Designation is required" },
+                    },
+                    showErrors: function (errorMap, errorList) {
+                        if (errorList.length) {
+                            let errorMessage = errorList[0].message;
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Validation Error',
+                                text: errorMessage,
+                            });
                         }
                     }
                 });
-            }
-            else {
-                var defaultData = {};
-                defaultData.AgentType = "";
-                defaultData.EmailAddress = ""
-                defaultData.MobileNumber = "";
-                $("#form").setWebControls(defaultData);
-            }
+            });
         }
 
-        flatpickr("#dateOfIncorporation", {
-            // defaultDate: "today",
-            maxDate: "today",
-            inline: false,
-            allowInput: true
-        });
+        function initializeLenderTab() {
+            // Lender form initialization logic goes here
+            console.log("Lender Tab Initialized");
 
-        flatpickr("#dateOfBirth", {
-            //defaultDate: "today",
-            maxDate: "2005-01-01",
-            inline: false,
-            allowInput: true
-        });
+            var selectedType = @GlobalConstant.ZERO;
+            $(function () {
+                $('#lenderIndDob').hide();
+                $('#lenderEmailAddress').attr('readonly', true);
+                $('#lenderMobileNumber').attr('readonly', true);
+                $("#lenderGenerateOTP").attr("disabled", "disabled");
+                //$('#generateOTP').hide();
+                $("#lenderGenerateOTP").parents(".form-group").hide();
+                $('#lenderEmpPmbDevCoop').show();
+                $('#lenderIndividual').hide();
+                $('#lenderManageLogin').hide();
 
-        flatpickr("#employmentDate", {
-            //defaultDate: "today",
-            maxDate: "today",
-            inline: false,
-            allowInput: true
+                $("#lenderAgentType").cnComboBox({
+                    url: '@Url.Content("~/LenderCategory/GetListJson")',
+                    key: "Id",
+                    value: "LenderInstitution",
+                    class: "form-control"
+                });
 
-        });
+                $("#lenderSector").cnComboBox({
+                    url: '@Url.Content("~/Sector/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
 
-        $('#rcNumber').on('input', function () {
-            // Get the current value of the RC Number input
-            var rcNumberValue = $(this).val();
+                $("#lenderSubSector").cnComboBox({
+                    url: '@Url.Content("~/SubSector/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
 
-            // Remove non-digit characters
-            var cleanedRCNumber = rcNumberValue.replace(/\D/g, '');
+                $("#lenderCompanyClass").cnComboBox({
+                    url: '@Url.Content("~/CompanyClass/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
 
-            // Limit the RC Number to 14 digits
-            var limitedRCNumber = cleanedRCNumber.substring(0, 14);
+                $("#lenderCompanyType").cnComboBox({
+                    url: '@Url.Content("~/CompanyType/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
 
-            // Add "RC" in front of the limited RC Number
-            var formattedRCNumber = 'RC' + limitedRCNumber;
+                $("#lenderContributionFrequency").cnComboBox({
+                    url: '@Url.Content("~/ContributionFrequency/GetListJson")',
+                    key: "Id",
+                    value: "Name"
+                });
 
-            // Update the input value
-            $(this).val(formattedRCNumber);
-        });
+                laydate.render({ elem: '#indDob', type: 'date', theme: 'molv' });
 
-        $('#nin').on('input', function () {
-            // Get the current value of the NIN input
-            var ninValue = $(this).val();
+                $("#lenderName").attr("disabled", "disabled");
+                $("#lenderAddress").attr("disabled", "disabled");
+                $("#lenderSector_select").attr("disabled", "disabled");
+                $("#lenderSubSector_select").attr("disabled", "disabled");
+                $("#lenderRcNumber").attr("disabled", "disabled");
+                $("#lenderDateOfIncorporation").attr("disabled", "disabled");
+                $("#lenderNatureOfBusiness").attr("disabled", "disabled");
+                $("#lenderNameOfRegistrar").attr("disabled", "disabled");
+                $("#lenderCompanyClass_select").attr("disabled", "disabled");
+                $("#lenderContactPerson").attr("disabled", "disabled");
+                $("#lenderContactPersonDesignation").attr("disabled", "disabled");
+                $("#lenderCompanyType_select").attr("disabled", "disabled");
+                $("#lenderContributionFrequency_select").attr("disabled", "disabled");
+                $("#lenderWebsite").attr("disabled", "disabled");
+                $("#lenderLogo").attr("disabled", "disabled");
+                $("#lenderTin").attr("disabled", "disabled");
 
-            // Remove non-digit characters
-            var cleanedNin = ninValue.replace(/\D/g, '');
+                $('#lenderAgentType').change(function () {
+                    debugger
+                    LenderAgentType = $("#lenderAgentType").cnComboBox('getValue');
+                    if (LenderAgentType == @GlobalConstant.ZERO) {
+                        $('#lenderEmailAddress').val('');
+                        $('#lenderEmailAddress').attr('readonly', true);
+                        $('#lenderMobileNumber').val('');
+                        $('#lenderMobileNumber').attr('readonly', true);
+                        $("#lenderGenerateOTP").attr("disabled", "disabled");
+                        $('indDob').hide();
+                        //$('#generateOTP').hide();
+                        $("#lenderGenerateOTP").parents(".form-group").hide();
+                        $("#lenderName").attr("disabled", "disabled");
+                        $("#lenderAddress").attr("disabled", "disabled");
+                        $("#lenderSector_select").attr("disabled", "disabled");
+                        $("#lenderSubSector_select").attr("disabled", "disabled");
+                        $("#lenderRcNumber").attr("disabled", "disabled");
+                        $("#lenderTin").attr("disabled", "disabled");
+                        $("#lenderDateOfIncorporation").attr("disabled", "disabled");
+                        $("#lenderNatureOfBusiness").attr("disabled", "disabled");
+                        $("#lenderNameOfRegistrar").attr("disabled", "disabled");
+                        $("#lenderCompanyClass_select").attr("disabled", "disabled");
+                        $("#lenderCompanyType_select").attr("disabled", "disabled");
+                        $("#lenderContactPerson").attr("disabled", "disabled");
+                        $("#lenderContactPersonDesignation").attr("disabled", "disabled");
+                        $("#lenderContributionFrequency_select").attr("disabled", "disabled");
+                        $("#lenderWebsite").attr("disabled", "disabled");
+                        $("#lenderLogo").attr("disabled", "disabled");
+                        $('#lenderEmpPmbDevCoop').show();
+                        $('#lenderIndividual').hide();
+                        $('#lenderManageLogin').hide();
+                    }
+                    if (LenderAgentType == @GlobalConstant.ONE) {
+                        selectedRole = 'admin';
+                        $('#lenderEmailAddress').val('');
+                        $('#lenderEmailAddress').attr('readonly', false);
+                        $('#lenderMobileNumber').val('');
+                        $('#lenderMobileNumber').attr('readonly', false);
+                        //$('#generateOTP').hide();
+                        $('#lenderIndDob').parents(".form-group").hide();
+                        $("#lenderGenerateOTP").parents(".form-group").hide();
+                        $("#lenderName").removeAttr("disabled").prop("required", true).attr("title", "Please enter company name");;
+                        $("#lenderAddress").removeAttr("disabled");
+                        $("#lenderSector_select").removeAttr("disabled");
+                        $("#lenderSubSector_select").attr("disabled", "disabled");
+                        $("#lenderRcNumber").removeAttr("disabled");
+                        $("#lenderDateOfIncorporation").removeAttr("disabled");
+                        $("#lenderNatureOfBusiness").removeAttr("disabled");
+                        $("#lenderNameOfRegistrar").removeAttr("disabled");
+                        $("#lenderCompanyClass_select").removeAttr("disabled");
+                        $("#lenderCompanyType_select").removeAttr("disabled");
+                        $("#lenderContributionFrequency_select").removeAttr("disabled");
+                        $("#lenderWebsite").removeAttr("disabled");
+                        $("#lenderTin").removeAttr("disabled");
+                        $("#lenderLogo").removeAttr("disabled");
+                        $('#lenderEmpPmbDevCoop').show();
+                        $('#lenderIndividual').hide();
+                        $('#lenderManageLogin').show();
+                        $('#lenderContactPerson').removeAttr("disabled");
+                        $('#lenderContactPersonDesignation').removeAttr("disabled");
+                        $("#lenderSector").parents(".form-group").show();
+                        $("#lenderNatureOfBusiness").parents(".form-group").show();
+                        $("#lenderCompanyClass").parents(".form-group").show();
+                        $("#lenderContributionFrequency").parents(".form-group").show();
+                        document.getElementById("lenderEmpPmbDevCoopTitle").innerHTML = "Lender";
+                        document.getElementById("lenderManageLoginTitle").innerHTML = "Admin Login Setup";
+                    }
+                    if (LenderAgentType == @GlobalConstant.TWO || LenderAgentType == @GlobalConstant.THREE || LenderAgentType == @GlobalConstant.FOUR || LenderAgentType == @GlobalConstant.SIX) {
+                        selectedRole = 'admin';
+                        $('#lenderEmailAddress').val('');
+                        $('#lenderEmailAddress').attr('readonly', false);
+                        $('#lenderMobileNumber').val('');
+                        $('#lenderMobileNumber').attr('readonly', false);
+                        $("#lenderGenerateOTP").parents(".form-group").hide();
+                        $("#lenderSector_select").removeAttr("disabled");
+                        $("#lenderSubSector_select").attr("disabled", "disabled");
+                        $("#lenderSector").parents(".form-group").show();
+                        $("#lenderContributionFrequency_select").removeAttr("disabled");
+                        $("#lenderContributionFrequency").parents(".form-group").show();
+                        $("#lenderIndBvn").parents(".form-group").hide();
+                        $("#lenderName").removeAttr("disabled");
+                        $("#lenderAddress").removeAttr("disabled");
+                        $("#lenderRcNumber").removeAttr("disabled");
+                        $("#lenderTin").removeAttr("disabled");
+                        $("#lenderContactPerson").parents(".form-group").hide();
+                        $("#lenderContactPersonDesignation").parents(".form-group").hide();
+                        $("#lenderDateOfIncorporation").removeAttr("disabled");
+                        $('#lenderEmpPmbDevCoop').show();
+                        $('#lenderIndividual').hide();
+                        $('#lenderManageLogin').show();
+                        $("#lenderWebsite").removeAttr("disabled");
 
-            // Limit the NIN to 11 digits
-            var limitedNin = cleanedNin.substring(0, 11);
+                        //$("#sector").parents(".form-group").hide();
+                        $("#lenderNatureOfBusiness").parents(".form-group").hide();
+                        $("#lenderCompanyClass").parents(".form-group").hide();
+                        //$("#contributionFrequency").parents(".form-group").hide();
+                        document.getElementById("lenderEmpPmbDevCoopTitle").innerHTML = "Lender";
+                        document.getElementById("lenderManageLoginTitle").innerHTML = "Admin Login Setup";
+                    }
+                    if (LenderAgentType == @GlobalConstant.FIVE) {
+                        LenderAgentType = 'user';
+                        $('#emailAddress').val('');
+                        $('#emailAddress').attr('readonly', false);
+                        $('#mobileNumber').val('');
+                        $('#mobileNumber').attr('readonly', false);
+                        $("#generateOTP").removeAttr("disabled");
+                        //$('#generateOTP').show();
+                        $("#generateOTP").parents(".form-group").hide();
+                        $('#empPmbDevCoop').hide();
+                        $('#individual').show();
+                        $('#manageLogin').hide();
+                        $("#coyName").removeAttr("disabled");
+                        $("#subSector_select").attr("disabled", "disabled");
+                        $("#coyAddress").parents(".form-group").hide();
+                        $("#coySector").parents(".form-group").hide();
+                        $("#coySubSector_select").attr("disabled", "disabled");
+                        $("#manageLogin").removeAttr("disabled");
+                        document.getElementById("manageLoginTitle").innerHTML = "Individual";
+                        document.getElementById("manageLoginTitle").innerHTML = "Admin Login Setup";
 
-            // Update the input value
-            $(this).val(limitedNin);
 
-            // Display an error message if the input exceeds 11 digits
-            if (cleanedNin.length > 11) {
-                $('#nin').text('NIN must be 11 digits if provided.');
-            } else {
-                $('#nin').text('');
+                        $('#generateOTP').on('click', function () {
+
+                            if ($('#emailAddress').val() == "") {
+                                cn.msgError("Please enter email!");
+                                return false;
+                            }
+                            else if ($('#mobileNumber').val() == "") {
+                                cn.msgError("Please enter mobile/telephone!");
+                                return false;
+                            }
+                            else if ($('#coyName').val() == "") {
+                                cn.msgError("Please select a company!");
+                                return false;
+                            }
+
+                            //$('#generateOTP').hide();
+                            $("#lenderGenerateOTP").parents(".form-group").hide();
+                            $('#lenderEmpPmbDevCoop').hide();
+                            $('#lenderIndividual').show();
+                            $('#lenderManageLogin').show();
+                            document.getElementById("lenderManageLoginTitle").innerHTML = "Login Profile";
+                            $("#lenderIndBvn").parents(".form-group").hide();
+                            $("#lenderIndFirstName").parents(".form-group").hide();
+                            $("#lenderIndLastName").parents(".form-group").hide();
+                            $("#lenderIndDob").parents(".form-group").hide();
+                            $("#lenderLBvn").hide();
+                            $("#lenderLFirstName").hide();
+                            $("#lenderLLastName").hide();
+                            $("#lenderLDateOfBirth").hide();
+
+                            $("#lenderSubSector_select").attr("disabled", "disabled");
+                            $("#coyName").parents(".col-sm-6").hide();
+                            $("#coyAddress").parents(".form-group").hide();
+                            $("#coySector").parents(".form-group").hide();
+                            $("#branch").parents(".form-group").show();
+                            $("#lendercoySubSector_select").attr("disabled", "disabled");
+
+                        });
+                    }
+
+                    $("#role").cnComboBox({
+                        url: '@Url.Content("~/Role/GetListJson")' + '?mode=' + roleMode + '&rolename=' + selectedRole,
+                        key: "Id",
+                        value: "RoleName",
+                        class: "form-control"
+                    });
+                });
+
+                $("#coyName").cnComboBox({
+                    url: '@Url.Content("~/Company/GetCompanyTreeListJson")',
+                    key: "id",
+                    value: "name",
+                    class: "form-control"
+                });
+
+                $("#logo").fileinput({
+                    language: 'en',
+                    showPreview: false,
+                    allowedFileExtensions: ['jpeg', 'jpg', 'png', 'gif', 'tiff']
+                }).on("fileuploaded", function (event, data) {
+                    var obj = data.response;
+                    if (obj.Tag == @GlobalConstant.ONE) {
+                        filePath = obj.Data;
+                    }
+                    else {
+                        filePath = '';
+                    }
+                });
+
+                $('#lenderSector').change(function () {
+                    sector = $("#lenderSector").cnComboBox('getValue');
+                    $("#lenderSubSector").cnComboBox({
+                        url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + sector,
+                        key: "Id",
+                        value: "Name"
+                    });
+                    if (sector > @GlobalConstant.ZERO) {
+                        $("#lenderSubSector_select").removeAttr("disabled");
+                    }
+                    else {
+                        $("#lenderSubSector_select").attr("disabled", "disabled");
+                    }
+                });
+
+                $('#employmentType').change(function () {
+                    employmentType = $("#employmentType").cnComboBox('getValue');
+                    if (employmentType == @GlobalConstant.ONE) {
+                        $("#coyName").attr("required", true);
+                        $("#coyName").parents(".col-sm-6").show();
+                        $("#coyAddress").parents(".form-group").hide();
+                        $("#coySector").parents(".form-group").hide();
+                        $("#branch").parents(".form-group").show();
+                    }
+                    else {
+                        $("#coyName").parents(".col-sm-6").hide();
+                        $("#coyAddress").parents(".form-group").hide();
+                        $("#coySector").parents(".form-group").hide();
+                        $("#branch").parents(".form-group").show();
+                    }
+                });
+
+                $('#coySector').change(function () {
+                    coySector = $("#coySector").cnComboBox('getValue');
+                    $("#coySubSector").cnComboBox({
+                        url: '@Url.Content("~/SubSector/GetListJson")' + '?sector=' + coySector,
+                        key: "Id",
+                        value: "Name"
+                    });
+                    if (coySector > @GlobalConstant.ZERO) {
+                        $("#coySubSector_select").removeAttr("disabled");
+                    }
+                    else {
+                        $("#coySubSector_select").attr("disabled", "disabled");
+                    }
+                });
+
+                getForm();
+
+                $("#form").validate({
+                    rules: {
+                        firstName: {
+                            required: true,
+                        },
+                        lastName: {
+                            required: true,
+                        },
+                        emailAddress: {
+                            required: true,
+                        },
+                        kinAddress: {
+                            required: true,
+                        },
+                        kinMobileNumber: {
+                            required: true,
+                        },
+                        kinFirstName: {
+                            required: true,
+                        },
+                        kinLastName: {
+                            required: true,
+                        },
+                        kinEmailAddress: {
+                            required: true,
+                        },
+                        monthlySalary: {
+                            required: true,
+                        },
+                        postalAddress: {
+                            required: true,
+                        },
+                        bvn: {
+                            required: true,
+                        },
+                        name: {
+                            required: true,
+                        },
+                        rcNumber: {
+                            required: true,
+                        },
+                        natureOfBusiness: {
+                            required: true,
+                        },
+                        tin: {
+                            required: true,
+                        },
+                        nameOfRegistrar: {
+                            required: true,
+                        },
+                        contactPerson: {
+                            required: true,
+                        },
+                        contactPersonDesignation: {
+                            required: true,
+                        },
+                    },
+                    messages: {
+                        firstName: { required: "First Name is required" },
+                        lastName: { required: "Last Name is required" },
+                        kinAddress: { required: "Next of Kin Address is required" },
+                        kinMobileNumber: { required: "Next of Kin Mobile Number is required" },
+                        kinFirstName: { required: "Next of Kin First Name is required" },
+                        kinLastName: { required: "Next of Kin Last Name is required" },
+                        kinEmailAddress: { required: "Next of Kin Email Address is required" },
+                        emailAddress: { required: "Email Address must be provided" },
+                        monthlySalary: { required: "Monthly Income is required" },
+                        postalAddress: { required: "Home Address is required" },
+                        bvn: { required: "Bank Verification Number is required" },
+                        name: { required: "Name is required" },
+                        rcNumber: { required: "Company RC Number is required" },
+                        natureOfBusiness: { required: "Nature Of Business is required" },
+                        tin: { required: "Tax Identification Number is required" },
+                        nameOfRegistrar: { required: "Name Of Registrar is required" },
+                        contactPerson: { required: "Contact Person is required" },
+                        contactPersonDesignation: { required: "Contact Person Designation is required" },
+                    },
+                    showErrors: function (errorMap, errorList) {
+                        if (errorList.length) {
+                            let errorMessage = errorList[0].message;
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Validation Error',
+                                text: errorMessage,
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+        // Initially load the customer tab by default
+        initializeCustomerTab();
+
+        // Listen for tab changes using the Bootstrap tab events
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href"); // Get the href of the clicked tab
+
+            if (target === '#customer') {
+                initializeCustomerTab(); // Reinitialize customer tab logic
+            } else if (target === '#lender') {
+                initializeLenderTab(); // Reinitialize lender tab logic
             }
         });
-
-        $('#indBvn').on('input', function () {
-            // Get the current value of the BVN input
-            var bvnValue = $(this).val();
-
-            // Remove non-digit characters
-            var cleanedBVN = bvnValue.replace(/\D/g, '');
-
-            // Limit the BVN to 11 digits
-            var limitedBVN = cleanedBVN.substring(0, 11);
-
-            // Update the input value
-            $(this).val(limitedBVN);
-
-            // Display an error message if the input exceeds 11 digits
-            if (cleanedBVN.length > 11) {
-                $('#bvnError').text('BVN must be 11 digits if provided.');
-            } else {
-                $('#bvnError').text('');
-            }
-        });
-
-        $('#bvn').on('input', function () {
-            // Get the current value of the BVN input
-            var bvnValue = $(this).val();
-
-            // Remove non-digit characters
-            var cleanedBVN = bvnValue.replace(/\D/g, '');
-
-            // Limit the BVN to 11 digits
-            var limitedBVN = cleanedBVN.substring(0, 11);
-
-            // Update the input value
-            $(this).val(limitedBVN);
-
-            // Display an error message if the input exceeds 11 digits
-            if (cleanedBVN.length > 11) {
-                $('#bvnError').text('BVN must be 11 digits if provided.');
-            } else {
-                $('#bvnError').text('');
-            }
-        });
+    });
 
 
-        $('#monthlySalary').on("keyup", function () {
-            $('span.error-keyup-1').hide();
-            var inputVal = $(this).val();
-            var numericReg = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/;
-            if (!numericReg.test(inputVal)) {
-                //$("#Monthlysalary, #uMonthlysalary, #uuMonthlysalary").val("");
-                $(this).after('<span class="text-danger error-keyup-1">Numeric characters only.</span>');
-            }
-        });
+    $('#tin').on('input', function () {
+        // Get the current value of the TIN input
+        var tinValue = $(this).val();
 
-        $('#monthlySalary').keyup(function (e) {
-            if (/[^0-9\d ]/i.test(this.value)) {
-                this.value = this.value.replace(/[^0-9\d ]/i, '');
+        // Remove non-digit characters
+        var cleanedTIN = tinValue.replace(/\D/g, '');
 
-            }
-        })
+        // Limit the TIN to 9 digits
+        var limitedTIN = cleanedTIN.substring(0, 9);
 
-        $(document).ready(function () {
-            $('#kinMobileNumber').on('input', function () {
-                var maxLength = 11;
-                if ($(this).val().length > maxLength) {
-                    $(this).val($(this).val().slice(0, maxLength));
+        // Update the input value
+        $(this).val(limitedTIN);
+
+        // Display an error message if the input exceeds 9 digits
+        if (cleanedTIN.length > 9) {
+            $('#tinError').text('TIN must be 9 digits.');
+        } else {
+            $('#tinError').text('');
+        }
+    });
+
+
+    function getForm() {
+        if (id > @GlobalConstant.ZERO) {
+            cn.ajax({
+                url: '@Url.Content("~/Company/GetFormJson")' + '?id=' + id,
+                type: "get",
+                success: function (obj) {
+                    if (obj.Tag == @GlobalConstant.ONE) {
+                        var result = obj.Data;
+                        $("#form").setWebControls(result);
+                    }
                 }
             });
+        }
+        else {
+            var defaultData = {};
+            defaultData.AgentType = "";
+            defaultData.EmailAddress = ""
+            defaultData.MobileNumber = "";
+            $("#form").setWebControls(defaultData);
+        }
+    }
+
+    flatpickr("#dateOfIncorporation", {
+        // defaultDate: "today",
+        maxDate: "today",
+        inline: false,
+        allowInput: true
+    });
+
+    flatpickr("#dateOfBirth", {
+        //defaultDate: "today",
+        maxDate: "2005-01-01",
+        inline: false,
+        allowInput: true
+    });
+
+    flatpickr("#employmentDate", {
+        //defaultDate: "today",
+        maxDate: "today",
+        inline: false,
+        allowInput: true
+
+    });
+
+    $('#rcNumber').on('input', function () {
+        // Get the current value of the RC Number input
+        var rcNumberValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedRCNumber = rcNumberValue.replace(/\D/g, '');
+
+        // Limit the RC Number to 14 digits
+        var limitedRCNumber = cleanedRCNumber.substring(0, 14);
+
+        // Add "RC" in front of the limited RC Number
+        var formattedRCNumber = 'RC' + limitedRCNumber;
+
+        // Update the input value
+        $(this).val(formattedRCNumber);
+    });
+
+    $('#nin').on('input', function () {
+        // Get the current value of the NIN input
+        var ninValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedNin = ninValue.replace(/\D/g, '');
+
+        // Limit the NIN to 11 digits
+        var limitedNin = cleanedNin.substring(0, 11);
+
+        // Update the input value
+        $(this).val(limitedNin);
+
+        // Display an error message if the input exceeds 11 digits
+        if (cleanedNin.length > 11) {
+            $('#nin').text('NIN must be 11 digits if provided.');
+        } else {
+            $('#nin').text('');
+        }
+    });
+
+    $('#indBvn').on('input', function () {
+        // Get the current value of the BVN input
+        var bvnValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedBVN = bvnValue.replace(/\D/g, '');
+
+        // Limit the BVN to 11 digits
+        var limitedBVN = cleanedBVN.substring(0, 11);
+
+        // Update the input value
+        $(this).val(limitedBVN);
+
+        // Display an error message if the input exceeds 11 digits
+        if (cleanedBVN.length > 11) {
+            $('#bvnError').text('BVN must be 11 digits if provided.');
+        } else {
+            $('#bvnError').text('');
+        }
+    });
+
+    $('#bvn').on('input', function () {
+        // Get the current value of the BVN input
+        var bvnValue = $(this).val();
+
+        // Remove non-digit characters
+        var cleanedBVN = bvnValue.replace(/\D/g, '');
+
+        // Limit the BVN to 11 digits
+        var limitedBVN = cleanedBVN.substring(0, 11);
+
+        // Update the input value
+        $(this).val(limitedBVN);
+
+        // Display an error message if the input exceeds 11 digits
+        if (cleanedBVN.length > 11) {
+            $('#bvnError').text('BVN must be 11 digits if provided.');
+        } else {
+            $('#bvnError').text('');
+        }
+    });
+
+
+    $('#monthlySalary').on("keyup", function () {
+        $('span.error-keyup-1').hide();
+        var inputVal = $(this).val();
+        var numericReg = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/;
+        if (!numericReg.test(inputVal)) {
+            //$("#Monthlysalary, #uMonthlysalary, #uuMonthlysalary").val("");
+            $(this).after('<span class="text-danger error-keyup-1">Numeric characters only.</span>');
+        }
+    });
+
+    $('#monthlySalary').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+        }
+    })
+
+    $(document).ready(function () {
+        $('#kinMobileNumber').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
+            }
         });
+    });
 
-        $('#kinMobileNumber').keyup(function (e) {
-            if (/[^0-9\d ]/i.test(this.value)) {
-                // Filter non-digits from input value.
-                // this.value = this.value.replace(/\D/g, '');
+    $('#kinMobileNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
 
-                //Filter special character
-                this.value = this.value.replace(/[^0-9\d ]/i, '');
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
 
 
+        }
+    })
+
+    $(document).ready(function () {
+        $('#accountNumber').on('input', function () {
+            var maxLength = 10;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
             }
-        })
-
-        $(document).ready(function () {
-            $('#accountNumber').on('input', function () {
-                var maxLength = 10;
-                if ($(this).val().length > maxLength) {
-                    $(this).val($(this).val().slice(0, maxLength));
-                }
-            });
         });
+    });
 
-        $('#accountNumber').keyup(function (e) {
-            if (/[^0-9\d ]/i.test(this.value)) {
-                // Filter non-digits from input value.
-                // this.value = this.value.replace(/\D/g, '');
+    $('#accountNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
 
-                //Filter special character
-                this.value = this.value.replace(/[^0-9\d ]/i, '');
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
 
 
+        }
+    })
+
+
+    $('input[name="Firstname"]').keyup(function (e) {
+        if (/[^a-z A-Z & -\d ]/i.test(this.value)) {
+            //// Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^a-z A-Z & -\d ]/i, '');
+
+
+        }
+    })
+
+    $('#mobileNumber').keyup(function (e) {
+        if (/[^0-9\d ]/i.test(this.value)) {
+            // Filter non-digits from input value.
+            // this.value = this.value.replace(/\D/g, '');
+
+            //Filter special character
+            this.value = this.value.replace(/[^0-9\d ]/i, '');
+
+
+        }
+    })
+
+    $(document).ready(function () {
+        $('#mobileNumber').on('input', function () {
+            var maxLength = 11;
+            if ($(this).val().length > maxLength) {
+                $(this).val($(this).val().slice(0, maxLength));
             }
-        })
-
-
-        $('input[name="Firstname"]').keyup(function (e) {
-            if (/[^a-z A-Z & -\d ]/i.test(this.value)) {
-                //// Filter non-digits from input value.
-                // this.value = this.value.replace(/\D/g, '');
-
-                //Filter special character
-                this.value = this.value.replace(/[^a-z A-Z & -\d ]/i, '');
-
-
-            }
-        })
-
-        $('#mobileNumber').keyup(function (e) {
-            if (/[^0-9\d ]/i.test(this.value)) {
-                // Filter non-digits from input value.
-                // this.value = this.value.replace(/\D/g, '');
-
-                //Filter special character
-                this.value = this.value.replace(/[^0-9\d ]/i, '');
-
-
-            }
-        })
-
-        $(document).ready(function () {
-            $('#mobileNumber').on('input', function () {
-                var maxLength = 11;
-                if ($(this).val().length > maxLength) {
-                    $(this).val($(this).val().slice(0, maxLength));
-                }
-            });
         });
+    });
 
-        //$(document).ready(function() {
-        //          $('#mobileNumber').on('input', function() {
-        //              var mobileNumber = $(this).val();
-        //              var errorMessage = $('#error-message');
-        //              if (mobileNumber.length > 0 && mobileNumber[0] !== '0') {
-        //                  errorMessage.show();
-        //              } else {
-        //                  errorMessage.hide();
-        //              }
-        //          });
-        //      });
+    $(document).ready(function () {
+        $('#mobileNumber').on('input keyup', function () {
+            var mobileNumber = $(this).val();
+            var errorMessage = $('#error-message');
 
+            // Remove existing error message
+            errorMessage.hide();
 
-        $(document).ready(function () {
-            $('#mobileNumber').on('input keyup', function () {
-                var mobileNumber = $(this).val();
-                var errorMessage = $('#error-message');
+            // Check if the input is numeric
+            var numericReg = /^\d*$/;
+            if (!numericReg.test(mobileNumber)) {
+                errorMessage.text('Numeric characters only.').show();
+                return;
+            }
 
-                // Remove existing error message
+            // Check if the input starts with '0'
+            if (mobileNumber.length > 0 && mobileNumber[0] !== '0') {
+                errorMessage.text('Mobile Number must start with 0').show();
+            } else {
                 errorMessage.hide();
-
-                // Check if the input is numeric
-                var numericReg = /^\d*$/;
-                if (!numericReg.test(mobileNumber)) {
-                    errorMessage.text('Numeric characters only.').show();
-                    return;
-                }
-
-                // Check if the input starts with '0'
-                if (mobileNumber.length > 0 && mobileNumber[0] !== '0') {
-                    errorMessage.text('Mobile Number must start with 0').show();
-                } else {
-                    errorMessage.hide();
-                }
-            });
+            }
         });
+    });
 
+    $('#coyRcNumber').on('input', function () {
+        // Get the current value of the RC Number input
+        var coyRcNumberValue = $(this).val();
 
+        // Remove non-digit characters
+        var cleanedCoyRcNumber = coyRcNumberValue.replace(/\D/g, '');
 
+        // Limit the RC Number to 14 digits
+        var limitedCoyRcNumber = cleanedCoyRcNumber.substring(0, 14);
 
-        //this jquery code helps to restrict some special xters
-        //$('#name').on('blur', function (event) {
+        // Add "RC" in front of the limited RC Number
+        var formattedCoyRCNumber = 'RC' + limitedCoyRcNumber;
 
-        //    $('span.error-keyup-1').hide();
-        //    var regex = new RegExp("^[a-z A-Z & -]+$");
-        //    var Nex = $("#name").val();
-        //    if (!regex.test(Nex)) {
-        //        event.preventDefault();
-        //        $('#name').val();
-        //        $(this).after('<span class="text-danger error-keyup-1">Alphabet characters only.</span>');
-        //        return false;
-        //    }
-        //});
+        // Update the input value
+        $(this).val(formattedCoyRCNumber);
+    });
 
-        //$('#name').keyup(function (e) {
-        //    if (/[^a-z A-Z & -\d ]/i.test(this.value)) {
-        //        //// Filter non-digits from input value.
-        //        // this.value = this.value.replace(/\D/g, '');
+    function saveForm(index) {
+        debugger;
+        var postData1 = $("#form").getWebControls({ Id: id });
+        var postData2 = $("#form1").getWebControls({ Id: id });
 
-        //        //Filter special character
-        //        this.value = this.value.replace(/[^a-z A-Z & -\d ]/i, '');
-
-
-        //    }
-        //})
-
-        $('#coyRcNumber').on('input', function () {
-            // Get the current value of the RC Number input
-            var coyRcNumberValue = $(this).val();
-
-            // Remove non-digit characters
-            var cleanedCoyRcNumber = coyRcNumberValue.replace(/\D/g, '');
-
-            // Limit the RC Number to 14 digits
-            var limitedCoyRcNumber = cleanedCoyRcNumber.substring(0, 14);
-
-            // Add "RC" in front of the limited RC Number
-            var formattedCoyRCNumber = 'RC' + limitedCoyRcNumber;
-
-            // Update the input value
-            $(this).val(formattedCoyRCNumber);
-        });
-
-        function saveForm(index) {
+        if (postData2.LenderType == null || postData2.LenderType == "" || postData2.LenderType == undefined) {
             if ($("#form").validate().form()) {
+                var selected = selectedType;
                 var path = '';
-                if (selectedType == @GlobalConstant.ONE || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR || selectedType == @GlobalConstant.SIX) {
+
+                if (selectedType == @GlobalConstant.ONE || selectedType == @GlobalConstant.THREE || selectedType == @GlobalConstant.FOUR || selectedType == @GlobalConstant.SIX || selectedType == @GlobalConstant.ZERO) {
                     path = '@Url.Content("~/Company/SaveFormsJson")';
                 } else if (selectedType == @GlobalConstant.TWO) {
                     path = '@Url.Content("~/Developer/SaveFormsJson")';
@@ -1327,6 +2632,77 @@
                     }
                 });
             }
-        }
+        } else {
+            if ($("#form1").validate().form()) {
+                var selected = selectedType;
+                var path = '';
 
-    </script>
+                path = '@Url.Content("~/Company/SaveFormsJson")';
+                postData2 = $("#form1").getWebControls({ Id: id });
+                postData2.Sector = cn.getLastValue(postData2.Sector);
+                postData2.SubSector = cn.getLastValue(postData2.SubSector);
+                postData2.ContributionFrequency = cn.getLastValue(postData2.ContributionFrequency);
+
+                if (postData2.Sector <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Sector!'
+                    });
+                    return false;
+                } else if (postData2.SubSector <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Sub Sector!'
+                    });
+                    return false;
+                } else if (postData2.ContributionFrequency <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please select Contribution Frequency!'
+                    });
+                    return false;
+                }
+
+
+                cn.ajax({
+                    url: path,
+                    type: "post",
+                    data: postData2,
+                    success: function (obj) {
+                        if (obj.Tag == @GlobalConstant.ONE) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: obj.Message
+                            }).then(() => {
+                                window.location.reload();
+                                parent.searchGrid();
+                                parent.layer.close(index);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Warning',
+                                text: obj.Message
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+</script>

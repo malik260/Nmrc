@@ -20,6 +20,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return list.ToList();
         }
 
+       
+
         public async Task<List<LenderSetupEntity>> GetPageList(LenderListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
@@ -29,21 +31,18 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
         public async Task<LenderSetupEntity> GetEntity(long Id)
         {
-            return await BaseRepository().FindEntity<LenderSetupEntity>(x => x.Lender == Id);
+            return await BaseRepository().FindEntity<LenderSetupEntity>(x => x.LenderCategory == Id);
         }
 
-        //public async Task<CreditTypeEntity> GetEntityByProductCode(string code)
-        //{
-        //    return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Code == code);
-        //}
+       
         public async Task<LenderSetupEntity> GetEntities(int id)
         {
             return await BaseRepository().FindEntity<LenderSetupEntity>(id);
         }
 
-        public async Task<CreditTypeEntity> GetEntitybiId(int id)
+        public async Task<LenderSetupEntity> GetEntitybyLendercategory(int id)
         {
-            return await BaseRepository().FindEntity<CreditTypeEntity>(x => x.Id == id);
+            return await BaseRepository().FindEntity<LenderSetupEntity>(x => x.LenderCategory == id);
         }
 
 
@@ -91,11 +90,12 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             {
                 if (param.LenderId != 0)
                 {
-                    expression = expression.And(second: t => t.LenderId == param.LenderId);
+                    expression = expression.And(second: t => t.LenderCategory == param.LenderId);
                 }
             }
             return expression;
         }
+       
         #endregion
     }
 }

@@ -13,17 +13,17 @@ using System.Linq.Expressions;
 
 namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 {
-    public class PmbRepository : DataRepository, IPmbRepository
+    public class LenderInstitutionsRepository : DataRepository, ILenderInstitutionsRepository
     {
         #region Retrieve data
-        public async Task<List<PmbEntity>> GetList(PmbListParam param)
+        public async Task<List<LenderInstitutionsEntity>> GetList(PmbListParam param)
         {
             var expression = ListFilter(param);
             var list = await BaseRepository().FindList(expression);
             return list.ToList();
         }
 
-        public async Task<List<PmbEntity>> GetPageList(PmbListParam param, Pagination pagination)
+        public async Task<List<LenderInstitutionsEntity>> GetPageList(PmbListParam param, Pagination pagination)
         {
             var expression = ListFilter(param);
             var list = await BaseRepository().FindList(expression, pagination);
@@ -51,7 +51,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         //    return combinedList;
         //}
 
-        public async Task<List<PmbEntity>> GetApprovalPageList(PmbListParam param, Pagination pagination)
+        public async Task<List<LenderInstitutionsEntity>> GetApprovalPageList(PmbListParam param, Pagination pagination)
         {
             // Build the initial filter expression
             var expression = ListFilter(param);
@@ -81,31 +81,31 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             return paginatedList;
         }
 
-        public async Task<PmbEntity> GetEntity(long id)
+        public async Task<LenderInstitutionsEntity> GetEntity(long id)
         {
-            return await BaseRepository().FindEntity<PmbEntity>(x => x.Id == id);
+            return await BaseRepository().FindEntity<LenderInstitutionsEntity>(x => x.Id == id);
         }
-        public async Task<PmbEntity> GetEntitybyNhf(string nhf)
+        public async Task<LenderInstitutionsEntity> GetEntitybyNhf(string nhf)
         {
-            return await BaseRepository().FindEntity<PmbEntity>(x => x.NHFNumber == nhf || x.Name == nhf);
-        }
-
-        public async Task<PmbEntity> GetEntitybyEmail(string email)
-        {
-            return await BaseRepository().FindEntity<PmbEntity>(x => x.EmailAddress == email);
+            return await BaseRepository().FindEntity<LenderInstitutionsEntity>(x => x.NHFNumber == nhf || x.Name == nhf);
         }
 
-        public async Task<PmbEntity> GetEntitybyName(string PMBName)
+        public async Task<LenderInstitutionsEntity> GetEntitybyEmail(string email)
         {
-            return await BaseRepository().FindEntity<PmbEntity>(x => x.Name == PMBName);
+            return await BaseRepository().FindEntity<LenderInstitutionsEntity>(x => x.EmailAddress == email);
+        }
+
+        public async Task<LenderInstitutionsEntity> GetEntitybyName(string PMBName)
+        {
+            return await BaseRepository().FindEntity<LenderInstitutionsEntity>(x => x.Name == PMBName);
         }
 
         // Whether the company name exists
         // <param name="entity"></param>
         // <returns></returns>
-        public bool ExistPmb(PmbEntity entity)
+        public bool ExistPmb(LenderInstitutionsEntity entity)
         {
-            var expression = ExtensionLinq.True<PmbEntity>();
+            var expression = ExtensionLinq.True<LenderInstitutionsEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -203,10 +203,95 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         }
 
 
-
-        public bool ExistRCNumber(PmbEntity entity)
+         public async Task SaveNmrcEmployee(EmployeeEntity entity)
         {
-            var expression = ExtensionLinq.True<PmbEntity>();
+            var message = string.Empty;
+            var db = await BaseRepository().BeginTrans();
+            try
+            {
+                if (entity.Id.IsNullOrZero())
+                {
+                    entity.Status = 1;
+                    await entity.Create();
+                    await db.Insert(entity);
+                }
+                else
+                {
+                    await db.Delete<MenuAuthorizeEntity>(t => t.AuthorizeId == entity.Id);
+                    await entity.Modify();
+                    await db.Update(entity);
+                }
+
+                if (string.IsNullOrEmpty(entity.MenuIds))
+                {
+                    var xx = new LoginDto();
+                    var MenuIds = xx.GetNMRCEmployeeMenus();
+                    //foreach (long menuId in TextHelper.SplitToArray<long>(entity.MenuIds, ','))
+                    foreach (var menuId in MenuIds)
+                    {
+                        MenuAuthorizeEntity menuAuthorizeEntity = new()
+                        {
+                            AuthorizeId = entity.Id,
+                            MenuId = menuId,
+                            AuthorizeType = AuthorizeTypeEnum.User.ToInt()
+                        };
+                        await menuAuthorizeEntity.Create();
+                        await db.Insert(menuAuthorizeEntity);
+                    }
+                }
+
+
+                // User login record
+                if (!string.IsNullOrEmpty(entity.EmailAddress))
+                {
+                    var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.USER_MENU_URL);
+                    UserEntity userEntity = new()
+                    {
+                        Company = entity.Company,
+                        Employee = entity.Id,
+                        UserName = entity.EmailAddress,
+                        Salt = entity.Salt,
+                        Password = entity.Password,
+                        RealName = entity.FirstName,
+                        LoginCount = GlobalConstant.ZERO,
+                        UserStatus = GlobalConstant.ONE,
+                        IsSystem = GlobalConstant.ZERO,
+                        IsOnline = GlobalConstant.ZERO,
+                        WebToken = SecurityHelper.GetGuid(true),
+                        ApiToken = string.Empty,
+                        BaseProcessMenu = currentMenu
+                    };
+                    await userEntity.Create();
+                    await db.Insert(userEntity);
+                }
+
+                MailParameter mailParameter = new()
+                {
+                    RealName = entity.FirstName,
+                    UserName = entity.EmailAddress,
+                    UserEmail = entity.EmailAddress,
+                    UserPassword = entity.DecryptedPassword,
+                    UserCompany = entity.CompanyName
+                };
+
+                var sendEmail = EmailHelper.IsPasswordEmailSent(mailParameter, out message);
+                
+
+                await db.CommitTrans();
+                // return true;
+            }
+            catch (Exception ex)
+            {
+                await db.RollbackTrans();
+                throw;
+            }
+        }
+
+
+
+        public bool ExistRCNumber(LenderInstitutionsEntity entity)
+        {
+            var expression = ExtensionLinq.True<LenderInstitutionsEntity>();
             expression = expression.And(t => t.BaseIsDelete == 0);
             if (entity.Id.IsNullOrZero())
             {
@@ -221,21 +306,21 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #endregion
 
         #region Submit data
-        public async Task SaveForm(PmbEntity entity)
+        public async Task SaveForm(LenderInstitutionsEntity entity)
         {
             if (entity.Id.IsNullOrZero() || entity.Id.ToStr().Length < 15)
             {
                 await entity.Create();
-                await BaseRepository().Insert<PmbEntity>(entity);
+                await BaseRepository().Insert<LenderInstitutionsEntity>(entity);
             }
             else
             {
                 await entity.Modify();
-                await BaseRepository().Update<PmbEntity>(entity);
+                await BaseRepository().Update<LenderInstitutionsEntity>(entity);
             }
         }
 
-        public async Task SaveForms(PmbEntity entity)
+        public async Task SaveForms(LenderInstitutionsEntity entity)
         {
             var message = string.Empty;
             var db = await BaseRepository().BeginTrans();
@@ -345,10 +430,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         public async Task DeleteForm(string ids)
         {
             long[] idArr = TextHelper.SplitToArray<long>(ids, ',');
-            await BaseRepository().Delete<PmbEntity>(idArr);
+            await BaseRepository().Delete<LenderInstitutionsEntity>(idArr);
         }
 
-        public async Task<bool> ApproveForm(PmbEntity entity, MenuEntity menu, OperatorInfo user)
+        public async Task<bool> ApproveForm(LenderInstitutionsEntity entity, MenuEntity menu, OperatorInfo user)
         {
             var message = string.Empty;
             var approvalLog = new ApprovalLogEntity();
@@ -416,7 +501,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         }
 
 
-        public async Task<bool> DisApproveForm(PmbEntity entity)
+        public async Task<bool> DisApproveForm(LenderInstitutionsEntity entity)
         {
             var message = string.Empty;
             var approvalLog = new ApprovalLogEntity();
@@ -442,9 +527,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
         #endregion
 
         #region Private method
-        private Expression<Func<PmbEntity, bool>> ListFilter(PmbListParam param)
+        private Expression<Func<LenderInstitutionsEntity, bool>> ListFilter(PmbListParam param)
         {
-            var expression = ExtensionLinq.True<PmbEntity>();
+            var expression = ExtensionLinq.True<LenderInstitutionsEntity>();
             if (param != null)
             {
                 if (!string.IsNullOrEmpty(param.Name))

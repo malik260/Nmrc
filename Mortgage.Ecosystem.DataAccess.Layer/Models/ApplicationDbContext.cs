@@ -77,6 +77,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<GenderEntity>? GenderEntity { get; set; }
         public DbSet<InternetBankingUsersEntity>? InternetBankingUsersEntity { get; set; }
         public DbSet<LenderTypeEntity>? LenderTypeEntity { get; set; }
+        public DbSet<LenderCategoryEntity>? LenderCategory { get; set; }
         public DbSet<LenderSetupEntity>? LenderSetupEntity { get; set; } // Lender Setup table     
         public DbSet<LogLoginEntity>? LogLoginEntity { get; set; } // Login log table        
         public DbSet<LogOperateEntity>? LogOperateEntity { get; set; } // Operation log table
@@ -95,9 +96,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<MenuAuthorizeEntity>? MenuAuthorizeEntity { get; set; } // Menu permission table        
         public DbSet<MenuEntity>? MenuEntity { get; set; } // Menu table
         public DbSet<NationalityEntity>? NationalityEntity { get; set; }
+        public DbSet<NmrcRefinancingEntity>? NmrcRefinancingEntity { get; set; }
         public DbSet<NextOfKinEntity>? NextOfKinEntity { get; set; }
         public DbSet<PaymentHistoryEntity>? PaymentHistoryEntity { get; set; }
-        public DbSet<PmbEntity>? PmbEntity { get; set; }
+        public DbSet<LenderInstitutionsEntity>? PmbEntity { get; set; }
         public DbSet<PropertyRegistrationEntity>? PropertyRegistrationEntity { get; set; } // Property Registration table       
         public DbSet<PropertySubscriptionEntity>? PropertySubscriptionEntity { get; set; } // Property Subscription table     
         public DbSet<PropertyGalleryEntity>? PropertyGalleryEntity { get; set; } // Property Gallery table
@@ -118,6 +120,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models
         public DbSet<SchemeLenderEntity>? SchemeLenderEntity { get; set; } // Scheme Lender table     
         public DbSet<SectorEntity>? SectorEntity { get; set; }
         public DbSet<SecondaryLenderEntity>? SecondaryLenderEntity { get; set; } // Secondary Lender table
+        public DbSet<SecondaryLenderChecklistProcedureEntity>? SecondaryLenderChecklistProcedureEntity { get; set; }
         public DbSet<StateEntity>? StateEntity { get; set; }
         public DbSet<StatementOfAccountEntity>? StatementOfAccountEntity { get; set; }
         public DbSet<SubSectorEntity>? SubSectorEntity { get; set; }

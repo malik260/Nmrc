@@ -22,12 +22,12 @@ using System.Text;
 
 namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 {
-    public class PmbService : IPmbService
+    public class LenderInstitutionsService : ILenderInstitutionsService
     {
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly HttpClient _client;
 
-        public PmbService(IUnitOfWork iUnitOfWork)
+        public LenderInstitutionsService(IUnitOfWork iUnitOfWork)
         {
             _iUnitOfWork = iUnitOfWork;
             _client = new HttpClient
@@ -42,9 +42,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #region Retrieve data
 
 
-        public async Task<TData<List<PmbEntity>>> GetList(PmbListParam param)
+        public async Task<TData<List<LenderInstitutionsEntity>>> GetList(PmbListParam param)
         {
-            TData<List<PmbEntity>> obj = new TData<List<PmbEntity>>();
+            TData<List<LenderInstitutionsEntity>> obj = new TData<List<LenderInstitutionsEntity>>();
             var allPmbs = await _iUnitOfWork.Pmbs.GetList(param);
             // Filter the list to include only approved companies
             var approvedPmbs = allPmbs.Where(pmb => pmb.Status == (int)ApprovalEnum.Approved).ToList();
@@ -65,8 +65,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             // Filter the list to include only approved companies
             var approvedPmbs = allPmbs.Where(pmb => pmb.Status == (int)ApprovalEnum.Approved).ToList();
             var result = from a in approvedPmbs 
-                         join b in context.LenderSetupEntity on a.Id equals b.Lender 
-                         join c in context.SchemeLenderEntity on a.Id equals c.LendersId 
+                         join b in context.LenderSetupEntity on a.Category equals b.LenderCategory 
+                         join c in context.SchemeLenderEntity on a.Category equals c.LendersId 
                          where b.LenderTypeId == 1 && c.SchemeId == 2
                          select new NonNhf
                          {Id =  a.Id,
@@ -81,9 +81,38 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
 
-        public async Task<TData<List<PmbEntity>>> GetPageList(PmbListParam param, Pagination pagination)
+        public async Task<TData<List<NonNhf>>> GetNonNhfSecondaryLenders(PmbListParam param)
         {
-            TData<List<PmbEntity>> obj = new TData<List<PmbEntity>>();
+            var context = new ApplicationDbContext();
+            TData<List<NonNhf>> obj = new TData<List<NonNhf>>();
+            var lenders = new LenderListParam();
+            var NonNhfLender = _iUnitOfWork.Lenders.GetList(lenders);
+            var allPmbs = await _iUnitOfWork.Pmbs.GetList(param);
+            // Filter the list to include only approved companies
+            var approvedPmbs = allPmbs.Where(pmb => pmb.Status == (int)ApprovalEnum.Approved).ToList();
+            var result = from a in approvedPmbs
+                         join b in context.LenderSetupEntity on a.Category equals b.LenderCategory
+                         join c in context.SchemeLenderEntity on a.Category equals c.LendersId
+                         where b.LenderTypeId == 2 && c.SchemeId == 2
+                         select new NonNhf
+                         {
+                             Id = a.Id,
+                             Name = a.Name
+                         };
+
+
+            obj.Data = result.ToList();
+            obj.Total = approvedPmbs.Count;
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+
+
+        public async Task<TData<List<LenderInstitutionsEntity>>> GetPageList(PmbListParam param, Pagination pagination)
+        {
+            TData<List<LenderInstitutionsEntity>> obj = new TData<List<LenderInstitutionsEntity>>();
             obj.Data = await _iUnitOfWork.Pmbs.GetPageList(param, pagination);
             if (obj.Data.Count > 0)
             {
@@ -92,7 +121,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 List<ContributionFrequencyEntity> contributionFrequencyList = await _iUnitOfWork.ContributionFrequencies.GetList(new ContributionFrequencyListParam { Ids = obj.Data.Select(p => p.Sector).ToList() });
                 //List<CompanyClassEntity> companyClassList = await _iUnitOfWork.CompanyClasses.GetList(new CompanyClassListParam { Ids = obj.Data.Select(p => p.CompanyClass).ToList() });
                 //List<CompanyTypeEntity> companyTypeList = await _iUnitOfWork.CompanyTypes.GetList(new CompanyTypeListParam { Ids = obj.Data.Select(p => p.CompanyType).ToList() });
-                foreach (PmbEntity company in obj.Data)
+                foreach (LenderInstitutionsEntity company in obj.Data)
                 {
                     company.SectorName = sectorList.Where(p => p.Id == company.Sector).Select(p => p.Name).FirstOrDefault();
                     company.SubSectorName = subSectorList.Where(p => p.Id == company.Subsector).Select(p => p.Name).FirstOrDefault();
@@ -111,8 +140,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             var obj = new TData<List<ZtreeInfo>>();
             obj.Data = new List<ZtreeInfo>();
-            List<PmbEntity> pmbList = await _iUnitOfWork.Pmbs.GetList(param);
-            foreach (PmbEntity pmb in pmbList)
+            List<LenderInstitutionsEntity> pmbList = await _iUnitOfWork.Pmbs.GetList(param);
+            foreach (LenderInstitutionsEntity pmb in pmbList)
             {
                 obj.Data.Add(new ZtreeInfo
                 {
@@ -124,16 +153,16 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
-        public async Task<TData<List<PmbEntity>>> GetApprovalPageList(PmbListParam param, Pagination pagination)
+        public async Task<TData<List<LenderInstitutionsEntity>>> GetApprovalPageList(PmbListParam param, Pagination pagination)
         {
-            TData<List<PmbEntity>> obj = new TData<List<PmbEntity>>();
+            TData<List<LenderInstitutionsEntity>> obj = new TData<List<LenderInstitutionsEntity>>();
             obj.Data = await _iUnitOfWork.Pmbs.GetApprovalPageList(param, pagination);
             if ((obj.Data.Count) > 0 && (!string.IsNullOrEmpty(param.Name)))
             {
                 obj.Data = obj.Data.Where(i => i.Name.Trim().ToLower() == param.Name.Trim().ToLower()).DefaultIfEmpty().ToList();
                 if (obj.Data[0] == null)
                 {
-                    obj.Data = new List<PmbEntity>();
+                    obj.Data = new List<LenderInstitutionsEntity>();
                     obj.Total = 0;
                     obj.Tag = 1;
                     return obj;
@@ -144,7 +173,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 List<SectorEntity> sectorList = await _iUnitOfWork.Sectors.GetList(new SectorListParam { Ids = obj.Data.Select(p => p.Sector).ToList() });
                 List<SubSectorEntity> subSectorList = await _iUnitOfWork.SubSectors.GetList(new SubSectorListParam { Ids = obj.Data.Select(p => p.Sector).ToList() });
                 List<ContributionFrequencyEntity> contributionFrequencyList = await _iUnitOfWork.ContributionFrequencies.GetList(new ContributionFrequencyListParam { Ids = obj.Data.Select(p => p.Sector).ToList() });
-                foreach (PmbEntity company in obj.Data)
+                foreach (LenderInstitutionsEntity company in obj.Data)
                 {
                     company.SectorName = sectorList.Where(p => p.Id == company.Sector).Select(p => p.Name).FirstOrDefault();
                     company.SubSectorName = subSectorList.Where(p => p.Id == company.Subsector).Select(p => p.Name).FirstOrDefault();
@@ -162,9 +191,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             var obj = new TData<List<ZtreeInfo>>();
             obj.Data = new List<ZtreeInfo>();
-            List<PmbEntity> pmbList = await _iUnitOfWork.Pmbs.GetList(param);
+            List<LenderInstitutionsEntity> pmbList = await _iUnitOfWork.Pmbs.GetList(param);
             List<UserEntity> userList = await _iUnitOfWork.Users.GetList(null);
-            foreach (PmbEntity pmb in pmbList)
+            foreach (LenderInstitutionsEntity pmb in pmbList)
             {
                 obj.Data.Add(new ZtreeInfo
                 {
@@ -185,9 +214,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
-        public async Task<TData<PmbEntity>> GetEntity(long id)
+        public async Task<TData<LenderInstitutionsEntity>> GetEntity(long id)
         {
-            TData<PmbEntity> obj = new TData<PmbEntity>();
+            TData<LenderInstitutionsEntity> obj = new TData<LenderInstitutionsEntity>();
             obj.Data = await _iUnitOfWork.Pmbs.GetEntity(id);
             obj.Tag = 1;
             return obj;
@@ -198,7 +227,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         #region Submit data
 
 
-        public async Task<TData<string>> SaveForms(PmbEntity entity)
+        public async Task<TData<string>> SaveForms(LenderInstitutionsEntity entity)
         {
             TData<string> obj = new TData<string>();
 
@@ -358,7 +387,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
 
 
-        public async Task<TData> ApproveForm(PmbEntity entity)
+        public async Task<TData> ApproveForm(LenderInstitutionsEntity entity)
         {
             ApplicationDbContext db = new ApplicationDbContext();
             TData<long> obj = new TData<long>();
@@ -380,53 +409,86 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             };
             var approvalLogRecords = await _iUnitOfWork.ApprovalLogs.GetList(approvalLogListParam);
             menuRecord.ApprovalLogList = approvalLogRecords;
-            NhfemployerVM employer = new NhfemployerVM();
-            employer.Employername = entityRecord.Name;
-            employer.Emailaddress = entityRecord.EmailAddress;
-            employer.Mobilenumber = entityRecord.MobileNumber;
-            employer.Rcnumber = entityRecord.RCNumber;
-            employer.Addressline1 = entityRecord.Address;
-            employer.Addressline2 = entityRecord.Address;
-            employer.Contactperson = companyRecord.ContactPerson;
-            employer.Contactpersondesignation = companyRecord.ContactPersonDesignation;
-            employer.Contributionlocation = "101";
-            employer.Datecreated = DateTime.Now;
-            employer.Economicsector = entityRecord.Sector.ToString();
-            employer.Postaladdress = entityRecord.Address;
-            employer.Telephonenumber = entityRecord.MobileNumber;
-            employer.Batchrefr = "4";
-            var EmployerInfo = await IntegrateEmployerToCore(employer);
-            if (EmployerInfo.responseCode != "200")
+            var GetLenderScheme = await _iUnitOfWork.SchemeLenders.GetEntityByLenderId(Convert.ToInt32( entityRecord.Category));
+            var LenderCategory = await _iUnitOfWork.Lenders.GetEntitybyLendercategory(Convert.ToInt32(entityRecord.Category));
+            string NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber().ToString();
+            string CustomerCode = NHFNumber + 00;
+
+            if (GetLenderScheme.SchemeId == GlobalConstant.ONE && LenderCategory.LenderTypeId == GlobalConstant.ONE)
             {
-                obj.Message = "Employer Approval Failed: " + EmployerInfo.message + "on Core Banking";
-                obj.Data = entity.Id;
-                obj.Tag = 0;
-                return obj;
+                NhfemployerVM employer = new NhfemployerVM();
+                employer.Employername = entityRecord.Name;
+                employer.Emailaddress = entityRecord.EmailAddress;
+                employer.Mobilenumber = entityRecord.MobileNumber;
+                employer.Rcnumber = entityRecord.RCNumber;
+                employer.Addressline1 = entityRecord.Address;
+                employer.Addressline2 = entityRecord.Address;
+                employer.Contactperson = companyRecord.ContactPerson;
+                employer.Contactpersondesignation = companyRecord.ContactPersonDesignation;
+                employer.Contributionlocation = "101";
+                employer.Datecreated = DateTime.Now;
+                employer.Economicsector = entityRecord.Sector.ToString();
+                employer.Postaladdress = entityRecord.Address;
+                employer.Telephonenumber = entityRecord.MobileNumber;
+                employer.Batchrefr = "4";
+                var EmployerInfo = await IntegrateEmployerToCore(employer);
+                if (EmployerInfo.responseCode != "200")
+                {
+                    obj.Message = "Employer Approval Failed: " + EmployerInfo.message + "on Core Banking";
+                    obj.Data = entity.Id;
+                    obj.Tag = 0;
+                    return obj;
+
+                }
+
+                NHFNumber = EmployerInfo.CustomerProfile.NhfNumber;
+                CustomerCode = EmployerInfo.CustomerProfile.CustomerCode;
 
             }
-            var EmployerRecord = db.CompanyEntity.Where(i => i.EmailAddress == employer.Emailaddress).DefaultIfEmpty().FirstOrDefault();
-            EmployerRecord.EmployerNhfNumber = EmployerInfo.CustomerProfile.NhfNumber;
-            EmployerRecord.EmployerCode = EmployerInfo.CustomerProfile.CustomerCode;
+            var EmployerRecord = db.CompanyEntity.Where(i => i.EmailAddress == entityRecord.EmailAddress).DefaultIfEmpty().FirstOrDefault();
+            EmployerRecord.EmployerNhfNumber = NHFNumber;
+            EmployerRecord.EmployerCode = CustomerCode;
+            EmployerRecord.Status = 1;
             db.SaveChanges();
 
-            entityRecord.NHFNumber = EmployerInfo.CustomerProfile.NhfNumber;
-            entityRecord.PmbCode = EmployerInfo.CustomerProfile.CustomerCode;
+            entityRecord.NHFNumber = NHFNumber;
+            entityRecord.PmbCode = CustomerCode;
 
             await _iUnitOfWork.Pmbs.ApproveForm(entityRecord, menuRecord, user);
-            var menus = await _iUnitOfWork.Menus.GetPmbMenuList();
-            foreach (var menu in menus)
+            if (entityRecord.Category == GlobalConstant.ONE)
             {
-                var menuAuth = new MenuAuthorizeEntity();
-                menuAuth.AuthorizeId = entity.Id;
-                menuAuth.MenuId = menu.Id;
-                menuAuth.AuthorizeType = AuthorizeTypeEnum.User.ToInt();
-                await _iUnitOfWork.MenuAuthorizes.SaveForm(menuAuth);
+                var menus = await _iUnitOfWork.Menus.GetPmbMenuList();
+                foreach (var menu in menus)
+                {
+                    var menuAuth = new MenuAuthorizeEntity();
+                    menuAuth.AuthorizeId = entity.Id;
+                    menuAuth.MenuId = menu.Id;
+                    menuAuth.AuthorizeType = AuthorizeTypeEnum.User.ToInt();
+                    await _iUnitOfWork.MenuAuthorizes.SaveForm(menuAuth);
 
-            };
+                }
+
+            }
+            if (entityRecord.Category == GlobalConstant.FOUR)
+            {
+
+                var menus = await _iUnitOfWork.Menus.GetNMRCList();
+                foreach (var menu in menus)
+                {
+                    var menuAuth = new MenuAuthorizeEntity();
+                    menuAuth.AuthorizeId = entity.Id;
+                    menuAuth.MenuId = menu.Id;
+                    menuAuth.AuthorizeType = AuthorizeTypeEnum.User.ToInt();
+                    await _iUnitOfWork.MenuAuthorizes.SaveForm(menuAuth);
+
+                }
+
+            }
+           
             var employeeRecord = db.EmployeeEntity.Where(i => i.EmailAddress == entityRecord.EmailAddress).DefaultIfEmpty().FirstOrDefault();
             employeeRecord.Status = 1;
-            employeeRecord.NHFNumber = long.Parse(entityRecord.NHFNumber);
-            employeeRecord.EmployeeCode = entityRecord.PmbCode;
+            employeeRecord.NHFNumber = long.Parse(NHFNumber);
+            employeeRecord.EmployeeCode = CustomerCode;
             db.SaveChanges();
             obj.Message = "Company Approved Successfully";
             //obj.Message = string.Empty;
@@ -437,7 +499,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
 
 
 
-        public async Task<TData> DisApproveForm(PmbEntity entity, string Remark)
+        public async Task<TData> DisApproveForm(LenderInstitutionsEntity entity, string Remark)
         {
             string message = string.Empty;
             ApplicationDbContext db = new ApplicationDbContext();
@@ -595,6 +657,130 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             entity.EmployerType = 3;
             entity.BaseProcessMenu = 563322288309538816;
             await _iUnitOfWork.Pmbs.SaveNewEmployee(entity);
+            // Clear the permission data in the cache
+            new MenuAuthorizeCache(_iUnitOfWork).Remove();
+
+            obj.Data = entity.Id.ParseToString();
+            obj.Tag = 1;
+            obj.Message = "Employee Added Successfully";
+            return obj;
+        }
+
+
+          public async Task<TData<string>> SaveNmrcEmployee(EmployeeEntity entity)
+        {
+            TData<string> obj = new TData<string>();
+            entity.EmploymentType = EmploymentTypeEnum.Employed.ToInt();
+            entity.CompanyName = _iUnitOfWork.Companies.GetEntity(entity.Company).Result.Name;
+            //entity.DateOfEmployment = DateTime.Now.ToDate();
+            entity.DateOfEmployment = DateTime.Now.Date;
+            var checkusername = await _iUnitOfWork.Users.GetEntity(entity.EmailAddress);
+
+            if (checkusername != null)
+            {
+                obj.Message = "Employee email address already exists!";
+                return obj;
+            }
+
+            if (string.IsNullOrEmpty(entity.MobileNumber))
+            {
+                obj.Message = "Mobile Number must be provided!";
+                return obj;
+            }
+            else if (entity.MobileNumber.Length != 11)
+            {
+                obj.Message = "Mobile Number must be 11 digits long!";
+                return obj;
+            }
+
+            if (entity.BVN.IsNotNull() && !ValidationHelper.ValidateBvn(entity.BVN))
+            {
+                obj.Message = "BVN must be digit and 11 in length!";
+                return obj;
+            }
+            else if (_iUnitOfWork.Employees.ExistEmployeeBVN(entity))
+            {
+                obj.Message = "Employee BVN already exists!";
+                return obj;
+            }
+
+            var mobileExist = await _iUnitOfWork.Employees.GetEmployeeByMobile(entity.MobileNumber);
+            if (mobileExist != null)
+            {
+                obj.Message = "Mobile Number already exist!";
+                return obj;
+            }
+
+            var EmailExist = await _iUnitOfWork.Employees.GetEmployeeByEmail(entity?.EmailAddress);
+            if (EmailExist != null)
+            {
+                obj.Message = "Email Address already exist!";
+                return obj;
+            }
+
+            var BvnExist = await _iUnitOfWork.Employees.GetEmployeeByBVN(entity?.BVN);
+            if (EmailExist != null)
+            {
+                obj.Message = "BVN already exist!";
+                return obj;
+            }
+            //if (entity.BVN.IsNotNull() && !ValidationHelper.ValidateBvn(entity.BVN))
+            //{
+            //    obj.Message = "BVN must be digit and 11 in length!";
+            //    return obj;
+            //}
+            //else if (_iUnitOfWork.Employees.ExistEmployeeBVN(entity))
+            //{
+            //    obj.Message = "Employee BVN already exists!";
+            //    return obj;
+            //}
+
+            if (entity.BankAccountNumber.IsNotNull() && !ValidationHelper.ValidateAccountNumber(entity.BankAccountNumber))
+            {
+                obj.Message = "Bank account number must be digit and 10 in length!";
+                return obj;
+            }
+            //else if (_iUnitOfWork.Employees.ExistEmployeeAccountNumber(entity))
+            //{
+            //    obj.Message = "Employee Account Number already exists!";
+            //    return obj;
+            //}
+
+            if (string.IsNullOrEmpty(entity.FirstName))
+            {
+                obj.Message = "First name must be provided!";
+                return obj;
+            }
+
+            if (string.IsNullOrEmpty(entity.LastName))
+            {
+                obj.Message = "Last name must be provided!";
+                return obj;
+            }
+
+            if (string.IsNullOrEmpty(entity.DateOfBirth))
+            {
+                obj.Message = "Date of birth must not be empty!";
+                return obj;
+            }
+
+            if (entity.DateOfEmployment == null || entity.DateOfEmployment == DateTime.MinValue)
+            {
+                obj.Message = "Please Provide Date Of Employment!";
+                return obj;
+            }
+            //if (!string.IsNullOrEmpty(entity.MenuIds) || string.IsNullOrEmpty(entity.MenuIds))
+            //{
+            entity.Salt = new UserService(_iUnitOfWork).GetPasswordSalt();
+            entity.DecryptedPassword = new UserService(_iUnitOfWork).GenerateDefaultPassword();
+            //entity.Password = new UserService(_iUnitOfWork).EncryptUserPassword(entity.DecryptedPassword, entity.Salt);
+            entity.Password = EncryptionHelper.Encrypt(entity.DecryptedPassword, entity.Salt);
+            //}
+
+            entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
+            entity.EmployerType = 3;
+            entity.BaseProcessMenu = 563322288309538816;
+            await _iUnitOfWork.Pmbs.SaveNmrcEmployee(entity);
             // Clear the permission data in the cache
             new MenuAuthorizeCache(_iUnitOfWork).Remove();
 

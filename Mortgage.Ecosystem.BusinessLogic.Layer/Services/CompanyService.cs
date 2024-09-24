@@ -391,6 +391,11 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 return obj;
             }
 
+            if (string.IsNullOrEmpty(entity.AgentType))
+            {
+                entity.AgentType = GlobalConstant.SIX.ToString();
+            }
+
             if (int.Parse(entity.AgentType.ToStr()) > GlobalConstant.ZERO && int.Parse(entity.AgentType.ToStr()) == GlobalConstant.ONE)
             {
                 if (entity.Sector < GlobalConstant.ONE)
@@ -429,12 +434,9 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 obj.Message = "Login : Last name must be provided!";
                 return obj;
             }
+            
 
-            //if (entity.Role.IsNullOrZero())
-            //{
-            //    obj.Message = "Login : Role must be selected!";
-            //    return obj;
-            //}
+            
             var currentMenu = await new DataRepository().GetMenuId(GlobalConstant.COMPANY_MENU_URL);
             entity.BaseProcessMenu = currentMenu;
             entity.EmployerNhfNumber = _iUnitOfWork.Employees.GenerateNHFNumber().ToString();

@@ -124,6 +124,35 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         }
 
 
+        public async Task<TData<List<ZtreeInfo>>> GetZtreeList3(MenuListParam param)
+        {
+            var obj = new TData<List<ZtreeInfo>>();
+            obj.Data = new List<ZtreeInfo>();
+
+            List<MenuEntity> list = await new MenuCache(_iUnitOfWork).GetList();
+            list = ListFilter(param, list);
+
+            foreach (MenuEntity menu in list)
+            {
+                if (menu.MenuUrl != null && menu.MenuUrl.Contains("Nmrc"))
+                {
+                    obj.Data.Add(new ZtreeInfo
+                    {
+                        id = menu.Id,
+                        pId = menu.Parent,
+                        name = menu.MenuName
+                    });
+
+                }
+
+            }
+
+            obj.Tag = 1;
+            return obj;
+        }
+
+
+
 
         public async Task<TData<MenuEntity>> GetEntity(long id)
         {

@@ -10,5 +10,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public long PmbId { get; set; }
     }
 }

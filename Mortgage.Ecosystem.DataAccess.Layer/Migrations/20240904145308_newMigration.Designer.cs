@@ -5006,7 +5006,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("tbl_Pmb", (string)null);
+                    b.ToTable("tbl_LenderInstitutions", (string)null);
                 });
 
             modelBuilder.Entity("Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.PropertyGalleryEntity", b =>

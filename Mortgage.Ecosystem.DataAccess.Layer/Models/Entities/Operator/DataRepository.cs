@@ -64,7 +64,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
                     strSql.Clear();
                     strSql.Append(@"SELECT a.Id, a.Name, a.Address, a.MobileNumber, a.EmailAddress,a.NHFNumber,
                                         a.RCNumber                                        
-                                FROM tbl_Pmb a
+                                FROM tbl_LenderInstitutions a
                                 WHERE a.Id = " + operatorInfo.Pmb);
                     var pmb = await BaseRepository().FindObject<PmbListParam>(strSql.ToString());
                     operatorInfo.PmbInfo = MapHelper.Map(pmb, operatorInfo.PmbInfo);
@@ -347,13 +347,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
 
 
 
-        public async Task<IEnumerable<PmbEntity>> GetPmbApprovalItems()
+        public async Task<IEnumerable<LenderInstitutionsEntity>> GetPmbApprovalItems()
         {
             var strSql = new StringBuilder();
             strSql.Clear();
             var user = await Operator.Instance.Current();
 
-            strSql.Append(@"SELECT DISTINCT a.BaseProcessMenu FROM tbl_Pmb a 
+            strSql.Append(@"SELECT DISTINCT a.BaseProcessMenu FROM tbl_LenderInstitutions a 
                     INNER JOIN tbl_Menu b ON a.BaseProcessMenu = b.Id");
 
             var process = await BaseRepository().FindList<PmbProcessParam>(strSql.ToString());
@@ -371,7 +371,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
             strSql.Clear();
             if (approvalLogRecords.Count <= 0)
             {
-                strSql.Append(@"SELECT a.* FROM tbl_Pmb a
+                strSql.Append(@"SELECT a.* FROM tbl_LenderInstitutions a
                         INNER JOIN tbl_Menu c ON a.BaseProcessMenu = c.Id
                         INNER JOIN tbl_ApprovalSetup b ON c.Id = b.MenuId
                         INNER JOIN tbl_Employee e ON a.Id = e.Company
@@ -379,13 +379,13 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities.Operator
             }
             else
             {
-                strSql.Append(@"SELECT a.* FROM tbl_Pmb a
+                strSql.Append(@"SELECT a.* FROM tbl_LenderInstitutions a
                         INNER JOIN tbl_ApprovalSetup b ON a.Id > 0
                         INNER JOIN tbl_ApprovalLog c ON b.Company = c.Company AND b.Authority = c.Authority AND b.MenuId = c.MenuId
                         INNER JOIN tbl_Menu d ON a.BaseProcessMenu = d.Id AND b.MenuId = d.Id
                         WHERE b.Company = " + user.Company + " AND b.Authority = " + user.Employee + " AND a.Id NOT IN " + approvalLogBracketList + " AND b.Priority = c.ApprovalCount AND d.ApprovalLevel > 0 AND c.ApprovalCount <= d.ApprovalLevel AND a.Status != 1");
             }
-            IEnumerable<PmbEntity> PmbList = await BaseRepository().FindList<PmbEntity>(strSql.ToString());
+            IEnumerable<LenderInstitutionsEntity> PmbList = await BaseRepository().FindList<LenderInstitutionsEntity>(strSql.ToString());
             return PmbList.GroupBy(x => new { x.Id, x.Name })
                         .SelectMany(x => x.OrderByDescending(y => y.BaseCreateTime).Take(1))
                         .OrderByDescending(x => x.BaseModifyTime)

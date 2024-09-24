@@ -57,6 +57,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IInternetBankingUsersRepository InternetBankingUsers { get; }
          ILenderRepository Lenders { get; }
          ILenderTypeRepository LenderTypes { get; }
+         ILenderCategoryRepository LenderCategory { get; }
         ILoanInitiationRepository LoanInitiations { get; }
         ILoanInitiationUploadRepository? LoanInitiationUploads { get; }
         ILoanReviewRepository LoanReviews { get; }
@@ -72,7 +73,9 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         INHFCustomerRequestRepository NHFCustomerRequests { get; }
         INHFRegCompanyRepository NHFRegCompanies { get; }
         INmrcCategoryRepository NmrcCategories { get; }
+        INmrcActivityRepository NmrcActivity{ get; }
         INmrcEligibilityRepository NmrcEligibilities { get; }
+        INmrcRefinanceRepository NmrcRefinance { get; }
         INHFRegUsersRepository NHFRegUsers { get; }
         IRefundRepository Refunds { get; }
         IRefundConditionRepository RefundConditions { get; }
@@ -80,7 +83,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
         IRiskAssessmentSetupRepository RiskAssessmentSetups { get; }
         IRiskAssessmentProcedureRepository RiskAssessmentProcedure { get; }
         ISchemeRepository Schemes { get; }
-        IPmbRepository Pmbs { get; }
+        ILenderInstitutionsRepository Pmbs { get; }
         IPaymentHistoryRepository PaymentHistories { get; }
         IPropertySubscriptionRepository PropertySubscriptions { get; }
         IPropertyRegistrationRepository PropertyRegistrations { get; }
@@ -93,6 +96,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces
 
         IRoleRepository Roles { get; }
         ISecondaryLenderRepository SecondaryLenders { get; }
+        ISecondaryLenderChecklistProcedureRepository SecondaryLenderChecklistsProcedures { get; }
         IStateRepository States { get; }
         ISchemeLenderRepository SchemeLenders { get; }
         IStatementOfAccountRepository StatementOfAccounts { get; }

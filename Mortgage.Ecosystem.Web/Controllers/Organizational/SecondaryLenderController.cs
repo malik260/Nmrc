@@ -65,7 +65,6 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
 
         #region Get data
         [HttpGet]
-        [AuthorizeFilter("secondarylender:search,user:search")]
         public async Task<IActionResult> GetListJson(SecondaryLenderListParam param)
         {
             TData<List<SecondaryLenderEntity>> obj = await _iSecondaryLenderService.GetList(param);
@@ -205,7 +204,7 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
                 TData<string> obj = await _iSecondaryLenderService.SaveNewEmployee(entity);
                 var auditInstance = new AuditTrailEntity();
                 auditInstance.Action = SystemOperationCode.SaveNewEmployee.ToString();
-                auditInstance.ActionRoute = SystemOperationCode.PMB.ToString();
+                auditInstance.ActionRoute = SystemOperationCode.SecondaryLender.ToString();
 
                 var audit = await _iAuditTrailService.SaveForm(auditInstance);
                 return Json(obj);

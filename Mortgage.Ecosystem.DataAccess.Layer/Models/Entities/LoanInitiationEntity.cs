@@ -58,6 +58,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [Column("LoanScheme")]
         public int?LoanScheme { get; set; }
+        [NotMapped]
+        public string? Scheme{ get; set; }
 
         [Column("ApplicationReferenceNo")]
         public string? ApplicationReferenceNo { get; set; }

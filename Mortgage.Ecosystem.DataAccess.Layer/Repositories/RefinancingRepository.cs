@@ -83,7 +83,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
 
                 await db.CommitTrans();
             }
-            catch
+            catch(Exception ex) 
             {
                 await db.RollbackTrans();
                 throw;

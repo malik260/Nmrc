@@ -1,0 +1,362 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="ibox-title">
+    <h5>NMRC UnderWriting</h5>
+</div>
+
+<div class="container-div">
+    <div class="row">
+         <div class="btn-group-sm" id="toolbar">
+
+        <a id="Send" class="btn btn-success" onclick="SendForReview()"><i class="fa fa-list"></i> Proceed to Review</a>
+        
+        </div>
+
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="gridTable" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        initGrid();
+
+        $("#status").cnComboBox({ data: cn.getJson(@Html.Raw(typeof(StatusEnum).EnumToDictionaryString())) });
+
+        laydate.render({ elem: '#startTime', format: 'yyyy-MM-dd', theme: 'molv' });
+        laydate.render({ elem: '#endTime', format: 'yyyy-MM-dd', theme: 'molv' });
+    });
+
+    function initGrid() {
+        debugger
+        var queryUrl = '@Url.Content("~/NmrcActivity/GetPageListJson")';
+        $('#gridTable').cnTable({
+            url: queryUrl,
+            detailView: true,
+            sortName: 'BaseModifyTime',
+            sortOrder: "Desc",
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'PmbName', title: 'Primary Mortgage Bank', sortable: false },
+                { field: 'ProductName', title: 'Product Name', sortable: false },
+                { field: 'RefinanceNumber', title: 'Batch Ref', sortable: false },
+                { field: 'TotalAmount', title: 'Total Amount', sortable: false },
+
+                {
+                    field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd");
+                    }
+                },
+
+                {
+                    title: 'Actions',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        debugger;
+                        var actions = [];
+                        var checklist = row.CheckList;
+                        var buttonName = (checklist == '1') ? 'CheckListed' : 'CheckList';
+
+                        var disabledAttribute = (checklist == '1') ? 'disabled' : '';
+                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showPmbChecklistForm(true)" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
+
+                        actions.push('&nbsp;');
+
+
+                        return actions.join('');
+                    }
+                },
+            ],
+            queryParams: function (params) {
+                var pagination = $('#gridTable').cnTable('getPagination', params);
+                var queryString = $("#searchDiv").getWebControls(pagination);
+                return queryString;
+            },
+            onExpandRow: function (index, row, $detail) {
+                initChildGrid(index, row, $detail);
+            }
+        });
+    }
+
+    function searchGrid() {
+        $('#gridTable').cnTable('search');
+        resetToolbarStatus();
+    }
+
+
+
+    //function initGrid2() {
+    //    debugger
+    //    var queryUrl = '@Url.Content("~/NmrcActivity/GetListById")';
+    //    $('#gridTable2').cnTable({
+    //        url: queryUrl,
+    //        detailView: true,
+    //        sortName: 'BaseModifyTime',
+    //        sortOrder: "Desc",
+    //        columns: [
+    //            { checkbox: true, visible: true },
+    //            { field: 'Id', title: 'Id', visible: false },
+    //            { field: 'MortgageBank', title: 'Primary Mortgage Bank', sortable: false },
+    //            { field: 'ProductName', title: 'Product Name', sortable: false },
+    //            { field: 'RefinanceNumber', title: 'Batch Ref', sortable: false },
+    //            { field: 'TotalAmount', title: 'Total Amount', sortable: false },
+
+    //            {
+    //                field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+    //                    return cn.formatDate(value, "yyyy-MM-dd");
+    //                }
+    //            },
+
+    //            {
+    //                title: 'Actions',
+    //                align: 'center',
+    //                formatter: function (value, row, index) {
+    //                    debugger;
+    //                    var actions = [];
+    //                    var checklist = row.CheckList;
+    //                    var buttonName = (checklist == '1') ? 'CheckListed' : 'CheckList';
+
+    //                    var disabledAttribute = (checklist == '1') ? 'disabled' : '';
+    //                    actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showPmbChecklistForm(true)" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
+
+    //                    actions.push('&nbsp;');
+
+
+    //                    return actions.join('');
+    //                }
+    //            },
+    //        ],
+    //        queryParams: function (params) {
+    //            return {
+    //                Id: row.RefinanceNumber,
+    //            };
+    //        }
+    //    });
+    //}
+
+
+
+    function openCustomDialog(options) {
+        layer.open({
+            type: 2,
+            title: options.title,
+            content: options.content,
+            area: [options.width, '90%'],
+            btn: [], // Remove the default confirm and close buttons
+            success: function (layero, index) {
+                options.callback(index, layero);
+            }
+        });
+    }
+
+
+    function initChildGrid(index, row, $detail) {
+        debugger;
+        $detail.html('Loading data ...');
+
+        // Format dates (if necessary)
+        var date = new Date(row.BaseCreateTime);
+
+        // Create HTML structure
+        var htmlData =
+            '<div class="card">' +
+            '<div class="card-header text-center">' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Loan Review for ' + row.Name + '</h6>' +
+            '</div>' +
+            '<div class="card-body">' +
+            '<form>' +
+            // Add form controls here if needed
+            '</form>' +
+            '<table id="gridTable2" data-mobile-responsive="true"></table>' + // Table inside card-body
+            '</div>' +
+            '</div>';
+
+        // Render the HTML
+        $detail.html(htmlData);
+
+        // Initialize the child table (pass row.Id as parameter)
+        $('#gridTable2').cnTable({
+            url: '/NmrcActivity/GetListById',
+            queryParams: function (params) {
+               return {
+                    Id: row.RefinanceNumber,  
+                };
+            },
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Id', title: 'Id', visible: false },
+                { field: 'CustomerName', title: 'Obligor', sortable: false },
+                { field: 'ProductName', title: 'Product Name', sortable: false },
+                { field: 'Tenor', title: 'Loan Tenor', sortable: false },
+                { field: 'Rate', title: 'Rate', sortable: false },
+                { field: 'Amount', title: 'Amount', sortable: false },
+
+                {
+                    field: 'BaseModifyTime', title: 'Application Date', formatter: function (value, row, index) {
+                        return cn.formatDate(value, "yyyy-MM-dd");
+                    }
+                },
+
+                {
+                    title: 'Actions',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        debugger;
+                        var actions = [];
+                        var checklist = row.CheckList;
+                        var buttonName = (checklist == '1') ? 'CheckListed' : 'CheckList';
+
+                        var disabledAttribute = (checklist == '1') ? 'disabled' : '';
+                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="showObligorChecklistForm(true)" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
+
+                        actions.push('&nbsp;');
+
+
+                        return actions.join('');
+                    }
+                },
+            ],
+        });
+
+        $detail.find('.card-header').click(function () {
+            var $cardBody = $(this).siblings('.card-body');
+            $cardBody.toggle(); 
+        });
+    }
+
+
+
+   
+
+
+    function SendForReview(id) {
+        debugger
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        id = selectedRow[0].Id;
+        cn.confirm("Send Transactions？", function () {
+            debugger;
+            cn.ajax({
+                url: '@Url.Content("~/NmrcActivity/ApproveUnderwriting")' + '?id=' + id,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    }
+                    else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+    function DisapproveUnderwriting(id) {
+        debugger
+        if (id === 0) {
+            cn.msgError("Please select an item");
+            return;
+        }
+        var remark = $("#remark").val();
+
+        cn.confirm("Confirm the Disapproval process？", function () {
+            cn.ajax({
+                url: '@Url.Content("~/Underwriting/DisapproveUnderwriting")' + '?id=' + id + '&remark=' + remark,
+                type: "post",
+                success: function (obj) {
+                    if (obj.Tag == 1) {
+                        cn.msgSuccess(obj.Message);
+                        searchGrid();
+                    } else {
+                        cn.msgError(obj.Message);
+                    }
+                }
+            });
+        });
+    }
+
+
+
+
+    function showPmbChecklistForm(bAdd) {
+        debugger
+        var id = 0;
+        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
+        id = selectedRow[0].Id;
+        var lenderid = selectedRow[0].PmbId;
+
+        console.log(id);
+
+        if (id == "1") {
+            $("#btnAddChecklist").prop("disabled", true);
+
+        }
+        localStorage.setItem('lenderid', lenderid);
+        if (!bAdd) {
+
+
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        openCustomDialog({
+            title: "Checklist Form",
+            content: '@Url.Content("~/NmrcActivity/NmrcPmbChecklistForm")',
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+
+    function showObligorChecklistForm(bAdd) {
+        debugger
+        var id = 0;
+        var selectedRow = $("#gridTable2").bootstrapTable("getSelections");
+        id = selectedRow[0].Id;
+        var NHFNumber = selectedRow[0].NHFNumber;
+
+        console.log(id);
+
+        if (id == "1") {
+            $("#btnAddChecklist").prop("disabled", true);
+
+        }
+        localStorage.setItem('NHFNumber', NHFNumber);
+        if (!bAdd) {
+
+
+            if (!cn.checkRowEdit(selectedRow)) {
+                return;
+            }
+            else {
+                id = selectedRow[0].Id;
+            }
+        }
+        openCustomDialog({
+            title: "Checklist Form",
+            content: '@Url.Content("~/NmrcActivity/NmrcObligorChecklistForm")',
+            width: "780px",
+            callback: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                iframeWin.saveForm(index);
+            }
+        });
+    }
+
+
+
+</script>

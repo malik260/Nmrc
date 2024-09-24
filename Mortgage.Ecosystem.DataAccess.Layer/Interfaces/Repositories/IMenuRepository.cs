@@ -16,5 +16,6 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Interfaces.Repositories
         Task SaveForm(MenuEntity entity);
         Task DeleteForm(string ids);
         Task<MenuEntity> GetEntitybyUrl(string url);
+        Task<List<MenuEntity>> GetNMRCList();
     }
 }

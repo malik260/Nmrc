@@ -88,13 +88,12 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             var batchData = new List<LoanDisbursementEntity>();
             var batchNo = RandomHelper.RandomLongGenerator(2000005, 99999999);
             batchData = JsonConvert.DeserializeObject<List<LoanDisbursementEntity>>(JsonConvert.DeserializeObject(lists).ToString());
-            var lender = await _iUnitOfWork.SecondaryLenders.GetEntity(SecondaryLender);
+            var lender = await _iUnitOfWork.Pmbs.GetEntity(SecondaryLender);
             var pmb = await _iUnitOfWork.Pmbs.GetEntity(batchData.FirstOrDefault().PmbId);
             var batchRef = lender.Name.ParseToString() + "-" + batchNo;
             decimal total = batchData.Select(i => i.Amount).ToList().Sum();
             foreach (LoanDisbursementEntity item in batchData)
             {
-                total = total + item.Amount;
                 var refinance = new RefinancingEntity();
                 refinance.Amount = item.Amount;
                 refinance.NHFNumber = item.CustomerNhf;
@@ -111,6 +110,29 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 await _iUnitOfWork.Refinancings.SaveForm(refinance);
 
             }
+
+            foreach (LoanDisbursementEntity item in batchData)
+            {
+                var refinance = new NmrcRefinancingEntity();
+                refinance.Amount = item.Amount;
+                refinance.NHFNumber = item.CustomerNhf;
+                refinance.PmbId = item.PmbId;
+                refinance.Tenor = item.Tenor;
+                refinance.Rate = item.Rate;
+                refinance.ApplicationDate = DateTime.Now;
+                refinance.RefinanceNumber = batchRef;
+                refinance.Status = 0;
+                refinance.TotalAmount = total;
+                refinance.LoanId = item.LoanId;
+                refinance.ProductCode = item.ProductCode;
+                refinance.LenderID = SecondaryLender;
+                refinance.Reviewed = 0;
+                refinance.Checklisted = 0;
+                refinance.Disbursed = 0;
+                await _iUnitOfWork.NmrcRefinance.SaveForm(refinance);
+
+            }
+
             string message;
             MailParameter mailParameter = new()
             {

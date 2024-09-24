@@ -537,7 +537,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             //}
 
             entity.NHFNumber = _iUnitOfWork.Employees.GenerateNHFNumber();
-            entity.EmployerType = 3;
+            entity.EmployerType = 6;
             entity.BaseProcessMenu = 563322288309538816;
             await _iUnitOfWork.SecondaryLenders.SaveNewEmployee(entity);
             // Clear the permission data in the cache

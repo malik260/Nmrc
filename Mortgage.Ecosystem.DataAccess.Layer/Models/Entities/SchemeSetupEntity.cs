@@ -11,10 +11,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         // Name
         [Column("SchemeName")]
-        public string SchemeName { get; set; }
-
-
-       [NotMapped]
-        public List<long> LendersId { get; set; }
+        public string? SchemeName { get; set; }
+      
     }
 }

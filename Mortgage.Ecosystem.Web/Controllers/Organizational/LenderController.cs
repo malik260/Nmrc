@@ -96,8 +96,13 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #region Submit data
         [HttpPost]
         [AuthorizeFilter("lender:add,company:edit")]
-        public async Task<IActionResult> SaveFormJson(LenderSetupEntity entity)
+        public async Task<IActionResult> SaveFormJson(string Lenders, int LenderTypeId)
         {
+            var entity = new LenderSetupEntity();
+            entity.LenderTypeId = LenderTypeId;
+            
+            var lender = Lenders.Split(",").Select(int.Parse).ToList();
+            entity.Lender = lender;
             TData<string> obj = await _iLenderService.SaveForm(entity);
             return Json(obj);
         }

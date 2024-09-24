@@ -2,17 +2,13 @@
     Layout = "~/Views/Shared/_Index.cshtml";
 }
 <div class="ibox-title">
-    <h5>UNDERWRITING</h5>
+    <h5>Loan Disbursement</h5>
 </div>
 
 <div class="container-div">
     <div class="row">
 
-        @* <div class="btn-group-sm" id="toolbar">
-
-        <a id="btnAddChecklist" class="btn btn-success" onclick="showSaveChecklistForm(true)"><i class="fa fa-list"></i> Checklist</a>
-        <a id="btnAddRiskAssesstment" class="btn btn-danger" onclick="showSaveRiskAssessmentForm(true)"><i class="fa fa-exclamation-triangle"></i> Risk Assessment</a>
-        </div>*@
+        
 
         <div class="col-sm-12 select-table table-striped">
             <table id="gridTable" data-mobile-responsive="true"></table>
@@ -97,136 +93,12 @@
     }
 
 
-
-    function showSaveForm(bAdd) {
-        var id = 0;
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            var loanId = selectedRow[0].LoanId;
-            localStorage.setItem('Data2', loanId);
-
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        openCustomDialog({
-            title: id > 0 ? "Edit Document" : "Add Document",
-            content: '@Url.Content("~/Underwriting/AddDocumentForm")' + '?id=' + id,
-            width: "780px",
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.saveForm(index);
-            }
-        });
-    }
-
-    function showSaveChecklistForm(bAdd) {
+    function Disburse(id) {
         debugger
-        var id = 0;
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        console.log(selectedRow);
-        var NhfNumber = selectedRow[0].NHFNumber;
-        var ProductName = selectedRow[0].ProductName;
-        var loanId = selectedRow[0].LoanId;
-        id = selectedRow[0].CheckList;
-        console.log(id);
-
-        if (id == "1") {
-            $("#btnAddChecklist").prop("disabled", true);
-
-        }
-
-        console.log(ProductName);
-        localStorage.setItem('Data', NhfNumber);
-        localStorage.setItem('Data1', ProductName);
-        localStorage.setItem('Data2', loanId);
-        if (!bAdd) {
-
-
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        openCustomDialog({
-            title: id > 0 ? "Edit Checklist" : "Checklist Form",
-            content: '@Url.Content("~/Underwriting/ChecklistForm")' + '?id=' + id,
-            width: "780px",
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.saveForm(index);
-            }
-        });
-    }
-
-    function showSaveRiskAssessmentForm(bAdd) {
-        var id = 0;
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        console.log(selectedRow);
-        var NhfNumber = selectedRow[0].NHFNumber;
-        var ProductName = selectedRow[0].ProductName;
-        var loanId = selectedRow[0].LoanId;
-
-        console.log(ProductName);
-        localStorage.setItem('Data', NhfNumber);
-        localStorage.setItem('Data1', ProductName);
-        localStorage.setItem('Data2', loanId);
-        if (!bAdd) {
-            var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-            if (!cn.checkRowEdit(selectedRow)) {
-                return;
-            }
-            else {
-                id = selectedRow[0].Id;
-            }
-        }
-        openCustomDialog({
-            title: id > 0 ? "Edit Risk Assessment Form" : "Risk Assessment Form",
-            content: '@Url.Content("~/Underwriting/RiskAssessmentForm")' + '?id=' + id,
-            width: "780px",
-            callback: function (index, layero) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                iframeWin.saveForm(index);
-            }
-        });
-    }
-
-
-
-    function deleteForm() {
-        var selectedRow = $("#gridTable").bootstrapTable("getSelections");
-        if (cn.checkRowDelete(selectedRow)) {
-            cn.confirm("Confirm to delete the selected" + selectedRow.length + "Row data?", function () {
-                var ids = cn.getIds(selectedRow);
-                cn.ajax({
-                    url: '@Url.Content("~/Underwriting/DeleteFormJson")' + '?ids=' + ids,
-                    type: "post",
-                    success: function (obj) {
-                        if (obj.Tag == 1) {
-                            cn.msgSuccess(obj.Message);
-                            searchGrid();
-                        }
-                        else {
-                            cn.msgError(obj.Message);
-                        }
-                    }
-                });
-            });
-        }
-    }
-
-
-    function approveUnderwriting(id) {
-        debugger
-        cn.confirm("Confirm the approval process？", function () {
+        cn.confirm("Confirm the Disbursement process？", function () {
             debugger;
             cn.ajax({
-                url: '@Url.Content("~/Underwriting/ApproveUnderwriting")' + '?id=' + id,
+                url: '@Url.Content("~/Underwriting/DisburseNonNhfLoan")' + '?id=' + id,
                 type: "post",
                 success: function (obj) {
                     if (obj.Tag == 1) {
@@ -266,56 +138,6 @@
     }
 
 
-    //   function Affordability(id) {
-    //    cn.confirm("Confirm the approval process?", function () {
-    //        debugger;
-    //        cn.ajax({
-    //            url: '@Url.Content("~/Underwriting/Affordability")' + '?id=' + id,
-    //            type: "post",
-    //            success: function (obj) {
-    //                if (obj.Tag == 1) {
-    //                    debugger;
-    //                    swal({
-    //                        title: 'Affordability', text: "Affordability Check successful", type: 'success'
-    //                    }).then(function () {
-    //                        $('#affordtab').modal('show');
-    //                    });
-
-    //                    var $table = $('#affordtable');
-    //                    $table.bootstrapTable("destroy");
-
-    //                    $table.bootstrapTable({
-    //                        data: obj.Data,
-    //                        columns: [
-    //                            {
-    //                                field: 'amountRequested',
-    //                                title: 'Amount Requested'
-    //                            },
-    //                            {
-    //                                field: 'affordableAmount',
-    //                                title: 'Affordable Amount',
-    //                            },
-    //                            {
-    //                                field: 'monthlyRepayment',
-    //                                title: 'Monthly Repayment',
-    //                            },
-    //                            {
-    //                                field: 'proposedTenor',
-    //                                title: 'Proposed Tenor',
-    //                            },
-    //                            {
-    //                                field: 'rate',
-    //                                title: 'Rate',
-    //                            }
-    //                        ]
-    //                    });
-    //                } else {
-    //                    cn.msgError(obj.Message);
-    //                }
-    //            }
-    //        });
-    //    });
-    //}
 
     function initChildGrid(index, row, $detail) {
         $detail.html('Loading data ...');
@@ -327,7 +149,7 @@
         var htmlData =
             '<div class="card">' +
             '<div class="card-header text-center" > ' +
-            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Underwritting Process for ' + row.Name + '</h6>' +
+            '<h6 class="card-title" style="font-weight: bold; color: black; font-size: 15px;">Disbursement for ' + row.Name + '</h6>' +
             '</div>' +
             '<div class="card-body">' +
             '<form>' +
@@ -362,8 +184,7 @@
             '<textarea id="remark" name="Remark" placeholder="Remark" class="form-control text-left" style="height:60px">' + row.Remark + '</textarea>' +
             '</div>' +
             '<div class="form-group col-sm-12 text-right">' +
-            '<button type="button" id="approve" onclick="approveUnderwriting(\'' + row.Id + '\');" class="btn btn-success btn-sm">Approve</button>' +
-            '<button type="button" id="disapprove" onclick="DisapproveUnderwriting(\'' + row.Id + '\');" class="btn btn-danger btn-sm">Disapprove</button>' +
+            '<button type="button" id="approve" onclick="Disburse(\'' + row.Id + '\');" class="btn btn-success btn-sm">Approve</button>' +           
             '</div>' +
             '</div>' +
             '</form>' +

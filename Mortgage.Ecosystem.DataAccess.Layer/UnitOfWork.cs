@@ -57,6 +57,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private IInternetBankingUsersRepository? _internetBankingUsers;
         private ILoanReviewRepository? _loanReviews;
         private ILenderRepository? _lenders;
+        private ILenderCategoryRepository? _lenderCategory;
         private ILenderTypeRepository? _lenderTypes;
         private ILoanRepaymentRepository? _loanRepayments;
         private ILoanInitiationRepository? _loanInitiations;
@@ -73,13 +74,15 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         private INHFRegCompanyRepository? _nhfregcompanies;
         private INHFRegUsersRepository? _nhfregusers;
         private INmrcCategoryRepository? _nmrcCategories;
+        private INmrcActivityRepository? _nmrcActivity;
         private INmrcEligibilityRepository? _nmrcEligibilities;
+        private INmrcRefinanceRepository? _nmrcRefinances;
         private IPaymentHistoryRepository? _paymentHistories;
         private IPropertyRegistrationRepository? _propertyRegistrations;
         private IPropertySubscriptionRepository? _propertySubscriptions;
         private IPropertyGalleryRepository? _propertyGalleries;
         private IPropertyUploadRepository? _propertyUploads;
-        private IPmbRepository? _pmbs;
+        private ILenderInstitutionsRepository? _pmbs;
         private IRefinancingRepository? _refinancings;
         private IRemitaPaymentDetailsRepository? _remitaPaymentDetails;
         private IRelationRepository? _relations;
@@ -91,6 +94,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         private IRoleRepository? _roles;
         private ISecondaryLenderRepository? _secondaryLenders;
+        private ISecondaryLenderChecklistProcedureRepository? _secondaryLenderChecklistsProcedures;
         private ISchemeRepository? _schemes;
         private ISchemeLenderRepository? _schemeLenders;
         private IStateRepository? _states;
@@ -216,8 +220,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
             _departments ??= new DepartmentRepository();
         public IDisbursementRepository Disbursements =>
         _disbursements ??= new DisbursementRepository();
-        public IPmbRepository Pmbs =>
-          _pmbs ??= new PmbRepository();
+        public ILenderInstitutionsRepository Pmbs =>
+          _pmbs ??= new LenderInstitutionsRepository();
 
         public IDesignationRepository Designations =>
             _designations ??= new DesignationRepository();
@@ -256,6 +260,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public ILenderRepository Lenders =>
       _lenders ??= new LenderRepository();
+          public ILenderCategoryRepository LenderCategory =>
+      _lenderCategory ??= new LenderCategoryRepository();
 
         public ILenderTypeRepository LenderTypes =>
         _lenderTypes ??= new LenderTypeRepository();
@@ -295,12 +301,16 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
           _nhfregusers ??= new NHFRegUsersRepository();
         public INHFRegCompanyRepository NHFRegCompanies =>
          _nhfregcompanies ??= new NHFRegCompanyRepository();
+         public INmrcActivityRepository NmrcActivity =>
+         _nmrcActivity ??= new NmrcActivityRepository();
 
         public INHFCustomerRequestRepository NHFCustomerRequests =>
             _nhfcustomerrequests ??= new NHFCustomerRequestRepository();
 
         public INmrcCategoryRepository NmrcCategories =>
            _nmrcCategories ??= new NmrcCategoryRepository();
+        public INmrcRefinanceRepository NmrcRefinance =>
+           _nmrcRefinances ??= new NmrcRefinanceRepository();
 
         public INmrcEligibilityRepository NmrcEligibilities =>
           _nmrcEligibilities ??= new NmrcEligibilityRepository();
@@ -346,6 +356,10 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
 
         public ISecondaryLenderRepository SecondaryLenders =>
      _secondaryLenders ??= new SecondaryLenderRepository();
+
+        public ISecondaryLenderChecklistProcedureRepository SecondaryLenderChecklistsProcedures =>
+       _secondaryLenderChecklistsProcedures ??= new SecondaryLenderChecklistProcedureRepository();
+
 
         public ISchemeLenderRepository SchemeLenders =>
   _schemeLenders ??= new SchemeLenderRepository();

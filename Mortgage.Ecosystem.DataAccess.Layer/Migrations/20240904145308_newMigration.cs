@@ -2018,7 +2018,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tbl_Pmb",
+                name: "tbl_LenderInstitutions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false),
@@ -2047,7 +2047,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_Pmb", x => x.Id);
+                    table.PrimaryKey("PK_tbl_LenderInstitutions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -2679,7 +2679,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Migrations
                 name: "tbl_PaymentHistory");
 
             migrationBuilder.DropTable(
-                name: "tbl_Pmb");
+                name: "tbl_LenderInstitutions");
 
             migrationBuilder.DropTable(
                 name: "tbl_PropertyGallery");

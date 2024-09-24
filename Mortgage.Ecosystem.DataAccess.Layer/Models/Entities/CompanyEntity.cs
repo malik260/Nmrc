@@ -187,5 +187,8 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
 
         [NotMapped]
         public string? KinAddress { get; set; }
+        
+        [NotMapped]
+        public string? LenderType { get; set; }
     }
 }

@@ -1,0 +1,244 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormWhite.cshtml";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
+@section header {
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/css/fileinput.min.css"))
+    @BundlerHelper.Render(HostingEnvironment.ContentRootPath, Url.Content("~/lib/fileinput/5.0.3/js/fileinput.min.js"))
+}
+
+
+<script src="https://cdn.tiny.cloud/1/97ihdj4pizrgnyrwd26euodeyfufnv6r4f4r656es9h2jdj5/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.min.css" rel="stylesheet" />
+<link href="~/lib/bootstrap.table/1.12.0/bootstrap-table.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+
+
+
+<div class="Underwriting" id="underwriting">
+    <div class="ChecklistForm" id="checklistForm">
+
+        <style>
+            .container {
+                vertical-align: middle;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #data-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+               
+                #data-table th {
+                    background-color: #f2f2f2;
+                    text-align: left;
+                }
+
+            .checkbox-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+        </style>
+
+
+
+        <div id="form3" class="form-horizontal m">
+            <div class="dialogblockborder dialogblockborderheadline">
+                <div class="col-sm-9 select-table table-striped">
+                    <table id="checklistTable" data-mobile-responsive="true"></table>
+                </div>
+
+
+            </div>
+
+            
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label class="control-label">Remark <font class="red"> *</font></label>
+                    <input id="remark" class="form-control" required />
+                </div>
+            </div>
+            <div Class="form-group" style="display: flex; margin-top:10%; justify-content: center; align-items: center">
+
+                <button class="btn btn-info" type="submit" id="btnChecklist" onclick="approveBulkTransactions()" style="margin-right: 10px;">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+                <button class="btn btn-danger" type="reset" onclick="clearForm()">
+                    <i class="fa fa-recycle"></i>
+                    Clear
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script type="text/javascript">
+
+
+    $(function () {
+        checkListGrid();
+    });
+
+
+
+    function checkListGrid() {
+        var queryUrl = '@Url.Content("~/NmrcEligibility/GetPmbEligibilityCriteria")';
+        $('#checklistTable').cnTable({
+            url: queryUrl,
+            columns: [
+                { checkbox: true, visible: true },
+                { field: 'Item', title: 'Item', visible: true },
+                { field: 'Description', title: 'Description', visible: true },
+                //{ checkbox: true, title: 'AppCheckbox', visible: true },
+                //{ checkbox: true, title: 'NotAppCheckbox', visible: true },
+
+            ],
+        });
+
+        // Update the checkbox column headers after the table is initialized
+        var headerCells = $('#checklistTable thead th');
+        $(headerCells[0]).text('App');
+
+    }
+
+
+    function approveBulkTransactions(index) {
+        debugger;
+        var SingleData = $('#checklistTable').bootstrapTable('getAllSelections');
+
+        var narration = $('#remark').val().trim();
+        if (!narration) {
+            swal.fire({
+                title: "Validation Error",
+                text: "Remark is required!",
+                type: "error",
+                confirmButtonText: "OK"
+            });
+            return;
+        }
+
+        console.log(SingleData.length); // Corrected the length property usage
+        if (SingleData.length !== 0) { // Corrected the length property usage
+            swal.fire({
+                title: "Are you sure?",
+                text: "Perform Checklist for customer!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#ff9800",
+                confirmButtonText: "Yes, continue",
+                cancelButtonText: "No, stop!",
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                preConfirm: function () {
+                    return new Promise(function (resolve) {
+                        setTimeout(function () {
+                            resolve();
+                        }, 4000);
+                    });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swal.fire({
+                        title: 'Processing...',
+                        html: 'Please wait...',
+                        showConfirmButton: false,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            swal.showLoading()
+                        }
+                    });
+                    var selectedItems = $('#checklistTable').bootstrapTable('getSelections');
+                    var Pmbid = localStorage.getItem("lenderid");
+                    
+                    debugger;
+                    var selectedItemsCombined = [];
+                    var remark = $('#remark').val();
+
+                    for (var i = 0; i < selectedItems.length; i++) {
+                        selectedItemsCombined.push({
+                            Item: selectedItems[i].Item,
+                            Description: selectedItems[i].Description,
+                            Remark: remark,
+                            PmbId: Pmbid,
+                        });
+                    }
+
+
+                    if (SingleData.length !== 0) { // Corrected the length property usage
+                        $.ajax({
+                            url: '/SecondaryLenderChecklistProcedure/SaveFormJson',
+                            type: 'POST',
+                            data: { selectedData: selectedItemsCombined },
+                            success: function (obj) {
+                                if (obj.Tag == 1) {
+                                    swal.fire({
+                                        title: 'CheckList Process',
+                                        text: obj.Message.toString(),
+                                        type: 'success'
+                                    }).then(function () {
+                                        window.location.reload(true);
+
+                                        
+                                        parent.layer.close(index);
+                                        parent.searchGrid();
+
+                                    });
+                                } else {
+                                    swal.fire({
+                                        title: 'Checklist Process',
+                                        text: obj.Message.toString(),
+                                        type: 'error'
+                                    }).then(function () {
+                                        window.location.reload(true);
+                                    });
+                                }
+                            },
+                            error: function (e) {
+                                swal.fire({
+                                    title: 'Checklist Process',
+                                    text: e.responseText,
+                                    type: 'error'
+                                });
+                                console.log(e);
+                            }
+                        });
+                    }
+                } else {
+                    swal.fire('Cancelled', 'Your checklist process has been cancelled', 'error');
+                }
+            });
+        } else {
+            $("#btnApproveBatch").removeAttr("disabled", true);
+            swal.fire("You have not selected any transaction(s)", {
+                type: 'warning'
+            });
+        }
+    }
+
+    function clearForm() {
+        debugger
+        // Clear the remark input
+        $('#remark').val('');
+
+        // Uncheck all checkboxes
+        $('#checklistTable').bootstrapTable('uncheckAll');
+    }
+
+
+</script>
+
+
+

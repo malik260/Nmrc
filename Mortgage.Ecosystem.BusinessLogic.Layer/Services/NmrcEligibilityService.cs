@@ -32,6 +32,27 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
             return obj;
         }
 
+
+        public async Task<TData<List<NmrcEligibilityEntity>>> GetPmbList(NmrcEligibilityListParam param)
+        {
+            TData<List<NmrcEligibilityEntity>> obj = new TData<List<NmrcEligibilityEntity>>();
+            obj.Data = await _iUnitOfWork.NmrcEligibilities.GetList(param);
+            obj.Data = obj.Data.Where(i => i.Category == 1).ToList();
+            obj.Total = obj.Data.Count;
+            obj.Tag = 1;
+            return obj;
+        }
+         public async Task<TData<List<NmrcEligibilityEntity>>> GetObligorList(NmrcEligibilityListParam param)
+        {
+            TData<List<NmrcEligibilityEntity>> obj = new TData<List<NmrcEligibilityEntity>>();
+            obj.Data = await _iUnitOfWork.NmrcEligibilities.GetList(param);
+            obj.Data = obj.Data.Where(i => i.Category == 2).ToList();
+            obj.Total = obj.Data.Count;
+            obj.Tag = 1;
+            return obj;
+        }
+
+
         public async Task<TData<List<NmrcEligibilityEntity>>> GetCategory(string categoryId)
         {
             TData<List<NmrcEligibilityEntity>> obj = new TData<List<NmrcEligibilityEntity>>();

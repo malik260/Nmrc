@@ -95,7 +95,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories
             {
                 if (param.StartDate != null && param.EndDate != null)
                 {
-                    expression = expression.And(t => t.DisbursementDate >= param.StartDate && t.DisbursementDate <= param.EndDate);
+                    expression = expression.And(t => t.DisbursementDate >= param.StartDate && t.DisbursementDate <= param.EndDate && t.PmbId == param.PmbId);
                 }
             }
             return expression;

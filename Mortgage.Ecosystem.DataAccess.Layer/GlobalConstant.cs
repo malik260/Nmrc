@@ -50,6 +50,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public const string EMPLOYEE_MENU_URL = "Employee/EmployeeIndex";
         public const string COMPANY_MENU_URL = "Company/CompanyIndex";
         public const string PMB_MENU_URL = "Pmb/PmbIndex";
+        public const string LENDERS_INSTITUTION_MENU_URL = "LenderInstitutions/LenderInstitutionIndex";
         public const string DEVELOPER_MENU_URL = "Developer/DeveloperIndex";
         public const string BROKER_MENU_URL = "Broker/BrokerIndex";
         public const string SECONDARYLENDER_MENU_URL = "SecondaryLender/SecondaryLenderIndex";
@@ -64,6 +65,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer
         public const int PMBANDEMPLOYEE_MENU_CATEGORY = 205;
         public const int EMPLOYERANDEMPLOYEE_MENU_CATEGORY = 206;
         public const int EMPLOYERANDPMB_MENU_CATEGORY = 207;
+        public const int NMRC_MENU_CATEGORY = 105;
 
 
 

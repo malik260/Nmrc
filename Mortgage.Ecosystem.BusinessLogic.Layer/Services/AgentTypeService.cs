@@ -1,4 +1,5 @@
 ﻿using Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces;
+using Mortgage.Ecosystem.DataAccess.Layer;
 using Mortgage.Ecosystem.DataAccess.Layer.Conversion;
 using Mortgage.Ecosystem.DataAccess.Layer.Interfaces;
 using Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos;
@@ -22,6 +23,8 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         {
             TData<List<AgentTypeEntity>> obj = new TData<List<AgentTypeEntity>>();
             obj.Data = await _iUnitOfWork.AgentTypes.GetList(param);
+            var Lenders = obj.Data.Where(x => x.Id == GlobalConstant.SIX).FirstOrDefault();
+            obj.Data.RemoveAll(x => x.Id == GlobalConstant.SIX);
             obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;

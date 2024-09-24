@@ -72,20 +72,14 @@
 
                         actions.push('<a class="btn btn-info btn-xs" href="#" onclick="Approve(\'' + row.Id + '\')" ' + disabledAttribute + '><i class="fa-solid fa-house"></i>' + buttonName + '</a>');
 
-                        //actions.push('&nbsp;');
-
-                        //actions.push('<a class="btn btn-info btn-xs" href="#" onclick="Affordability(\'' + row.NHFNumber + '\')"><i class="fa-solid fa-house"></i>Affordability</a>');
+                      
 
                         actions.push('&nbsp;');
 
 
                         actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="Reject(\'' + row.Id + '\')"><i class="fa fa-key"></i>Reject</a>');
                         
-                        //actions.push('&nbsp;');
-
-
-                        //actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="Reject(\'' + row.Id + '\')"><i class="fa-solid fa-eye"></i>View</a>');
-
+                      
                         return actions.join('');
                     }
                 },
@@ -94,7 +88,8 @@
                 var pagination = $('#gridTable').cnTable('getPagination', params);
                 var queryString = $("#searchDiv").getWebControls(pagination);
                 return queryString;
-            },
+            }
+            ,
             onExpandRow: function(index, row, $detail){
                 initChildGrid(index, row, $detail);
             }

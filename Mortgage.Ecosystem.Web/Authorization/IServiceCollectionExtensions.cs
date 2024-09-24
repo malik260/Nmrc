@@ -83,6 +83,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IGenderService, GenderService>();
             services.AddScoped<IInternetBankingUsersService, InternetBankingUsersService>();
             services.AddScoped<ILoanReviewService, LoanReviewService>();
+            services.AddScoped<ILenderCategoryService, LenderCategoryService>();
             services.AddScoped<ILenderService, LenderService>();
             services.AddScoped<ILenderTypeService, LenderTypeService>();
             services.AddScoped<ILoanInitiationService, LoanInitiationService>();
@@ -98,6 +99,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<INationalityService, NationalityService>();
             services.AddScoped<INextOfKinService, NextOfKinService>();
             services.AddScoped<INmrcEligibilityService, NmrcEligibilityService>();
+            services.AddScoped<INmrcActivityService, NmrcActivityService>();
             services.AddScoped<INmrcCategoryService, NmrcCategoryService>();
             services.AddScoped<INHFRegCompanyService, NHFRegCompanyService>();
             services.AddScoped<INHFRegUsersService, NHFRegUsersService>();
@@ -108,7 +110,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<IPropertyRegistrationService, PropertyRegistrationService>();
             services.AddScoped<IPropertyGalleryService, PropertyGalleryService>();
             services.AddScoped<IPropertyUploadService, PropertyUploadService>();
-            services.AddScoped<IPmbService, PmbService>();
+            services.AddScoped<ILenderInstitutionsService, LenderInstitutionsService>();
             services.AddScoped<IRefinancingService, RefinancingService>();
             services.AddScoped<IRefundService, RefundService>();
             services.AddScoped<IRefundConditionService, RefundConditionService>();
@@ -121,6 +123,7 @@ namespace Mortgage.Ecosystem.Web.Authorization
             services.AddScoped<ISchemeLenderService, SchemeLenderService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ISecondaryLenderService, SecondaryLenderService>();
+            services.AddScoped<ISecondaryLenderChecklistProcedureService, SecondaryLenderChecklistProcedureService>();
             services.AddScoped<ISectorService, SectorService>();
             services.AddScoped<IStateService, StateService>();
             services.AddScoped<IStatementOfAccountService, StatementOfAccountService>();

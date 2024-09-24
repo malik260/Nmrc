@@ -69,6 +69,21 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Dtos
             list.Add(664553002530508800);
             list.Add(563325021112504320);
             list.Add(563327185478225920);
+            list.Add(5898777445214440000);
+            
+            
+            return list;
+
+        }
+
+         public List<long> GetNMRCEmployeeMenus()
+        {
+            var param = new MenuListParam();
+            var list = new List<long>();
+            list.Add(5877411145200001445);
+            list.Add(5978441444236655780);
+            list.Add(5987774554544522399);
+            list.Add(5987447100236541478);
             
             
             return list;

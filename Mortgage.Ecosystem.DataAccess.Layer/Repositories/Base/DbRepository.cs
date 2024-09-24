@@ -398,15 +398,7 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Repositories.Base
 
         public async Task<IEnumerable<T>> FindList<T>(Expression<Func<T, bool>> condition, Pagination pagination) where T : class, new()
         {
-            //try
-            //{
-            //    await FindList<T>(condition, pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
-            //}
-            //catch (Exception e)
-            //{
-            //    var xx = e.Message;
-            //    var xx1 = xx;
-            //}
+            
             var data = await FindList<T>(condition, pagination.Sort, pagination.SortType.ToLower() == "asc" ? true : false, pagination.PageSize, pagination.PageIndex);
             pagination.TotalCount = data.total;
             return data.list;

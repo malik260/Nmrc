@@ -8,14 +8,15 @@ namespace Mortgage.Ecosystem.DataAccess.Layer.Models.Entities
     [Table("st_Lender")]
     public class LenderSetupEntity : IdentityExtensionEntity
     {
-        [Key]
-        [Column("LenderId")]
-        public int LenderId { get; set; }
-        // Name
-        [Column("Lender")]
-        public long Lender { get; set; }
+       
+        [Column("LenderCategory")]
+        public int LenderCategory { get; set; }
         
         [Column("LenderTypeId")]
         public int? LenderTypeId { get; set; }
+
+        [NotMapped]
+        [Column("Lender")]
+        public List<int>? Lender { get; set; }
     }
 }

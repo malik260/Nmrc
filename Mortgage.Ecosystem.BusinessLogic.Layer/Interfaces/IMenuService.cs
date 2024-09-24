@@ -7,6 +7,7 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Interfaces
 {
     public interface IMenuService
     {
+        Task<TData<List<ZtreeInfo>>> GetZtreeList3(MenuListParam param);
         Task<TData<List<MenuEntity>>> GetList(MenuListParam param);
         Task<TData<List<ZtreeInfo>>> GetZtreeList(MenuListParam param);
         Task<TData<MenuEntity>> GetEntity(long id);
