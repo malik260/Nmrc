@@ -168,7 +168,12 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
                 await context.LenderSetupEntity.AddRangeAsync(lendersetup);
             }
 
+
+            bool isUpdate = entity.Id > 0;
+            await _iUnitOfWork.Lenders.SaveForm(entity);
+
             await context.SaveChangesAsync();
+
             obj.Data = entity.Id.ParseToString();
             obj.Tag = 1;
             obj.Message = "Lender added successfully";

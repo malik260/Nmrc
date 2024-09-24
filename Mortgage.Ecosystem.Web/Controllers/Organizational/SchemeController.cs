@@ -102,9 +102,14 @@ namespace Mortgage.Ecosystem.Web.Controllers.Organizational
         #region Submit data
         [HttpPost]
         [AuthorizeFilter("scheme:add,company:edit")]
-        public async Task<IActionResult> SaveFormJson(SchemeSetupEntity entity)
+        [HttpPost]
+        [AuthorizeFilter("scheme:add,company:edit")]
+        public async Task<IActionResult> SaveFormJson(string selectedIds, string inputName)
         {
-            
+            var entity = new SchemeSetupEntity();
+            entity.SchemeName = inputName;
+
+            entity.LendersId = selectedIds.Split(",").Select(long.Parse).ToList();
             TData<string> obj = await _iSchemeService.SaveForm(entity);
             return Json(obj);
         }

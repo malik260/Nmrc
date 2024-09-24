@@ -21,10 +21,19 @@ namespace Mortgage.Ecosystem.BusinessLogic.Layer.Services
         public async Task<TData<List<LoanInitiationUploadEntity>>> GetList(long id)
         {
             TData<List<LoanInitiationUploadEntity>> obj = new TData<List<LoanInitiationUploadEntity>>();
-            obj.Data = await _iUnitOfWork.LoanInitiationUploads.GetList(id);
+            var files = await _iUnitOfWork.LoanInitiationUploads.GetList(id);
+
+            obj.Data = files.Select(file => new LoanInitiationUploadEntity
+            {
+                Label = file.Label,
+                filedata = file.filedata,  
+                Type = file.Type  // Assuming you're storing the MIME type
+            }).ToList();
+
             obj.Total = obj.Data.Count;
             obj.Tag = 1;
             return obj;
+
         }
 
         public async Task<TData<List<LoanInitiationUploadEntity>>> GetPageList(LoanInitiationUploadListParam param, Pagination pagination)
